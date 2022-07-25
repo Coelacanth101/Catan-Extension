@@ -1,0 +1,546 @@
+@charset "UTF-8";
+#container{
+    max-width: 800px;
+    height: 100%;
+    margin: auto;
+}
+#nameinputarea{
+    margin: auto;
+    text-align: center;
+}
+#gamestart{
+    margin: auto;
+    text-align: center;
+}
+#board_area{
+    position:relative;
+    width:500px;
+    max-width: 100%;
+    aspect-ratio: 7 / 6.9282;
+    background:orange;
+    margin: auto;
+}
+#my_area{
+    width: 100%;
+    background-color: skyblue;
+}
+#me{
+    max-width:500px;
+    margin:1px auto;
+    border: 3px solid black; 
+    border-radius: 5px;
+}
+#me .resource{
+    width: 50%;
+    text-align: center;
+    vertical-align: middle;
+}
+#me .title{
+    width: 50%;
+    text-align: center;
+    vertical-align: middle;
+}
+#me .card{
+    width: 50%;
+    text-align: center;
+    vertical-align: middle;
+}
+#me .used{
+    width: 50%;
+    text-align: center;
+    vertical-align: middle;
+}
+#others{
+    position:relative;
+    width:800px;
+    max-width: 100%;
+    background-color:pink;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+#others .player{
+    width: 30%;
+    min-width: 240px;
+    margin:1px auto;
+    border: 3px solid black; 
+    border-radius: 5px;
+}
+.row{
+    display: flex;
+}
+.name{
+    width: 50%;
+    text-align: center;
+    vertical-align: middle;
+}
+.token{
+    width: 50%;
+    text-align: center;
+    vertical-align: middle;
+}
+#others .resource{
+    width: 50%;
+    text-align: center;
+    vertical-align: middle;
+}
+#others .title{
+    width: 50%;
+    text-align: center;
+    vertical-align: middle;
+}
+#others .card{
+    width: 50%;
+    text-align: center;
+    vertical-align: middle;
+}
+#others .used{
+    width: 50%;
+    text-align: center;
+    vertical-align: middle;
+}
+#name0{
+    background-color: red;
+}
+#name1{
+    background-color: green;
+}
+#name2{
+    background-color: steelblue;
+}
+#name3{
+    background-color: yellow;
+}
+#name4{
+    background-color: orange;
+}
+#name5{
+    background-color: purple;
+}
+.square{
+    border: 1px solid black;
+    width: 20px;
+    display: inline-block;
+    margin: 0px 1px 0px 1px;
+}
+#button_area{
+    width:100%;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: darkseagreen;
+}
+.action_button{
+    background:skyblue;
+    width: 56px;
+    height: 40px;
+    margin: 1px;
+}
+.lumber{
+    background-color: rgb(62, 187, 62);
+}
+.brick{
+    background-color: darkred;
+}
+.ore{
+    background-color: darkgray;
+}
+.grain{
+    background-color: gold;
+}
+.wool{
+    background-color: lightgreen;
+}
+
+
+
+
+
+
+
+
+
+
+
+#board{
+    max-width:100%;
+    height:auto;
+    position:absolute;
+}
+.tile{
+    position:absolute;
+    width:13.7755102041%;
+}
+.tilex1{
+    left:0.4008746355685131%;
+}
+.tilex2{
+    left:11.078717201166182%;
+}
+.tilex3{
+    left:21.756559766763846%;
+}
+.tilex4{
+    left:32.434402332361515%;
+}
+.tilex5{
+    left:43.11224489795919%;
+}
+.tilex6{
+    left:53.790087463556844%;
+}
+.tilex7{
+    left:64.46793002915452%;
+}
+.tilex8{
+    left:75.14577259475219%;
+}
+.tilex9{
+    left:85.82361516034986%;
+}
+.tiley1{
+    top:0.40500736377025043%;
+}
+.tiley2{
+    top:6.62739322533137%;
+}
+.tiley3{
+    top:12.849779086892488%;
+}
+.tiley4{
+    top:19.072164948453608%;
+}
+.tiley5{
+    top:25.294550810014726%;
+}
+.tiley6{
+    top:31.516936671575845%;
+}
+.tiley7{
+    top:37.73932253313696%;
+}
+.tiley8{
+    top:43.961708394698086%;
+}
+.tiley9{
+    top:50.1840942562592%;
+}
+.tiley10{
+    top:56.40648011782032%;
+}
+.tiley11{
+    top:62.628865979381445%;
+}
+.tiley12{
+    top:68.85125184094257%;
+}
+.tiley13{
+    top:75.07363770250367%;
+}
+.tiley14{
+    top:81.2960235640648%;
+}
+.tiley15{
+    top:87.51840942562592%;
+}
+.node{
+    position:absolute;
+    width:5.5210171514343225%;
+    height:5.577934854026429%;
+    z-index:1;
+    background:rgba(255,0,0,0.4);
+    border-radius:50%;
+}
+.nodex1{
+    left:8.13599288200879%;
+}
+.nodex2{
+    left:11.5616488586852%;
+}
+.nodex3{
+    left:18.8138354476065%;
+}
+.nodex4{
+    left:22.2394914242828%;
+}
+.nodex5{
+    left:29.4916780132041%;
+}
+.nodex6{
+    left:32.9173339898805%;
+}
+.nodex7{
+    left:40.1695205788018%;
+}
+.nodex8{
+    left:43.5951765554782%;
+}
+.nodex9{
+    left:50.8473631443995%;
+}
+.nodex10{
+    left:54.2730191210759%;
+}
+.nodex11{
+    left:61.5252057099971%;
+}
+.nodex12{
+    left:64.9508616866735%;
+}
+.nodex13{
+    left:72.2030482755948%;
+}
+.nodex14{
+    left:75.6287042522712%;
+}
+.nodex15{
+    left:82.8808908411925%;
+}
+.nodex16{
+    left:86.3065468178689%;
+}
+.nodey1{
+    top:9.83989855236823%;
+}
+.nodey2{
+    top:16.0622844139294%;
+}
+.nodey3{
+    top:22.2846702754905%;
+}
+.nodey4{
+    top:28.5070561370516%;
+}
+.nodey5{
+    top:34.7294419986127%;
+}
+.nodey6{
+    top:40.9518278601738%;
+}
+.nodey7{
+    top:47.174213721735%;
+}
+.nodey8{
+    top:53.3965995832961%;
+}
+.nodey9{
+    top:59.6189854448572%;
+}
+.nodey10{
+    top:65.8413713064183%;
+}
+.nodey11{
+    top:72.0637571679794%;
+}
+.nodey12{
+    top:78.2861430295406%;
+}
+.nodey13{
+    top:84.5085288911017%;
+}
+.road{
+    position:absolute;
+    width:5.5210171514343225%;
+    height:5.577934854026429%;
+    z-index:1;
+    background:rgba(255,0,0,0.4);
+    border-radius:50%;
+}
+.roadx1{
+    left:9.84882087034698%;
+}
+.roadx2{
+    left:15.1695205788018%;
+}
+.roadx3{
+    left:20.5266634359447%;
+}
+.roadx4{
+    left:25.8473631443995%;
+}
+.roadx5{
+    left:31.2045060015423%;
+}
+.roadx6{
+    left:36.5252057099971%;
+}
+.roadx7{
+    left:41.88234856714%;
+}
+.roadx8{
+    left:47.2030482755948%;
+}
+.roadx9{
+    left:52.5237479840496%;
+}
+.roadx10{
+    left:57.8808908411925%;
+}
+.roadx11{
+    left:63.2015905496473%;
+}
+.roadx12{
+    left:68.5587334067901%;
+}
+.roadx13{
+    left:73.879433115245%;
+}
+.roadx14{
+    left:79.2365759723878%;
+}
+.roadx15{
+    left:84.5572756808426%;
+}
+.roady1{
+    top:9.83989855236823%;
+}
+.roady2{
+    top:12.9695009087747%;
+}
+.roady3{
+    top:16.0622844139294%;
+}
+.roady4{
+    top:19.1918867703358%;
+}
+.roady5{
+    top:22.2846702754905%;
+}
+.roady6{
+    top:25.414272631897%;
+}
+.roady7{
+    top:28.5070561370516%;
+}
+.roady8{
+    top:31.6366584934581%;
+}
+.roady9{
+    top:34.7294419986127%;
+}
+.roady10{
+    top:37.8590443550192%;
+}
+.roady11{
+    top:40.9518278601738%;
+}
+.roady12{
+    top:44.0814302165803%;
+}
+.roady13{
+    top:47.174213721735%;
+}
+.roady14{
+    top:50.3038160781414%;
+}
+.roady15{
+    top:53.3965995832961%;
+}
+.roady16{
+    top:56.5262019397026%;
+}
+.roady17{
+    top:59.6189854448572%;
+}
+.roady18{
+    top:62.7485878012637%;
+}
+.roady19{
+    top:65.8413713064183%;
+}
+.roady20{
+    top:68.9709736628248%;
+}
+.roady21{
+    top:72.0637571679794%;
+}
+.roady22{
+    top:75.1933595243859%;
+}
+.roady23{
+    top:78.2861430295406%;
+}
+.roady24{
+    top:81.415745385947%;
+}
+.roady25{
+    top:84.5085288911017%;
+}
+.tile_button{
+    position:absolute;
+    width:6.432335618244978%;
+    height:6.498648356577401%;
+    z-index:1;
+    background:rgba(255,0,0,0.4);
+    border-radius:50%;
+}
+.tile_buttonx1{
+    left:14.7138613453965%;
+}
+.tile_buttonx2{
+    left:25.3917039109941%;
+}
+.tile_buttonx3{
+    left:36.0695464765918%;
+}
+.tile_buttonx4{
+    left:46.7473890421895%;
+}
+.tile_buttonx5{
+    left:57.4252316077871%;
+}
+.tile_buttonx6{
+    left:68.1030741733848%;
+}
+.tile_buttonx7{
+    left:78.7809167389825%;
+}
+.tile_buttony1{
+    top:15.6019276626539%;
+}
+.tile_buttony2{
+    top:21.824313524215%;
+}
+.tile_buttony3{
+    top:28.0466993857761%;
+}
+.tile_buttony4{
+    top:34.2690852473372%;
+}
+.tile_buttony5{
+    top:40.4914711088983%;
+}
+.tile_buttony6{
+    top:46.7138569704595%;
+}
+.tile_buttony7{
+    top:52.9362428320206%;
+}
+.tile_buttony8{
+    top:59.1586286935817%;
+}
+.tile_buttony9{
+    top:65.3810145551428%;
+}
+.tile_buttony10{
+    top:71.6034004167039%;
+}
+.tile_buttony11{
+    top:77.8257862782651%;
+}
+.chip{
+    position:absolute;
+    width:6.432335618244978%;
+    background:rgba(255,0,0,0.4);
+    border-radius:50%;
+}
+
+#initialize{
+    text-align: center;
+    margin: 100px auto auto auto
+}
+#yesorno{
+    display: none;
+}
