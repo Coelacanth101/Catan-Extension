@@ -12,40 +12,79 @@
     margin: auto;
     text-align: center;
 }
+@media screen and (min-width:800px) {
+    #board_and_button{
+        display: flex;
+    }
+}
 #board_area{
     position:relative;
-    width:500px;
-    max-width: 100%;
+    max-width:600px;
     aspect-ratio: 7 / 6.9282;
-    background:orange;
     margin: auto;
+}@media screen and (min-width:800px) {
+    #board_area{
+        position:relative;
+        width:600px;
+        aspect-ratio: 7 / 6.9282;
+        margin: auto;
+    }
+}
+#button_area{
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    background-color: darkseagreen;
+}@media screen and (min-width:800px) {
+    #button_area{
+        width:100px;
+        margin: auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        background-color: darkseagreen;
+    }
+}
+#road_button{
+    display: none;
+}
+#house_button{
+    display: none;
+}
+#city_button{
+    display: none;
+}
+#monopoly_area{
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    background-color: rgb(81, 49, 197);
 }
 #my_area{
     width: 100%;
-    background-color: skyblue;
 }
-#me{
+#my_area .player{
     max-width:500px;
     margin:1px auto;
     border: 3px solid black; 
     border-radius: 5px;
 }
-#me .resource{
+#my_area .resource{
     width: 50%;
     text-align: center;
     vertical-align: middle;
 }
-#me .title{
+#my_area .title{
     width: 50%;
     text-align: center;
     vertical-align: middle;
 }
-#me .card{
+#my_area .progress{
     width: 50%;
     text-align: center;
     vertical-align: middle;
 }
-#me .used{
+#my_area .used{
     width: 50%;
     text-align: center;
     vertical-align: middle;
@@ -54,14 +93,14 @@
     position:relative;
     width:800px;
     max-width: 100%;
-    background-color:pink;
     margin: auto;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
 #others .player{
-    width: 30%;
+    width: 45%;
+    max-width: 480px;
     min-width: 240px;
     margin:1px auto;
     border: 3px solid black; 
@@ -69,6 +108,7 @@
 }
 .row{
     display: flex;
+    height: auto;
 }
 .name{
     width: 50%;
@@ -90,7 +130,7 @@
     text-align: center;
     vertical-align: middle;
 }
-#others .card{
+#others .progress{
     width: 50%;
     text-align: center;
     vertical-align: middle;
@@ -100,22 +140,22 @@
     text-align: center;
     vertical-align: middle;
 }
-#name0{
+#player0name{
     background-color: red;
 }
-#name1{
+#player1name{
     background-color: green;
 }
-#name2{
+#player2name{
     background-color: steelblue;
 }
-#name3{
+#player3name{
     background-color: yellow;
 }
-#name4{
+#player4name{
     background-color: orange;
 }
-#name5{
+#player5name{
     background-color: purple;
 }
 .square{
@@ -124,25 +164,27 @@
     display: inline-block;
     margin: 0px 1px 0px 1px;
 }
-#button_area{
-    width:100%;
-    margin: auto;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    background-color: darkseagreen;
-}
+
 .action_button{
     background:skyblue;
-    width: 56px;
+    width: 100px;
     height: 40px;
     margin: 1px;
+    font-size: 0.6em;
+}@media screen and (min-width:800px) {
+    .action_button{
+        background:skyblue;
+        width: 56px;
+        height: 40px;
+        margin: 1px;
+        font-size: 0.8em;
+    }
 }
 .lumber{
     background-color: rgb(62, 187, 62);
 }
 .brick{
-    background-color: darkred;
+    background-color: rgb(179, 8, 8);
 }
 .ore{
     background-color: darkgray;
@@ -153,8 +195,30 @@
 .wool{
     background-color: lightgreen;
 }
-
-
+.back{
+    background-color: black;
+}
+.house{
+    width: 80%;
+    height: auto;
+}
+.city{
+    width: 100%;
+    height: auto;
+}
+.roadtoken{
+    width: 80%;
+    height: auto;
+}
+#thief{
+    width:100%;
+    height:100%;
+    z-index:2;
+    background:rgba(0, 0, 0, 0.6);
+    border-radius:50%;
+    text-align: center;
+    vertical-align: middle;
+}
 
 
 
@@ -250,8 +314,10 @@
     width:5.5210171514343225%;
     height:5.577934854026429%;
     z-index:1;
-    background:rgba(255,0,0,0.4);
+    background:rgba(255,0,0,0);
     border-radius:50%;
+    text-align: center;
+    vertical-align: middle;
 }
 .nodex1{
     left:8.13599288200879%;
@@ -345,8 +411,10 @@
     width:5.5210171514343225%;
     height:5.577934854026429%;
     z-index:1;
-    background:rgba(255,0,0,0.4);
+    background:rgba(255,0,0,0);
     border-radius:50%;
+    text-align: center;
+    vertical-align: middle;
 }
 .roadx1{
     left:9.84882087034698%;
@@ -473,7 +541,7 @@
     width:6.432335618244978%;
     height:6.498648356577401%;
     z-index:1;
-    background:rgba(255,0,0,0.4);
+    background:rgba(255,0,0,0);
     border-radius:50%;
 }
 .tile_buttonx1{
@@ -533,7 +601,7 @@
 .chip{
     position:absolute;
     width:6.432335618244978%;
-    background:rgba(255,0,0,0.4);
+    background:rgba(255,0,0,0);
     border-radius:50%;
 }
 

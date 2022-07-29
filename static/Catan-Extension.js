@@ -1,5 +1,4 @@
 const socket = io();
-
 //画面初期化
 $('#initializebutton').on('click', function(){
     $('#yesorno').show()
@@ -44,16 +43,63 @@ socket.on('nameDisplay', (playersName)=>{
     }
 })
 
+socket.on('island', (island)=>{
+    display.island(island)
+})
+
+
+
+
+
+
+
+
+
+
 socket.on('hideItems', (game)=>{
     display.hideItems(game)
 });
-socket.on('name', (game)=>{
-    display.name(game)
+
+socket.on('allResource', (game)=>{
+    display.allResource(game)
+});
+socket.on('allToken', (game)=>{
+    display.allToken(game)
+});
+socket.on('allTitle', (game)=>{
+    display.allTitle(game)
+});
+socket.on('allProgress', (game)=>{
+    display.allProgress(game)
+});
+socket.on('allUsed', (game)=>{
+    display.allUsed(game)
+});
+socket.on('buildings', (game)=>{
+    display.buildings(game)
+});
+socket.on('thief', (buttonnumber)=>{
+    display.thief(buttonnumber)
+});
+socket.on('deletethief', (buttonnumber)=>{
+    display.deleteThief(buttonnumber)
+});
+socket.on('hidemonopoly', (e)=>{
+    display.hideMonopolyArea()
+});
+socket.on('hideBoard_And_Button', (e)=>{
+    display.hideBoard_And_Button()
+});
+socket.on('showBoard_And_Button', (e)=>{
+    display.showBoard_And_Button()
 });
 
-socket.on('allHands', (game)=>{
-    display.allHands(game)
-});
+
+
+
+
+
+
 socket.on('myHand', (player)=>{
     display.myHand(player)
 });
@@ -78,15 +124,8 @@ socket.on('handClear', (player)=>{
 /*socket.on('startbuttonclick', (n)=>{
     display.startButtonHide(n)
 });*/
-socket.on('boxRed', (boxNumber)=>{
-    display.boxRed(boxNumber)
-});
-socket.on('boxClear', (card)=>{
-    display.boxClear(card)
-});
-socket.on('boxDelete',(e)=>{
-    display.boxDelete()
-})
+
+
 socket.on('yesbuttonclick', (maxPlayer)=>{
     display.initialize(maxPlayer)
 });
@@ -112,6 +151,72 @@ socket.on('playersort', (players)=>{
     display.playerSort(players)
 })
 
+//nodeをクリック
+$(`#board_area`).on('click','.node',function(){
+    let nodeNumber = Number($(this).attr('id').slice(4))
+    const data = {nodeNumber:nodeNumber, socketID:socket.id}
+    socket.emit('nodeclick', data)
+});
+//roadをクリック
+$(`#board_area`).on('click','.road',function(){
+    let roadNumber = Number($(this).attr('id').slice(4))
+    const data = {roadNumber:roadNumber, socketID:socket.id}
+    socket.emit('roadclick', data)
+});
+//ダイスボタンをクリック
+$(`#button_area`).on('click','#dice_button',function(){
+    const data = {socketID:socket.id}
+    socket.emit('diceclick', data)
+});
+//ドローボタンをクリック
+$(`#button_area`).on('click','#draw_button',function(){
+    const data = {socketID:socket.id}
+    socket.emit('drawclick', data)
+});
+//騎士ボタンをクリック
+$(`#button_area`).on('click','#knight_button',function(){
+    const data = {socketID:socket.id}
+    socket.emit('knightclick', data)
+});
+//タイルボタンをクリック
+$(`#board_area`).on('click','.tile_button',function(){
+    let tileButtonNumber = Number($(this).attr('id').slice(11))
+    const data = {tileButtonNumber:tileButtonNumber, socketID:socket.id}
+    socket.emit('thiefmove', data)
+});
+//独占ボタンをクリック
+$(`#button_area`).on('click','#monopoly_button',function(){
+    $(`#monopoly_area`).toggle()
+});
+//独占資源ボタンをクリック
+$(`#monopoly_area`).on(`click`, `.monopoly_resource_button`, function(){
+    let resource = $(this).attr('id').slice(9)
+    console.log(resource)
+    const data = {resource:resource, socketID:socket.id}
+    socket.emit('monopoly', data)
+})
+//街道建設ボタンをクリック
+$(`#button_area`).on('click','#roadbuild_button',function(){
+    const data = {socketID:socket.id}
+    socket.emit('roadbuildclick', data)
+});
+
+
+
+
+//街道ボタンをクリック
+$(`#button_area`).on('click','#road_button',function(){
+    const data = {socketID:socket.id}
+    socket.emit('roadbuttonclick', data)
+});
+//収穫ボタンをクリック
+$(`#button_area`).on('click','#harvest_button',function(){
+    const data = {socketID:socket.id}
+    socket.emit('harvestclick', data)
+});
+
+
+
 
 //手札を選択
 $('#players').on('click', '.player .hand .card', function(){
@@ -120,25 +225,12 @@ $('#players').on('click', '.player .hand .card', function(){
         let data = {cardNumber:cardNumber, socketID:socket.id}
         socket.emit('handclick', data)
     }
-    
-})
-/*//カードを場に出す
-$('.playbutton').on('click',function(){
-    if($(this).parent().parent().data('socketid') === socket.id){
-        let n = Number($(this).data('playernumber'))
-        player ={number:n, socketID:socket.id}
-        socket.emit('playbuttonclick', player)
-        $(`.card`).css('background-color', '')
-    };
-})*/
+});
 
 
-//箱を選択
-$('#box').on('click', '.card', function(){
-        const boxNumber = Number($(this).data('box'))
-        data = {boxNumber:boxNumber, socketID:socket.id}
-        socket.emit('boxclick', data)
-})
+
+
+
 
 //もう一度遊ぶ
 $('#newgamebutton').on('click',function(){
@@ -169,6 +261,12 @@ $('#players').on('click', '.player .buttonarea .endbutton', function(){
 
 //画面表示
 const display = {
+    hideBoard_And_Button(){
+        $('#board_and_button').hide()
+    },
+    showBoard_And_Button(){
+        $('#board_and_button').show()
+      },
     hideItems(game){
         let i = 1
         while(i <= game.maxPlayer){
@@ -183,7 +281,6 @@ const display = {
         $('#gamestartbutton').hide()
         $('#newgamebutton').hide();
         $('#nameinputarea').hide();
-        $('#field').show()
         $('.startbutton').hide()
         $('#players').show();
         this.toggleTakeOver();
@@ -204,26 +301,146 @@ const display = {
         $('#field').show()
         $('#players').show();
     },
-    name(game){
-        for(let p of game.players){
-            $(`#player${p.number}`).data('socketid', `${p.socketID}`);
-            $(`#player${p.number}name`).html(`${p.name}`);
+    island(island){
+        $('#board_and_button').show()
+        console.log(island)
+        let tileNumber = 1
+        for(line of island){
+            for(tile of line){
+                $(`#tile${tileNumber}`).attr(`src`, `./${tile.type}.png`)
+                tileNumber += 1
+            }
+        }
+        tileNumber = 1
+        for(line of island){
+            for(tile of line){
+                if(tile.type === 'ore'|| tile.type === 'grain'|| tile.type === 'brick'|| tile.type === 'lumber'|| tile.type === 'wool'|| tile.type === 'desert'){
+                    if(tile.type !== 'desert'){
+                        $(`#chip${tileNumber}`).attr(`src`, `./${tile.number}.png`)
+                    }
+                    tileNumber += 1
+                }
+            }
         }
     },
-    allHands(game){
+    allResource(game){
         for(let p of game.players){
-            $(`#player${p.number}hand`).html('')
+            $(`#player${p.number}resource`).html('')
+            let numberOfResources = p.resource.ore + p.resource.grain + p.resource.wool + p.resource.lumber + p.resource.brick
+            if(numberOfResources === 0){
+                $(`#player${p.number}resource`).html(' ')
+            }
             if(p.socketID === socket.id){
-                for(c of p.hand){
-                    $(`#player${p.number}hand`).append(`<img src="./${c}.png" id="${c}" class="player${p.number}card card" alt="${c}">`);
+                for(r in p.resource){
+                    let i = 1
+                    while(i <= p.resource[r]){
+                        $(`#player${p.number}resource`).append(`<p class="square ${String(r)}">${translate(String(r))}</p>`);
+                        i += 1
+                    };
                 };
             }else{
-                for(c of p.hand){
-                    $(`#player${p.number}hand`).append(`<img src="./back.png" class="player${p.number}card card">`);
-                }
+                let numberOfResources = p.resource.ore + p.resource.grain + p.resource.wool + p.resource.lumber + p.resource.brick
+                $(`#player${p.number}resource`).append(`資源:${numberOfResources}枚`);
+                /*for(r in p.resource){
+                    let i = 1
+                    while(i <= p.resource[r]){
+                        $(`#player${p.number}resource`).append(`<p class="square back">背</p>`);
+                        i += 1
+                    };
+                };*/
             }
         };
     },
+    allToken(game){
+        for(let p of game.players){
+            $(`#player${p.number}token`).html(`家:${p.token.house} 街:${p.token.city} 道:${p.token.road}`)
+        };
+    },
+    allTitle(game){
+        for(let p of game.players){
+            $(`#player${p.number}title`).html(``)
+            if(p.largestArmy === 2){
+                $(`#player${p.number}title`).append(`<p class="square">大</p>`)
+            }
+            if(p.longestRoad === 2){
+                $(`#player${p.number}title`).append(`<p class="square">長</p>`)
+            }
+        };
+    },
+    allProgress(game){
+        for(let p of game.players){
+            $(`#player${p.number}progress`).html('')
+            let numberOfProgress = p.progress.knight + p.progress.road + p.progress.harvest + p.progress.monopoly + p.progress.point
+            if(numberOfProgress === 0){
+                $(`#player${p.number}progress`).html(' ')
+            }
+            if(p.socketID === socket.id){
+                for(pr in p.progress){
+                    let i = 1
+                    while(i <= p.progress[pr]){
+                        $(`#player${p.number}progress`).append(`<p class="square ${String(pr)}card">${translate(String(pr))}</p>`);
+                        i += 1
+                    };
+                };
+            }else{
+                for(pr in p.progress){
+                    let i = 1
+                    while(i <= p.progress[pr]){
+                        $(`#player${p.number}progress`).append(`<p class="square back">背</p>`);
+                        i += 1
+                    };
+                };
+            }
+        };
+    },
+    allUsed(game){
+        for(let p of game.players){
+            $(`#player${p.number}used`).html('')
+            if(p.socketID === socket.id){
+                for(u in p.used){
+                    let i = 1
+                    while(i <= p.used[u]){
+                        $(`#player${p.number}used`).append(`<p class="square ${String(u)}card">${translate(String(u))}</p>`);
+                        i += 1
+                    };
+                };
+            }else{
+                for(u in p.used){
+                    let i = 1
+                    while(i <= p.resource[u]){
+                        $(`#player${p.number}used`).append(`<p class="square back">背</p>`);
+                        i += 1
+                    };
+                };
+            }
+        };
+    },
+    buildings(game){
+        for(house of game.board.house){
+            $(`#node${house.nodeNumber}`).html(``)
+            $(`#node${house.nodeNumber}`).append(`<img id="house${house.nodeNumber}" class="house" src="./house${house.owner.number+1}.png">`)
+        }
+        for(road of game.board.road){
+            $(`#road${road.roadNumber}`).html(``)
+            $(`#road${road.roadNumber}`).append(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./road_${road.roadDegree}${road.owner.number+1}.png">`)
+        }
+        for(city of game.board.city){
+            $(`#node${city.nodeNumber}`).html(``)
+            $(`#node${city.nodeNumber}`).append(`<img id="city${city.nodeNumber}" class="city" src="./city${city.owner.number+1}.png">`)
+        }
+    },
+    thief(buttonnumber){
+        $(`#tile_button${buttonnumber}`).append(`<div id="thief"></div>`)
+    },
+    deleteThief(buttonnumber){
+        $(`#tile_button${buttonnumber}`).html(``)
+    },
+    hideMonopolyArea(){
+        $(`#monopoly_area`).hide()
+    },
+
+
+
     myHand(player){
         $(`#player${player.number}hand`).html('')
         if(player.socketID === socket.id){
@@ -236,45 +453,8 @@ const display = {
             }
         }
     },
-    field(game){
-        let i = 1
-        for(box of game.boxes){
-            $(`#box${i}`).attr('src', `./${box.current}.png`)
-            i += 1
-        }
-        $('#remained').html(`山札残り${game.deck.length}枚`)
-    },
-    nextButtonHIde(){
-        $('#nextroundbutton').hide()
-    },
     startButton(){
         $('.startbutton').toggle()
-    },
-    backgroundAllDelete(){
-        $('.card').css('background-color', '');
-    },
-    backgroundDelete(card){
-        $(`#player${card.holderNumber}card${card.index}`).css('background-color', '');
-    },
-    handRed(player){
-        $(`.player${player.number}card`).css('background-color', '');
-        $(`#${player.playingCard}`).css('background-color', 'red');
-    },
-    handClear(player){
-        $(`.player${player.number}card`).css('background-color', '');
-    },
-    gameStartButton(){
-        $('#gamestartbutton').toggle()
-    },
-    boxDelete(){
-        $(`.box`).css('background-color', '');
-    },
-    boxRed(boxNumber){
-        $(`.box`).css('background-color', '');
-        $(`#box${boxNumber}`).css('background-color', 'red');
-    },
-    boxclear(card){
-        $(`#fieldcard${card.index}`).css('background-color', '');
     },
     initialize(maxPlayer){
         $('#gamestartbutton').show()
@@ -298,8 +478,9 @@ const display = {
     },
     turnPlayer(tn){
         let i = 0;
-        while(i <= 4){
-            $(`#player${i}`).css('border', '0px');
+        while(i <= 5){
+            $(`#player${i}`).css('border-color', 'black');
+            $(`#player${i}`).css('border', '3px solid');
             i += 1
         }
         $(`#player${tn}`).css('border', '5px solid');
@@ -308,7 +489,8 @@ const display = {
     turnPlayerDelete(){
         let i = 0;
         while(i <= 4){
-            $(`#player${i}`).css('border', '0px');
+            $(`#player${i}`).css('border-color', 'black');
+            $(`#player${i}`).css('border', '3px solid');
             i += 1
         }
     },
@@ -342,18 +524,25 @@ const display = {
         let myNumber
         for(p of players){
             if(p.socketID === socket.id){
-                $('#players').html('')
+                $('#my_area').html('')
                 myNumber = p.number
-                $('#players').append(
-                    `<div id="player${myNumber}" class="player">
-                        <div id="player${myNumber}information" class="information"><p id="player${myNumber}name" class="name"></p></div>
-                        <div id="player${myNumber}hand" class="hand"></div>
-                        <div class="buttonarea">
-                            <button id="endbutton${myNumber}" class="endbutton" data-playernumber="${myNumber}">終了</button>
-                            <button id="takeoverbutton${myNumber}" class="takeoverbutton" data-playernumber="${myNumber}">継承</button>
+                $('#my_area').append(
+                    `<div id="player${myNumber}" class="player" data-name="${players[myNumber].name}">
+                        <div id="player${myNumber}row1" class="row">
+                            <div id="player${myNumber}name" class="name"><strong>${myNumber+1}:${players[myNumber].name}</strong></div>
+                            <div id="player${myNumber}token" class="token" >家:${players[myNumber].token.house} 街:${players[myNumber].token.city} 道:${players[myNumber].token.road}</div>
+                        </div>
+                        <div id="player${myNumber}row2" class="row">
+                            <div id="player${myNumber}resource" class="resource"><p class="square lumber">木</p><p class="square lumber">木</p><p class="square lumber">木</p><p class="square brick">煉</p><p class="square ore">鉄</p><p class="square grain">麦</p><p class="square grain">麦</p><p class="square wool">羊</p></div>
+                            <div id="player${myNumber}title" class="title">最大騎士力</div>
+                        </div>
+                        <div id="player${myNumber}row3" class="row">
+                            <div id="player${myNumber}progress" class="progress">騎:${players[myNumber].progress.knight} 発:${players[myNumber].progress.harvest} 点:${players[myNumber].progress.point}</div>
+                            <div id="player${myNumber}used" class="used"><p class="square">騎</p><p class="square">騎</p><p class="square">騎</p></div>
                         </div>
                     </div>`
                 )
+                $('#others').html('')
                 let i = 1
                 while(i <= players.length - 1){
                     if(myNumber === players.length - 1){
@@ -361,17 +550,55 @@ const display = {
                     }else{
                         myNumber += 1
                     }
-                    $('#players').append(
-                        `<div id="player${myNumber}" class="player">
-                            <div id="player${myNumber}information" class="information"><p id="player${myNumber}name" class="name"></p></div>
-                            <div id="player${myNumber}hand" class="hand"></div>
-                            <div class="buttonarea">
-                                <button id="takeoverbutton${myNumber}" class="takeoverbutton" data-playernumber="${myNumber}">継承</button>
+                    $('#others').append(
+                        `<div id="player${myNumber}" class="player" data-name="${players[myNumber].name}">
+                            <div id="player${myNumber}row1" class="row">
+                                <div id="player${myNumber}name" class="name"><strong>${myNumber+1}:${players[myNumber].name}</strong></div>
+                                <div id="player${myNumber}token" class="token" >家:${players[myNumber].token.house} 街:${players[myNumber].token.city} 道:${players[myNumber].token.road}</div>
+                            </div>
+                            <div id="player${myNumber}row2" class="row">
+                                <div id="player${myNumber}resource" class="resource"><p class="square lumber">木</p><p class="square lumber">木</p><p class="square lumber">木</p><p class="square brick">煉</p><p class="square ore">鉄</p><p class="square grain">麦</p><p class="square grain">麦</p><p class="square wool">羊</p></div>
+                                <div id="player${myNumber}title" class="title">最大騎士力</div>
+                            </div>
+                            <div id="player${myNumber}row3" class="row">
+                                <div id="player${myNumber}progress" class="progress">騎:${players[myNumber].progress.knight} 発:${players[myNumber].progress.harvest} 点:${players[myNumber].progress.point}</div>
+                                <div id="player${myNumber}used" class="used"><p class="square">騎</p><p class="square">騎</p><p class="square">騎</p></div>
                             </div>
                         </div>`
                     )
                     i += 1
                 }
+                return
+            }
+        }
+        for(p of players){
+            $('#my_area').html('')
+            $('#others').html('')
+            let i = 1
+            let myNumber = 0
+            while(i <= players.length - 1){
+                if(myNumber === players.length - 1){
+                    myNumber = 0
+                }else{
+                    myNumber += 1
+                }
+                $('#others').append(
+                    `<div id="player${myNumber}" class="player" data-name="${players[myNumber].name}">
+                        <div id="player${myNumber}row1" class="row">
+                            <div id="player${myNumber}name" class="name"><strong>${myNumber+1}:${players[myNumber].name}</strong></div>
+                            <div id="player${myNumber}token" class="token" >家:${players[myNumber].token.house} 街:${players[myNumber].token.city} 道:${players[myNumber].token.road}</div>
+                        </div>
+                        <div id="player${myNumber}row2" class="row">
+                            <div id="player${myNumber}resource" class="resource"><p class="square lumber">木</p><p class="square lumber">木</p><p class="square lumber">木</p><p class="square brick">煉</p><p class="square ore">鉄</p><p class="square grain">麦</p><p class="square grain">麦</p><p class="square wool">羊</p></div>
+                            <div id="player${myNumber}title" class="title">最大騎士力</div>
+                        </div>
+                        <div id="player${myNumber}row3" class="row">
+                            <div id="player${myNumber}progress" class="progress">騎:${players[myNumber].progress.knight} 発:${players[myNumber].progress.harvest} 点:${players[myNumber].progress.point}</div>
+                            <div id="player${myNumber}used" class="used"><p class="square">騎</p><p class="square">騎</p><p class="square">騎</p></div>
+                        </div>
+                    </div>`
+                )
+                i += 1
             }
         }
     },
@@ -383,6 +610,30 @@ function game(){
     let e = ''
     socket.emit('console',e)
 }
+function translate(item){
+    if(item === 'ore'){
+        return '鉄'
+    }else if(item === 'grain'){
+        return '麦'
+    }else if(item === 'wool'){
+        return '羊'
+    }else if(item === 'lumber'){
+        return '木'
+    }else if(item === 'brick'){
+        return '煉'
+    }else if(item === 'knight'){
+        return '騎'
+    }else if(item === 'road'){
+        return '道'
+    }else if(item === 'harvest'){
+        return '収'
+    }else if(item === 'monopoly'){
+        return '独'
+    }else if(item === 'point'){
+        return '点'
+    }
+}
 socket.on('console',(game)=>{
     console.log(game)
 })
+
