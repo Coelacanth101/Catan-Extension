@@ -12,12 +12,13 @@
     margin: auto;
     text-align: center;
 }
+
 #board_area{
     position:relative;
     max-width:600px;
     aspect-ratio: 7 / 6.9282;
     margin: auto;
-};
+}
 #message_area{
     text-align: center
 };
@@ -25,7 +26,7 @@
     display: flex;
     text-align: center;
     background-color: darkseagreen;
-};
+}
 #road_button{
     display: none;
 }
@@ -214,6 +215,7 @@
 }
 #dicearea{
     display: flex;
+    padding: 0px;
     margin: 5px;
     justify-content: center;
 }
