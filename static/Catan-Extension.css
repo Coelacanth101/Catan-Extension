@@ -30,8 +30,10 @@
         margin: auto;
     }
 }
+#message_area{
+    text-align: center
+};
 #button_area{
-    margin: auto;
     display: flex;
     justify-content: center;
     background-color: darkseagreen;
@@ -59,6 +61,74 @@
     display: flex;
     justify-content: center;
     background-color: rgb(81, 49, 197);
+}
+#harvest_area{
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    background-color: rgb(197, 49, 135);
+}
+#burst_area{
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    background-color: rgb(61, 197, 49);
+}
+#negotiate_area{
+    margin: auto;
+    justify-content: center;
+    text-align: center;
+    background-color: rgb(197, 187, 49);
+}
+#trade_area{
+    margin: auto;
+    justify-content: center;
+    text-align: center;
+    background-color: rgb(197, 49, 177);
+}
+#counterpart{
+    text-align: center;
+}
+.propose_button{
+    background:skyblue;
+    width: 70px;
+    height: 30px;
+    margin: 1px;
+    font-size: 0.6em;
+}
+#to0{
+    background-color: red;
+}
+#to1{
+    background-color: green;
+}
+#to2{
+    background-color: steelblue;
+}
+#to3{
+    background-color: yellow;
+}
+#to4{
+    background-color: orange;
+}
+#to5{
+    background-color: purple;
+}
+#proposing_area{
+    display: flex;
+    justify-content: center;
+}
+#proposed_area{
+    text-align: center;
+}
+#proposeterm{
+    display: flex;
+    justify-content: center;
+}
+.numberinput{
+    margin: auto;
+    display: flex;
+    justify-content: center;
 }
 #my_area{
     width: 100%;
@@ -167,7 +237,7 @@
 
 .action_button{
     background:skyblue;
-    width: 100px;
+    width: 50px;
     height: 40px;
     margin: 1px;
     font-size: 0.6em;
@@ -219,7 +289,52 @@
     text-align: center;
     vertical-align: middle;
 }
+.center{
+    text-align: center;
+    vertical-align: middle;
+}
+p{
+    display: inline-block;
+}
+.giveresource{
+    display: flex;
+    justify-content: center;
+}
+.takeresource{
+    display: flex;
+    justify-content: center;
+}
 
+
+
+
+.spinner_area{
+    width: 10%;
+    height:10%;
+    display: flex;
+}
+.btnspinner{
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.spinner_area input{
+    padding: 11px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 18px;
+    width: auto;
+    vertical-align: middle;
+    /* デフォルトのスピナーを消す */
+    -webkit-appearance: none;
+    -moz-appearance:textfield;
+}
+
+.spinner_area input[type="button"]{
+    cursor: pointer;
+}
 
 
 
@@ -597,6 +712,21 @@
 }
 .tile_buttony11{
     top:77.8257862782651%;
+}
+.direction1{
+    transform: rotate(60deg)
+}
+.direction2{
+    transform: rotate(120deg)
+}
+.direction3{
+    transform: rotate(180deg)
+}
+.direction4{
+    transform: rotate(240deg)
+}
+.direction5{
+    transform: rotate(300deg)
 }
 .chip{
     position:absolute;

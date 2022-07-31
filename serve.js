@@ -53,12 +53,12 @@ class Player{
     this.thisTurnProgress = 0
     this.largestArmy = 0
     this.longestRoad = 0
+    this.longestLength = 0
     this.point = 0
     this.progressUse = 0
     this.dice = 1
-  };
-  pointReload(){
-    this.point = this.house.length + this.city.length*2 + this.progress.point + this.largestArmy + this.longestRoad
+    this.toTrash = 0
+    this.tradeRate = {ore:4,grain:4,wool:4,lumber:4,brick:4}
   };
   build(item, position){
     if(item === 'house'){
@@ -91,6 +91,9 @@ class Player{
             }
           }
         }
+        this.constructPort(position)
+        board.longestCheck()
+        game.pointReload()
         display.allPlayerInformation()
         display.buildings()
       }
@@ -125,6 +128,9 @@ class Player{
           let tile = board.island[tileposition[0]][tileposition[1]]
           tile.houseOwner.push(this)
         }
+        this.constructPort(position)
+        board.longestCheck()
+        game.pointReload()
         display.allPlayerInformation()
         display.buildings()
       }
@@ -145,6 +151,7 @@ class Player{
         }
         //問題なければ建設
         this.token.city -= 1
+        this.token.house += 1
         this.city.push({position:position, nodeNumber: board.nodePositionToNumber(position)})
         board.city.push({type:'city', position:position, nodeNumber: board.nodePositionToNumber(position), owner:this})
         let tiles = board.tilesAroundNode(position)
@@ -157,6 +164,8 @@ class Player{
         discard(house, this.house)
         house = positionToObject(position, board.house)
         discard(house, board.house)
+        board.longestCheck()
+        game.pointReload()
         display.allPlayerInformation()
         display.buildings()
       }
@@ -174,6 +183,8 @@ class Player{
         this.token.road -= 1
         this.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position)})
         board.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), owner:this})
+        board.longestCheck()
+        game.pointReload()
         display.allPlayerInformation()
         display.buildings()
         game.turnEndSetup()
@@ -199,6 +210,8 @@ class Player{
         this.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position)})
         board.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), owner:this})
         this.useResource(item)
+        board.longestCheck()
+        game.pointReload()
         display.allPlayerInformation()
         display.buildings()
       }
@@ -219,6 +232,8 @@ class Player{
         this.token.road -= 1
         this.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position)})
         board.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), owner:this})
+        board.longestCheck()
+        game.pointReload()
         display.allPlayerInformation()
         display.buildings()
         if(this.token.road >= 1){
@@ -245,6 +260,8 @@ class Player{
         this.token.road -= 1
         this.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position)})
         board.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), owner:this})
+        board.longestCheck()
+        game.pointReload()
         display.allPlayerInformation()
         display.buildings()
         game.phase = 'afterdice'
@@ -263,6 +280,7 @@ class Player{
       this.useResource('progress')
       this.progress[game.progressDeck[0]] += 1
       game.progressDeck.splice(0, 1)
+      game.pointReload()
       display.allPlayerInformation()
     }
   };
@@ -280,6 +298,8 @@ class Player{
     this.progressUse += 1
     this.progress.knight -= 1
     this.used.knight += 1
+    this.largestArmyCheck()
+    game.pointReload()
     display.allPlayerInformation()
   };
   thiefmove(position){
@@ -343,7 +363,7 @@ class Player{
     }
   };
   monopoly(resource){
-    if(game.phase !== 'afterdice'){
+    if(game.phase !== 'monopoly'){
       return
     }
     if(this.progress.monopoly <= 0){
@@ -361,8 +381,32 @@ class Player{
         player.resource[resource] = 0
       }
     }
+    display.hideMyMonopolyArea(this.socketID)
     display.allPlayerInformation()
   };
+  harvest(resource){
+    if(game.phase !== 'harvest1' && game.phase !== 'harvest2'){
+      return
+    }
+    if(game.phase === 'harvest1'){
+      if(this.progress.harvest <= 0){
+        return
+      }
+      if(this.progressUse >= 1){
+        return
+      }
+      this.progressUse += 1
+      this.progress.harvest -= 1
+      this.used.harvest += 1
+      this.resource[resource] += 1
+      game.phase = 'harvest2'
+    }else if(game.phase === 'harvest2'){
+      this.resource[resource] += 1
+      game.phase = 'afterdice'
+      display.hideMyHarvestArea(this.socketID)
+    }
+    display.allPlayerInformation()
+  }
   roadBuild(){
     if(game.phase !== 'afterdice'){
       return
@@ -381,20 +425,156 @@ class Player{
     }
     display.allPlayerInformation()
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  turnEnd(){
+    this.progressUse = 0
+    this.dice = 1
+    game.turnEnd()
+  }
+  trash(resource){
+    if(this.resource[resource] < 1){
+      return
+    }
+    if(this.toTrash >= 1){
+      this.resource[resource] -= 1
+      this.toTrash -= 1
+    }
+    if(this.toTrash === 0){
+      display.hideMyBurstArea(this.socketID)
+      discard(this, game.burstPlayer)
+      if(game.burstPlayer.length === 0){
+        game.phase = 'thiefmove'
+      }
+    }
+    display.allPlayerInformation()
+  }
+  myLongest(){
+    //道に接した点を一つ選択
+    let longest = 0
+    for(let startRoad of this.road){
+      /*display.log('道')
+      display.log(startRoad.roadNumber)
+      display.log('を選択')*/
+      let nodes = board.sidesOfRoad(startRoad.position)
+      for(let startNode of nodes){
+        /*display.log('node')
+        display.log(board.nodePositionToNumber(startNode))
+        display.log('からカウントスタート')*/
+        let count = 0
+        let countedRoad = []
+        let returnedRoad = []
+        /*display.log('node')
+        display.log(board.nodePositionToNumber(startNode))
+        display.log('から')*/
+        let currentNode = board.otherSideOfRoad(startNode, startRoad.position)
+        /*display.log(board.nodePositionToNumber(currentNode))
+        display.log('へ移動')*/
+        countedRoad.push(startRoad)
+        /*display.log('これまでに通った道は')
+        for(let road of countedRoad){
+          display.log(road.roadNumber)
+        }*/
+        count += 1
+        /*display.log('countは')
+        display.log(count)*/
+        let lastRoad = startRoad
+        while(true){
+          let adjacentRoad = []
+          if(board.nodeCondition(currentNode) !== 'blank' && board.nodeCondition(currentNode) !== 'adjacent' && board.nodeCondition(currentNode).owner !== this){
+            /*display.log('node')
+            display.log(board.nodePositionToNumber(currentNode))
+            display.log('には人の家がある')*/
+            adjacentRoad.push(lastRoad)
+          }else{
+            /*display.log('node')
+            display.log(board.nodePositionToNumber(currentNode))
+            display.log('には人の家はない')*/
+            adjacentRoad = this.myRoadsAroundNode(currentNode)
+          }
+          let unpassedRoad = copyOfArray(adjacentRoad)
+          for(let road of countedRoad){
+            discard(road, unpassedRoad)
+          }
+          /*display.log('隣接する道は')
+          for(let road of adjacentRoad){
+            display.log(road.roadNumber)
+          }
+          display.log('その中で通っていない道は')
+          for(let road of unpassedRoad){
+            display.log(road.roadNumber)
+          }*/
+          let unreturnedRoad = copyOfArray(adjacentRoad)
+          for(let road of returnedRoad){
+            discard(road, unreturnedRoad)
+          }
+          for(let road of unreturnedRoad){
+            if(!countedRoad.includes(road)){
+              discard(road, unreturnedRoad)
+            }
+          }
+          /*display.log('1回だけ通った道は')
+          for(let road of unreturnedRoad){
+            display.log(road.roadNumber)
+          }*/
+          if(unpassedRoad.length !== 0){
+            /*display.log('通っていない道の内')
+            display.log(unpassedRoad[0].roadNumber)
+            display.log('を通って')
+            display.log('node')
+            display.log(board.nodePositionToNumber(currentNode))
+            display.log('から')*/
+            currentNode = board.otherSideOfRoad(currentNode, unpassedRoad[0].position)
+            /*display.log(board.nodePositionToNumber(currentNode))
+            display.log('へ移動')*/
+            countedRoad.push(unpassedRoad[0])
+            /*display.log('これまでに通った道は')
+            for(let road of countedRoad){
+              display.log(road.roadNumber)
+            }*/
+            count += 1
+            /*display.log('countは')
+            display.log(count)*/
+            lastRoad = unpassedRoad[0]
+            continue
+          }else if(unreturnedRoad.length !== 0){
+            /*display.log('1度も通っていない道がないので、1度だけ通った道')
+            display.log(unreturnedRoad[0].roadNumber)
+            display.log('を引き返す。ここまでのカウントは')
+            display.log(count)*/
+            if(count > longest){
+              /*display.log('これまでの記録')
+              display.log(longest)
+              display.log('を更新したので、記録を')
+              display.log(count)
+              display.log('に変更')*/
+              longest = count
+            }
+            /*display.log(board.nodePositionToNumber(currentNode))
+            display.log('から')
+            display.log(unreturnedRoad[0].roadNumber)
+            display.log('を通って')*/
+            currentNode = board.otherSideOfRoad(currentNode, unreturnedRoad[0].position)
+            /*display.log(board.nodePositionToNumber(currentNode))
+            display.log('へ移動')*/
+            returnedRoad.push(unreturnedRoad[0])
+            /*display.log('二回通った道は')
+            for(let road of returnedRoad){
+              display.log(road.roadNumber)
+            }*/
+            count -= 1
+            /*display.log('countは')
+            display.log(count)*/
+            continue
+          }else{
+            /*display.log('進める道がない')*/
+            break
+          }
+        }
+      }
+    }
+    /*display.log('すべての道を選択終了。最長記録は')
+    display.log(longest)*/
+    return longest
+  };
 
 
   //道の端に自分の建物があるか確認
@@ -418,6 +598,19 @@ class Player{
       }
     }
     return false
+  };
+  //nodeの周りの自分の道
+  myRoadsAroundNode(nodeposition){
+    let myRoads =[]
+    let roadpositions = board.roadsArounNode(nodeposition)
+    for(let roadposition of roadpositions){
+      for(let road of this.road){
+        if(arrayComparison(roadposition, road.position)){
+          myRoads.push(road)
+        }
+      }
+    }
+    return myRoads
   }
   //nodeの周りに自分の道が存在するか確認
   IhaveRoadAroundNode(nodeposition){
@@ -463,31 +656,109 @@ class Player{
       this.resource[resource] -= buildResource[item][resource]
     }
   };
-
-
-
-  turnEnd(){
-    this.playingCard = ''
-    this.targetBox = ''
-    display.boxDelete()
-    this.draw()
-    this.toDraw = 0
-    game.turnEnd()
+  //最大騎士力チェック
+  largestArmyCheck(){
+    if(this.used.knight >= 3){
+      if(game.largestArmyPlayer === ''){
+        game.largestArmyPlayer = this
+        this.largestArmy = 2
+      }else if(this.used.knight > game.largestArmyPlayer.used.knight){
+        game.largestArmyPlayer.largestArmy = 0
+        this.largestArmy = 2
+        game.largestArmyPlayer = this
+      }
+    }
   };
-  resetMythis(){
-    this.hand = [];
-    toDraw = 0;
-    this.playingCard = ''
-    this.targetBox = ''
+  trade(data){
+    let ex = 0
+    let im = 0
+    for(let resource in data.exportresource){
+      if(this.resource[resource] < data.exportresource[resource]){
+        display.hideMyTradeArea(this.socketID)
+        return
+      }
+      if(data.exportresource[resource] % this.tradeRate[resource] !== 0){
+        display.hideMyTradeArea(this.socketID)
+        return
+      }
+      ex += data.exportresource[resource] / this.tradeRate[resource]
+      im += data.importresource[resource]
+    }
+    if(ex !== im){
+      display.log('等しくない')
+      display.hideMyTradeArea(this.socketID)
+      return
+    }
+    for(let resource in data.exportresource){
+      display.log('成立')
+      this.resource[resource] -= data.exportresource[resource]
+      this.resource[resource] += data.importresource[resource]
+    }
+    game.phase = 'afterdice'
+    display.hideMyTradeArea(this.socketID)
+    display.allPlayerInformation()
+  }
+  accepted(){
+    let data = game.proposedata
+    game.phase = 'afterdice'
+    display.hideMyProposingArea(data.proposer.socketID)
+    display.hideMyProposedArea(data.proposee.socketID)
+    for(let resource in data.giveresource){
+      if(data.proposer.resource[resource] < data.giveresource[resource]){
+        return
+      }
+      if(data.proposee.resource[resource] < data.takeresource[resource]){
+        return
+      }
+    }    
+    for(let resource in data.giveresource){
+      data.proposer.resource[resource] -= data.giveresource[resource]
+      data.proposee.resource[resource] += data.giveresource[resource]
+      data.proposee.resource[resource] -= data.takeresource[resource]
+      data.proposer.resource[resource] += data.takeresource[resource]
+    }
+    display.allPlayerInformation()
   };
-  refresh(){
-    this.hand = [];
-    this.toDraw = 0;
-    this.playingCard = ''
-    this.targetBox = ''
-  };
+  denied(){
+    let data = game.proposedata
+    game.phase = 'afterdice'
+    display.hideMyProposingArea(data.proposer.socketID)
+    display.hideMyProposedArea(data.proposee.socketID)
+    display.allPlayerInformation()
+  }
   totalResource(){
     return this.resource.ore + this.resource.wool + this.resource.grain + this.resource.lumber + this.resource.brick
+  };
+  constructPort(nodeposition){
+    for(let key in board.ports){
+      for(let port of board.ports[key]){
+        if(arrayComparison(nodeposition, port)){
+          if(key === 'oreport'){
+            this.tradeRate.ore = 2
+          }
+          if(key === 'grainport'){
+            this.tradeRate.grain = 2
+          }
+          if(key === 'woolport'){
+            this.tradeRate.wool = 2
+          }
+          if(key === 'lumberport'){
+            this.tradeRate.lumber = 2
+          }
+          if(key === 'brickport'){
+            this.tradeRate.brick = 2
+          }
+          if(key === 'genericport'){
+            for(let resource in this.tradeRate){
+              if(this.tradeRate[resource] === 4){
+                this.tradeRate[resource] = 3
+              }
+            }
+          }
+          io.to(this.socketID).emit('reloadrate', this.tradeRate)
+        }
+      }
+    }
   }
 }
 
@@ -495,7 +766,7 @@ class Player{
 
 
 
-const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[],[],[]],thief:'', house:[], city:[], road:[], nodeLine:[7,16,27,40,53,64,73,80],roadLine:[6,10,18,23,33,39,51,58,70,76,86,91,99,103,109], dice:[],tileLine:[3,7,12,18,23,27,30],
+const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[],[],[]],thief:'', house:[], city:[], road:[], nodeLine:[7,16,27,40,53,64,73,80],roadLine:[6,10,18,23,33,39,51,58,70,76,86,91,99,103,109], dice:[],tileLine:[3,7,12,18,23,27,30],ports:{oreport:[], grainport:[], woolport:[], lumberport:[], brickport:[],genericport:[]},
   makeIsland(){
     this.island = [[],[],[],[],[],[],[],[],[]]
     let lands = ['ore','ore','ore','ore','ore','brick','brick','brick','brick','brick','wool','wool','wool','wool','wool','wool','lumber','lumber','lumber','lumber','lumber','lumber','grain','grain','grain','grain','grain','grain','desert','desert']
@@ -509,7 +780,7 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
       if(x === 1|| x === 9){
         let i = 1
         while(i <= 4){
-          let tile = {type:oceans[0],position:[x-1,y-1],houseOwner:[], cityOwner:[],produce:false}
+          let tile = {type:oceans[0],position:[x-1,y-1],houseOwner:[], cityOwner:[],produce:false, direction:0}
           board.island[x-1].push(tile)
           oceans.splice(0,1)
           i += 1
@@ -518,15 +789,15 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
       }else{
         while(y <= row[x-1]){
           if(y === 1||y === row[x-1]){
-            let tile = {type:oceans[0],position:[x-1,y-1],houseOwner:[], cityOwner:[],produce:false}
+            let tile = {type:oceans[0],position:[x-1,y-1],houseOwner:[], cityOwner:[],produce:false, direction:0}
             board.island[x-1].push(tile)
             oceans.splice(0,1)            
           }else{
             if(lands[0] !== 'desert'){
-              let tile = {type:lands[0],position:[x-1,y-1],houseOwner:[], cityOwner:[],produce:true}
+              let tile = {type:lands[0],position:[x-1,y-1],houseOwner:[], cityOwner:[],produce:true, direction:0}
               board.island[x-1].push(tile)
             }else{
-              let tile = {type:lands[0],position:[x-1,y-1],houseOwner:[], cityOwner:[],produce:false}
+              let tile = {type:lands[0],position:[x-1,y-1],houseOwner:[], cityOwner:[],produce:false, direction:0}
               board.island[x-1].push(tile)
               this.thief = tile
             }
@@ -549,7 +820,21 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
         }
       }
     }
-
+    for(let line of this.island){
+      for(let ocean of line){
+        if(ocean.type === 'woolport' || ocean.type === 'oreport' || ocean.type === 'grainport' || ocean.type === 'brickport' || ocean.type === 'lumberport' || ocean.type === 'genericport'){
+          let directionChoices = this.ableDirectionOfOcean(ocean)
+          let portsChoices = this.portsNodeCombiOnOcean(ocean)
+          let number = Math.floor(Math.random()*2)
+          let direction  = directionChoices[number]
+          let ports = portsChoices[number]
+          ocean.direction = direction
+          for(let port of ports){
+            board.ports[ocean.type].push(port)
+          }
+        }
+      }
+    }
   },
   //node番号を座標に変換
   nodeNumberToPosition(number){
@@ -721,9 +1006,14 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
     let dice1 = Math.ceil(Math.random()*6);
     let dice2 = Math.ceil(Math.random()*6);
     this.dice = [dice1,dice2];
-    game.phase = 'afterdice'
     game.turnPlayer.dice = 0
     this.produce(dice1+dice2)
+    display.log(dice1+dice2)
+    if(dice1 + dice2 === 7){
+      game.burstPlayerCheck()
+    }else{
+      game.phase = 'afterdice'
+    }
   },
   //資源産出
   produce(add){
@@ -741,7 +1031,7 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
    }
    display.allPlayerInformation()
   },
-  //nodeの周りのroad
+  //nodeの周りのroad座標
   roadsArounNode(nodeposition){
     let x = nodeposition[0]
     let y = nodeposition[1]
@@ -773,7 +1063,7 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
     };
     return arr;
   },
-  //nodeの間のroad
+  //roadの間のnode
   nodeBetweenRoads(road1, road2){
     let nodes1 = this.sidesOfRoad(road1);
     let nodes2 = this.sidesOfRoad(road2);
@@ -813,7 +1103,7 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
     while(true){
       if(tilebuttonnumber <= this.tileLine[x-1]){
         if(x === 1){
-          y = number
+          y = tilebuttonnumber
         }else{
           y = tilebuttonnumber - this.tileLine[x-2]
         }
@@ -831,6 +1121,118 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
       return this.tileLine[position[0]-2]+position[1]
     }
   },
+  otherSideOfRoad(node,roadposition){
+    let nodes = this.sidesOfRoad(roadposition)
+    if(arrayComparison(node, nodes[0])){
+      return nodes[1]
+    }else if(arrayComparison(node, nodes[1])){
+      return nodes[0]
+    }
+    else false
+  },
+  longestCheck(){
+    let longestPlayer = []
+    for(let player of game.players){
+      player.longestLength = player.myLongest()
+      if(player.longestLength >= 5){
+        if(longestPlayer.length === 0){
+          longestPlayer.push(player)
+        }else if(player.longestLength > longestPlayer[0].longestLength){
+          longestPlayer = [player]
+        }else if(player.longestLength === longestPlayer[0].longestLength){
+          longestPlayer.push(player)
+        }
+      }
+    }
+    if(longestPlayer.length === 1){
+      game.longestRoadPlayer = longestPlayer[0]
+    }else if(longestPlayer.includes(game.longestRoadPlayer)){
+    }else{
+      game.longestRoadPlayer = ''
+    }
+    for(let player of game.players){
+      player.longestRoad = 0
+    }
+    game.longestRoadPlayer.longestRoad = 2
+  },
+  ableDirectionOfOcean(oceanobject){
+    let x = oceanobject.position[0]
+    let y = oceanobject.position[1]
+    if(x === 0){
+      if(y === 0){
+        return [5,5]
+      }else if(y === 3){
+        return [4,4]
+      }else{
+        return [4,5]
+      }
+    }else if(x >= 1 && x <= 3){
+      if(y === 0){
+        return [0,5]
+      }else{
+        return [3,4]
+      }
+    }else if(x === 4){
+      if(y === 0){
+        return [0,0]
+      }else if(y === 7){
+        return [3,3]
+      }
+    }else if(x >= 5 && x <=7){
+      if(y === 0){
+        return [0,1]
+      }else{
+        return [2,3]
+      }
+    }else if(x === 8){
+      if(y === 0){
+        return [1,1]
+      }else if(y === 3){
+        return [2,2]
+      }else{
+        return [1,2]
+      }
+    }
+  },
+  portsNodeCombiOnOcean(oceanobject){
+    let x = oceanobject.position[0]
+    let y = oceanobject.position[1]
+    if(x === 0){
+      if(y === 0){
+        return [[[1,1],[1,2]],[[1,1],[1,2]]]
+      }else if(y === 3){
+        return [[[1,6],[1,7]],[[1,6],[1,7]]]
+      }else{
+        return [[[1,y*2],[1,y*2+1]],[[1,y*2+1],[1,y*2+2]]]
+      }
+    }else if(x >= 1 && x <= 3){
+      if(y === 0){
+        return [[[x,1],[x+1,2]],[[x+1,1],[x+1,2]]]
+      }else{
+        return [[[x,y*2-1],[x+1,y*2]],[[x+1,y*2],[x+1,y*2+1]]]
+      }
+    }else if(x === 4){
+      if(y === 0){
+        return [[[4,1],[5,1]],[[4,1],[5,1]]]
+      }else if(y === 7){
+        return [[[4,13],[5,13]],[[4,13],[5,13]]]
+      }
+    }else if(x >= 5 && x <=7){
+      if(y === 0){
+        return [[[x,2],[x+1,1]],[[x,1],[x,2]]]
+      }else{
+        return [[[x,y*2],[x,y*2+1]],[[x,y*2],[x+1,y*2-1]]]
+      }
+    }else if(x === 8){
+      if(y === 0){
+        return [[[8,1],[8,2]],[[8,1],[8,2]]]
+      }else if(y === 3){
+        return [[[7,6],[7,7]],[[7,7],[7,7]]]
+      }else{
+        return [[[8,y*2+1],[8,y*2+2]],[[8,y*2],[8,y*2+1]]]
+      }
+    }
+  }
 }
 
 
@@ -840,7 +1242,7 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
 
 
 
-const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputting', progressDeck:[],board:board,
+const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputting', progressDeck:[],board:board,buildingPhase:0,largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:'',
   playerMake(){
     let i = 1
     this.players = []
@@ -873,8 +1275,6 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputti
     this.turnPlayer = this.players[0]
     this.progressDeckMake();
     display.playerSort();
-    /*display.allHands();
-    display.field()*/
     display.hideItems();
     display.turnPlayer();
   },
@@ -926,28 +1326,32 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputti
     this.progressDeck = arr
   },
   turnEnd(){
-    while(true){
-      let now = this.turnPlayer
-      if(this.players.indexOf(this.turnPlayer) === this.players.length-1){
-        this.turnPlayer = this.players[0];
-      } else {
-          this.turnPlayer = this.players[this.players.indexOf(this.turnPlayer)+1];
-      }
-      if(this.turnPlayer.hand.length !== 0){
-        break
-      }else if(this.turnPlayer === now && now.hand.length === 0){
+    if(game.phase === 'afterdice'){
+      if(game.turnPlayer.point >= 10){
+        game.gameEnd()
         return
       }
+      game.buildingPhase = 0
+      game.phase = 'building'
     }
-    this.turn += 1
+    display.hideMyButtonArea(game.turnPlayer.socketID)
+    if(this.players.indexOf(this.turnPlayer) === this.players.length-1){
+      this.turnPlayer = this.players[0];
+    } else {
+        this.turnPlayer = this.players[this.players.indexOf(this.turnPlayer)+1];
+    }
     display.turnPlayer()
-    display.allHands()
-    display.field()
+    display.showMyButtonArea(game.turnPlayer.socketID)
+    if(this.buildingPhase === this.players.length){
+      this.phase = 'beforedice'
+    }
+    this.buildingPhase += 1
   },
   turnEndSetup(){
     if(this.turnPlayer.house.length === 2){
       if(this.turnPlayer === this.players[0]){
         this.phase = 'beforedice'
+        display.showMyButtonArea(game.turnPlayer.socketID)
       }else{
         this.turnPlayer = this.players[this.players.indexOf(this.turnPlayer)-1];
       }
@@ -960,6 +1364,45 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputti
     }
     display.turnPlayer()
   },
+  pointReload(){
+    for(let player of this.players){
+      player.point = player.house.length + player.city.length*2 + player.progress.point + player.largestArmy + player.longestRoad
+    }
+  },
+  gameEnd(){
+    display.gameResult()
+  },
+  burstPlayerCheck(){
+    this.burstPlayer = []
+    for(let player of this.players){
+      if(player.totalResource() >= 8){
+        this.burstPlayer.push(player)
+        player.toTrash = Math.floor(player.totalResource()/2)
+      }
+    }
+    if(this.burstPlayer.length !== 0){
+      this.phase = 'burst'
+      for(let player of this.burstPlayer){
+        display.showMyBurstArea(player.socketID)
+      }
+    }else{
+      game.phase = 'thiefmove'
+    }
+  },
+  IDToPlayer(ID){
+    for(let player of this.players){
+      if(ID === player.socketID){
+        return player
+      }
+    }
+  },
+
+
+
+
+
+
+
   takeOver(player){
     this.players[player.number].socketID = player.socketID
   },
@@ -997,8 +1440,7 @@ const display = {
     io.emit('island', island)
   },
   hideMyItems(socketID){
-    let nop = game.players.length
-    io.to(socketID).emit('hidemyitems', nop)
+    io.to(socketID).emit('hideItems', game)
   },
   allResource(){
     io.emit('allResource', game);
@@ -1037,6 +1479,74 @@ const display = {
     let e
     io.emit('hidemonopoly',e)
   },
+  hideHarvestArea(){
+    let e
+    io.emit('hideharvest',e)
+  },
+  hideBurstArea(){
+    let e
+    io.emit('hideburst',e)
+  },
+  hideTradeArea(){
+    let e
+    io.emit('hidetrade',e)
+  },
+  hideNegotiateArea(){
+    let e
+    io.emit('hidenegotiate',e)
+  },
+  hideProposingArea(){
+    let e
+    io.emit('hideproposing', e)
+  },
+  hideProposedArea(){
+    let e
+    io.emit('hideproposed', e)
+  },
+  hidePlayers(){
+    let e
+    io.emit('hideplayers', e)
+  },
+  hideMyMonopolyArea(socketID){
+    let e
+    io.to(socketID).emit('hidemonopoly',e)
+  },
+  showMyMonopolyArea(socketID){
+    let e
+    io.to(socketID).emit('showmonopoly',e)
+  },
+  hideMyHarvestArea(socketID){
+    let e
+    io.to(socketID).emit('hideharvest',e)
+  },
+  showMyHarvestArea(socketID){
+    let e
+    io.to(socketID).emit('showharvest',e)
+  },
+  hideMyBurstArea(socketID){
+    let e
+    io.to(socketID).emit('hideburst',e)
+  },
+  showMyBurstArea(socketID){
+    let e
+    io.to(socketID).emit('showburst',e)
+  },
+  hideMyTradeArea(socketID){
+    let e
+    io.to(socketID).emit('hidetrade',e)
+  },
+  showMyTradeArea(socketID){
+    let e
+    io.to(socketID).emit('showtrade',e)
+  },
+  hideMyNegotiateArea(socketID){
+    let e
+    io.to(socketID).emit('hidenegotiate',e)
+  },
+  showMyNegotiateArea(socketID){
+    let e
+    io.to(socketID).emit('shownegotiate',e)
+  },
   hideBoard_And_Button(){
     let e
     io.emit('hideBoard_And_Button', e)
@@ -1045,57 +1555,24 @@ const display = {
     let e
     io.emit('showBoard_And_Button', e)
   },
-
-
-
-
-
-
-
-
-
-
-
-
-
-  myHand(player){
-    io.emit('myHand', player)
+  gameResult(){
+    io.emit('gameresult', game)
   },
-  field(){
-      io.emit('field', game)
+  showMyProposingArea(socketID){
+    let data = game.proposedata
+    io.to(socketID).emit('showproposing', data)
   },
-  nextButtonHIde(){
-      let a = ''
-      io.emit('nextButtonHide', a)
+  showMyProposedArea(socketID){
+    let data = game.proposedata
+    io.to(socketID).emit('showproposed', data)
   },
-  matchResult(){
-      let data = {championname:game.champion.name, players:game.copyOfPlayers()}
-      io.emit('matchResult', data)
+  hideMyProposingArea(socketID){
+    let e
+    io.to(socketID).emit('hideproposing', e)
   },
-  hideResult(){
-    let a = ''
-    io.emit('hideResult', a)
-  },
-  backgroundAllDelete(){
-    let a = ''
-    io.emit('backgroundAllDelete', a)
-  },
-  backgroundDelete(card){
-    io.emit('backgroundDelete', card)
-  },
-  handRed(player){
-    io.emit('handRed', player)
-  },
-  handClear(){
-    let player = game.turnPlayer
-    io.emit('handClear', player)
-  },
-  boxRed(boxNumber){
-    io.emit('boxRed', boxNumber)
-  },
-  boxDelete(){
-    let e = ''
-    io.emit('boxDelete', e);
+  hideMyProposedArea(socketID){
+    let e
+    io.to(socketID).emit('hideproposed', e)
   },
   initialize(){
     let maxPlayer = game.maxPlayer
@@ -1105,10 +1582,6 @@ const display = {
     let tn = game.turnPlayer.number
     io.emit('turnplayer', tn)
   },
-  turnPlayerDelete(){
-    let e = ''
-    io.emit('tunplayerdelete', e)
-  },
   takeOver(player){
     io.emit('takeoverbuttonclick', player)
   },
@@ -1116,20 +1589,30 @@ const display = {
     let e = ''
     io.emit('toggletakeoverbutton',e)
   },
-  showStart(n){
-    io.emit('showstart', n)
-  },
   playerSort(){
     let players = game.players
     io.emit('playersort', players)
   },
-  /*allmighty(){
-    if(game.phase === ''){
-    }
-  },*/
+  myplayerSort(socketID){
+    let players = game.players
+    io.to(socketID).emit('playersort', players)
+  },
+  hideMyButtonArea(socketID){
+    let e
+    io.to(socketID).emit('hidebuttonarea', e)
+  },
+  showMyButtonArea(socketID){
+    let e
+    io.to(socketID).emit('showbuttonarea', e)
+  },
+  hideButtonArea(){
+    let e
+    io.emit('hidebuttonarea', e)
+  },
   log(a){
     io.emit('log', a)
   },
+
 }
 
 function discard(item,array){
@@ -1193,6 +1676,13 @@ function positionToObject(position, array){
   }
   return false
 };
+function copyOfArray(array){
+  let arr =[]
+  for(let item of array){
+    arr.push(item)
+  }
+  return arr
+}
 
 
 
@@ -1202,12 +1692,30 @@ io.on("connection", (socket)=>{
   if(game.phase === 'nameinputting'){
     io.to(socket.id).emit("nameDisplay", (playersName));
     display.hideBoard_And_Button()
+    display.hideButtonArea()
     display.hideMonopolyArea()
+    display.hideHarvestArea()
+    display.hideBurstArea()
+    display.hideTradeArea()
+    display.hideNegotiateArea()
+    display.hideProposingArea()
+    display.hideProposedArea()
+    display.hidePlayers()
   }else{
-    display.hideItems();
+    display.hideMyItems(socket.id);
+    display.hideButtonArea(socket.id)
+    display.hideMyMonopolyArea(socket.id)
+    display.hideMyHarvestArea(socket.id)
+    display.hideMyBurstArea(socket.id)
+    display.hideMyTradeArea(socket.id)
+    display.hideMyNegotiateArea(socket.id)
+    display.hideMyProposingArea(socket.id)
+    display.hideMyProposedArea(socket.id)
+    display.myplayerSort(socket.id);
     display.turnPlayer();
     display.island()
     display.thief()
+    display.buildings()
     display.allPlayerInformation()
   }
   
@@ -1266,7 +1774,7 @@ io.on("connection", (socket)=>{
     });
     //ダイスボタンをクリック
     socket.on('diceclick',(data)=>{
-      if(data.socketID !== game.turnPlayer.socketID/* || game.phase !== 'beforedice'*/){
+      if(data.socketID !== game.turnPlayer.socketID || game.phase !== 'beforedice'){
         return
       }else{
         board.rollDice()
@@ -1298,13 +1806,46 @@ io.on("connection", (socket)=>{
         game.turnPlayer.thiefmove(position)
       }
     });
+    //独占ボタンをクリック
+    socket.on('monopolybutton',(data)=>{
+      if(data.socketID !== game.turnPlayer.socketID){
+        return
+      }else if(game.phase === 'afterdice' && game.turnPlayer.progressUse === 0 && game.turnPlayer.progress.monopoly >= 1){
+        game.phase = 'monopoly'
+        display.showMyMonopolyArea(game.turnPlayer.socketID)
+      }else if(game.phase === 'monopoly'){
+        game.phase = 'afterdice'
+        display.hideMyMonopolyArea(game.turnPlayer.socketID)
+      }
+    });
     //独占資源ボタンをクリック
     socket.on('monopoly',(data)=>{
       let resource = data.resource
       if(data.socketID !== game.turnPlayer.socketID){
         return
-      }else if(game.phase === 'afterdice'){
+      }else if(game.phase === 'monopoly'){
         game.turnPlayer.monopoly(resource)
+      }
+    });
+    //収穫ボタンをクリック
+    socket.on('harvestbutton',(data)=>{
+      if(data.socketID !== game.turnPlayer.socketID){
+        return
+      }else if(game.phase === 'afterdice' && game.turnPlayer.progressUse === 0 && game.turnPlayer.progress.harvest >= 1){
+        game.phase = 'harvest1'
+        display.showMyHarvestArea(game.turnPlayer.socketID)
+      }else if(game.phase === 'harvest1'){
+        game.phase = 'afterdice'
+        display.hideMyHarvestArea(game.turnPlayer.socketID)
+      }
+    });
+    //収穫資源ボタンをクリック
+    socket.on('harvest',(data)=>{
+      let resource = data.resource
+      if(data.socketID !== game.turnPlayer.socketID){
+        return
+      }else if(game.phase === 'harvest1' || game.phase === 'harvest2'){
+        game.turnPlayer.harvest(resource)
       }
     });
     //街道建設ボタンをクリック
@@ -1315,87 +1856,105 @@ io.on("connection", (socket)=>{
         game.turnPlayer.roadBuild()
       }
     });
-
-
-
-
-
-
-
-  //手札を選択
-  socket.on('handclick', (data)=>{
-    if(data.socketID === game.turnPlayer.socketID){
-      game.turnPlayer.playingCard = data.cardNumber
-      let player = game.turnPlayer
-      display.handRed(player)
-      player.play()
-    }
-  });
-
-
-  //開始に同意する
-  socket.on('startbuttonclick', (data)=>{
-    let n = data.number
-    let p = game.players[n]
-    p.startOK();
-    io.emit('startbuttonclick', n)
-  })
-
-  //カードを場に出す
-  socket.on('playbuttonclick', (player)=>{
-    let n = player.number
-    let p = game.players[n]
-    p.playCards();
-  })
-  
-  //もう一度遊ぶ
-  socket.on('newgamebuttonclick', (e)=>{
-    game.newGame();
-  })
-
-  //初期化
-  
-  socket.on('yesbuttonclick', (e)=>{
-    display.initialize()
-    game.initialize()
-  })
-
-  //継承
-  socket.on('takeoverbuttonclick', (player)=>{
-    game.takeOver(player)
-    display.takeOver(player)
-    display.playerSort()
-    display.allHands();
-    display.hideItems();
-    display.field()
-    display.turnPlayer();
-  })
-
-  //ターン終了
-  socket.on('endbuttonclick', (player)=>{
-    let n = player.number
-    let p = game.players[n]
-    if(p === game.turnPlayer){
-      if(game.deck.length !== 0){
-        if(p.toDraw >= 2 || p.hand.length === 0){
-          p.turnEnd()
-        }
-      }else{
-        if(p.toDraw >= 1 || p.hand.length === 0){
-          p.turnEnd()
-        }
+    //終了ボタンをクリック
+    socket.on('endbuttonclick',(data)=>{
+      if(data.socketID !== game.turnPlayer.socketID){
+        return
+      }else if(game.phase === 'afterdice' || game.phase === 'building'){
+        game.turnPlayer.turnEnd()
       }
-    }
-  })
-
-
-
-
-
-  //コンソールに表示
-  socket.on('console',(e)=>{
-    socket.emit('console', game)
-  })
+    });
+    //バースト資源ボタンをクリック
+    socket.on('burst',(data)=>{
+      let resource = data.resource
+      let player = game.IDToPlayer(data.socketID)
+      if(!game.burstPlayer.includes(player)){
+        return
+      }else if(game.phase === 'burst'){
+        player.trash(resource)
+      }
+    });
+    //貿易ボタンをクリック
+    socket.on('tradebuttonclick',(data)=>{
+      if(data.socketID !== game.turnPlayer.socketID){
+        return
+      }else if(game.phase === 'afterdice'){
+        game.phase = 'trade'
+        display.showMyTradeArea(game.turnPlayer.socketID)
+      }else if(game.phase === 'trade'){
+        game.phase = 'afterdice'
+        display.hideMyTradeArea(game.turnPlayer.socketID)
+      }
+    });
+    //貿易決定ボタンをクリック
+    socket.on('tradedecide',(data)=>{
+      if(data.socketID !== game.turnPlayer.socketID){
+        return
+      }else if(game.phase === 'trade'){
+        game.turnPlayer.trade(data)
+      }
+    });
+    //交渉ボタンをクリック
+    socket.on('negotiatebuttonclick',(data)=>{
+      if(data.socketID !== game.turnPlayer.socketID){
+        return
+      }else if(game.phase === 'afterdice'){
+        game.phase = 'negotiate'
+        display.showMyNegotiateArea(game.turnPlayer.socketID)
+      }else if(game.phase === 'negotiate'){
+        game.phase = 'afterdice'
+        display.hideMyNegotiateArea(game.turnPlayer.socketID)
+      }
+    });
+    //交渉相手ボタンをクリック
+    socket.on('propose',(data)=>{
+      if(data.socketID !== game.turnPlayer.socketID){
+        return
+      }else if(game.phase === 'negotiate'){
+        game.phase = 'propose'
+        game.proposedata = {proposer:game.turnPlayer, proposee:game.players[data.counterpartnumber], giveresource:data.giveresource, takeresource:data.takeresource}
+        display.hideMyNegotiateArea(game.proposedata.proposer.socketID)
+        display.showMyProposingArea(game.proposedata.proposer.socketID)
+        display.showMyProposedArea(game.proposedata.proposee.socketID)
+      }
+    });
+    //同意ボタンをクリック
+    socket.on('accept',(data)=>{
+      if(data.socketID !== game.proposedata.proposee.socketID){
+        return
+      }else if(game.phase === 'propose'){
+        game.proposedata.proposer.accepted()
+      }
+    });
+    //断るボタンをクリック
+    socket.on('deny',(data)=>{
+      if(data.socketID !== game.proposedata.proposee.socketID){
+        return
+      }else if(game.phase === 'propose'){
+        game.proposedata.proposer.denied()
+      }
+    });
+    //もう一度遊ぶ
+    socket.on('newgamebuttonclick', (e)=>{
+      game.newGame();
+    })
+    //初期化
+    socket.on('yesbuttonclick', (e)=>{
+      display.initialize()
+      game.initialize()
+    })
+    //継承
+    socket.on('takeoverbuttonclick', (player)=>{
+      game.takeOver(player)
+      display.takeOver(player)
+      display.playerSort()
+      display.hideItems();
+      display.turnPlayer();
+    })
+    //コンソールに表示
+    socket.on('console',(e)=>{
+      socket.emit('console', game)
+    })
 })
 
 

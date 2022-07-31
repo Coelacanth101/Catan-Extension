@@ -87,45 +87,69 @@ socket.on('deletethief', (buttonnumber)=>{
 socket.on('hidemonopoly', (e)=>{
     display.hideMonopolyArea()
 });
+socket.on('hideharvest', (e)=>{
+    display.hideHarvestArea()
+});
+socket.on('hideburst', (e)=>{
+    display.hideBurstArea()
+});
+socket.on('hidetrade', (e)=>{
+    display.hideTradeArea()
+});
+socket.on('hidenegotiate', (e)=>{
+    display.hideNegotiateArea()
+});
+socket.on('showmonopoly', (e)=>{
+    display.showMonopolyArea()
+});
+socket.on('showharvest', (e)=>{
+    display.showHarvestArea()
+});
+socket.on('showburst', (e)=>{
+    display.showBurstArea()
+});
+socket.on('showburst', (e)=>{
+    display.showBurstArea()
+});
+socket.on('showtrade', (e)=>{
+    display.showTradeArea()
+});
+socket.on('shownegotiate', (e)=>{
+    display.showNegotiateArea()
+});
+socket.on('showproposing', (data)=>{
+    display.showProposing(data)
+});
+socket.on('showproposed', (data)=>{
+    display.showProposed(data)
+});
+socket.on('hideproposing', (e)=>{
+    display.hideProposing()
+});
+socket.on('hideproposed', (e)=>{
+    display.hideProposed()
+});
+socket.on('hideplayers', (e)=>{
+    display.hidePlayers()
+})
 socket.on('hideBoard_And_Button', (e)=>{
     display.hideBoard_And_Button()
 });
 socket.on('showBoard_And_Button', (e)=>{
     display.showBoard_And_Button()
 });
-
-
-
-
-
-
-
-socket.on('myHand', (player)=>{
-    display.myHand(player)
-});
-socket.on('field', (game)=>{
-    display.field(game)
-});
-socket.on('startButton', ()=>{
-    display.startButton()
-});
-socket.on('backgroundAllDelete', ()=>{
-    display.backgroundAllDelete()
-});
-socket.on('backgroundDelete', (card)=>{
-    display.backgroundDelete(card)
-});
-socket.on('handRed', (player)=>{
-    display.handRed(player)
-});
-socket.on('handClear', (player)=>{
-    display.handClear(player)
+socket.on('gameresult', (game)=>{
+    display.gameResult(game)
 })
-/*socket.on('startbuttonclick', (n)=>{
-    display.startButtonHide(n)
-});*/
-
-
+socket.on('reloadrate', (data)=>{
+    console.log(data.ore)
+    $(`#exportore`).attr(`step`, data.ore)
+    console.log($(`#exportore`).attr(`step`))
+    $(`#exportgrain`).attr(`step`, data.grain)
+    $(`#exportwool`).attr(`step`, data.wool)
+    $(`#exportlumber`).attr(`step`, data.lumber)
+    $(`#exportbrick`).attr(`step`, data.brick)
+})
 socket.on('yesbuttonclick', (maxPlayer)=>{
     display.initialize(maxPlayer)
 });
@@ -138,9 +162,6 @@ socket.on('turnplayerdelete', ()=>{
 socket.on('takeoverbuttonclick', (player)=>{
     display.takeOver(player)
 })
-socket.on('hidemyitems',(nop)=>{
-    display.hideMyItems(nop)
-})
 socket.on('toggletakeoverbutton',()=>{
     display.toggleTakeOver()
 })
@@ -150,6 +171,14 @@ socket.on('log', (a)=>{
 socket.on('playersort', (players)=>{
     display.playerSort(players)
 })
+socket.on('hidebuttonarea', (e)=>{
+    display.hideButtonArea()
+})
+socket.on('showbuttonarea', (e)=>{
+    display.showButtonArea()
+})
+
+
 
 //nodeをクリック
 $(`#board_area`).on('click','.node',function(){
@@ -186,19 +215,98 @@ $(`#board_area`).on('click','.tile_button',function(){
 });
 //独占ボタンをクリック
 $(`#button_area`).on('click','#monopoly_button',function(){
-    $(`#monopoly_area`).toggle()
+    const data = {socketID:socket.id}
+    socket.emit('monopolybutton', data)
 });
 //独占資源ボタンをクリック
-$(`#monopoly_area`).on(`click`, `.monopoly_resource_button`, function(){
+$(`#monopoly_area`).on(`click`, `.resource_button`, function(){
     let resource = $(this).attr('id').slice(9)
-    console.log(resource)
     const data = {resource:resource, socketID:socket.id}
     socket.emit('monopoly', data)
+})
+//収穫ボタンをクリック
+$(`#button_area`).on('click','#harvest_button',function(){
+    const data = {socketID:socket.id}
+    socket.emit('harvestbutton', data)
+});
+//収穫資源ボタンをクリック
+$(`#harvest_area`).on(`click`, `.resource_button`, function(){
+    let resource = $(this).attr('id').slice(8)
+    const data = {resource:resource, socketID:socket.id}
+    socket.emit('harvest', data)
 })
 //街道建設ボタンをクリック
 $(`#button_area`).on('click','#roadbuild_button',function(){
     const data = {socketID:socket.id}
     socket.emit('roadbuildclick', data)
+});
+//終了ボタンをクリック
+$(`#button_area`).on('click','#end_button',function(){
+    const data = {socketID:socket.id}
+    socket.emit('endbuttonclick', data)
+});
+//バースト資源ボタンをクリック
+$(`#burst_area`).on(`click`, `.resource_button`, function(){
+    let resource = $(this).attr('id').slice(6)
+    const data = {resource:resource, socketID:socket.id}
+    socket.emit('burst', data)
+})
+//貿易ボタンをクリック
+$(`#button_area`).on('click','#trade_button',function(){
+    const data = {socketID:socket.id}
+    socket.emit('tradebuttonclick', data)
+});
+//貿易決定ボタンをクリック
+$(`#trade_area`).on('click','#tradedecide',function(){
+    const exportore = Number($(`#exportore`).val())
+    const exportgrain = Number($(`#exportgrain`).val())
+    const exportwool = Number($(`#exportwool`).val())
+    const exportlumber = Number($(`#exportlumber`).val())
+    const exportbrick = Number($(`#exportbrick`).val())
+    const exportresource = {ore:exportore,grain:exportgrain,wool:exportwool,lumber:exportlumber,brick:exportbrick}
+    const importore = Number($(`#importore`).val())
+    const importgrain = Number($(`#importgrain`).val())
+    const importwool = Number($(`#importwool`).val())
+    const importlumber = Number($(`#importlumber`).val())
+    const importbrick = Number($(`#importbrick`).val())
+    const importresource = {ore:importore,grain:importgrain,wool:importwool,lumber:importlumber,brick:importbrick}
+    const data = {socketID:socket.id, exportresource:exportresource, importresource:importresource}
+    console.log(data)
+    socket.emit('tradedecide', data)
+});
+//交渉ボタンをクリック
+$(`#button_area`).on('click','#negotiate_button',function(){
+    const data = {socketID:socket.id}
+    socket.emit('negotiatebuttonclick', data)
+});
+//交渉相手ボタンをクリック
+$(`#counterpart`).on('click','.propose_button',function(){
+    const counterpartnumber = Number($(this).attr(`id`).slice(2))
+    const giveore = Number($(`#giveore`).val())
+    const givegrain = Number($(`#givegrain`).val())
+    const givewool = Number($(`#givewool`).val())
+    const givelumber = Number($(`#givelumber`).val())
+    const givebrick = Number($(`#givebrick`).val())
+    const giveresource = {ore:giveore,grain:givegrain,wool:givewool,lumber:givelumber,brick:givebrick}
+    const takeore = Number($(`#takeore`).val())
+    const takegrain = Number($(`#takegrain`).val())
+    const takewool = Number($(`#takewool`).val())
+    const takelumber = Number($(`#takelumber`).val())
+    const takebrick = Number($(`#takebrick`).val())
+    const takeresource = {ore:takeore,grain:takegrain,wool:takewool,lumber:takelumber,brick:takebrick}
+    const data = {socketID:socket.id, counterpartnumber:counterpartnumber, giveresource:giveresource, takeresource:takeresource}
+    console.log(data)
+    socket.emit('propose', data)
+});
+//同意ボタンをクリック
+$(`#acceptordeny`).on('click','#accept',function(){
+    const data = {socketID:socket.id}
+    socket.emit('accept', data)
+});
+//断るボタンをクリック
+$(`#acceptordeny`).on('click','#deny',function(){
+    const data = {socketID:socket.id}
+    socket.emit('deny', data)
 });
 
 
@@ -276,38 +384,21 @@ const display = {
         i = game.players.length
         while(i <= game.maxPlayer - 1){
             $(`#player${i}`).hide()
+            $(`#to${i}`).hide()
             i += 1
         }
-        $('#gamestartbutton').hide()
-        $('#newgamebutton').hide();
+        $('#gamestart').hide()
         $('#nameinputarea').hide();
-        $('.startbutton').hide()
         $('#players').show();
         this.toggleTakeOver();
     },
-    hideMyItems(nop){
-        let i = 1
-        while(i <= 5){
-            $(`#player${i-1}`).show()
-            i += 1
-        }
-        while(nop <= 4){
-            $(`#player${nop}`).hide()
-            nop += 1
-        }
-        $('#gamestartbutton').hide();
-        $('#newgamebutton').hide();
-        $('#nameinputarea').hide();
-        $('#field').show()
-        $('#players').show();
-    },
     island(island){
         $('#board_and_button').show()
-        console.log(island)
         let tileNumber = 1
         for(line of island){
             for(tile of line){
                 $(`#tile${tileNumber}`).attr(`src`, `./${tile.type}.png`)
+                $(`#tile${tileNumber}`).addClass(`direction${tile.direction}`)
                 tileNumber += 1
             }
         }
@@ -327,9 +418,9 @@ const display = {
         for(let p of game.players){
             $(`#player${p.number}resource`).html('')
             let numberOfResources = p.resource.ore + p.resource.grain + p.resource.wool + p.resource.lumber + p.resource.brick
-            if(numberOfResources === 0){
-                $(`#player${p.number}resource`).html(' ')
-            }
+            /*if(numberOfResources === 0){
+                $(`#player${p.number}resource`).html('<p> </p>')
+            }*/
             if(p.socketID === socket.id){
                 for(r in p.resource){
                     let i = 1
@@ -339,7 +430,6 @@ const display = {
                     };
                 };
             }else{
-                let numberOfResources = p.resource.ore + p.resource.grain + p.resource.wool + p.resource.lumber + p.resource.brick
                 $(`#player${p.number}resource`).append(`資源:${numberOfResources}枚`);
                 /*for(r in p.resource){
                     let i = 1
@@ -371,9 +461,9 @@ const display = {
         for(let p of game.players){
             $(`#player${p.number}progress`).html('')
             let numberOfProgress = p.progress.knight + p.progress.road + p.progress.harvest + p.progress.monopoly + p.progress.point
-            if(numberOfProgress === 0){
-                $(`#player${p.number}progress`).html(' ')
-            }
+            /*if(numberOfProgress === 0){
+                $(`#player${p.number}progress`).html('<p> </p>')
+            }*/
             if(p.socketID === socket.id){
                 for(pr in p.progress){
                     let i = 1
@@ -430,7 +520,7 @@ const display = {
         }
     },
     thief(buttonnumber){
-        $(`#tile_button${buttonnumber}`).append(`<div id="thief"></div>`)
+        $(`#tile_button${buttonnumber}`).html(`<div id="thief"></div>`)
     },
     deleteThief(buttonnumber){
         $(`#tile_button${buttonnumber}`).html(``)
@@ -438,20 +528,116 @@ const display = {
     hideMonopolyArea(){
         $(`#monopoly_area`).hide()
     },
-
-
-
-    myHand(player){
-        $(`#player${player.number}hand`).html('')
-        if(player.socketID === socket.id){
-            for(c of player.hand){
-                $(`#player${player.number}hand`).append(`<img src="./${c}.png" id="${c}" class="player${player.number}card card" alt="${c}">`);
+    showMonopolyArea(){
+        $(`#monopoly_area`).show()
+    },
+    hideHarvestArea(){
+        $(`#harvest_area`).hide()
+    },
+    showHarvestArea(){
+        $(`#harvest_area`).show()
+    },
+    hideBurstArea(){
+        $(`#burst_area`).hide()
+    },
+    showBurstArea(){
+        $(`#burst_area`).show()
+    },
+    hideTradeArea(){
+        $(`#trade_area`).hide()
+        $(`input[type='number']`).val(``)
+    },
+    showTradeArea(){
+        $(`#trade_area`).show()
+    },
+    hideNegotiateArea(){
+        $(`#negotiate_area`).hide()
+        $(`input[type='number']`).val(``)
+    },
+    showNegotiateArea(){
+        $(`#negotiate_area`).show()
+    },
+    showProposing(data){
+        $(`#proposing_area`).show()
+        $(`#proposing_area`).html(``)
+        $(`#proposing_area`).append(`<div>${data.proposee.name}に</div>`)
+        $(`#proposing_area`).append(`<div class='giveresource'></div>`)
+        $(`#proposing_area`).append(`<div class='takeresource'></div>`)
+        for(let resource in data.giveresource){
+            let i = 1
+            let j = 1
+            while(i <= data.giveresource[resource]){
+                $(`#proposing_area .giveresource`).append(`<div class="square ${String(resource)}">${translate(String(resource))}</div>`);
+                i += 1
             };
-        }else{
-            for(c of player.hand){
-                $(`#player${player.number}hand`).append(`<img src="./back.png" class="player${player.number}card card">`);
+            while(j <= data.takeresource[resource]){
+                $(`#proposing_area .takeresource`).append(`<div class="square ${String(resource)}">${translate(String(resource))}</div>`);
+                j += 1
+            };
+        };
+        $(`#proposing_area .giveresource`).append(`<div>をあげて</div>`)
+        $(`#proposing_area .takeresource`).append(`<div>をもらう</div>`)
+    },
+    showProposed(data){
+        $(`#proposed_area`).show()
+        $(`#proposeterm`).html(``)
+        $(`#proposeterm`).append(`<div>${data.proposer.name}に</div>`)
+        $(`#proposeterm`).append(`<div class='giveresource'></div>`)
+        $(`#proposeterm`).append(`<div class='takeresource'></div>`)
+        for(let resource in data.giveresource){
+            let i = 1
+            let j = 1
+            while(i <= data.takeresource[resource]){
+                $(`#proposeterm .giveresource`).append(`<div class="square ${String(resource)}">${translate(String(resource))}</div>`);
+                i += 1
+            };
+            while(j <= data.giveresource[resource]){
+                $(`#proposeterm .takeresource`).append(`<div class="square ${String(resource)}">${translate(String(resource))}</div>`);
+                j += 1
+            };
+        };
+        $(`#proposeterm .giveresource`).append(`<div>をあげて</div>`)
+        $(`#proposeterm .takeresource`).append(`<div>をもらう</div>`)
+    },
+    hideProposing(){
+        $(`#proposing_area`).hide()
+        $(`#proposing_area`).html(``)
+    },
+    hideProposed(){
+        $(`#proposed_area`).hide()
+        $(`#proposeterm`).html(``)
+    },
+    hidePlayers(){
+        $(`#players`).hide()
+    },
+    gameResult(game){
+        $(`#message_area`).html(`<h1>${game.turnPlayer.name}の勝ちです!</h1>`)
+        for(let p of game.players){
+            $(`#player${p.number}resource`).html('')
+            $(`#player${p.number}progress`).html('')
+            let numberOfResources = p.resource.ore + p.resource.grain + p.resource.wool + p.resource.lumber + p.resource.brick
+            let numberOfProgress = p.progress.knight + p.progress.road + p.progress.harvest + p.progress.monopoly + p.progress.point
+            if(numberOfResources === 0){
+                $(`#player${p.number}resource`).html('<p> </p>')
             }
-        }
+            if(numberOfProgress === 0){
+                $(`#player${p.number}progress`).html('<p> </p>')
+            }
+            for(r in p.resource){
+                let i = 1
+                while(i <= p.resource[r]){
+                    $(`#player${p.number}resource`).append(`<p class="square ${String(r)}">${translate(String(r))}</p>`);
+                    i += 1
+                };
+            }
+            for(pr in p.progress){
+                let i = 1
+                while(i <= p.progress[pr]){
+                    $(`#player${p.number}progress`).append(`<p class="square ${String(pr)}card">${translate(String(pr))}</p>`);
+                    i += 1
+                };
+            };
+        };
     },
     startButton(){
         $('.startbutton').toggle()
@@ -526,6 +712,7 @@ const display = {
             if(p.socketID === socket.id){
                 $('#my_area').html('')
                 myNumber = p.number
+                $(`#to${myNumber}`).hide()
                 $('#my_area').append(
                     `<div id="player${myNumber}" class="player" data-name="${players[myNumber].name}">
                         <div id="player${myNumber}row1" class="row">
@@ -533,12 +720,12 @@ const display = {
                             <div id="player${myNumber}token" class="token" >家:${players[myNumber].token.house} 街:${players[myNumber].token.city} 道:${players[myNumber].token.road}</div>
                         </div>
                         <div id="player${myNumber}row2" class="row">
-                            <div id="player${myNumber}resource" class="resource"><p class="square lumber">木</p><p class="square lumber">木</p><p class="square lumber">木</p><p class="square brick">煉</p><p class="square ore">鉄</p><p class="square grain">麦</p><p class="square grain">麦</p><p class="square wool">羊</p></div>
-                            <div id="player${myNumber}title" class="title">最大騎士力</div>
+                            <div id="player${myNumber}resource" class="resource"></div>
+                            <div id="player${myNumber}title" class="title"></div>
                         </div>
                         <div id="player${myNumber}row3" class="row">
-                            <div id="player${myNumber}progress" class="progress">騎:${players[myNumber].progress.knight} 発:${players[myNumber].progress.harvest} 点:${players[myNumber].progress.point}</div>
-                            <div id="player${myNumber}used" class="used"><p class="square">騎</p><p class="square">騎</p><p class="square">騎</p></div>
+                            <div id="player${myNumber}progress" class="progress"></div>
+                            <div id="player${myNumber}used" class="used"></div>
                         </div>
                     </div>`
                 )
@@ -557,12 +744,12 @@ const display = {
                                 <div id="player${myNumber}token" class="token" >家:${players[myNumber].token.house} 街:${players[myNumber].token.city} 道:${players[myNumber].token.road}</div>
                             </div>
                             <div id="player${myNumber}row2" class="row">
-                                <div id="player${myNumber}resource" class="resource"><p class="square lumber">木</p><p class="square lumber">木</p><p class="square lumber">木</p><p class="square brick">煉</p><p class="square ore">鉄</p><p class="square grain">麦</p><p class="square grain">麦</p><p class="square wool">羊</p></div>
-                                <div id="player${myNumber}title" class="title">最大騎士力</div>
+                                <div id="player${myNumber}resource" class="resource"></div>
+                                <div id="player${myNumber}title" class="title"></div>
                             </div>
                             <div id="player${myNumber}row3" class="row">
-                                <div id="player${myNumber}progress" class="progress">騎:${players[myNumber].progress.knight} 発:${players[myNumber].progress.harvest} 点:${players[myNumber].progress.point}</div>
-                                <div id="player${myNumber}used" class="used"><p class="square">騎</p><p class="square">騎</p><p class="square">騎</p></div>
+                                <div id="player${myNumber}progress" class="progress"></div>
+                                <div id="player${myNumber}used" class="used"></div>
                             </div>
                         </div>`
                     )
@@ -571,17 +758,12 @@ const display = {
                 return
             }
         }
+        $('#my_area').html('')
+        $('#others').html('')
         for(p of players){
-            $('#my_area').html('')
-            $('#others').html('')
             let i = 1
             let myNumber = 0
-            while(i <= players.length - 1){
-                if(myNumber === players.length - 1){
-                    myNumber = 0
-                }else{
-                    myNumber += 1
-                }
+            while(i <= players.length){
                 $('#others').append(
                     `<div id="player${myNumber}" class="player" data-name="${players[myNumber].name}">
                         <div id="player${myNumber}row1" class="row">
@@ -589,18 +771,29 @@ const display = {
                             <div id="player${myNumber}token" class="token" >家:${players[myNumber].token.house} 街:${players[myNumber].token.city} 道:${players[myNumber].token.road}</div>
                         </div>
                         <div id="player${myNumber}row2" class="row">
-                            <div id="player${myNumber}resource" class="resource"><p class="square lumber">木</p><p class="square lumber">木</p><p class="square lumber">木</p><p class="square brick">煉</p><p class="square ore">鉄</p><p class="square grain">麦</p><p class="square grain">麦</p><p class="square wool">羊</p></div>
-                            <div id="player${myNumber}title" class="title">最大騎士力</div>
+                            <div id="player${myNumber}resource" class="resource"></div>
+                            <div id="player${myNumber}title" class="title"></div>
                         </div>
                         <div id="player${myNumber}row3" class="row">
-                            <div id="player${myNumber}progress" class="progress">騎:${players[myNumber].progress.knight} 発:${players[myNumber].progress.harvest} 点:${players[myNumber].progress.point}</div>
-                            <div id="player${myNumber}used" class="used"><p class="square">騎</p><p class="square">騎</p><p class="square">騎</p></div>
+                            <div id="player${myNumber}progress" class="progress"></div>
+                            <div id="player${myNumber}used" class="used"></div>
                         </div>
                     </div>`
                 )
+                if(myNumber === players.length - 1){
+                    myNumber = 0
+                }else{
+                    myNumber += 1
+                }
                 i += 1
             }
         }
+    },
+    hideButtonArea(){
+        $('#button_area').hide()
+    },
+    showButtonArea(){
+        $('#button_area').show()
     },
 }
 
@@ -636,4 +829,3 @@ function translate(item){
 socket.on('console',(game)=>{
     console.log(game)
 })
-

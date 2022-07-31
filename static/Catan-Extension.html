@@ -372,17 +372,152 @@
             </div>
         </div>
         <div id="monopoly_area">
-            <button id="monopoly_ore" class="action_button monopoly_resource_button">鉄</button>
-            <button id="monopoly_grain" class="action_button monopoly_resource_button">麦</button>
-            <button id="monopoly_wool" class="action_button monopoly_resource_button">羊</button>
-            <button id="monopoly_lumber" class="action_button monopoly_resource_button">木</button>
-            <button id="monopoly_brick" class="action_button monopoly_resource_button">煉</button>
+            <button id="monopoly_ore" class="action_button resource_button">鉄</button>
+            <button id="monopoly_grain" class="action_button resource_button">麦</button>
+            <button id="monopoly_wool" class="action_button resource_button">羊</button>
+            <button id="monopoly_lumber" class="action_button resource_button">木</button>
+            <button id="monopoly_brick" class="action_button resource_button">煉</button>
         </div>
-        <div id="negotiate_area"></div>
-        <div id="trade_area"></div>
-        <div id="my_area">
-        </div> 
-        <div id="others">
+        <div id="harvest_area">
+            <button id="harvest_ore" class="action_button resource_button">鉄</button>
+            <button id="harvest_grain" class="action_button resource_button">麦</button>
+            <button id="harvest_wool" class="action_button resource_button">羊</button>
+            <button id="harvest_lumber" class="action_button resource_button">木</button>
+            <button id="harvest_brick" class="action_button resource_button">煉</button>
+        </div>
+        <div id="burst_area">
+            <button id="burst_ore" class="action_button resource_button">鉄</button>
+            <button id="burst_grain" class="action_button resource_button">麦</button>
+            <button id="burst_wool" class="action_button resource_button">羊</button>
+            <button id="burst_lumber" class="action_button resource_button">木</button>
+            <button id="burst_brick" class="action_button resource_button">煉</button>
+        </div>
+        <div id="negotiate_area">
+            <div class="give numberinput">
+                <div class="center">
+                    <p>あげる</p>
+                </div>
+                <div>
+                    <div>鉄</div>
+                    <input id="giveore" type="number" value="" min="0" max="100" step="1">
+                </div>
+                <div>
+                    <div>麦</div>
+                    <input id="givegrain" type="number" value="" min="0" max="100" step="1">
+                </div>
+                <div>
+                    <div>羊</div>
+                    <input id="givewool" type="number" value="" min="0" max="100" step="1">
+                </div>
+                <div>
+                    <div>木</div>
+                    <input id="givelumber" type="number" value="" min="0" max="100" step="1">
+                </div>
+                <div>
+                    <div>煉</div>
+                    <input id="givebrick" type="number" value="" min="0" max="100" step="1">
+                </div>
+            </div>
+            <div class="get numberinput">
+                <div class="center">
+                    <p>もらう</p>
+                </div>
+                <div>
+                    <div>鉄</div>
+                    <input id="takeore" type="number" value="" min="0" max="100" step="1">
+                </div>
+                <div>
+                    <div>麦</div>
+                    <input id="takegrain" type="number" value="" min="0" max="100" step="1">
+                </div>
+                <div>
+                    <div>羊</div>
+                    <input id="takewool" type="number" value="" min="0" max="100" step="1">
+                </div>
+                <div>
+                    <div>木</div>
+                    <input id="takelumber" type="number" value="" min="0" max="100" step="1">
+                </div>
+                <div>
+                    <div>煉</div>
+                    <input id="takebrick" type="number" value="" min="0" max="100" step="1">
+                </div>
+            </div>
+            <div id="counterpart">
+                <button id="to0" class="propose_button">player0</button>
+                <button id="to1" class="propose_button">player1</button>
+                <button id="to2" class="propose_button">player2</button>
+                <button id="to3" class="propose_button">player3</button>
+                <button id="to4" class="propose_button">player4</button>
+                <button id="to5" class="propose_button">player5</button>
+            </div>
+        </div>
+        <div id="proposing_area"></div>
+        <div id="proposed_area">
+            <div id="proposeterm"></div>
+            <div id="acceptordeny">
+                <button id="accept">同意</button>
+                <button id="deny">断る</button>
+            </div>
+        </div>
+        <div id="trade_area">
+            <div class="give numberinput">
+                <div class="center">
+                    <p>捨てる</p>
+                </div>
+                <div>
+                    <div>鉄</div>
+                    <input id="exportore" type="number" value="" min="0" max="100" step="4">
+                </div>
+                <div>
+                    <div>麦</div>
+                    <input id="exportgrain" type="number" value="" min="0" max="100" step="4">
+                </div>
+                <div>
+                    <div>羊</div>
+                    <input id="exportwool" type="number" value="" min="0" max="100" step="4">
+                </div>
+                <div>
+                    <div>木</div>
+                    <input id="exportlumber" type="number" value="" min="0" max="100" step="4">
+                </div>
+                <div>
+                    <div>煉</div>
+                    <input id="exportbrick" type="number" value="" min="0" max="100" step="4">
+                </div>
+            </div>
+            <div class="get numberinput">
+                <div class="center">
+                    <p>引く</p>
+                </div>
+                <div>
+                    <div>鉄</div>
+                    <input id="importore" type="number" value="" min="0" max="100" step="1">
+                </div>
+                <div>
+                    <div>麦</div>
+                    <input id="importgrain" type="number" value="" min="0" max="100" step="1">
+                </div>
+                <div>
+                    <div>羊</div>
+                    <input id="importwool" type="number" value="" min="0" max="100" step="1">
+                </div>
+                <div>
+                    <div>木</div>
+                    <input id="importlumber" type="number" value="" min="0" max="100" step="1">
+                </div>
+                <div>
+                    <div>煉</div>
+                    <input id="importbrick" type="number" value="" min="0" max="100" step="1">
+                </div>
+            </div>
+            <button id="tradedecide">決定</button>
+        </div>
+        <div id="players">
+            <div id="my_area">
+            </div> 
+            <div id="others">
+            </div>
         </div>
         <div id="initialize">
             <button id="initializebutton">初期化</button>
