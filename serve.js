@@ -767,9 +767,23 @@ class Player{
 
 
 const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[],[],[]],thief:'', house:[], city:[], road:[], nodeLine:[7,16,27,40,53,64,73,80],roadLine:[6,10,18,23,33,39,51,58,70,76,86,91,99,103,109], dice:[],tileLine:[3,7,12,18,23,27,30],ports:{oreport:[], grainport:[], woolport:[], lumberport:[], brickport:[],genericport:[]},
-  makeIsland(){
+  makeIsland(data){
     this.island = [[],[],[],[],[],[],[],[],[]]
-    let lands = ['ore','ore','ore','ore','ore','brick','brick','brick','brick','brick','wool','wool','wool','wool','wool','wool','lumber','lumber','lumber','lumber','lumber','lumber','grain','grain','grain','grain','grain','grain','desert','desert']
+    let lands = []
+    for(let resource in data.tileamounts){
+      let i = 1
+      while(i <= data.tileamounts[resource]){
+        lands.push(resource)
+        i += 1
+      }
+    }
+    let i = 1
+    let l = lands.length
+    while(i <= 30 - l){
+      lands.push('desert')
+      i += 1
+    }
+    display.log(lands)
     let oceans = ['woolport','woolport','oreport','brickport','lumberport','grainport','genericport','genericport','genericport','genericport','genericport','ocean','ocean','ocean','ocean','ocean','ocean','ocean','ocean','ocean','ocean','ocean']
     lands = shuffle(lands)
     oceans = shuffle(oceans)
@@ -1008,7 +1022,7 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
     this.dice = [dice1,dice2];
     game.turnPlayer.dice = 0
     this.produce(dice1+dice2)
-    display.log(dice1+dice2)
+    display.dice(this.dice)
     if(dice1 + dice2 === 7){
       game.burstPlayerCheck()
     }else{
@@ -1232,6 +1246,19 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
         return [[[8,y*2+1],[8,y*2+2]],[[8,y*2],[8,y*2+1]]]
       }
     }
+  },
+  initialize(){
+    this.island = [[],[],[],[],[],[],[],[],[]]
+    this.numbers = [[],[],[],[],[],[],[],[],[]]
+    this.thief = ''
+    this.house = []
+    this.city = []
+    this.road = []
+    this.nodeLine = [7,16,27,40,53,64,73,80]
+    this.roadLine = [6,10,18,23,33,39,51,58,70,76,86,91,99,103,109]
+    this.dice = []
+    this.tileLine = [3,7,12,18,23,27,30]
+    this.ports = {oreport:[], grainport:[], woolport:[], lumberport:[], brickport:[], genericport:[]}
   }
 }
 
@@ -1255,14 +1282,6 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputti
         i += 1
     }
     this.turnPlayer = this.players[0]
-  },
-
-  refresh(){
-    for(let p of this.players){
-        p.refresh();
-    }
-    this.turnPlayer = ''
-    this.phase = 'playing'
   },
   gameStart(){
     this.phase = 'setup'
@@ -1408,8 +1427,15 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputti
   },
   initialize(){
     this.players.length = 0;
-    this.refresh()
-    this.phase = 'nameinputting'
+    this.turnPlayer = '';
+    this.phase = 'nameinputting';
+    this.phase = 'nameinputting';
+    this.progressDeck = [];
+    this.buildingPhase = 0;
+    this.largestArmyPlayer = '';
+    this.longestRoadPlayer = '';
+    this.burstPlayer = [];
+    this.proposedata = '';
   },
 }
 
@@ -1612,7 +1638,41 @@ const display = {
   log(a){
     io.emit('log', a)
   },
+  showNameInputArea(playersName){
+    io.emit('shownameinputarea', (playersName));
+  },
+  showMyNameInputArea(socketID, playersName){
+    io.to(socketID).emit('shownameinputarea', (playersName));
 
+  },
+  hideYesOrNoButton(){
+    io.emit('hideyesornobutton', '');
+  },
+  showGameStartButton(){
+    io.emit('showgamestartbutton', '');
+  },
+  cleanUpBoard(){
+    io.emit('cleanupboard', '');
+  },
+  dice(dice){
+    io.emit('dice', dice);
+  },
+  initialize(){
+    this.showNameInputArea(playersName)
+    this.showGameStartButton()
+    this.hideYesOrNoButton()
+    this.hideBoard_And_Button()
+    this.hideButtonArea()
+    this.hideMonopolyArea()
+    this.hideHarvestArea()
+    this.hideBurstArea()
+    this.hideTradeArea()
+    this.hideNegotiateArea()
+    this.hideProposingArea()
+    this.hideProposedArea()
+    this.hidePlayers()
+    this.cleanUpBoard()
+  },
 }
 
 function discard(item,array){
@@ -1683,6 +1743,17 @@ function copyOfArray(array){
   }
   return arr
 }
+function initialize(){
+  game.initialize();
+  board.initialize();
+  playersName = []
+  let m = 1
+  while(m <= maxPlayer){
+    playersName.push('')
+    m += 1
+  }
+  display.initialize()
+}
 
 
 
@@ -1702,7 +1773,7 @@ io.on("connection", (socket)=>{
     display.hideProposedArea()
     display.hidePlayers()
   }else{
-    display.hideMyItems(socket.id);
+    
     display.hideButtonArea(socket.id)
     display.hideMyMonopolyArea(socket.id)
     display.hideMyHarvestArea(socket.id)
@@ -1712,6 +1783,7 @@ io.on("connection", (socket)=>{
     display.hideMyProposingArea(socket.id)
     display.hideMyProposedArea(socket.id)
     display.myplayerSort(socket.id);
+    display.hideMyItems(socket.id);
     display.turnPlayer();
     display.island()
     display.thief()
@@ -1728,7 +1800,7 @@ io.on("connection", (socket)=>{
   });
 
   //スタートボタンクリック
-  socket.on('start', (e)=>{
+  socket.on('start', (data)=>{
     let i = 1
     while(i <= maxPlayer){
         discard('', playersName);
@@ -1737,7 +1809,7 @@ io.on("connection", (socket)=>{
     playersName = shuffle(playersName)
     if(playersName.length >= 1){
       game.gameStart()
-      board.makeIsland()
+      board.makeIsland(data)
       display.island()
       display.thief()
       display.allPlayerInformation()
@@ -1940,8 +2012,7 @@ io.on("connection", (socket)=>{
     })
     //初期化
     socket.on('yesbuttonclick', (e)=>{
-      display.initialize()
-      game.initialize()
+      initialize()
     })
     //継承
     socket.on('takeoverbuttonclick', (player)=>{

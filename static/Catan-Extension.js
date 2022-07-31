@@ -28,8 +28,21 @@ socket.on("nameInput", (namedata)=>{
 
 //スタートボタンクリック発信
 $('#gamestartbutton').on('click', function(){
-    let e
-    socket.emit('start', e)
+    let ore = Number($(`#oretileamount`).val())
+    let grain = Number($(`#ricetileamount`).val())
+    let wool = Number($(`#wooltileamount`).val())
+    let lumber = Number($(`#lumbertileamount`).val())
+    let brick = Number($(`#bricktileamount`).val())
+    const tileamounts ={ore:ore,grain:grain,wool:wool,lumber:lumber,brick:brick}
+    let total = 0
+    for(resource in tileamounts){
+        total += tileamounts[resource]
+    }
+    if(total > 28){
+        return
+    }
+    const data = {tileamounts:tileamounts}
+    socket.emit('start', data)
 })
 
 //入力済みの名前表示
@@ -42,6 +55,10 @@ socket.on('nameDisplay', (playersName)=>{
         i += 1
     }
 })
+socket.on('shownameinputarea', (playersName)=>{
+    display.showNameInputArea(playersName)
+})
+
 
 socket.on('island', (island)=>{
     display.island(island)
@@ -142,9 +159,7 @@ socket.on('gameresult', (game)=>{
     display.gameResult(game)
 })
 socket.on('reloadrate', (data)=>{
-    console.log(data.ore)
     $(`#exportore`).attr(`step`, data.ore)
-    console.log($(`#exportore`).attr(`step`))
     $(`#exportgrain`).attr(`step`, data.grain)
     $(`#exportwool`).attr(`step`, data.wool)
     $(`#exportlumber`).attr(`step`, data.lumber)
@@ -177,8 +192,18 @@ socket.on('hidebuttonarea', (e)=>{
 socket.on('showbuttonarea', (e)=>{
     display.showButtonArea()
 })
-
-
+socket.on('hideyesornobutton',()=>{
+    display.hideYesOrNoButton()
+})
+socket.on('showgamestartbutton',()=>{
+    display.showGameStartButton()
+})
+socket.on('cleanupboard',()=>{
+    display.cleanUpBoard()
+})
+socket.on('dice',(dice)=>{
+    display.dice(dice)
+})
 
 //nodeをクリック
 $(`#board_area`).on('click','.node',function(){
@@ -390,7 +415,6 @@ const display = {
         $('#gamestart').hide()
         $('#nameinputarea').hide();
         $('#players').show();
-        this.toggleTakeOver();
     },
     island(island){
         $('#board_and_button').show()
@@ -408,6 +432,8 @@ const display = {
                 if(tile.type === 'ore'|| tile.type === 'grain'|| tile.type === 'brick'|| tile.type === 'lumber'|| tile.type === 'wool'|| tile.type === 'desert'){
                     if(tile.type !== 'desert'){
                         $(`#chip${tileNumber}`).attr(`src`, `./${tile.number}.png`)
+                    }else{
+                        $(`#chip${tileNumber}`).attr(`src`, ``)
                     }
                     tileNumber += 1
                 }
@@ -418,9 +444,6 @@ const display = {
         for(let p of game.players){
             $(`#player${p.number}resource`).html('')
             let numberOfResources = p.resource.ore + p.resource.grain + p.resource.wool + p.resource.lumber + p.resource.brick
-            /*if(numberOfResources === 0){
-                $(`#player${p.number}resource`).html('<p> </p>')
-            }*/
             if(p.socketID === socket.id){
                 for(r in p.resource){
                     let i = 1
@@ -431,13 +454,6 @@ const display = {
                 };
             }else{
                 $(`#player${p.number}resource`).append(`資源:${numberOfResources}枚`);
-                /*for(r in p.resource){
-                    let i = 1
-                    while(i <= p.resource[r]){
-                        $(`#player${p.number}resource`).append(`<p class="square back">背</p>`);
-                        i += 1
-                    };
-                };*/
             }
         };
     },
@@ -461,9 +477,6 @@ const display = {
         for(let p of game.players){
             $(`#player${p.number}progress`).html('')
             let numberOfProgress = p.progress.knight + p.progress.road + p.progress.harvest + p.progress.monopoly + p.progress.point
-            /*if(numberOfProgress === 0){
-                $(`#player${p.number}progress`).html('<p> </p>')
-            }*/
             if(p.socketID === socket.id){
                 for(pr in p.progress){
                     let i = 1
@@ -520,6 +533,7 @@ const display = {
         }
     },
     thief(buttonnumber){
+        $(`.tile_button`).html(``)
         $(`#tile_button${buttonnumber}`).html(`<div id="thief"></div>`)
     },
     deleteThief(buttonnumber){
@@ -545,14 +559,14 @@ const display = {
     },
     hideTradeArea(){
         $(`#trade_area`).hide()
-        $(`input[type='number']`).val(``)
+        $(`.resourcenumber`).val(``)
     },
     showTradeArea(){
         $(`#trade_area`).show()
     },
     hideNegotiateArea(){
         $(`#negotiate_area`).hide()
-        $(`input[type='number']`).val(``)
+        $(`.resourcenumber`).val(``)
     },
     showNegotiateArea(){
         $(`#negotiate_area`).show()
@@ -639,10 +653,7 @@ const display = {
             };
         };
     },
-    startButton(){
-        $('.startbutton').toggle()
-    },
-    initialize(maxPlayer){
+    /*initialize(maxPlayer){
         $('#gamestartbutton').show()
         $('#nextroundbutton').hide();
         $('#newgamebutton').hide();
@@ -661,7 +672,7 @@ const display = {
             </div>`)
             i += 1
         }
-    },
+    },*/
     turnPlayer(tn){
         let i = 0;
         while(i <= 5){
@@ -699,15 +710,12 @@ const display = {
             $('.takeoverbutton').show()
         }
     },
-    showStart(n){
-        $(`#startbutton${n}`).show();
-        $(`#reversebutton${n}`).show();
-    },
     log(a){
         console.log(a)
     },
     playerSort(players){
         let myNumber
+        $(`.propose_button`).show()
         for(p of players){
             if(p.socketID === socket.id){
                 $('#my_area').html('')
@@ -737,6 +745,7 @@ const display = {
                     }else{
                         myNumber += 1
                     }
+                    $(`#to${myNumber}`).html(`${players[myNumber].name}`)
                     $('#others').append(
                         `<div id="player${myNumber}" class="player" data-name="${players[myNumber].name}">
                             <div id="player${myNumber}row1" class="row">
@@ -795,6 +804,64 @@ const display = {
     showButtonArea(){
         $('#button_area').show()
     },
+    showNameInputArea(playersName){
+        $(`#nameinputarea`).show()
+        $('#nameinputarea').html('<h1>九州の開拓者たち</h1><h2>名前を入力してください</h2>')
+        let i = 1
+        while(i <= playersName.length){
+            $('#nameinputarea').append(`<div class="player${i-1}">
+                <div class="playername">
+                    <input type="text" class="nameinput" data-namenumber="${i-1}">
+                    <input type="button" value="決定" class="namebutton">
+                </div>
+            </div>`)
+            i += 1
+        }
+        $(`#nameinputarea`).append(`<div id="tileamounts" class="numberinput">
+            <div>
+                <div>鉄</div>
+                <input id="oretileamount" type="number" value="5" min="0" max="100" step="1">
+            </div>
+            <div>
+                <div>米</div>
+                <input id="ricetileamount" type="number" value="6" min="0" max="100" step="">
+            </div>
+            <div>
+                <div>羊</div>
+                <input id="wooltileamount" type="number" value="6" min="0" max="100" step="">
+            </div>
+            <div>
+                <div>木</div>
+                <input id="lumbertileamount" type="number" value="6" min="0" max="100" step="">
+            </div>
+            <div>
+                <div>煉</div>
+                <input id="bricktileamount" type="number" value="5" min="0" max="100" step="1">
+            </div>
+        </div>`)
+        /*i = 1
+        for(let player of playersName){
+            if(player.name){
+                $(`.player${playersName.indexOf(player)}`).html(`<p><strong>${player.name}</strong></p>`)
+            }
+            i += 1
+        }*/
+    },
+    hideYesOrNoButton(){
+        $(`#yesorno`).hide()
+    },
+    showGameStartButton(){
+        $(`#gamestart`).show()
+    },
+    cleanUpBoard(){
+        $(`.node`).html(``)
+        $(`.road`).html(``)
+        $(`.tile_button`).html(``)
+    },
+    dice(dice){
+        $(`#message_area`).show()
+        $(`#message_area`).html(`<h1><div class="dice">${dice[0]}</div><div class="dice">${dice[1]}</div></h1>`)
+    }
 }
 
 

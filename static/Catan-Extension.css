@@ -77,7 +77,6 @@
 #negotiate_area{
     margin: auto;
     justify-content: center;
-    text-align: center;
     background-color: rgb(197, 187, 49);
 }
 #trade_area{
@@ -234,7 +233,13 @@
     display: inline-block;
     margin: 0px 1px 0px 1px;
 }
-
+.dice{
+    width:50px;
+    border: 5px solid black;
+    display: inline-block;
+    margin: 0px 1px 0px 1px;
+    border-radius:10%;
+}
 .action_button{
     background:skyblue;
     width: 50px;
