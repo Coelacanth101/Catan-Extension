@@ -807,7 +807,7 @@ function translate(item){
     if(item === 'ore'){
         return '鉄'
     }else if(item === 'grain'){
-        return '麦'
+        return '米'
     }else if(item === 'wool'){
         return '羊'
     }else if(item === 'lumber'){
