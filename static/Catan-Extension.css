@@ -12,41 +12,20 @@
     margin: auto;
     text-align: center;
 }
-@media screen and (min-width:800px) {
-    #board_and_button{
-        display: flex;
-    }
-}
 #board_area{
     position:relative;
     max-width:600px;
     aspect-ratio: 7 / 6.9282;
     margin: auto;
-}@media screen and (min-width:800px) {
-    #board_area{
-        position:relative;
-        width:600px;
-        aspect-ratio: 7 / 6.9282;
-        margin: auto;
-    }
-}
+};
 #message_area{
     text-align: center
 };
 #button_area{
     display: flex;
-    justify-content: center;
+    text-align: center;
     background-color: darkseagreen;
-}@media screen and (min-width:800px) {
-    #button_area{
-        width:100px;
-        margin: auto;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        background-color: darkseagreen;
-    }
-}
+};
 #road_button{
     display: none;
 }
@@ -233,8 +212,13 @@
     display: inline-block;
     margin: 0px 1px 0px 1px;
 }
+#dicearea{
+    display: flex;
+    margin: 5px;
+    justify-content: center;
+}
 .dice{
-    width:50px;
+    width:48px;
     border: 5px solid black;
     display: inline-block;
     margin: 0px 1px 0px 1px;
@@ -242,14 +226,17 @@
 }
 .action_button{
     background:skyblue;
-    width: 50px;
-    height: 40px;
-    margin: 1px;
+    width: 15%;
+    max-width: 60px;
+    height: 30px;
+    padding: 0px;
+    margin: 2px 0.5px 3px;
     font-size: 0.6em;
 }@media screen and (min-width:800px) {
     .action_button{
         background:skyblue;
-        width: 56px;
+        width: 15%;
+        max-width: 60px;
         height: 40px;
         margin: 1px;
         font-size: 0.8em;

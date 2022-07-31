@@ -204,6 +204,9 @@ socket.on('cleanupboard',()=>{
 socket.on('dice',(dice)=>{
     display.dice(dice)
 })
+socket.on('hidemessagearea',()=>{
+    display.hidemessageArea()
+})
 
 //nodeをクリック
 $(`#board_area`).on('click','.node',function(){
@@ -860,8 +863,12 @@ const display = {
     },
     dice(dice){
         $(`#message_area`).show()
-        $(`#message_area`).html(`<h1><div class="dice">${dice[0]}</div><div class="dice">${dice[1]}</div></h1>`)
-    }
+        $(`#message_area`).html(`<h1 id="dicearea"><div class="dice">${dice[0]}</div><div class="dice">${dice[1]}</div></h1>`)
+    },
+    hidemessageArea(){
+        $(`#message_area`).hide()
+        $(`#message_area`).html(``)
+    },
 }
 
 

@@ -1657,6 +1657,9 @@ const display = {
   dice(dice){
     io.emit('dice', dice);
   },
+  hidemessageArea(){
+    io.emit('hidemessagearea', );
+  },
   initialize(){
     this.showNameInputArea(playersName)
     this.showGameStartButton()
@@ -1672,6 +1675,7 @@ const display = {
     this.hideProposedArea()
     this.hidePlayers()
     this.cleanUpBoard()
+    this.hidemessageArea()
   },
 }
 
