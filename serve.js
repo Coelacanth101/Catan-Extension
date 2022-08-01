@@ -1676,7 +1676,7 @@ const display = {
   },
   toggleMyButtons(socketID){
     let myself = game.IDToPlayer(socketID)
-    //display.hideMyButton(socketID,'dice')
+    display.hideMyButton(socketID,'dice')
     for(let card in myself.progress){
       display.hideMyButton(socketID, card)
     }
