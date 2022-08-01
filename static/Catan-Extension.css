@@ -190,22 +190,22 @@
     vertical-align: middle;
 }
 #player0name{
-    background-color: red;
+    background-color: rgb(236, 28, 36);
 }
 #player1name{
-    background-color: green;
+    background-color: rgb(62, 125, 35);
 }
 #player2name{
-    background-color: steelblue;
+    background-color: rgb(89, 119, 203);
 }
 #player3name{
-    background-color: yellow;
+    background-color: rgb(255, 242, 0);
 }
 #player4name{
-    background-color: orange;
+    background-color: rgb(242, 169, 13);
 }
 #player5name{
-    background-color: purple;
+    background-color: rgb(184, 61, 186);
 }
 .square{
     border: 1px solid black;

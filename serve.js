@@ -1,4 +1,5 @@
 const { Console } = require("console");
+const { createSocket } = require("dgram");
 const { emit, off } = require("process");
 const { brotliCompress } = require("zlib");
 
@@ -685,12 +686,10 @@ class Player{
       im += data.importresource[resource]
     }
     if(ex !== im){
-      display.log('等しくない')
       display.hideMyTradeArea(this.socketID)
       return
     }
     for(let resource in data.exportresource){
-      display.log('成立')
       this.resource[resource] -= data.exportresource[resource]
       this.resource[resource] += data.importresource[resource]
     }
@@ -717,6 +716,7 @@ class Player{
       data.proposee.resource[resource] -= data.takeresource[resource]
       data.proposer.resource[resource] += data.takeresource[resource]
     }
+    game.proposedata = {proposer:'', proposee:'', giveresource:'', takeresource:''}
     display.allPlayerInformation()
   };
   denied(){
@@ -724,6 +724,7 @@ class Player{
     game.phase = 'afterdice'
     display.hideMyProposingArea(data.proposer.socketID)
     display.hideMyProposedArea(data.proposee.socketID)
+    game.proposedata = {proposer:'', proposee:'', giveresource:'', takeresource:''}
     display.allPlayerInformation()
   }
   totalResource(){
@@ -783,7 +784,6 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
       lands.push('desert')
       i += 1
     }
-    display.log(lands)
     let oceans = ['woolport','woolport','oreport','brickport','lumberport','grainport','genericport','genericport','genericport','genericport','genericport','ocean','ocean','ocean','ocean','ocean','ocean','ocean','ocean','ocean','ocean','ocean']
     lands = shuffle(lands)
     oceans = shuffle(oceans)
@@ -1269,7 +1269,7 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
 
 
 
-const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputting', progressDeck:[],board:board,buildingPhase:0,largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:'',
+const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputting', progressDeck:[],board:board,buildingPhase:0,largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:'', takeresource:''},
   playerMake(){
     let i = 1
     this.players = []
@@ -1414,6 +1414,7 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputti
         return player
       }
     }
+    return false
   },
 
 
@@ -1423,7 +1424,9 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputti
 
 
   takeOver(player){
+    display.log('takeover')
     this.players[player.number].socketID = player.socketID
+    display.allMighty(player.socketID)
   },
   initialize(){
     this.players.length = 0;
@@ -1435,7 +1438,7 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputti
     this.largestArmyPlayer = '';
     this.longestRoadPlayer = '';
     this.burstPlayer = [];
-    this.proposedata = '';
+    this.proposedata = {proposer:'', proposee:'', giveresource:'', takeresource:''};
   },
 }
 
@@ -1581,6 +1584,10 @@ const display = {
     let e
     io.emit('showBoard_And_Button', e)
   },
+  showMyBoard_And_Button(socketID){
+    let e
+    io.to(socketID).emit('showBoard_And_Button', e)
+  },
   gameResult(){
     io.emit('gameresult', game)
   },
@@ -1608,18 +1615,11 @@ const display = {
     let tn = game.turnPlayer.number
     io.emit('turnplayer', tn)
   },
-  takeOver(player){
-    io.emit('takeoverbuttonclick', player)
-  },
-  toggleTakeOver(){
-    let e = ''
-    io.emit('toggletakeoverbutton',e)
-  },
   playerSort(){
     let players = game.players
     io.emit('playersort', players)
   },
-  myplayerSort(socketID){
+  myPlayerSort(socketID){
     let players = game.players
     io.to(socketID).emit('playersort', players)
   },
@@ -1659,6 +1659,62 @@ const display = {
   },
   hidemessageArea(){
     io.emit('hidemessagearea', );
+  },
+  allMighty(socketID){
+    if(game.phase === 'nameinputting'){
+      display.showNameInputArea(playersName)
+      display.hideBoard_And_Button()
+      display.hideButtonArea()
+      display.hideMonopolyArea()
+      display.hideHarvestArea()
+      display.hideBurstArea()
+      display.hideTradeArea()
+      display.hideNegotiateArea()
+      display.hideProposingArea()
+      display.hideProposedArea()
+      display.hidePlayers()
+    }else{
+      display.showMyBoard_And_Button(socketID)
+      display.hideMyButtonArea(socketID)
+      display.hideMyMonopolyArea(socketID)
+      display.hideMyHarvestArea(socketID)
+      display.hideMyBurstArea(socketID)
+      display.hideMyTradeArea(socketID)
+      display.hideMyNegotiateArea(socketID)
+      display.hideMyProposingArea(socketID)
+      display.hideMyProposedArea(socketID)
+      display.myPlayerSort(socketID);
+      display.hideMyItems(socketID);
+      display.turnPlayer();
+      display.island()
+      display.thief()
+      display.buildings()
+      display.allPlayerInformation()
+      if(socketID === game.turnPlayer.socketID){
+        display.showMyButtonArea(socketID)
+      }
+      if(socketID === game.turnPlayer.socketID && game.phase === 'monopoly'){
+        display.showMyMonopolyArea(socketID)
+      }
+      if(socketID === game.turnPlayer.socketID && game.phase === 'harvest'){
+        display.showMyHarvestArea(socketID)
+      }
+      if(game.IDToPlayer(socketID).toTrash !== 0 && game.phase === 'burst'){
+        display.showMyBurstArea(socketID)
+      }
+      if(socketID === game.turnPlayer.socketID && game.phase === 'trade'){
+        display.showMyTradeArea(socketID)
+      }
+      if(socketID === game.turnPlayer.socketID && game.phase === 'negotiate'){
+        display.showMyNegotiateArea(socketID)
+      }
+      if(socketID === game.proposedata.proposer.socketID && game.phase === 'propose'){
+        display.showMyProposingArea(socketID)
+      }
+      if(socketID === game.proposedata.proposee.socketID && game.phase === 'propose'){
+        display.showMyProposedArea(socketID)
+      }
+    }
   },
   initialize(){
     this.showNameInputArea(playersName)
@@ -1764,36 +1820,7 @@ function initialize(){
 io.on("connection", (socket)=>{
 
   //画面の表示
-  if(game.phase === 'nameinputting'){
-    io.to(socket.id).emit("nameDisplay", (playersName));
-    display.hideBoard_And_Button()
-    display.hideButtonArea()
-    display.hideMonopolyArea()
-    display.hideHarvestArea()
-    display.hideBurstArea()
-    display.hideTradeArea()
-    display.hideNegotiateArea()
-    display.hideProposingArea()
-    display.hideProposedArea()
-    display.hidePlayers()
-  }else{
-    
-    display.hideButtonArea(socket.id)
-    display.hideMyMonopolyArea(socket.id)
-    display.hideMyHarvestArea(socket.id)
-    display.hideMyBurstArea(socket.id)
-    display.hideMyTradeArea(socket.id)
-    display.hideMyNegotiateArea(socket.id)
-    display.hideMyProposingArea(socket.id)
-    display.hideMyProposedArea(socket.id)
-    display.myplayerSort(socket.id);
-    display.hideMyItems(socket.id);
-    display.turnPlayer();
-    display.island()
-    display.thief()
-    display.buildings()
-    display.allPlayerInformation()
-  }
+  display.allMighty(socket.id)
   
   //名前の入力
   socket.on("nameInput", (namedata)=>{
@@ -2019,12 +2046,14 @@ io.on("connection", (socket)=>{
       initialize()
     })
     //継承
-    socket.on('takeoverbuttonclick', (player)=>{
+    socket.on('takeover', (player)=>{
+      let socketID = player.socketID
+      for(let player of game.players){
+        if(socketID === player.socketID){
+          return
+        }
+      }
       game.takeOver(player)
-      display.takeOver(player)
-      display.playerSort()
-      display.hideItems();
-      display.turnPlayer();
     })
     //コンソールに表示
     socket.on('console',(e)=>{

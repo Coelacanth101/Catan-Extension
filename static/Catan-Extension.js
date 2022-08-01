@@ -174,7 +174,7 @@ socket.on('turnplayer', (tn)=>{
 socket.on('turnplayerdelete', ()=>{
     display.turnPlayerDelete()
 })
-socket.on('takeoverbuttonclick', (player)=>{
+socket.on('takeover', (player)=>{
     display.takeOver(player)
 })
 socket.on('toggletakeoverbutton',()=>{
@@ -351,16 +351,13 @@ $(`#button_area`).on('click','#harvest_button',function(){
     socket.emit('harvestclick', data)
 });
 
-
-
-
-//手札を選択
-$('#players').on('click', '.player .hand .card', function(){
-    if($(this).parent().parent().data('socketid') === socket.id){
-        const cardNumber = Number($(this).attr('id'))
-        let data = {cardNumber:cardNumber, socketID:socket.id}
-        socket.emit('handclick', data)
-    }
+//継承
+$('#others').on('click', '.name', function(){
+    console.log('継承')
+    let n = Number($(this).parent().parent().data('number'))
+    let player ={number:n, socketID:socket.id}
+    console.log(player)
+    socket.emit('takeover', player)
 });
 
 
@@ -372,22 +369,6 @@ $('#players').on('click', '.player .hand .card', function(){
 $('#newgamebutton').on('click',function(){
     let e =''
     socket.emit('newgamebuttonclick', e)
-});
-
-//継承
-$('#players').on('click', '.player .buttonarea .takeoverbutton', function(){
-    let n = Number($(this).data('playernumber'))
-    let player ={number:n, socketID:socket.id}
-    socket.emit('takeoverbuttonclick', player)
-});
-
-//ターン終了
-$('#players').on('click', '.player .buttonarea .endbutton', function(){
-    if($(this).parent().parent().data('socketid') === socket.id){
-        let n = Number($(this).data('playernumber'))
-        let player ={number:n, socketID:socket.id}
-        socket.emit('endbuttonclick', player)
-    }
 });
 
 
@@ -656,26 +637,6 @@ const display = {
             };
         };
     },
-    /*initialize(maxPlayer){
-        $('#gamestartbutton').show()
-        $('#nextroundbutton').hide();
-        $('#newgamebutton').hide();
-        $('#nameinputarea').show();
-        $('#field').hide();
-        $('#players').hide();
-        $('#yesorno').hide()
-        $('#nameinputarea').html('<h1>The Game</h1><h2>名前を入力してください</h2>')
-        let i = 1
-        while(i <= maxPlayer){
-            $('#nameinputarea').append(`<div class="player${i-1}">
-                <div class="playername">
-                    <input type="text" class="nameinput" data-namenumber="${i-1}">
-                    <input type="button" value="決定" class="namebutton">
-                </div>
-            </div>`)
-            i += 1
-        }
-    },*/
     turnPlayer(tn){
         let i = 0;
         while(i <= 5){
@@ -694,38 +655,22 @@ const display = {
             i += 1
         }
     },
-    takeOver(player){
-        $(`#player${player.number}`).data('socketid', player.socketID)
-        this.toggleTakeOver()
-    },
-    toggleTakeOver(){
-        let i = 0;
-        let condition = 'watching'
-        while(i <= 4){
-            if($(`#player${i}`).data('socketid') === socket.id){
-                condition = 'playing'
-            }
-            i += 1
-        }
-        if(condition === 'playing'){
-            $('.takeoverbutton').hide()
-        }else{
-            $('.takeoverbutton').show()
-        }
-    },
     log(a){
         console.log(a)
     },
     playerSort(players){
+        console.log(players)
         let myNumber
         $(`.propose_button`).show()
         for(p of players){
             if(p.socketID === socket.id){
                 $('#my_area').html('')
+                console.log('#my_area消去')
                 myNumber = p.number
                 $(`#to${myNumber}`).hide()
+                console.log('#my_areaに追加')
                 $('#my_area').append(
-                    `<div id="player${myNumber}" class="player" data-name="${players[myNumber].name}">
+                    `<div id="player${myNumber}" class="player" data-name="${players[myNumber].name}" data-number="${players[myNumber].number}">
                         <div id="player${myNumber}row1" class="row">
                             <div id="player${myNumber}name" class="name"><strong>${myNumber+1}:${players[myNumber].name}</strong></div>
                             <div id="player${myNumber}token" class="token" >家:${players[myNumber].token.house} 街:${players[myNumber].token.city} 道:${players[myNumber].token.road}</div>
@@ -741,6 +686,7 @@ const display = {
                     </div>`
                 )
                 $('#others').html('')
+                console.log('#others消去')
                 let i = 1
                 while(i <= players.length - 1){
                     if(myNumber === players.length - 1){
@@ -749,8 +695,9 @@ const display = {
                         myNumber += 1
                     }
                     $(`#to${myNumber}`).html(`${players[myNumber].name}`)
+                    console.log('#othersに追加')
                     $('#others').append(
-                        `<div id="player${myNumber}" class="player" data-name="${players[myNumber].name}">
+                        `<div id="player${myNumber}" class="player" data-name="${players[myNumber].name}" data-number="${players[myNumber].number}">
                             <div id="player${myNumber}row1" class="row">
                                 <div id="player${myNumber}name" class="name"><strong>${myNumber+1}:${players[myNumber].name}</strong></div>
                                 <div id="player${myNumber}token" class="token" >家:${players[myNumber].token.house} 街:${players[myNumber].token.city} 道:${players[myNumber].token.road}</div>
@@ -772,32 +719,31 @@ const display = {
         }
         $('#my_area').html('')
         $('#others').html('')
+        console.log('#my_area消去')
+        console.log('#others消去')
+        myNumber = 0
         for(p of players){
-            let i = 1
-            let myNumber = 0
-            while(i <= players.length){
-                $('#others').append(
-                    `<div id="player${myNumber}" class="player" data-name="${players[myNumber].name}">
-                        <div id="player${myNumber}row1" class="row">
-                            <div id="player${myNumber}name" class="name"><strong>${myNumber+1}:${players[myNumber].name}</strong></div>
-                            <div id="player${myNumber}token" class="token" >家:${players[myNumber].token.house} 街:${players[myNumber].token.city} 道:${players[myNumber].token.road}</div>
-                        </div>
-                        <div id="player${myNumber}row2" class="row">
-                            <div id="player${myNumber}resource" class="resource"></div>
-                            <div id="player${myNumber}title" class="title"></div>
-                        </div>
-                        <div id="player${myNumber}row3" class="row">
-                            <div id="player${myNumber}progress" class="progress"></div>
-                            <div id="player${myNumber}used" class="used"></div>
-                        </div>
-                    </div>`
-                )
-                if(myNumber === players.length - 1){
-                    myNumber = 0
-                }else{
-                    myNumber += 1
-                }
-                i += 1
+            console.log('#othersに追加')
+            $('#others').append(
+                `<div id="player${myNumber}" class="player" data-name="${players[myNumber].name}" data-number="${players[myNumber].number}">
+                    <div id="player${myNumber}row1" class="row">
+                        <div id="player${myNumber}name" class="name"><strong>${myNumber+1}:${players[myNumber].name}</strong></div>
+                        <div id="player${myNumber}token" class="token" >家:${players[myNumber].token.house} 街:${players[myNumber].token.city} 道:${players[myNumber].token.road}</div>
+                    </div>
+                    <div id="player${myNumber}row2" class="row">
+                        <div id="player${myNumber}resource" class="resource"></div>
+                        <div id="player${myNumber}title" class="title"></div>
+                    </div>
+                    <div id="player${myNumber}row3" class="row">
+                        <div id="player${myNumber}progress" class="progress"></div>
+                        <div id="player${myNumber}used" class="used"></div>
+                    </div>
+                </div>`
+            )
+            if(myNumber === players.length - 1){
+                myNumber = 0
+            }else{
+                myNumber += 1
             }
         }
     },
