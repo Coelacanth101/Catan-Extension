@@ -49,9 +49,8 @@ class Player{
     this.house = []
     this.city = []
     this.road = []
-    this.progress = {knight:0, road:0, harvest:0, monopoly:0, point:0}
-    this.used = {knight:0, road:0, harvest:0, monopoly:0, point:0}
-    this.thisTurnProgress = 0
+    this.progress = {knight:0, roadbuild:0, harvest:0, monopoly:0, point:0}
+    this.used = {knight:0, roadbuild:0, harvest:0, monopoly:0, point:0}
     this.largestArmy = 0
     this.longestRoad = 0
     this.longestLength = 0
@@ -303,6 +302,7 @@ class Player{
     this.largestArmyCheck()
     game.pointReload()
     display.allPlayerInformation()
+    display.toggleMyButtons(game.turnPlayer.socketID)
   };
   thiefmove(position){
     if(game.phase !== 'thiefmove'){
@@ -383,8 +383,10 @@ class Player{
         player.resource[resource] = 0
       }
     }
+    game.phase = 'afterdice'
     display.hideMyMonopolyArea(this.socketID)
     display.allPlayerInformation()
+    display.toggleMyButtons(game.turnPlayer.socketID)
   };
   harvest(resource){
     if(game.phase !== 'harvest1' && game.phase !== 'harvest2'){
@@ -408,24 +410,26 @@ class Player{
       display.hideMyHarvestArea(this.socketID)
     }
     display.allPlayerInformation()
+    display.toggleMyButtons(game.turnPlayer.socketID)
   }
   roadBuild(){
     if(game.phase !== 'afterdice'){
       return
     }
-    if(this.progress.road <= 0){
+    if(this.progress.roadbuild <= 0){
       return
     }
     if(this.progressUse >= 1){
       return
     }
     this.progressUse += 1
-    this.progress.road -= 1
-    this.used.road += 1
+    this.progress.roadbuild -= 1
+    this.used.roadbuild += 1
     if(this.token.road >= 1){
       game.phase = 'roadbuild1'
     }
     display.allPlayerInformation()
+    display.toggleMyButtons(game.turnPlayer.socketID)
   }
   turnEnd(){
     this.progressUse = 0
@@ -1029,6 +1033,7 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
     }else{
       game.phase = 'afterdice'
     }
+    display.toggleMyButtons(game.turnPlayer.socketID)
   },
   //資源産出
   produce(add){
@@ -1312,7 +1317,7 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputti
       i += 1
     }
     i = 1;
-    while(i <= progress.road){
+    while(i <= progress.roadbuild){
       this.progressDeck.push('road')
       i += 1
     }
@@ -1628,6 +1633,7 @@ const display = {
   showMyButtonArea(socketID){
     let e
     io.to(socketID).emit('showbuttonarea', e)
+    display.toggleMyButtons(socketID)
   },
   hideButtonArea(){
     let e
@@ -1637,6 +1643,7 @@ const display = {
     io.emit('log', a)
   },
   showNameInputArea(playersName){
+    display.log(playersName)
     io.emit('shownameinputarea', (playersName));
   },
   showMyNameInputArea(socketID, playersName){
@@ -1655,8 +1662,50 @@ const display = {
   dice(dice){
     io.emit('dice', dice);
   },
+  hideDiceArea(){
+    io.emit('hidedicearea', dice);
+  },
   hidemessageArea(){
     io.emit('hidemessagearea', );
+  },
+  showMyButton(socketID,string){
+    io.to(socketID).emit('showbutton',string)
+  },
+  hideMyButton(socketID,string){
+    io.to(socketID).emit('hidebutton',string)
+  },
+  toggleMyButtons(socketID){
+    let myself = game.IDToPlayer(socketID)
+    //display.hideMyButton(socketID,'dice')
+    for(let card in myself.progress){
+      display.hideMyButton(socketID, card)
+    }
+    display.hideMyButton(socketID,'draw')
+    display.hideMyButton(socketID,'negotiate')
+    display.hideMyButton(socketID,'trade')
+    display.hideMyButton(socketID,'end')
+    if(game.phase === 'beforedice'){
+      display.showMyButton(socketID,'dice')
+    }
+    if(game.phase === 'beforedice'){
+      display.showMyButton(socketID,'dice')
+    }
+    if(myself.progress.knight !== 0 && myself.progressUse === 0 && game.phase !== 'building'){
+      display.showMyButton(socketID,'knight')
+    }
+    for(let card in myself.progress){
+      if(myself.progress[card] !== 0 && myself.progressUse === 0 && game.phase !== 'beforedice' && game.phase !== 'building'){
+        display.showMyButton(socketID,card)
+      }
+    }
+    if(game.phase !== 'building' && game.phase !== 'beforedice'){
+      display.showMyButton(socketID,'draw')
+      display.showMyButton(socketID,'negotiate')
+      display.showMyButton(socketID,'trade')
+    }
+    if(game.phase !== 'beforedice'){
+      display.showMyButton(socketID,'end')
+    }
   },
   allMighty(socketID){
     if(game.phase === 'nameinputting'){
@@ -1688,7 +1737,7 @@ const display = {
       display.thief()
       display.buildings()
       display.allPlayerInformation()
-      if(socketID === game.turnPlayer.socketID){
+      if(socketID === game.turnPlayer.socketID && game.phase !== 'setup'){
         display.showMyButtonArea(socketID)
       }
       if(socketID === game.turnPlayer.socketID && game.phase === 'monopoly'){
@@ -1729,6 +1778,7 @@ const display = {
     this.hideProposedArea()
     this.hidePlayers()
     this.cleanUpBoard()
+    this.hideDiceArea()
     this.hidemessageArea()
   },
 }
@@ -1875,7 +1925,7 @@ io.on("connection", (socket)=>{
     });
     //ダイスボタンをクリック
     socket.on('diceclick',(data)=>{
-      if(data.socketID !== game.turnPlayer.socketID || game.phase !== 'beforedice'){
+      if(data.socketID !== game.turnPlayer.socketID/* /////////////|| game.phase !== 'beforedice'*/){
         return
       }else{
         board.rollDice()

@@ -204,8 +204,17 @@ socket.on('cleanupboard',()=>{
 socket.on('dice',(dice)=>{
     display.dice(dice)
 })
+socket.on('hidedicearea',()=>{
+    display.hideDiceArea()
+})
 socket.on('hidemessagearea',()=>{
     display.hidemessageArea()
+})
+socket.on('showbutton',(string)=>{
+    display.showButton(string)
+})
+socket.on('hidebutton',(string)=>{
+    display.hideButton(string)
 })
 
 //nodeをクリック
@@ -742,13 +751,19 @@ const display = {
         $(`#nameinputarea`).show()
         $('#nameinputarea').html('<h1>九州の開拓者たち</h1><h2>名前を入力してください</h2>')
         let i = 1
-        while(i <= playersName.length){
-            $('#nameinputarea').append(`<div class="player${i-1}">
-                <div class="playername">
-                    <input type="text" class="nameinput" data-namenumber="${i-1}">
-                    <input type="button" value="決定" class="namebutton">
-                </div>
-            </div>`)
+        for(let player of playersName){
+            if(player.name){
+                $('#nameinputarea').append(`<div class="player${i-1}">
+                    <p><strong>${player.name}</strong></p>
+                </div>`)
+            }else{
+                $('#nameinputarea').append(`<div class="player${i-1}">
+                    <div class="playername">
+                        <input type="text" class="nameinput" data-namenumber="${i-1}">
+                        <input type="button" value="決定" class="namebutton">
+                    </div>
+                </div>`)
+            }
             i += 1
         }
         $(`#nameinputarea`).append(`<div id="tileamounts" class="numberinput">
@@ -773,13 +788,6 @@ const display = {
                 <input id="bricktileamount" type="number" value="5" min="0" max="100" step="1">
             </div>
         </div>`)
-        /*i = 1
-        for(let player of playersName){
-            if(player.name){
-                $(`.player${playersName.indexOf(player)}`).html(`<p><strong>${player.name}</strong></p>`)
-            }
-            i += 1
-        }*/
     },
     hideYesOrNoButton(){
         $(`#yesorno`).hide()
@@ -793,13 +801,22 @@ const display = {
         $(`.tile_button`).html(``)
     },
     dice(dice){
-        $(`#message_area`).show()
-        $(`#message_area`).html(`<h1 id="dicearea"><div class="dice">${dice[0]}</div><div class="dice">${dice[1]}</div></h1>`)
+        $(`#dice_area`).show()
+        $(`#dice_area`).html(`<div class="dice">${dice[0]}</div><div class="dice">${dice[1]}</div></p>`)
+    },
+    hideDiceArea(){
+        $(`#dice_area`).hide()
     },
     hidemessageArea(){
         $(`#message_area`).hide()
         $(`#message_area`).html(``)
     },
+    showButton(string){
+        $(`#${string}_button`).show()
+    },
+    hideButton(string){
+        $(`#${string}_button`).hide()
+    }
 }
 
 
