@@ -299,7 +299,6 @@ $(`#trade_area`).on('click','#tradedecide',function(){
     const importbrick = Number($(`#importbrick`).val())
     const importresource = {ore:importore,grain:importgrain,wool:importwool,lumber:importlumber,brick:importbrick}
     const data = {socketID:socket.id, exportresource:exportresource, importresource:importresource}
-    console.log(data)
     socket.emit('tradedecide', data)
 });
 //交渉ボタンをクリック
@@ -323,7 +322,6 @@ $(`#counterpart`).on('click','.propose_button',function(){
     const takebrick = Number($(`#takebrick`).val())
     const takeresource = {ore:takeore,grain:takegrain,wool:takewool,lumber:takelumber,brick:takebrick}
     const data = {socketID:socket.id, counterpartnumber:counterpartnumber, giveresource:giveresource, takeresource:takeresource}
-    console.log(data)
     socket.emit('propose', data)
 });
 //同意ボタンをクリック
@@ -356,7 +354,12 @@ $('#others').on('click', '.name', function(){
     console.log('継承')
     let n = Number($(this).parent().parent().data('number'))
     let player ={number:n, socketID:socket.id}
-    console.log(player)
+    socket.emit('takeover', player)
+});
+$('#my_area').on('click', '.name', function(){
+    console.log('継承')
+    let n = Number($(this).parent().parent().data('number'))
+    let player ={number:n, socketID:socket.id}
     socket.emit('takeover', player)
 });
 
@@ -649,16 +652,13 @@ const display = {
         console.log(a)
     },
     playerSort(players){
-        console.log(players)
         let myNumber
         $(`.propose_button`).show()
         for(p of players){
             if(p.socketID === socket.id){
                 $('#my_area').html('')
-                console.log('#my_area消去')
                 myNumber = p.number
                 $(`#to${myNumber}`).hide()
-                console.log('#my_areaに追加')
                 $('#my_area').append(
                     `<div id="player${myNumber}" class="player" data-name="${players[myNumber].name}" data-number="${players[myNumber].number}">
                         <div id="player${myNumber}row1" class="row">
@@ -676,7 +676,6 @@ const display = {
                     </div>`
                 )
                 $('#others').html('')
-                console.log('#others消去')
                 let i = 1
                 while(i <= players.length - 1){
                     if(myNumber === players.length - 1){
@@ -685,7 +684,6 @@ const display = {
                         myNumber += 1
                     }
                     $(`#to${myNumber}`).html(`${players[myNumber].name}`)
-                    console.log('#othersに追加')
                     $('#others').append(
                         `<div id="player${myNumber}" class="player" data-name="${players[myNumber].name}" data-number="${players[myNumber].number}">
                             <div id="player${myNumber}row1" class="row">
@@ -709,11 +707,8 @@ const display = {
         }
         $('#my_area').html('')
         $('#others').html('')
-        console.log('#my_area消去')
-        console.log('#others消去')
         myNumber = 0
         for(p of players){
-            console.log('#othersに追加')
             $('#others').append(
                 `<div id="player${myNumber}" class="player" data-name="${players[myNumber].name}" data-number="${players[myNumber].number}">
                     <div id="player${myNumber}row1" class="row">
