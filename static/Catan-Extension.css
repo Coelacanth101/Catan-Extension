@@ -24,8 +24,7 @@
 };
 #button_area{
     display: flex;
-    text-align: center;
-    background-color: darkseagreen;
+    justify-content: center;
 }
 #road_button{
     display: none;
@@ -76,22 +75,22 @@
     font-size: 0.6em;
 }
 #to0{
-    background-color: red;
+    background-color: rgb(236, 28, 36);
 }
 #to1{
-    background-color: green;
+    background-color: rgb(62, 125, 35);
 }
 #to2{
-    background-color: steelblue;
+    background-color: rgb(89, 119, 203);
 }
 #to3{
-    background-color: yellow;
+    background-color: rgb(255, 242, 0);
 }
 #to4{
-    background-color: orange;
+    background-color: rgb(242, 169, 13);
 }
 #to5{
-    background-color: purple;
+    background-color: rgb(184, 61, 186);
 }
 #proposing_area{
     display: flex;
@@ -298,8 +297,17 @@ p{
     display: flex;
     justify-content: center;
 }
-
-
+.ore_button{
+    
+};
+.wool_button{
+};
+.grain_button{
+};
+.lumber_button{
+};
+.brick_button{
+};
 
 
 .spinner_area{

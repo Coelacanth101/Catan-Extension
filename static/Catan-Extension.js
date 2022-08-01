@@ -483,23 +483,13 @@ const display = {
     allUsed(game){
         for(let p of game.players){
             $(`#player${p.number}used`).html('')
-            if(p.socketID === socket.id){
-                for(u in p.used){
-                    let i = 1
-                    while(i <= p.used[u]){
-                        $(`#player${p.number}used`).append(`<p class="square ${String(u)}card">${translate(String(u))}</p>`);
-                        i += 1
-                    };
+            for(u in p.used){
+                let i = 1
+                while(i <= p.used[u]){
+                    $(`#player${p.number}used`).append(`<p class="square ${String(u)}card">${translate(String(u))}</p>`);
+                    i += 1
                 };
-            }else{
-                for(u in p.used){
-                    let i = 1
-                    while(i <= p.resource[u]){
-                        $(`#player${p.number}used`).append(`<p class="square back">背</p>`);
-                        i += 1
-                    };
-                };
-            }
+            };
         };
     },
     buildings(game){

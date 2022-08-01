@@ -160,6 +160,7 @@ class Player{
         for(let tileposition of tiles){
           let tile = board.island[tileposition[0]][tileposition[1]]
           tile.cityOwner.push(this)
+          discard(this, tile.houseOwner)
         }
         let house = positionToObject(position, this.house)
         discard(house, this.house)
@@ -1241,7 +1242,7 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
       if(y === 0){
         return [[[8,1],[8,2]],[[8,1],[8,2]]]
       }else if(y === 3){
-        return [[[7,6],[7,7]],[[7,7],[7,7]]]
+        return [[[8,6],[8,7]],[[8,7],[8,7]]]
       }else{
         return [[[8,y*2+1],[8,y*2+2]],[[8,y*2],[8,y*2+1]]]
       }
@@ -1254,10 +1255,7 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
     this.house = []
     this.city = []
     this.road = []
-    this.nodeLine = [7,16,27,40,53,64,73,80]
-    this.roadLine = [6,10,18,23,33,39,51,58,70,76,86,91,99,103,109]
     this.dice = []
-    this.tileLine = [3,7,12,18,23,27,30]
     this.ports = {oreport:[], grainport:[], woolport:[], lumberport:[], brickport:[], genericport:[]}
   }
 }
