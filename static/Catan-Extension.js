@@ -33,7 +33,13 @@ $('#gamestartbutton').on('click', function(){
     let wool = Number($(`#wooltileamount`).val())
     let lumber = Number($(`#lumbertileamount`).val())
     let brick = Number($(`#bricktileamount`).val())
-    const tileamounts ={ore:ore,grain:grain,wool:wool,lumber:lumber,brick:brick}
+    let tileamounts
+    if(ore === 0 && grain === 0 && wool === 0 && lumber === 0 && brick === 0){
+        tileamounts = {ore:5,grain:6,wool:6,lumber:6,brick:5}
+    }else{
+        tileamounts = {ore:ore,grain:grain,wool:wool,lumber:lumber,brick:brick}
+    }
+    console.log(tileamounts)
     let total = 0
     for(resource in tileamounts){
         total += tileamounts[resource]
@@ -424,6 +430,7 @@ const display = {
         }
         $('#gamestart').hide()
         $('#nameinputarea').hide();
+        $('#tileamounts').hide();
         $('#field').show();
     },
     island(island){
@@ -781,6 +788,7 @@ const display = {
     },
     showNameInputArea(playersName){
         $(`#nameinputarea`).show()
+        $('#tileamounts').show();
         $(`#gamestart`).show()
         $('#nameinputarea').html('<h1>九州の開拓者たち</h1><h2>名前を入力してください</h2>')
         let i = 1
@@ -799,28 +807,6 @@ const display = {
             }
             i += 1
         }
-        $(`#nameinputarea`).append(`<div id="tileamounts" class="numberinput">
-            <div>
-                <div class="givetakeresource ore">鉄</div>
-                <input id="oretileamount" class="resourcenumber" type="number" value="5" min="0" max="100" step="1">
-            </div>
-            <div>
-                <div class="givetakeresource grain">米</div>
-                <input id="ricetileamount" class="resourcenumber" type="number" value="6" min="0" max="100" step="">
-            </div>
-            <div>
-                <div class="givetakeresource wool">羊</div>
-                <input id="wooltileamount" class="resourcenumber" type="number" value="6" min="0" max="100" step="">
-            </div>
-            <div>
-                <div class="givetakeresource lumber">木</div>
-                <input id="lumbertileamount" class="resourcenumber" type="number" value="6" min="0" max="100" step="">
-            </div>
-            <div>
-                <div class="givetakeresource brick">煉</div>
-                <input id="bricktileamount" class="resourcenumber" type="number" value="5" min="0" max="100" step="1">
-            </div>
-        </div>`)
     },
     hideYesOrNoButton(){
         $(`#yesorno`).hide()
