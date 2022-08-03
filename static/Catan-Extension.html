@@ -15,118 +15,119 @@
             <div class="player0">
                 <div class="playername">
                     <input type="text" class="nameinput" data-namenumber="0">
-                    <input type="button" value="決定" class="namebutton">
+                    <input type="button" value="決定" class="namebutton action_button">
                 </div>
             </div>
             <div class="player1">
                 <div class="playername">
                 <input type="text" class="nameinput" data-namenumber="1">
-                <input type="button" value="決定" class="namebutton">
+                <input type="button" value="決定" class="namebutton action_button">
                 </div>
             </div>
             <div class="player2">
                 <div class="playername">
                 <input type="text" class="nameinput" data-namenumber="2">
-                <input type="button" value="決定" class="namebutton">
+                <input type="button" value="決定" class="namebutton action_button">
                 </div>
             </div>
             <div class="player3">
                 <div class="playername">
                 <input type="text" class="nameinput" data-namenumber="3">
-                <input type="button" value="決定" class="namebutton">
+                <input type="button" value="決定" class="namebutton action_button">
                 </div>
             </div>
             <div class="player4">
                 <div class="playername">
                 <input type="text" class="nameinput" data-namenumber="4">
-                <input type="button" value="決定" class="namebutton">
+                <input type="button" value="決定" class="namebutton action_button">
                 </div>
             </div>
             <div class="player5">
                 <div class="playername">
                 <input type="text" class="nameinput" data-namenumber="5">
-                <input type="button" value="決定" class="namebutton">
+                <input type="button" value="決定" class="namebutton action_button">
                 </div>
             </div>
             <div id="tileamounts" class="numberinput">
                 <div>
-                    <div>鉄</div>
-                    <input id="oretileamount" type="number" value="5" min="0" max="100" step="1">
+                    <div class="givetakeresource ore">鉄</div>
+                    <input id="oretileamount" class="resourcenumber" type="number" value="5" min="0" max="100" step="1">
                 </div>
                 <div>
-                    <div>米</div>
-                    <input id="ricetileamount" type="number" value="6" min="0" max="100" step="1">
+                    <div class="givetakeresource grain">米</div>
+                    <input id="ricetileamount" class="resourcenumber" type="number" value="6" min="0" max="100" step="1">
                 </div>
                 <div>
-                    <div>羊</div>
-                    <input id="wooltileamount" type="number" value="6" min="0" max="100" step="1">
+                    <div class="givetakeresource wool">羊</div>
+                    <input id="wooltileamount" class="resourcenumber" type="number" value="6" min="0" max="100" step="1">
                 </div>
                 <div>
-                    <div>木</div>
-                    <input id="lumbertileamount" type="number" value="6" min="0" max="100" step="1">
+                    <div class="givetakeresource lumber">木</div>
+                    <input id="lumbertileamount" class="resourcenumber" type="number" value="6" min="0" max="100" step="1">
                 </div>
                 <div>
-                    <div>煉</div>
-                    <input id="bricktileamount" type="number" value="5" min="0" max="100" step="1">
+                    <div class="givetakeresource brick">煉</div>
+                    <input id="bricktileamount" class="resourcenumber" type="number" value="5" min="0" max="100" step="1">
                 </div>
             </div>
         </div>
-        <div id="gamestart"><button id="gamestartbutton">開始</button></div>
-        <div id="board_and_button">
+        <div id="gamestart"><button id="gamestartbutton" class="action_button">開始</button></div>
+        <div id="field">
             <div id="board_area">
+                <div id="dice_area"></div>
                 <img id="board" src='./large_board.png'>
-                <img id="tile1" class="tilex1 tiley5 tile" src="./ocean.png">
-                <img id="tile2" class="tilex1 tiley7 tile" src="./ocean.png">
-                <img id="tile3" class="tilex1 tiley9 tile" src="./ocean.png">
-                <img id="tile4" class="tilex1 tiley11 tile" src="./ocean.png">
-                <img id="tile5" class="tilex2 tiley4 tile" src="./ocean.png">
-                <img id="tile6" class="tilex2 tiley6 tile" src="./desert.png">
-                <img id="tile7" class="tilex2 tiley8 tile" src="./desert.png">
-                <img id="tile8" class="tilex2 tiley10 tile" src="./desert.png">
-                <img id="tile9" class="tilex2 tiley12 tile" src="./ocean.png">
-                <img id="tile10" class="tilex3 tiley3 tile" src="./ocean.png">
-                <img id="tile11" class="tilex3 tiley5 tile" src="./desert.png">
-                <img id="tile12" class="tilex3 tiley7 tile" src="./desert.png">
-                <img id="tile13" class="tilex3 tiley9 tile" src="./desert.png">
-                <img id="tile14" class="tilex3 tiley11 tile" src="./desert.png">
-                <img id="tile15" class="tilex3 tiley13 tile" src="./ocean.png">
-                <img id="tile16" class="tilex4 tiley2 tile" src="./ocean.png">
-                <img id="tile17" class="tilex4 tiley4 tile" src="./desert.png">
-                <img id="tile18" class="tilex4 tiley6 tile" src="./desert.png">
-                <img id="tile19" class="tilex4 tiley8 tile" src="./desert.png">
-                <img id="tile20" class="tilex4 tiley10 tile" src="./desert.png">
-                <img id="tile21" class="tilex4 tiley12 tile" src="./desert.png">
-                <img id="tile22" class="tilex4 tiley14 tile" src="./ocean.png">
-                <img id="tile23" class="tilex5 tiley1 tile" src="./ocean.png">
-                <img id="tile24" class="tilex5 tiley3 tile" src="./desert.png">
-                <img id="tile25" class="tilex5 tiley5 tile" src="./desert.png">
-                <img id="tile26" class="tilex5 tiley7 tile" src="./desert.png">
-                <img id="tile27" class="tilex5 tiley9 tile" src="./desert.png">
-                <img id="tile28" class="tilex5 tiley11 tile" src="./desert.png">
-                <img id="tile29" class="tilex5 tiley13 tile" src="./desert.png">
-                <img id="tile30" class="tilex5 tiley15 tile" src="./ocean.png">
-                <img id="tile31" class="tilex6 tiley2 tile" src="./ocean.png">
-                <img id="tile32" class="tilex6 tiley4 tile" src="./desert.png">
-                <img id="tile33" class="tilex6 tiley6 tile" src="./desert.png">
-                <img id="tile34" class="tilex6 tiley8 tile" src="./desert.png">
-                <img id="tile35" class="tilex6 tiley10 tile" src="./desert.png">
-                <img id="tile36" class="tilex6 tiley12 tile" src="./desert.png">
-                <img id="tile37" class="tilex6 tiley14 tile" src="./ocean.png">
-                <img id="tile38" class="tilex7 tiley3 tile" src="./ocean.png">
-                <img id="tile39" class="tilex7 tiley5 tile" src="./desert.png">
-                <img id="tile40" class="tilex7 tiley7 tile" src="./desert.png">
-                <img id="tile41" class="tilex7 tiley9 tile" src="./desert.png">
-                <img id="tile42" class="tilex7 tiley11 tile" src="./desert.png">
-                <img id="tile43" class="tilex7 tiley13 tile" src="./ocean.png">
-                <img id="tile44" class="tilex8 tiley4 tile" src="./ocean.png">
-                <img id="tile45" class="tilex8 tiley6 tile" src="./desert.png">
-                <img id="tile46" class="tilex8 tiley8 tile" src="./desert.png">
-                <img id="tile47" class="tilex8 tiley10 tile" src="./desert.png">
-                <img id="tile48" class="tilex8 tiley12 tile" src="./ocean.png">
-                <img id="tile49" class="tilex9 tiley5 tile" src="./ocean.png">
-                <img id="tile50" class="tilex9 tiley7 tile" src="./ocean.png">
-                <img id="tile51" class="tilex9 tiley9 tile" src="./ocean.png">
-                <img id="tile52" class="tilex9 tiley11 tile" src="./ocean.png">
+                <img id="tile1" class="tilex1 tiley5 tile" data-direction="" src="./ocean.png">
+                <img id="tile2" class="tilex1 tiley7 tile" data-direction="" src="./ocean.png">
+                <img id="tile3" class="tilex1 tiley9 tile" data-direction="" src="./ocean.png">
+                <img id="tile4" class="tilex1 tiley11 tile" data-direction="" src="./ocean.png">
+                <img id="tile5" class="tilex2 tiley4 tile" data-direction="" src="./ocean.png">
+                <img id="tile6" class="tilex2 tiley6 tile" data-direction="" src="./desert.png">
+                <img id="tile7" class="tilex2 tiley8 tile" data-direction="" src="./desert.png">
+                <img id="tile8" class="tilex2 tiley10 tile" data-direction="" src="./desert.png">
+                <img id="tile9" class="tilex2 tiley12 tile" data-direction="" src="./ocean.png">
+                <img id="tile10" class="tilex3 tiley3 tile" data-direction="" src="./ocean.png">
+                <img id="tile11" class="tilex3 tiley5 tile" data-direction="" src="./desert.png">
+                <img id="tile12" class="tilex3 tiley7 tile" data-direction="" src="./desert.png">
+                <img id="tile13" class="tilex3 tiley9 tile" data-direction="" src="./desert.png">
+                <img id="tile14" class="tilex3 tiley11 tile" data-direction="" src="./desert.png">
+                <img id="tile15" class="tilex3 tiley13 tile" data-direction="" src="./ocean.png">
+                <img id="tile16" class="tilex4 tiley2 tile" data-direction="" src="./ocean.png">
+                <img id="tile17" class="tilex4 tiley4 tile" data-direction="" src="./desert.png">
+                <img id="tile18" class="tilex4 tiley6 tile" data-direction="" src="./desert.png">
+                <img id="tile19" class="tilex4 tiley8 tile" data-direction="" src="./desert.png">
+                <img id="tile20" class="tilex4 tiley10 tile" data-direction="" src="./desert.png">
+                <img id="tile21" class="tilex4 tiley12 tile" data-direction="" src="./desert.png">
+                <img id="tile22" class="tilex4 tiley14 tile" data-direction="" src="./ocean.png">
+                <img id="tile23" class="tilex5 tiley1 tile" data-direction="" src="./ocean.png">
+                <img id="tile24" class="tilex5 tiley3 tile" data-direction="" src="./desert.png">
+                <img id="tile25" class="tilex5 tiley5 tile" data-direction="" src="./desert.png">
+                <img id="tile26" class="tilex5 tiley7 tile" data-direction="" src="./desert.png">
+                <img id="tile27" class="tilex5 tiley9 tile" data-direction="" src="./desert.png">
+                <img id="tile28" class="tilex5 tiley11 tile" data-direction="" src="./desert.png">
+                <img id="tile29" class="tilex5 tiley13 tile" data-direction="" src="./desert.png">
+                <img id="tile30" class="tilex5 tiley15 tile" data-direction="" src="./ocean.png">
+                <img id="tile31" class="tilex6 tiley2 tile" data-direction="" src="./ocean.png">
+                <img id="tile32" class="tilex6 tiley4 tile" data-direction="" src="./desert.png">
+                <img id="tile33" class="tilex6 tiley6 tile" data-direction="" src="./desert.png">
+                <img id="tile34" class="tilex6 tiley8 tile" data-direction="" src="./desert.png">
+                <img id="tile35" class="tilex6 tiley10 tile" data-direction="" src="./desert.png">
+                <img id="tile36" class="tilex6 tiley12 tile" data-direction="" src="./desert.png">
+                <img id="tile37" class="tilex6 tiley14 tile" data-direction="" src="./ocean.png">
+                <img id="tile38" class="tilex7 tiley3 tile" data-direction="" src="./ocean.png">
+                <img id="tile39" class="tilex7 tiley5 tile" data-direction="" src="./desert.png">
+                <img id="tile40" class="tilex7 tiley7 tile" data-direction="" src="./desert.png">
+                <img id="tile41" class="tilex7 tiley9 tile" data-direction="" src="./desert.png">
+                <img id="tile42" class="tilex7 tiley11 tile" data-direction="" src="./desert.png">
+                <img id="tile43" class="tilex7 tiley13 tile" data-direction="" src="./ocean.png">
+                <img id="tile44" class="tilex8 tiley4 tile" data-direction="" src="./ocean.png">
+                <img id="tile45" class="tilex8 tiley6 tile" data-direction="" src="./desert.png">
+                <img id="tile46" class="tilex8 tiley8 tile" data-direction="" src="./desert.png">
+                <img id="tile47" class="tilex8 tiley10 tile" data-direction="" src="./desert.png">
+                <img id="tile48" class="tilex8 tiley12 tile" data-direction="" src="./ocean.png">
+                <img id="tile49" class="tilex9 tiley5 tile" data-direction="" src="./ocean.png">
+                <img id="tile50" class="tilex9 tiley7 tile" data-direction="" src="./ocean.png">
+                <img id="tile51" class="tilex9 tiley9 tile" data-direction="" src="./ocean.png">
+                <img id="tile52" class="tilex9 tiley11 tile" data-direction="" src="./ocean.png">
                 <div id="node1"  class="node nodex2 nodey4"></div>
                 <div id="node2"  class="node nodex1 nodey5"></div>
                 <div id="node3"  class="node nodex2 nodey6"></div>
@@ -377,172 +378,189 @@
                 <img id="chip29" class="chip tile_buttonx7 tile_buttony6" src ="">
                 <img id="chip30" class="chip tile_buttonx7 tile_buttony8" src ="">
             </div>
-            <div id="dice_and_button">
-                <div id="dice_area"></div>
-                <div id="button_area">
-                    <button id="dice_button" class="action_button">ダイス</button>
-                    <button id="road_button" class="action_button">道</button>
-                    <button id="house_button" class="action_button">家</button>
-                    <button id="city_button" class="action_button">街</button>
-                    <button id="knight_button" class="action_button">騎士</button>
-                    <button id="roadbuild_button" class="action_button">街道</button>
-                    <button id="harvest_button" class="action_button">収穫</button>
-                    <button id="monopoly_button" class="action_button">独占</button>
-                    <button id="draw_button" class="action_button">ドロー</button>
-                    <button id="negotiate_button" class="action_button">交渉</button>
-                    <button id="trade_button" class="action_button">貿易</button>
-                    <button id="end_button" class="action_button">終了</button>
+            <div id="player_and_button_area">
+                <div id="players">
+                    <div id="playerinformation">
+                    </div>
+                    <div id="buttons">
+                        <div id="button_area" class="control_area">
+                            <button id="dice_button" class="action_button">ダイス</button>
+                            <button id="road_button" class="action_button">道</button>
+                            <button id="house_button" class="action_button">家</button>
+                            <button id="city_button" class="action_button">街</button>
+                            <button id="knight_button" class="action_button">騎士</button>
+                            <button id="roadbuild_button" class="action_button">街道</button>
+                            <button id="harvest_button" class="action_button">収穫</button>
+                            <button id="monopoly_button" class="action_button">独占</button>
+                            <button id="draw_button" class="action_button">ドロー</button>
+                            <button id="negotiate_button" class="action_button">交渉</button>
+                            <button id="trade_button" class="action_button">貿易</button>
+                            <button id="end_button" class="action_button">終了</button>
+                        </div>
+                        <div id="monopoly_area" class="control_area">
+                            <div class="resource_button_area">
+                                <button id="monopoly_ore" class="action_button resource_button ore">鉄</button>
+                                <button id="monopoly_grain" class="action_button resource_button  grain">米</button>
+                                <button id="monopoly_wool" class="action_button resource_button wool">羊</button>
+                                <button id="monopoly_lumber" class="action_button resource_button lumber">木</button>
+                                <button id="monopoly_brick" class="action_button resource_button brick">煉</button>
+                            </div>
+                            <div class="quitprogress">
+                                <button class="quitprogressbutton action_button">戻る</button>
+                            </div>
+                        </div>
+                        <div id="harvest_area" class="control_area">
+                            <div class="resource_button_area">
+                                <button id="harvest_ore" class="action_button resource_button ore">鉄</button>
+                                <button id="harvest_grain" class="action_button resource_button grain">米</button>
+                                <button id="harvest_wool" class="action_button resource_button wool">羊</button>
+                                <button id="harvest_lumber" class="action_button resource_button lumber">木</button>
+                                <button id="harvest_brick" class="action_button resource_button brick">煉</button>
+                            </div>
+                            <div class="quitprogress">
+                                <button class="quitprogressbutton action_button">戻る</button>
+                            </div>
+                        </div>
+                        <div id="burst_area" class="control_area">
+                            <div id="burst_message"></div>
+                            <div id="trash_area" class="resource_button_area">
+                                <button id="burst_ore" class="action_button resource_button ore">鉄</button>
+                                <button id="burst_grain" class="action_button resource_button grain">米</button>
+                                <button id="burst_wool" class="action_button resource_button wool">羊</button>
+                                <button id="burst_lumber" class="action_button resource_button lumber">木</button>
+                                <button id="burst_brick" class="action_button resource_button brick">煉</button>
+                            </div>
+                        </div>
+                        <div id="negotiate_area" class="control_area">
+                            <div class="give numberinput">
+                                <div class="do">
+                                    <p>あげる</p>
+                                </div>
+                                <div>
+                                    <div class="givetakeresource ore">鉄</div>
+                                    <input id="giveore" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
+                                </div>
+                                <div>
+                                    <div class="givetakeresource grain">米</div>
+                                    <input id="givegrain" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
+                                </div>
+                                <div>
+                                    <div class="givetakeresource wool">羊</div>
+                                    <input id="givewool" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
+                                </div>
+                                <div>
+                                    <div class="givetakeresource lumber">木</div>
+                                    <input id="givelumber" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
+                                </div>
+                                <div>
+                                    <div class="givetakeresource brick">煉</div>
+                                    <input id="givebrick" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
+                                </div>
+                            </div>
+                            <div class="take numberinput">
+                                <div class="do">
+                                    <p>もらう</p>
+                                </div>
+                                <div>
+                                    <div class="givetakeresource ore">鉄</div>
+                                    <input id="takeore" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
+                                </div>
+                                <div>
+                                    <div class="givetakeresource grain">米</div>
+                                    <input id="takegrain" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
+                                </div>
+                                <div>
+                                    <div class="givetakeresource wool">羊</div>
+                                    <input id="takewool" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
+                                </div>
+                                <div>
+                                    <div class="givetakeresource lumber">木</div>
+                                    <input id="takelumber" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
+                                </div>
+                                <div>
+                                    <div class="givetakeresource brick">煉</div>
+                                    <input id="takebrick" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
+                                </div>
+                            </div>
+                            <div id="counterpart">
+                                <button id="to0" class="propose_button player0color">player0</button>
+                                <button id="to1" class="propose_button player1color">player1</button>
+                                <button id="to2" class="propose_button player2color">player2</button>
+                                <button id="to3" class="propose_button player3color">player3</button>
+                                <button id="to4" class="propose_button player4color">player4</button>
+                                <button id="to5" class="propose_button player5color">player5</button>
+                                <button id="quitnegotiate" class="action_button">戻る</button>
+                            </div>
+                        </div>
+                        <div id="propose_area" class="control_area">
+                            <div id="proposeterm"></div>
+                            <div id="acceptordeny">
+                                <button id="accept" class="action_button">同意</button>
+                                <button id="deny" class="action_button">断る</button>
+                            </div>
+                        </div>
+                        <div id="trade_area" class="control_area">
+                            <div class="give numberinput">
+                                <div class="do">
+                                    <p>捨てる</p>
+                                </div>
+                                <div>
+                                    <div class="givetakeresource ore">鉄</div>
+                                    <input id="exportore" class="resourcenumber" type="number" value="" min="0" max="100" step="4">
+                                </div>
+                                <div>
+                                    <div class="givetakeresource grain">米</div>
+                                    <input id="exportgrain" class="resourcenumber" type="number" value="" min="0" max="100" step="4">
+                                </div>
+                                <div>
+                                    <div class="givetakeresource wool">羊</div>
+                                    <input id="exportwool" class="resourcenumber" type="number" value="" min="0" max="100" step="4">
+                                </div>
+                                <div>
+                                    <div class="givetakeresource lumber">木</div>
+                                    <input id="exportlumber" class="resourcenumber" type="number" value="" min="0" max="100" step="4">
+                                </div>
+                                <div>
+                                    <div class="givetakeresource brick">煉</div>
+                                    <input id="exportbrick" class="resourcenumber" type="number" value="" min="0" max="100" step="4">
+                                </div>
+                            </div>
+                            <div class="take numberinput">
+                                <div class="do">
+                                    <p>もらう</p>
+                                </div>
+                                <div>
+                                    <div class="givetakeresource ore">鉄</div>
+                                    <input id="importore" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
+                                </div>
+                                <div>
+                                    <div class="givetakeresource grain">米</div>
+                                    <input id="importgrain" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
+                                </div>
+                                <div>
+                                    <div class="givetakeresource wool">羊</div>
+                                    <input id="importwool" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
+                                </div>
+                                <div>
+                                    <div class="givetakeresource lumber">木</div>
+                                    <input id="importlumber" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
+                                </div>
+                                <div>
+                                    <div class="givetakeresource brick">煉</div>
+                                    <input id="importbrick" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
+                                </div>
+                            </div>
+                            <div id="decidearea">
+                                <button id="tradedecide" class="action_button">決定</button>
+                                <button id="quittrade" class="action_button">戻る</button>
+                            </div>
+                            
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div id="monopoly_area">
-            <button id="monopoly_ore" class="action_button resource_button ore">鉄</button>
-            <button id="monopoly_grain" class="action_button resource_button  grain">米</button>
-            <button id="monopoly_wool" class="action_button resource_button wool">羊</button>
-            <button id="monopoly_lumber" class="action_button resource_button lumber">木</button>
-            <button id="monopoly_brick" class="action_button resource_button brick">煉</button>
-        </div>
-        <div id="harvest_area">
-            <button id="harvest_ore" class="action_button resource_button ore">鉄</button>
-            <button id="harvest_grain" class="action_button resource_button grain">米</button>
-            <button id="harvest_wool" class="action_button resource_button wool">羊</button>
-            <button id="harvest_lumber" class="action_button resource_button lumber">木</button>
-            <button id="harvest_brick" class="action_button resource_button brick">煉</button>
-        </div>
-        <div id="burst_area">
-            <button id="burst_ore" class="action_button resource_button ore">鉄</button>
-            <button id="burst_grain" class="action_button resource_button grain">米</button>
-            <button id="burst_wool" class="action_button resource_button wool">羊</button>
-            <button id="burst_lumber" class="action_button resource_button lumber">木</button>
-            <button id="burst_brick" class="action_button resource_button brick">煉</button>
-        </div>
-        <div id="negotiate_area">
-            <div class="give numberinput">
-                <div class="center">
-                    <p>あげる</p>
-                </div>
-                <div>
-                    <div>鉄</div>
-                    <input id="giveore" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
-                </div>
-                <div>
-                    <div>米</div>
-                    <input id="givegrain" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
-                </div>
-                <div>
-                    <div>羊</div>
-                    <input id="givewool" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
-                </div>
-                <div>
-                    <div>木</div>
-                    <input id="givelumber" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
-                </div>
-                <div>
-                    <div>煉</div>
-                    <input id="givebrick" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
-                </div>
-            </div>
-            <div class="take numberinput">
-                <div class="center">
-                    <p>もらう</p>
-                </div>
-                <div>
-                    <div>鉄</div>
-                    <input id="takeore" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
-                </div>
-                <div>
-                    <div>米</div>
-                    <input id="takegrain" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
-                </div>
-                <div>
-                    <div>羊</div>
-                    <input id="takewool" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
-                </div>
-                <div>
-                    <div>木</div>
-                    <input id="takelumber" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
-                </div>
-                <div>
-                    <div>煉</div>
-                    <input id="takebrick" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
-                </div>
-            </div>
-            <div id="counterpart">
-                <button id="to0" class="propose_button">player0</button>
-                <button id="to1" class="propose_button">player1</button>
-                <button id="to2" class="propose_button">player2</button>
-                <button id="to3" class="propose_button">player3</button>
-                <button id="to4" class="propose_button">player4</button>
-                <button id="to5" class="propose_button">player5</button>
-            </div>
-        </div>
-        <div id="proposing_area"></div>
-        <div id="proposed_area">
-            <div id="proposeterm"></div>
-            <div id="acceptordeny">
-                <button id="accept">同意</button>
-                <button id="deny">断る</button>
-            </div>
-        </div>
-        <div id="trade_area">
-            <div class="give numberinput">
-                <div class="center">
-                    <p>捨てる</p>
-                </div>
-                <div>
-                    <div>鉄</div>
-                    <input id="exportore" class="resourcenumber" type="number" value="" min="0" max="100" step="4">
-                </div>
-                <div>
-                    <div>米</div>
-                    <input id="exportgrain" class="resourcenumber" type="number" value="" min="0" max="100" step="4">
-                </div>
-                <div>
-                    <div>羊</div>
-                    <input id="exportwool" class="resourcenumber" type="number" value="" min="0" max="100" step="4">
-                </div>
-                <div>
-                    <div>木</div>
-                    <input id="exportlumber" class="resourcenumber" type="number" value="" min="0" max="100" step="4">
-                </div>
-                <div>
-                    <div>煉</div>
-                    <input id="exportbrick" class="resourcenumber" type="number" value="" min="0" max="100" step="4">
-                </div>
-            </div>
-            <div class="take numberinput">
-                <div class="center">
-                    <p>引く</p>
-                </div>
-                <div>
-                    <div>鉄</div>
-                    <input id="importore" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
-                </div>
-                <div>
-                    <div>米</div>
-                    <input id="importgrain" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
-                </div>
-                <div>
-                    <div>羊</div>
-                    <input id="importwool" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
-                </div>
-                <div>
-                    <div>木</div>
-                    <input id="importlumber" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
-                </div>
-                <div>
-                    <div>煉</div>
-                    <input id="importbrick" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
-                </div>
-            </div>
-            <button id="tradedecide">決定</button>
-        </div>
-        <div id="players">
-            <div id="my_area">
-            </div> 
-            <div id="others">
-            </div>
-        </div>
+            
         <div id="initialize">
             <button id="initializebutton">初期化</button>
             <div id="yesorno">

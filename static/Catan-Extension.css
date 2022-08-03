@@ -1,342 +1,737 @@
 @charset "UTF-8";
 #container{
-    max-width: 800px;
-    height: 100%;
+    max-width: 1000px;
     margin: auto;
 }
-#nameinputarea{
-    margin: auto;
-    text-align: center;
-}
-#gamestart{
-    margin: auto;
-    text-align: center;
-}
-
 #board_area{
     position:relative;
-    max-width:600px;
+    justify-content: center;
+    width: 600px;
     aspect-ratio: 7 / 6.9282;
-    margin: auto;
 }
-#message_area{
-    text-align: center
-};
-#button_area{
-    display: flex;
-    justify-content: center;
+@media screen and (max-width:850px){
+        #nameinputarea{
+            margin: auto;
+            text-align: center;
+        }
+        #gamestart{
+            margin: auto;
+            text-align: center;
+        }
+        #field{
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            justify-content: center;
+        }
+        #board_area{
+            position:relative;
+            justify-content: center;
+            width: 600px;
+            aspect-ratio: 7 / 6.9282;
+        }
+            #dice_area{
+                    width: 20%;
+                    height: 10%;
+                    display: flex;
+                    justify-content: center;
+                    position: absolute;
+                    right: 0px;
+                    top: 0px;
+                    background-color: rgb(131, 221, 131);
+                    z-index: 1;
+            }
+                .dice{
+                    width:48%;
+                    border: 5px solid black;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius:10%;
+                    font-size: 30px;
+                    margin-right: 0.5px;
+                    margin-left: 0.5px;
+                }
+        #player_and_button_area{
+            width: 100%;
+            max-width: 400px;
+            height: 600px;
+            display: flex;
+            justify-content: center;
+            position: relative;
+            margin-top: 140px;
+        }
+            #players{
+                width: 100%;
+            }
+            #playerinformation{
+                display: flex;
+                flex-wrap: wrap;
+                width:100%;
+                height:auto;
+                position: relative;
+                align-items: center;
+                font-size: 14.7px;
+            }
+                .player{
+                    width: 100%;
+                    margin:1px auto;
+                    border: 3px solid black; 
+                    border-radius: 5px;
+                }
+                .row{
+                    display: flex;
+                    min-height: 22px;
+                }
+                .line{
+                    width: 50%;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .nameline{
+                    width: 50%;
+                    display: flex;
+                    align-items: center;
+                    border-right:2px solid black;
+                    border-bottom:2px solid black;
+                }
+                .playermark{
+                    height: 100%;
+                    width: 15%;
+                    display:flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .name{
+                    width: 85%;
+                    height: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    text-align: center;
+                }
+                .player0color{
+                    background-color: rgb(236, 28, 36);
+                }
+                .player1color{
+                    background-color: rgb(62, 125, 35);
+                }
+                .player2color{
+                    background-color: rgb(89, 119, 203);
+                }
+                .player3color{
+                    background-color: rgb(255, 242, 0);
+                }
+                .player4color{
+                    background-color: rgb(242, 169, 13);
+                }
+                .player5color{
+                    background-color: rgb(184, 61, 186);
+                }
+                    .resourcecard{
+                        display: flex;
+                        margin:0 2px;
+                        border: 1px solid black; 
+                        border-radius: 1px;
+                        width: 20px;
+                        height: 20px;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                    .progresscard{
+                        display: flex;
+                        margin:0 1px;
+                        border: 1px solid black; 
+                        border-radius: 1px;
+                        width: 20px;
+                        height: 20px;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                    .back{
+                        display: flex;
+                        margin:0 1px;
+                        border: 1px solid black; 
+                        border-radius: 1px;
+                        width: 20px;
+                        height: 20px;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: black;
+                    }
+                    .usedcard{
+                        display: flex;
+                        margin:0 2px;
+                        border: 1px solid black; 
+                        border-radius: 1px;
+                        width: 20px;
+                        height: 20px;
+                        justify-content: center;
+                        align-items: center;
+                    }
+            #buttons{
+                width: 100%;
+                height: 140px;
+                position: absolute;
+                top: -140px;
+            }
+                #button_area{
+                    width: 100%;
+                    height: 100%;
+                    margin: auto;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    align-items: center;
+
+                }
+                    .action_button{
+                        background:skyblue;
+                        width: 60px;
+                        height: 30px;
+                        margin: 1px;
+                        padding: 0px;
+                        font-size: 1em;
+                        font-weight: bold;
+                    }
+                
+                #monopoly_area{
+                    width: 100%;
+                    height: 100%;
+                    margin: auto;
+                    justify-content: center;
+                    align-items: center;
+                }
+                    .resource_button_area{
+                        display: flex;
+                        width: 100%;
+                        height: 75%;
+                        margin: auto;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                    .quitprogress{
+                        display: flex;
+                        width: 100%;
+                        height: 25%;
+                        margin: auto;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                #harvest_area{
+                    width: 100%;
+                    height: 100%;
+                    margin: auto;
+                    justify-content: center;
+                    align-items: center;
+                }
+                #burst_area{
+                    width: 100%;
+                    height: 100%;
+                    margin: auto;
+                    justify-content: center;
+                    align-items: center;
+                }
+                #burst_message{
+                    text-align: center;
+                }
+                
+                .lumber{
+                    background-color: rgb(62, 187, 62);
+                }
+                .brick{
+                    background-color: rgb(179, 8, 8);
+                }
+                .ore{
+                    background-color: darkgray;
+                }
+                .grain{
+                    background-color: gold;
+                }
+                .wool{
+                    background-color: lightgreen;
+                }
+                #negotiate_area{
+                    width: 100%;
+                    height: 100%;
+                    margin: auto;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .numberinput{
+                    display:flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 50px;
+                    position:relative
+                }
+                .give{
+                    display:flex;
+                }
+                    .givetakeresource{
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 20px;
+                        border-radius: 50%;
+                        font-weight: bold;
+                    }
+                    .resourcenumber{
+                        width: 50px;
+                    }
+                    
+                .take{
+                    display: flex;
+                }
+                #counterpart{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .propose_button{
+                    width: 70px;
+                    height: 30px;
+                    margin: 1px;
+                    font-size: 14px;
+                    font-weight: bold;
+                }
+                .do{
+                }
+                #propose_area{
+                    width: 100%;
+                    height: 100%;
+                    margin: auto;
+                    font-size: large;
+                }
+                #proposeterm{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                    height: 75%;
+                }
+                #proposeterm div{
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    width: 100%;
+                }
+                .giveresource{
+                    display: flex;
+                    justify-content: center;
+                }
+                .takeresource{
+                    display: flex;
+                    justify-content: center;
+                }
+                #acceptordeny{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                    height: 25%;
+                }
+                #trade_area{
+                    width: 100%;
+                    height: 100%;
+                    margin: auto;
+                    justify-content: center;
+                    align-items: center;
+                }
+                #decidearea{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .house{
+                    width: 80%;
+                    height: auto;
+                }
+                .city{
+                    width: 100%;
+                    height: auto;
+                }
+                .roadtoken{
+                    width: 80%;
+                    height: auto;
+                }
+        
 }
-#road_button{
-    display: none;
-}
-#house_button{
-    display: none;
-}
-#city_button{
-    display: none;
-}
-#monopoly_area{
-    margin: auto;
-    display: flex;
-    justify-content: center;
-    background-color: rgb(81, 49, 197);
-}
-#harvest_area{
-    margin: auto;
-    display: flex;
-    justify-content: center;
-    background-color: rgb(197, 49, 135);
-}
-#burst_area{
-    margin: auto;
-    display: flex;
-    justify-content: center;
-    background-color: rgb(61, 197, 49);
-}
-#negotiate_area{
-    margin: auto;
-    justify-content: center;
-    background-color: rgb(197, 187, 49);
-}
-#trade_area{
-    margin: auto;
-    justify-content: center;
-    text-align: center;
-    background-color: rgb(197, 49, 177);
-}
-#counterpart{
-    text-align: center;
-}
-.propose_button{
-    background:skyblue;
-    width: 70px;
-    height: 30px;
-    margin: 1px;
-    font-size: 0.6em;
-}
-#to0{
-    background-color: rgb(236, 28, 36);
-}
-#to1{
-    background-color: rgb(62, 125, 35);
-}
-#to2{
-    background-color: rgb(89, 119, 203);
-}
-#to3{
-    background-color: rgb(255, 242, 0);
-}
-#to4{
-    background-color: rgb(242, 169, 13);
-}
-#to5{
-    background-color: rgb(184, 61, 186);
-}
-#proposing_area{
-    display: flex;
-    justify-content: center;
-}
-#proposed_area{
-    text-align: center;
-}
-#proposeterm{
-    display: flex;
-    justify-content: center;
-}
-.numberinput{
-    margin: auto;
-    display: flex;
-    justify-content: center;
-}
-#my_area{
-    width: 100%;
-}
-#my_area .player{
-    max-width:500px;
-    margin:1px auto;
-    border: 3px solid black; 
-    border-radius: 5px;
-}
-#my_area .resource{
-    width: 50%;
-    text-align: center;
-    vertical-align: middle;
-}
-#my_area .title{
-    width: 50%;
-    text-align: center;
-    vertical-align: middle;
-}
-#my_area .progress{
-    width: 50%;
-    text-align: center;
-    vertical-align: middle;
-}
-#my_area .used{
-    width: 50%;
-    text-align: center;
-    vertical-align: middle;
-}
-#others{
-    position:relative;
-    width:800px;
-    max-width: 100%;
-    margin: auto;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-#others .player{
-    width: 45%;
-    max-width: 480px;
-    min-width: 240px;
-    margin:1px auto;
-    border: 3px solid black; 
-    border-radius: 5px;
-}
-.row{
-    display: flex;
-    height: auto;
-}
-.name{
-    width: 50%;
-    text-align: center;
-    vertical-align: middle;
-}
-.token{
-    width: 50%;
-    text-align: center;
-    vertical-align: middle;
-}
-#others .resource{
-    width: 50%;
-    text-align: center;
-    vertical-align: middle;
-}
-#others .title{
-    width: 50%;
-    text-align: center;
-    vertical-align: middle;
-}
-#others .progress{
-    width: 50%;
-    text-align: center;
-    vertical-align: middle;
-}
-#others .used{
-    width: 50%;
-    text-align: center;
-    vertical-align: middle;
-}
-#player0name{
-    background-color: rgb(236, 28, 36);
-}
-#player1name{
-    background-color: rgb(62, 125, 35);
-}
-#player2name{
-    background-color: rgb(89, 119, 203);
-}
-#player3name{
-    background-color: rgb(255, 242, 0);
-}
-#player4name{
-    background-color: rgb(242, 169, 13);
-}
-#player5name{
-    background-color: rgb(184, 61, 186);
-}
-.square{
-    border: 1px solid black;
-    width: 20px;
-    display: inline-block;
-    margin: 0px 1px 0px 1px;
-}
-#dice_area{
-    display: flex;
-    padding: 0px;
-    margin: 5px;
-    justify-content: center;
-}
-.dice{
-    width:48px;
-    border: 5px solid black;
-    display: inline-block;
-    margin: 0px 1px 0px 1px;
-    border-radius:10%;
-}
-.action_button{
-    background:skyblue;
-    width: 15%;
-    max-width: 60px;
-    height: 30px;
-    padding: 0px;
-    margin: 2px 0.5px 3px;
-    font-size: 0.6em;
-}@media screen and (min-width:800px) {
-    .action_button{
-        background:skyblue;
-        width: 15%;
-        max-width: 60px;
-        height: 40px;
-        margin: 1px;
-        font-size: 0.8em;
-    }
-}
-.lumber{
-    background-color: rgb(62, 187, 62);
-}
-.brick{
-    background-color: rgb(179, 8, 8);
-}
-.ore{
-    background-color: darkgray;
-}
-.grain{
-    background-color: gold;
-}
-.wool{
-    background-color: lightgreen;
-}
-.back{
-    background-color: black;
-}
-.house{
-    width: 80%;
-    height: auto;
-}
-.city{
-    width: 100%;
-    height: auto;
-}
-.roadtoken{
-    width: 80%;
-    height: auto;
-}
-#thief{
-    width:100%;
-    height:100%;
-    z-index:2;
-    background:rgba(0, 0, 0, 0.6);
-    border-radius:50%;
-    text-align: center;
-    vertical-align: middle;
-}
-.center{
-    text-align: center;
-    vertical-align: middle;
-}
-p{
-    display: inline-block;
-}
-.giveresource{
-    display: flex;
-    justify-content: center;
-}
-.takeresource{
-    display: flex;
-    justify-content: center;
-}
-.ore_button{
+
+
+
+
     
-};
-.wool_button{
-};
-.grain_button{
-};
-.lumber_button{
-};
-.brick_button{
-};
+        
+            
+@media screen and (min-width:850px) {
+    #nameinputarea{
+        margin: auto;
+        text-align: center;
+    }
+    #gamestart{
+        margin: auto;
+        text-align: center;
+    }
+    #field{
+        width: 100%;
+        height: 600px;
+        display: flex;
+        align-items: center;
+    }
+        #board_area{
+            position:relative;
+            width: calc(100% - 400px);
+            aspect-ratio: 7 / 6.9282;
+        }
+            #dice_area{
+                    width: 20%;
+                    height: 10%;
+                    display: flex;
+                    justify-content: center;
+                    position: absolute;
+                    right: 0px;
+                    top: 0px;
+                    background-color: rgb(131, 221, 131);
+                    z-index: 1;
+            }
+                .dice{
+                    width:48%;
+                    border: 5px solid black;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius:10%;
+                    font-size: 45px;
+                    margin-right: 0.5px;
+                    margin-left: 0.5px;
+                }
+        #player_and_button_area{
+            width: calc(100% - 600px);
+            height: 600px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+            #players{
+                width: 100%;
+            }
+            #playerinformation{
+                display: flex;
+                flex-wrap: wrap;
+                width:100%;
+                height:auto;
+                position: relative;
+                align-items: center;
+                font-size: 14.7px;
+            }
+                .player{
+                    width: 100%;
+                    margin:1px auto;
+                    border: 3px solid black; 
+                    border-radius: 5px;
+                }
+                .row{
+                    display: flex;
+                    min-height: 22px;
+                }
+                .line{
+                    width: 50%;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .nameline{
+                    width: 50%;
+                    display: flex;
+                    align-items: center;
+                    border-right:2px solid black;
+                    border-bottom:2px solid black;
+                }
+                .playermark{
+                    height: 100%;
+                    width: 15%;
+                    display:flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .name{
+                    width: 85%;
+                    height: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    text-align: center;
+                }
+                .player0color{
+                    background-color: rgb(236, 28, 36);
+                }
+                .player1color{
+                    background-color: rgb(62, 125, 35);
+                }
+                .player2color{
+                    background-color: rgb(89, 119, 203);
+                }
+                .player3color{
+                    background-color: rgb(255, 242, 0);
+                }
+                .player4color{
+                    background-color: rgb(242, 169, 13);
+                }
+                .player5color{
+                    background-color: rgb(184, 61, 186);
+                }
+                    .resourcecard{
+                        display: flex;
+                        margin:0 2px;
+                        border: 1px solid black; 
+                        border-radius: 1px;
+                        width: 20px;
+                        height: 20px;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                    .progresscard{
+                        display: flex;
+                        margin:0 1px;
+                        border: 1px solid black; 
+                        border-radius: 1px;
+                        width: 20px;
+                        height: 20px;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                    .back{
+                        display: flex;
+                        margin:0 1px;
+                        border: 1px solid black; 
+                        border-radius: 1px;
+                        width: 20px;
+                        height: 20px;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: black;
+                    }
+                    .usedcard{
+                        display: flex;
+                        margin:0 2px;
+                        border: 1px solid black; 
+                        border-radius: 1px;
+                        width: 20px;
+                        height: 20px;
+                        justify-content: center;
+                        align-items: center;
+                    }
+            #buttons{
+                width: 100%;
+                height: 140px;
+            }
+                #button_area{
+                    width: 100%;
+                    height: 100%;
+                    margin: auto;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    align-items: center;
+
+                }
+                    .action_button{
+                        background:skyblue;
+                        width: 60px;
+                        height: 30px;
+                        margin: 1px;
+                        padding: 0px;
+                        font-size: 1em;
+                        font-weight: bold;
+                    }
+                
+                #monopoly_area{
+                    width: 100%;
+                    height: 100%;
+                    margin: auto;
+                    justify-content: center;
+                    align-items: center;
+                }
+                    .resource_button_area{
+                        display: flex;
+                        width: 100%;
+                        height: 75%;
+                        margin: auto;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                    .quitprogress{
+                        display: flex;
+                        width: 100%;
+                        height: 25%;
+                        margin: auto;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                #harvest_area{
+                    width: 100%;
+                    height: 100%;
+                    margin: auto;
+                    justify-content: center;
+                    align-items: center;
+                }
+                #burst_area{
+                    width: 100%;
+                    height: 100%;
+                    margin: auto;
+                    justify-content: center;
+                    align-items: center;
+                }
+                #burst_message{
+                    text-align: center;
+                }
+                
+                .lumber{
+                    background-color: rgb(62, 187, 62);
+                }
+                .brick{
+                    background-color: rgb(179, 8, 8);
+                }
+                .ore{
+                    background-color: darkgray;
+                }
+                .grain{
+                    background-color: gold;
+                }
+                .wool{
+                    background-color: lightgreen;
+                }
+                #negotiate_area{
+                    width: 100%;
+                    height: 100%;
+                    margin: auto;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .numberinput{
+                    display:flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 50px;
+                    position:relative
+                }
+                .give{
+                    display:flex;
+                }
+                    .givetakeresource{
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 20px;
+                        border-radius: 50%;
+                        font-weight: bold;
+                    }
+                    .resourcenumber{
+                        width: 50px;
+                    }
+                    
+                .take{
+                    display: flex;
+                }
+                #counterpart{
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .propose_button{
+                    width: 70px;
+                    height: 30px;
+                    margin: 1px;
+                    font-size: 14px;
+                    font-weight: bold;
+                }
+                .do{
+                    position: absolute;
+                    left: 0px;
+                }
+                #propose_area{
+                    width: 100%;
+                    height: 100%;
+                    margin: auto;
+                    font-size: large;
+                }
+                #proposeterm{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                    height: 75%;
+                }
+                #proposeterm div{
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    width: 100%;
+                }
+                .giveresource{
+                    display: flex;
+                    justify-content: center;
+                }
+                .takeresource{
+                    display: flex;
+                    justify-content: center;
+                }
+                #acceptordeny{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                    height: 25%;
+                }
+                #trade_area{
+                    width: 100%;
+                    height: 100%;
+                    margin: auto;
+                    justify-content: center;
+                    align-items: center;
+                }
+                #decidearea{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .house{
+                    width: 80%;
+                    height: auto;
+                }
+                .city{
+                    width: 100%;
+                    height: auto;
+                }
+                .roadtoken{
+                    width: 80%;
+                    height: auto;
+                }
+                
+}
 
 
-.spinner_area{
-    width: 10%;
-    height:10%;
-    display: flex;
-}
-.btnspinner{
-    -ms-user-select: none;
-    -moz-user-select: -moz-none;
-    -khtml-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
-}
-.spinner_area input{
-    padding: 11px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 18px;
-    width: auto;
-    vertical-align: middle;
-    /* デフォルトのスピナーを消す */
-    -webkit-appearance: none;
-    -moz-appearance:textfield;
-}
 
-.spinner_area input[type="button"]{
-    cursor: pointer;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -430,11 +825,11 @@ p{
     position:absolute;
     width:5.5210171514343225%;
     height:5.577934854026429%;
-    z-index:1;
-    background:rgba(255,0,0,0);
+    z-index:2;
     border-radius:50%;
     text-align: center;
     vertical-align: middle;
+    background-color: rgb(179, 54, 54,0.4);
 }
 .nodex1{
     left:8.13599288200879%;
@@ -528,10 +923,10 @@ p{
     width:5.5210171514343225%;
     height:5.577934854026429%;
     z-index:1;
-    background:rgba(255,0,0,0);
     border-radius:50%;
     text-align: center;
     vertical-align: middle;
+    background-color: rgb(179, 54, 54,0.4);
 }
 .roadx1{
     left:9.84882087034698%;
@@ -658,7 +1053,6 @@ p{
     width:6.432335618244978%;
     height:6.498648356577401%;
     z-index:1;
-    background:rgba(255,0,0,0);
     border-radius:50%;
 }
 .tile_buttonx1{
@@ -715,32 +1109,48 @@ p{
 .tile_buttony11{
     top:77.8257862782651%;
 }
-.direction1{
+[data-direction="1"]{
     transform: rotate(60deg)
 }
-.direction2{
+[data-direction="2"]{
     transform: rotate(120deg)
 }
-.direction3{
+[data-direction="3"]{
     transform: rotate(180deg)
 }
-.direction4{
+[data-direction="4"]{
     transform: rotate(240deg)
 }
-.direction5{
+[data-direction="5"]{
     transform: rotate(300deg)
 }
 .chip{
     position:absolute;
     width:6.432335618244978%;
-    background:rgba(255,0,0,0);
     border-radius:50%;
 }
-
+#thief{
+    width:100%;
+    height:100%;
+    z-index:2;
+    background:rgba(0, 0, 0, 0.6);
+    border-radius:50%;
+    text-align: center;
+    vertical-align: middle;
+}
 #initialize{
     text-align: center;
     margin: 100px auto auto auto
 }
 #yesorno{
+    display: none;
+}
+#road_button{
+    display: none;
+}
+#house_button{
+    display: none;
+}
+#city_button{
     display: none;
 }
