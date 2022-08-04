@@ -39,7 +39,6 @@ $('#gamestartbutton').on('click', function(){
     }else{
         tileamounts = {ore:ore,grain:grain,wool:wool,lumber:lumber,brick:brick}
     }
-    console.log(tileamounts)
     let total = 0
     for(resource in tileamounts){
         total += tileamounts[resource]
@@ -155,6 +154,12 @@ socket.on('showField', (e)=>{
 socket.on('gameresult', (game)=>{
     display.gameResult(game)
 })
+socket.on('showgameendarea', ()=>{
+    display.showGameEndArea()
+})
+socket.on('hidegameendarea', ()=>{
+    display.hideGameEndArea()
+})
 socket.on('reloadrate', (data)=>{
     $(`#exportore`).attr(`step`, data.ore)
     $(`#exportgrain`).attr(`step`, data.grain)
@@ -209,8 +214,8 @@ socket.on('renounce',(renounce)=>{
 })
 
 //nodeをクリック
-$(`#board_area`).on('click','.node',function(){
-    let nodeNumber = Number($(this).attr('id').slice(4))
+$(`#board_area`).on('click','.nodetouch',function(){
+    let nodeNumber = Number($(this).attr('id').slice(9))
     const data = {nodeNumber:nodeNumber, socketID:socket.id}
     socket.emit('nodeclick', data)
 });
@@ -527,16 +532,16 @@ const display = {
     },
     buildings(game){
         for(house of game.board.house){
-            $(`#node${house.nodeNumber}`).html(``)
-            $(`#node${house.nodeNumber}`).append(`<img id="house${house.nodeNumber}" class="house" src="./house${house.owner.number+1}.png">`)
+            $(`#nodetouch${house.nodeNumber}`).html(``)
+            $(`#nodetouch${house.nodeNumber}`).append(`<img id="house${house.nodeNumber}" class="house" src="./house${house.owner.number+1}.png">`)
         }
         for(road of game.board.road){
             $(`#road${road.roadNumber}`).html(``)
             $(`#road${road.roadNumber}`).append(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./road_${road.roadDegree}${road.owner.number+1}.png">`)
         }
         for(city of game.board.city){
-            $(`#node${city.nodeNumber}`).html(``)
-            $(`#node${city.nodeNumber}`).append(`<img id="city${city.nodeNumber}" class="city" src="./city${city.owner.number+1}.png">`)
+            $(`#nodetouch${city.nodeNumber}`).html(``)
+            $(`#nodetouch${city.nodeNumber}`).append(`<img id="city${city.nodeNumber}" class="city" src="./city${city.owner.number+1}.png">`)
         }
     },
     thief(buttonnumber){
@@ -675,6 +680,13 @@ const display = {
             };
         };
     },
+    showGameEndArea(){
+        $(`#gameend_area`).show()
+    },
+    hideGameEndArea(){
+        $(`#gameend_area`).hide()
+        $(`#message_area`).html(``)
+    },
     turnPlayer(data){
         let i = 0;
         while(i <= 5){
@@ -812,7 +824,7 @@ const display = {
         $(`#yesorno`).hide()
     },
     cleanUpBoard(){
-        $(`.node`).html(``)
+        $(`.nodetouch`).html(``)
         $(`.road`).html(``)
         $(`.tile_button`).html(``)
         $(`#dice_area`).html(``)

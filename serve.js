@@ -52,6 +52,42 @@ class Player{
     this.city = []
     this.road = []
     this.progress = {knight:0, roadbuild:0, harvest:0, monopoly:0, point:0}
+    this.thisTurnDraw = {knight:0, roadbuild:0, harvest:0, monopoly:0, point:0}
+    this.used = {knight:0, roadbuild:0, harvest:0, monopoly:0, point:0}
+    this.largestArmy = 0
+    this.longestRoad = 0
+    this.longestLength = 0
+    this.point = 0
+    this.progressUse = 0
+    this.dice = 1
+    this.toTrash = 0
+    this.tradeRate = {ore:4,grain:4,wool:4,lumber:4,brick:4}
+    this.renounce = false
+    this.log = {resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
+    token:{house:5, city:4, road:15},
+    house:[],
+    city:[],
+    road:[],
+    progress:{knight:0, roadbuild:0, harvest:0, monopoly:0, point:0},
+    used:{knight:0, roadbuild:0, harvest:0, monopoly:0, point:0},
+    largestArmy:0,
+    longestRoad:0,
+    longestLength:0,
+    point:0,
+    progressUse:0,
+    dice:1,
+    toTrash:0,
+    tradeRate:{ore:4,grain:4,wool:4,lumber:4,brick:4},
+  renounce:false}
+  };
+  reset(){
+    this.resource = {ore:0,grain:0,wool:0,lumber:0,brick:0}
+    this.token = {house:5, city:4, road:15}
+    this.house = []
+    this.city = []
+    this.road = []
+    this.progress = {knight:0, roadbuild:0, harvest:0, monopoly:0, point:0}
+    this.thisTurnDraw = {knight:0, roadbuild:0, harvest:0, monopoly:0, point:0}
     this.used = {knight:0, roadbuild:0, harvest:0, monopoly:0, point:0}
     this.largestArmy = 0
     this.longestRoad = 0
@@ -80,15 +116,12 @@ class Player{
   renounce:false}
   };
   recordLog(){
-    display.log(this.name+'recordlog')
     game.lastActionPlayer = this
     for(let resource in this.resource){
-      display.log(resource+String(this.resource[resource]))
       this.log.resource[resource] = this.resource[resource]
       this.log.tradeRate[resource] = this.tradeRate[resource]
     }
     for(let token in this.token){
-      display.log(token+String(this.token[token]))
       this.log.token[token] = this.token[token]
     }
     this.log.house = []
@@ -380,6 +413,7 @@ class Player{
       }
       this.useResource('progress')
       this.progress[game.progressDeck[0]] += 1
+      this.thisTurnDraw[game.progressDeck[0]] += 1
       game.progressDeck.splice(0, 1)
       game.pointReload()
       display.allPlayerInformation()
@@ -390,7 +424,7 @@ class Player{
     if(game.phase !== 'beforedice' && game.phase !== 'afterdice'){
       return
     }
-    if(this.progress.knight <= 0){
+    if(this.progress.knight - this.thisTurnDraw.knight <= 0){
       return
     }
     if(this.progressUse >= 1){
@@ -477,7 +511,7 @@ class Player{
     if(game.phase !== 'monopoly'){
       return
     }
-    if(this.progress.monopoly <= 0){
+    if(this.progress.monopoly - this.progress.monopoly <= 0){
       return
     }
     if(this.progressUse >= 1){
@@ -502,7 +536,7 @@ class Player{
       return
     }
     if(game.phase === 'harvest1'){
-      if(this.progress.harvest <= 0){
+      if(this.progress.harvest - this.progress.harvest <= 0){
         return
       }
       if(this.progressUse >= 1){
@@ -525,7 +559,7 @@ class Player{
     if(game.phase !== 'afterdice'){
       return
     }
-    if(this.progress.roadbuild <= 0){
+    if(this.progress.roadbuild - this.progress.roadbuild <= 0){
       return
     }
     if(this.progressUse >= 1){
@@ -545,6 +579,7 @@ class Player{
     recordLog()
     this.progressUse = 0
     this.dice = 1
+    this.thisTurnDraw = {knight:0, roadbuild:0, harvest:0, monopoly:0, point:0}
     game.turnEnd()
   }
   trash(resource){
@@ -821,7 +856,18 @@ class Player{
 
 
 
-const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[],[],[]],thief:'', house:[], city:[], road:[], nodeLine:[7,16,27,40,53,64,73,80],roadLine:[6,10,18,23,33,39,51,58,70,76,86,91,99,103,109], dice:[],landLine:[3,7,12,18,23,27,30],ports:{oreport:[], grainport:[], woolport:[], lumberport:[], brickport:[],genericport:[]},log:{island:[[],[],[],[],[],[],[],[],[]],thief:'',house:[], city:[], road:[]},
+const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[],[],[]],thief:'', house:[], city:[], road:[], nodeLine:[7,16,27,40,53,64,73,80],roadLine:[6,10,18,23,33,39,51,58,70,76,86,91,99,103,109], dice:[],landLine:[3,7,12,18,23,27,30],ports:{oreport:[], grainport:[], woolport:[], lumberport:[], brickport:[],genericport:[]},log:{island:[[],[],[],[],[],[],[],[],[]],thief:'',house:[], city:[], road:[]},islandData:'',
+  reset(){
+    this.island = [[],[],[],[],[],[],[],[],[]]
+    this.numbers = [[],[],[],[],[],[],[],[],[]]
+    this.thief = ''
+    this.house = []
+    this.city = []
+    this.road = []
+    this.dice = []
+    this.ports = {oreport:[], grainport:[], woolport:[], lumberport:[], brickport:[],genericport:[]}
+    this.log = {island:[[],[],[],[],[],[],[],[],[]],thief:'',house:[], city:[], road:[]}
+  },
   recordLog(){
     for(let line of this.island){
       for(let tile of line){
@@ -884,7 +930,7 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
     }
     let i = 1
     let l = lands.length
-    while(i <= 30 - l){
+    while(i <= this.landLine[this.landLine.length-1] - l){
       lands.push('desert')
       i += 1
     }
@@ -1034,7 +1080,7 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
   roadDegree(position){
     if(position[0] % 2 === 0){
       return 'horizon'
-    }else if(position[0] <= 7){
+    }else if(position[0] <= this.landLine.length){
       if((position[0]+position[1]) % 2 === 0){
         return 'right_up'
       }else{
@@ -1341,9 +1387,9 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
       }
     }else if(x === (this.landLine.length+1)/2){
       if(y === 0){
-        return [[[4,1],[5,1]],[[4,1],[5,1]]]
+        return [[[x,1],[x+1,1]],[[x,1],[x+1,1]]]
       }else{
-        return [[[4,13],[5,13]],[[4,13],[5,13]]]
+        return [[[x,y*2-1],[x+1,y*2-1]],[[x,y*2-1],[x+1,y*2-1]]]
       }
     }else if(x > (this.landLine.length+1)/2 && x <= this.landLine.length){
       if(y === 0){
@@ -1353,11 +1399,11 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
       }
     }else if(x === this.landLine.length+1){
       if(y === 0){
-        return [[[8,1],[8,2]],[[8,1],[8,2]]]
+        return [[[x,1],[x,2]],[[x,1],[x,2]]]
       }else if(y === this.landLine[0]){
-        return [[[8,6],[8,7]],[[8,7],[8,7]]]
+        return [[[x,y*2],[x,y*2+1]],[[x,y*2],[x,y*2+1]]]
       }else{
-        return [[[8,y*2+1],[8,y*2+2]],[[8,y*2],[8,y*2+1]]]
+        return [[[x,y*2+1],[x,y*2+2]],[[x,y*2],[x,y*2+1]]]
       }
     }
   },
@@ -1370,6 +1416,8 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
     this.road = []
     this.dice = []
     this.ports = {oreport:[], grainport:[], woolport:[], lumberport:[], brickport:[], genericport:[]}
+    this.islandData = ''
+    this.log = {island:[[],[],[],[],[],[],[],[],[]],thief:'',house:[], city:[], road:[]}
   }
 }
 
@@ -1379,6 +1427,37 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
 
 
 const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputting', progressDeck:[],board:board,buildingPhase:0,largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:'', takeresource:''},renounce:[],log:{turnPlayer:'', phase:'nameinputting', progressDeck:[],buildingPhase:0,largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}, takeresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}},renounce:[]},lastActionPlayer:'',
+  newGame(){
+    for(let player of this.players){
+      player.reset()
+    }
+    board.reset()
+    this.reset()
+    this.players = shuffle(this.players)
+    let i = 1;
+    for(let player of this.players){
+      player.number = i - 1
+      i += 1
+    }
+    this.turnPlayer = this.players[0]
+    this.progressDeckMake();
+    board.makeIsland(board.islandData)
+    display.allMighty()
+    display.hideAllButtons()
+  },
+  reset(){
+    this.turnPlayer = '';
+    this.phase = 'setup';
+    this.progressDeck = [];
+    this.buildingPhase = 0;
+    this.largestArmyPlayer = '';
+    this.longestRoadPlayer = '';
+    this.burstPlayer = [];
+    this.proposedata = {proposer:'', proposee:'', giveresource:'', takeresource:''};
+    this.renounce = []
+    this.log = {turnPlayer:'', phase:'setup', progressDeck:[],buildingPhase:0,largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}, takeresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}},renounce:[]}
+    this.lastActionPlayer = ''
+  },
   recordLog(){
     this.log.turnPlayer = this.turnPlayer
     this.log.phase = this.phase
@@ -1557,6 +1636,7 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputti
     }
   },
   gameEnd(){
+    game.phase = 'end'
     display.gameResult()
   },
   burstPlayerCheck(){
@@ -1587,6 +1667,7 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputti
     }
     return false
   },
+  
 
 
 
@@ -1611,6 +1692,7 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputti
     this.burstPlayer = [];
     this.proposedata = {proposer:'', proposee:'', giveresource:'', takeresource:''};
     this.renounce = []
+    this.lastActionPlayer = ''
   },
 }
 
@@ -1722,6 +1804,7 @@ const display = {
   hideTradeArea(){
     let e
     io.emit('hidetrade',e)
+    this.showButtonArea()
   },
   hideNegotiateArea(){
     let e
@@ -1807,6 +1890,23 @@ const display = {
   },
   gameResult(){
     io.emit('gameresult', game)
+    this.showGameEndArea()
+  },
+  showGameEndArea(){
+    io.emit('showgameendarea', '')
+    this.hideButtonArea()
+  },
+  hideGameEndArea(){
+    io.emit('hidegameendarea', '')
+    this.showButtonArea()
+  },
+  showMyGameEndArea(socketID){
+    io.to(socketID).emit('showgameendarea', '')
+    this.hideMyButtonArea(socketID)
+  },
+  hideMyGameEndArea(socketID){
+    io.to(socketID).emit('hidegameendarea', '')
+    this.showMyButtonArea(socketID)
   },
   showProposeArea(){
     let data = game.proposedata
@@ -1922,11 +2022,11 @@ const display = {
       if(game.phase === 'beforedice'){
         display.showMyButton(socketID,'dice')
       }
-      if(myself.progress.knight !== 0 && myself.progressUse === 0 && (game.phase === 'beforedice' || game.phase === 'afterdice')){
+      if(myself.progress.knight - myself.thisTurnDraw.knight !== 0 && myself.progressUse === 0 && (game.phase === 'beforedice' || game.phase === 'afterdice')){
         display.showMyButton(socketID,'knight')
       }
       for(let card in progress){
-        if(myself.progress[card] !== 0 && myself.progressUse === 0 && game.phase === 'afterdice'){
+        if(myself.progress[card] - myself.thisTurnDraw[card] !== 0 && myself.progressUse === 0 && game.phase === 'afterdice'){
           display.showMyButton(socketID,card)
         }
       }
@@ -1950,6 +2050,7 @@ const display = {
       display.hideMyTradeArea(socketID)
       display.hideMyNegotiateArea(socketID)
       display.hideMyProposeArea(socketID)
+      display.hideMyGameEndArea(socketID)
       display.cleanUpMyBoard(socketID)
       display.deleteMyThief(socketID)
     }else{
@@ -1962,13 +2063,14 @@ const display = {
       display.hideMyTradeArea(socketID)
       display.hideMyNegotiateArea(socketID)
       display.hideMyProposeArea(socketID)
+      display.hideMyGameEndArea(socketID)
       display.myPlayerSort(socketID);
       display.hideMyItems(socketID);
       display.turnPlayer();
-      display.cleanUpBoard()
+      display.cleanUpMyBoard(socketID)
       display.island()
       display.dice()
-      display.deleteThief()
+      display.deleteMyThief(socketID)
       display.thief()
       display.buildings()
       display.allPlayerInformationTo(socketID)
@@ -1992,6 +2094,12 @@ const display = {
       if(game.phase === 'propose'){
         display.showMyProposeArea(socketID)
       }
+      if(game.phase === 'propose'){
+        display.showMyProposeArea(socketID)
+      }
+      if(game.phase === 'end'){
+        display.showMyGameEndArea(socketID)
+      }
     }
   },
   allMighty(){
@@ -2004,6 +2112,7 @@ const display = {
       display.hideTradeArea()
       display.hideNegotiateArea()
       display.hideProposeArea()
+      display.hideGameEndArea()
       display.cleanUpBoard()
       display.deleteThief()
     }else{
@@ -2015,6 +2124,7 @@ const display = {
       display.hideTradeArea()
       display.hideNegotiateArea()
       display.hideProposeArea()
+      display.hideGameEndArea()
       display.playerSort();
       display.hideItems();
       display.turnPlayer();
@@ -2045,6 +2155,9 @@ const display = {
       if(game.phase === 'propose'){
         display.showProposeArea()
       }
+      if(game.phase === 'end'){
+        display.showGameEndArea()
+      }
     }
   },
   initialize(){
@@ -2057,6 +2170,7 @@ const display = {
     this.hideTradeArea()
     this.hideNegotiateArea()
     this.hideProposeArea()
+    this.hideGameEndArea()
     ////////this.hidePlayers()
     this.cleanUpBoard()
     //this.hideDiceArea()
@@ -2148,7 +2262,9 @@ function initialize(){
   display.initialize()
 }
 function recordLog(){
-  game.turnPlayer.recordLog()
+  for(let player of game.players){
+    player.recordLog()
+  }
   board.recordLog()
   game.recordLog()
 }
@@ -2181,6 +2297,7 @@ io.on("connection", (socket)=>{
     playersName = shuffle(playersName)
     if(playersName.length >= 1){
       game.gameStart()
+      board.islandData = data
       board.makeIsland(data)
       display.island()
       display.thief()
@@ -2436,13 +2553,17 @@ io.on("connection", (socket)=>{
     })
     socket.on('undo', (socketID)=>{
       if(game.phase === 'burst'){
+        display.log('2564')
         let myself = game.IDToPlayer(socketID)
+        display.log(myself)
         myself.unDo()
+        display.log(myself)
         if(myself.toTrash > 0 && !game.burstPlayer.includes(myself)){
+          display.log('2562')
           game.burstPlayer.push(myself)
-          display.showBurstArea()
-          display.allResource()
         }
+        display.showBurstArea()
+        display.allResource()
       }else if(socketID === game.lastActionPlayer.socketID){
         unDo()
         display.allMighty()
@@ -2453,7 +2574,3 @@ io.on("connection", (socket)=>{
       socket.emit('console', game)
     })
 })
-
-
-
-
