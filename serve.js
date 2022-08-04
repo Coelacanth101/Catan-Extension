@@ -29,6 +29,7 @@ app.get("/:file", (req, res)=>{
 /*------------------------------------------
 ------------------------------------------*/
 const maxPlayer = 6
+const properPlayer = 6
 let playersName = []
 let m = 1
 while(m <= maxPlayer){
@@ -820,7 +821,7 @@ class Player{
 
 
 
-const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[],[],[]],thief:'', house:[], city:[], road:[], nodeLine:[7,16,27,40,53,64,73,80],roadLine:[6,10,18,23,33,39,51,58,70,76,86,91,99,103,109], dice:[],tileLine:[3,7,12,18,23,27,30],ports:{oreport:[], grainport:[], woolport:[], lumberport:[], brickport:[],genericport:[]},log:{island:[[],[],[],[],[],[],[],[],[]],thief:'',house:[], city:[], road:[]},
+const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[],[],[]],thief:'', house:[], city:[], road:[], nodeLine:[7,16,27,40,53,64,73,80],roadLine:[6,10,18,23,33,39,51,58,70,76,86,91,99,103,109], dice:[],landLine:[3,7,12,18,23,27,30],ports:{oreport:[], grainport:[], woolport:[], lumberport:[], brickport:[],genericport:[]},log:{island:[[],[],[],[],[],[],[],[],[]],thief:'',house:[], city:[], road:[]},
   recordLog(){
     for(let line of this.island){
       for(let tile of line){
@@ -891,10 +892,10 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
     lands = shuffle(lands)
     oceans = shuffle(oceans)
     let x = 1
-    while(x <= 9){
+    while(x <= this.island.length){
       let  y = 1
       let row = [0,5,6,7,8,7,6,5,0]
-      if(x === 1|| x === 9){
+      if(x === 1|| x === this.island.length){
         let i = 1
         while(i <= 4){
           let tile = {type:oceans[0],position:[x-1,y-1],houseOwner:[], cityOwner:[],produce:false, direction:0}
@@ -1054,19 +1055,19 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
     let up = [nodex, nodey - 1]
     let down = [nodex, nodey + 1]
     let side
-    if(nodex <= 3){
+    if(nodex <= this.nodeLine.length/2-1){
       if(nodey % 2 === 0){
         side = [nodex - 1, nodey - 1]
       }else{
         side = [nodex + 1, nodey + 1]
       }
-    }else if(nodex === 4){
+    }else if(nodex === this.nodeLine.length/2){
       if(nodey % 2 === 0){
         side = [nodex - 1, nodey - 1]
       }else{
         side = [nodex + 1, nodey]
       }
-    }else if(nodex === 5){
+    }else if(nodex === this.nodeLine.length/2 +1){
       if(nodey % 2 === 0){
         side = [nodex + 1, nodey - 1]
       }else{
@@ -1099,11 +1100,11 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
     if(roadx % 2 === 1){
       return [[(roadx+1)/2, roady], [(roadx+1)/2, roady+1]]
     }else{
-      if(roadx <= 6){
+      if(roadx <= this.landLine.length -1){
         return [[roadx/2,roady*2-1], [roadx/2+1, roady*2]]
-      }else if(roadx === 8){
+      }else if(roadx === this.landLine.length +1){
         return [[roadx/2,roady*2-1], [roadx/2+1, roady*2-1]]
-      }else if(roadx >= 10){
+      }else if(roadx >= this.landLine.length +3){
         return [[roadx/2, roady*2], [roadx/2+1, roady*2-1]]
       }
     }
@@ -1112,7 +1113,7 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
   tilesAroundNode(nodeposition){
     let x = nodeposition[0]
     let y = nodeposition[1]
-    if(x <= 4){
+    if(x <= this.nodeLine.length /2){
       if(y % 2 === 1){
         return [[x-1,(y-1)/2],[x,(y-1)/2],[x,(y+1)/2]]
       }else{
@@ -1162,7 +1163,7 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
   roadsArounNode(nodeposition){
     let x = nodeposition[0]
     let y = nodeposition[1]
-    if(x <= 4){
+    if(x <= this.nodeLine.length /2){
       if(y % 2 === 0){
         return [[(x-1)*2, y/2],[x*2-1, y-1],[x*2-1, y]]
       }else{
@@ -1228,11 +1229,11 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
     let x = 1
     let y
     while(true){
-      if(tilebuttonnumber <= this.tileLine[x-1]){
+      if(tilebuttonnumber <= this.landLine[x-1]){
         if(x === 1){
           y = tilebuttonnumber
         }else{
-          y = tilebuttonnumber - this.tileLine[x-2]
+          y = tilebuttonnumber - this.landLine[x-2]
         }
         return [x, y]
       }else{
@@ -1245,7 +1246,7 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
     if(position[0] === 1){
       return position[1]
     }else{
-      return this.tileLine[position[0]-2]+position[1]
+      return this.landLine[position[0]-2]+position[1]
     }
   },
   otherSideOfRoad(node,roadposition){
@@ -1288,33 +1289,33 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
     if(x === 0){
       if(y === 0){
         return [5,5]
-      }else if(y === 3){
+      }else if(y === this.landLine[0]){
         return [4,4]
       }else{
         return [4,5]
       }
-    }else if(x >= 1 && x <= 3){
+    }else if(x >= 1 && x <= (this.landLine.length-1)/2){
       if(y === 0){
         return [0,5]
       }else{
         return [3,4]
       }
-    }else if(x === 4){
+    }else if(x === (this.landLine.length+1)/2){
       if(y === 0){
         return [0,0]
-      }else if(y === 7){
+      }else{
         return [3,3]
       }
-    }else if(x >= 5 && x <=7){
+    }else if(x >= (this.landLine.length+3)/2 && x <=this.landLine.length){
       if(y === 0){
         return [0,1]
       }else{
         return [2,3]
       }
-    }else if(x === 8){
+    }else if(x === this.landLine.length+1){
       if(y === 0){
         return [1,1]
-      }else if(y === 3){
+      }else if(y === this.landLine[0]){
         return [2,2]
       }else{
         return [1,2]
@@ -1327,33 +1328,33 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
     if(x === 0){
       if(y === 0){
         return [[[1,1],[1,2]],[[1,1],[1,2]]]
-      }else if(y === 3){
+      }else if(y === this.landLine[0]){
         return [[[1,6],[1,7]],[[1,6],[1,7]]]
       }else{
         return [[[1,y*2],[1,y*2+1]],[[1,y*2+1],[1,y*2+2]]]
       }
-    }else if(x >= 1 && x <= 3){
+    }else if(x >= 1 && x <= (this.landLine.length-1)/2){
       if(y === 0){
         return [[[x,1],[x+1,2]],[[x+1,1],[x+1,2]]]
       }else{
         return [[[x,y*2-1],[x+1,y*2]],[[x+1,y*2],[x+1,y*2+1]]]
       }
-    }else if(x === 4){
+    }else if(x === (this.landLine.length+1)/2){
       if(y === 0){
         return [[[4,1],[5,1]],[[4,1],[5,1]]]
-      }else if(y === 7){
+      }else{
         return [[[4,13],[5,13]],[[4,13],[5,13]]]
       }
-    }else if(x >= 5 && x <=7){
+    }else if(x > (this.landLine.length+1)/2 && x <= this.landLine.length){
       if(y === 0){
         return [[[x,2],[x+1,1]],[[x,1],[x,2]]]
       }else{
         return [[[x,y*2],[x,y*2+1]],[[x,y*2],[x+1,y*2-1]]]
       }
-    }else if(x === 8){
+    }else if(x === this.landLine.length+1){
       if(y === 0){
         return [[[8,1],[8,2]],[[8,1],[8,2]]]
-      }else if(y === 3){
+      }else if(y === this.landLine[0]){
         return [[[8,6],[8,7]],[[8,7],[8,7]]]
       }else{
         return [[[8,y*2+1],[8,y*2+2]],[[8,y*2],[8,y*2+1]]]
