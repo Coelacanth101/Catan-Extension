@@ -1,19 +1,10 @@
 @charset "UTF-8";
 #container{
     width: 100%;
+    max-width: 1500px;
     margin: auto;
 }
-
-#field{
-    width: 100%;
-    justify-content: center;
-}
-    #board_area{
-        position:relative;
-        justify-content: center;
-        width: 600px;
-        aspect-ratio: 7 / 6.9282;
-    }
+   
         #dice_area{
             width: 20%;
             height: 10%;
@@ -25,364 +16,380 @@
             background-color: rgb(131, 221, 131);
             z-index: 1;
         }
-@media screen and (max-width:850px){
-        #nameinputarea{
-            margin: auto;
-            text-align: center;
+@media screen and (orientation:portrait){
+    #nameinputarea{
+        margin: auto;
+        text-align: center;
+    }
+    #gamestart{
+        margin: auto;
+        text-align: center;
+    }
+    #field{
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        justify-content: center;
+        background-color: brown;
+    }
+    #board_area{
+        position:relative;
+        justify-content: center;
+        width: 100%;
+        aspect-ratio: 7 / 6.9282;
+    }
+        #dice_area{
+                width: 20%;
+                height: 10%;
+                display: flex;
+                justify-content: center;
+                position: absolute;
+                right: 0px;
+                top: 0px;
+                background-color: rgb(131, 221, 131);
+                z-index: 1;
         }
-        #gamestart{
-            margin: auto;
-            text-align: center;
+            .dice{
+                width:48%;
+                border: 0.5vh solid black;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius:10%;
+                font-size: 4vh;
+                margin-right: 0.5px;
+                margin-left: 0.5px;
+            }
+    #player_and_button_area{
+        width: 100%;
+        max-width: 400px;
+        height: 600px;
+        display: flex;
+        justify-content: center;
+        position: relative;
+        margin-top: 140px;
+    }
+        #players{
+            width: 100%;
         }
-        #field{
+        #playerinformation{
             display: flex;
             flex-wrap: wrap;
-            width: 100%;
-            justify-content: center;
-        }
-        #board_area{
-            position:relative;
-            justify-content: center;
-            width: 600px;
-            aspect-ratio: 7 / 6.9282;
-        }
-            #dice_area{
-                    width: 20%;
-                    height: 10%;
-                    display: flex;
-                    justify-content: center;
-                    position: absolute;
-                    right: 0px;
-                    top: 0px;
-                    background-color: rgb(131, 221, 131);
-                    z-index: 1;
-            }
-                .dice{
-                    width:48%;
-                    border: 5px solid black;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    border-radius:10%;
-                    font-size: 30px;
-                    margin-right: 0.5px;
-                    margin-left: 0.5px;
-                }
-        #player_and_button_area{
-            width: 100%;
-            max-width: 400px;
-            height: 600px;
-            display: flex;
-            justify-content: center;
+            width:100%;
+            height:auto;
             position: relative;
-            margin-top: 140px;
+            align-items: center;
+            font-size: 14.7px;
         }
-            #players{
+            .player{
                 width: 100%;
+                margin:1px auto;
+                border: 3px solid black; 
+                border-radius: 5px;
+                height: auto;
+                min-height: 60px;
             }
-            #playerinformation{
+            .row{
+                display: flex;
+                min-height: 22px;
+                height: 33%;
+            }
+            .line{
+                width: 50%;
                 display: flex;
                 flex-wrap: wrap;
-                width:100%;
-                height:auto;
-                position: relative;
+                justify-content: center;
                 align-items: center;
-                font-size: 14.7px;
             }
-                .player{
-                    width: 100%;
-                    margin:1px auto;
-                    border: 3px solid black; 
-                    border-radius: 5px;
-                }
-                .row{
+            .nameline{
+                width: 50%;
+                display: flex;
+                align-items: center;
+                border-right:2px solid black;
+                border-bottom:2px solid black;
+            }
+            .playermark{
+                height: 100%;
+                width: 15%;
+                min-width: 30px;
+                display:flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .name{
+                width: 85%;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+            .player0color{
+                background-color: rgb(236, 28, 36);
+            }
+            .player1color{
+                background-color: rgb(62, 125, 35);
+            }
+            .player2color{
+                background-color: rgb(89, 119, 203);
+            }
+            .player3color{
+                background-color: rgb(255, 242, 0);
+            }
+            .player4color{
+                background-color: rgb(242, 169, 13);
+            }
+            .player5color{
+                background-color: rgb(184, 61, 186);
+            }
+                .resourcecard{
                     display: flex;
-                    min-height: 22px;
-                }
-                .line{
-                    width: 50%;
-                    display: flex;
-                    flex-wrap: wrap;
+                    margin:0 0.5%;
+                    border: 1px solid black; 
+                    border-radius: 1px;
+                    width: 20px;
+                    height: 20px;
                     justify-content: center;
                     align-items: center;
                 }
-                .nameline{
-                    width: 50%;
+                .progresscard{
                     display: flex;
-                    align-items: center;
-                    border-right:2px solid black;
-                    border-bottom:2px solid black;
-                }
-                .playermark{
-                    height: 100%;
-                    width: 15%;
-                    display:flex;
+                    margin:0 1px;
+                    border: 1px solid black; 
+                    border-radius: 1px;
+                    width: 20px;
+                    height: 20px;
                     justify-content: center;
                     align-items: center;
                 }
-                .name{
-                    width: 85%;
-                    height: 100%;
+                .back{
                     display: flex;
+                    margin:0 1px;
+                    border: 1px solid black; 
+                    border-radius: 1px;
+                    width: 20px;
+                    height: 20px;
                     justify-content: center;
                     align-items: center;
-                    text-align: center;
+                    background-color: black;
                 }
-                .player0color{
-                    background-color: rgb(236, 28, 36);
+                .usedcard{
+                    display: flex;
+                    margin:0 2px;
+                    border: 1px solid black; 
+                    border-radius: 1px;
+                    width: 20px;
+                    height: 20px;
+                    justify-content: center;
+                    align-items: center;
                 }
-                .player1color{
-                    background-color: rgb(62, 125, 35);
-                }
-                .player2color{
-                    background-color: rgb(89, 119, 203);
-                }
-                .player3color{
-                    background-color: rgb(255, 242, 0);
-                }
-                .player4color{
-                    background-color: rgb(242, 169, 13);
-                }
-                .player5color{
-                    background-color: rgb(184, 61, 186);
-                }
-                    .resourcecard{
-                        display: flex;
-                        margin:0 2px;
-                        border: 1px solid black; 
-                        border-radius: 1px;
-                        width: 20px;
-                        height: 20px;
-                        justify-content: center;
-                        align-items: center;
-                    }
-                    .progresscard{
-                        display: flex;
-                        margin:0 1px;
-                        border: 1px solid black; 
-                        border-radius: 1px;
-                        width: 20px;
-                        height: 20px;
-                        justify-content: center;
-                        align-items: center;
-                    }
-                    .back{
-                        display: flex;
-                        margin:0 1px;
-                        border: 1px solid black; 
-                        border-radius: 1px;
-                        width: 20px;
-                        height: 20px;
-                        justify-content: center;
-                        align-items: center;
-                        background-color: black;
-                    }
-                    .usedcard{
-                        display: flex;
-                        margin:0 2px;
-                        border: 1px solid black; 
-                        border-radius: 1px;
-                        width: 20px;
-                        height: 20px;
-                        justify-content: center;
-                        align-items: center;
-                    }
-            #buttons{
+        #buttons{
+            width: 100%;
+            height: 140px;
+            position: absolute;
+            top: -140px;
+        }
+            #button_area{
                 width: 100%;
-                height: 140px;
-                position: absolute;
-                top: -140px;
-            }
-                #button_area{
-                    width: 100%;
-                    height: 100%;
-                    margin: auto;
-                    display: flex;
-                    flex-wrap: wrap;
-                    justify-content: center;
-                    align-items: center;
+                height: 100%;
+                margin: auto;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
 
-                }
-                    .action_button{
-                        background:skyblue;
-                        width: 60px;
-                        height: 30px;
-                        margin: 1px;
-                        padding: 0px;
-                        font-size: 1em;
-                        font-weight: bold;
-                    }
-                
-                #monopoly_area{
-                    width: 100%;
-                    height: 100%;
-                    margin: auto;
-                    justify-content: center;
-                    align-items: center;
-                }
-                    .resource_button_area{
-                        display: flex;
-                        width: 100%;
-                        height: 75%;
-                        margin: auto;
-                        justify-content: center;
-                        align-items: center;
-                    }
-                    .quitprogress{
-                        display: flex;
-                        width: 100%;
-                        height: 25%;
-                        margin: auto;
-                        justify-content: center;
-                        align-items: center;
-                    }
-                #harvest_area{
-                    width: 100%;
-                    height: 100%;
-                    margin: auto;
-                    justify-content: center;
-                    align-items: center;
-                }
-                #burst_area{
-                    width: 100%;
-                    height: 100%;
-                    margin: auto;
-                    justify-content: center;
-                    align-items: center;
-                }
-                #burst_message{
-                    text-align: center;
-                }
-                
-                .lumber{
-                    background-color: rgb(62, 187, 62);
-                }
-                .brick{
-                    background-color: rgb(179, 8, 8);
-                }
-                .ore{
-                    background-color: darkgray;
-                }
-                .grain{
-                    background-color: gold;
-                }
-                .wool{
-                    background-color: lightgreen;
-                }
-                #negotiate_area{
-                    width: 100%;
-                    height: 100%;
-                    margin: auto;
-                    justify-content: center;
-                    align-items: center;
-                }
-                .numberinput{
-                    display:flex;
-                    justify-content: center;
-                    align-items: center;
-                    height: 50px;
-                    position:relative
-                }
-                .give{
-                    display:flex;
-                }
-                    .givetakeresource{
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        height: 20px;
-                        border-radius: 50%;
-                        font-weight: bold;
-                    }
-                    .resourcenumber{
-                        width: 50px;
-                    }
-                    
-                .take{
-                    display: flex;
-                }
-                #counterpart{
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                }
-                .propose_button{
-                    width: 70px;
+            }
+                .action_button{
+                    background:skyblue;
+                    width: 60px;
                     height: 30px;
                     margin: 1px;
-                    font-size: 14px;
+                    padding: 0px;
+                    font-size: 1em;
                     font-weight: bold;
                 }
-                .do{
-                }
-                #propose_area{
-                    width: 100%;
-                    height: 100%;
-                    margin: auto;
-                    font-size: large;
-                }
-                #proposeterm{
+            
+            #monopoly_area{
+                width: 100%;
+                height: 100%;
+                margin: auto;
+                justify-content: center;
+                align-items: center;
+            }
+                .resource_button_area{
                     display: flex;
-                    justify-content: center;
-                    align-items: center;
                     width: 100%;
                     height: 75%;
-                }
-                #proposeterm div{
-                    display: flex;
-                    flex-wrap: wrap;
-                    justify-content: center;
-                    width: 100%;
-                }
-                .giveresource{
-                    display: flex;
-                    justify-content: center;
-                }
-                .takeresource{
-                    display: flex;
-                    justify-content: center;
-                }
-                #acceptordeny{
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    width: 100%;
-                    height: 25%;
-                }
-                #trade_area{
-                    width: 100%;
-                    height: 100%;
                     margin: auto;
                     justify-content: center;
                     align-items: center;
                 }
-                #decidearea{
+                .quitprogress{
                     display: flex;
+                    width: 100%;
+                    height: 25%;
+                    margin: auto;
                     justify-content: center;
                     align-items: center;
                 }
-                .house{
-                    width: 80%;
-                    height: auto;
+                .quitprogressbutton{
+                    background-color: white;
+                    width: 60px;
+                    height: 30px;
+                    margin: 1px;
+                    padding: 0px;
+                    font-size: 1em;
+                    font-weight: bold;
                 }
-                .city{
-                    width: 100%;
-                    height: auto;
+            #harvest_area{
+                width: 100%;
+                height: 100%;
+                margin: auto;
+                justify-content: center;
+                align-items: center;
+            }
+            #burst_area{
+                width: 100%;
+                height: 100%;
+                margin: auto;
+                justify-content: center;
+                align-items: center;
+            }
+            #burst_message{
+                text-align: center;
+            }
+            
+            .lumber{
+                background-color: rgb(62, 187, 62);
+            }
+            .brick{
+                background-color: rgb(179, 8, 8);
+            }
+            .ore{
+                background-color: darkgray;
+            }
+            .grain{
+                background-color: gold;
+            }
+            .wool{
+                background-color: lightgreen;
+            }
+            #negotiate_area{
+                width: 100%;
+                height: 100%;
+                margin: auto;
+                justify-content: center;
+                align-items: center;
+            }
+            .numberinput{
+                display:flex;
+                justify-content: center;
+                align-items: center;
+                height: 50px;
+                position:relative
+            }
+            .give{
+                display:flex;
+            }
+                .resourcecircle{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 20px;
+                    border-radius: 50%;
+                    font-weight: bold;
                 }
-                .roadtoken{
-                    width: 80%;
-                    height: auto;
+                .resourcenumber{
+                    width: 50px;
                 }
-        
+            .take{
+                display: flex;
+            }
+            #counterpart{
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+            }
+            .propose_button{
+                width: 16%;
+                height: 30px;
+                margin: 0.25%;
+                font-size: 14px;
+                font-weight: bold;
+            }
+            #quitnegotiatebutton{
+                background-color: white;
+                width: 16%;
+                height: 30px;
+                margin: 0.25%;
+                font-size: 1em;
+                font-weight: bold;
+            }
+            #propose_area{
+                width: 100%;
+                height: 100%;
+                margin: auto;
+                font-size: large;
+            }
+            #proposeterm{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 75%;
+            }
+            #proposeterm div{
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                width: 100%;
+            }
+            .giveresource{
+                display: flex;
+                justify-content: center;
+            }
+            .takeresource{
+                display: flex;
+                justify-content: center;
+            }
+            #acceptordeny{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 25%;
+            }
+            #trade_area{
+                width: 100%;
+                height: 100%;
+                margin: auto;
+                justify-content: center;
+                align-items: center;
+            }
+            #decidearea{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            #quittradebutton{
+                background-color: white;
+                width: 60px;
+                height: 30px;
+                margin: 1px;
+                padding: 0px;
+                font-size: 1em;
+                font-weight: bold;
+            }
 }
+
 
 
 
 
     
 @media screen and (orientation: landscape){
-    @media screen and (min-width:1000px) {
-        #nameinputarea{
+    #nameinputarea{
             margin: auto;
             text-align: center;
         }
@@ -392,14 +399,34 @@
         }
         #field{
             width: 100%;
-            height: 100vh;
+            height: 98vh;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             background-color: aqua;
+        }@media screen and (min-height:600px){
+            #field{
+                align-items: center;
+            }
         }
             #board_area{
                 position:relative;
                 width: calc(100% - 400px);
+                display: flex;
+                justify-content: center;
+                max-height: 100%;
+                aspect-ratio: 7 / 6.9282;
+            }@media screen and (min-width:850px) and (max-width:1000px) {
+                #board_area{
+                    width: 600px;
+                }
+            }@media screen and (max-width:850px) {
+                #board_area{
+                    width: calc(100% - 250px);
+                }
+            }
+            #board{
+                position: relative;
+                height:100%;
                 aspect-ratio: 7 / 6.9282;
             }
                 #dice_area{
@@ -415,25 +442,39 @@
                 }
                     .dice{
                         width:48%;
-                        border: 5px solid black;
+                        border: 1vh solid black;
                         display: flex;
                         justify-content: center;
                         align-items: center;
                         border-radius:10%;
-                        font-size: 45px;
+                        font-size: 8vh;
                         margin-right: 0.5px;
                         margin-left: 0.5px;
                     }
             #player_and_button_area{
                 width: 400px;
                 height: 600px;
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                align-items: center;
+            }@media screen and (min-width:850px) and (max-width:1000px) {
+                #player_and_button_area{
+                    width: calc(100% - 600px);
+                    min-width: 250px;
+                }
+            }@media screen and (max-width:850px) {
+                #player_and_button_area{
+                    width: 250px;
+                }
             }
                 #players{
                     width: 100%;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    align-items: center;
+                }@media screen and (max-height:600px){
+                    #players{
+                        position: relative;
+                        margin-top: 140px;
+                    }
                 }
                 #playerinformation{
                     display: flex;
@@ -449,10 +490,13 @@
                         margin:1px auto;
                         border: 3px solid black; 
                         border-radius: 5px;
+                        height: auto;
+                        min-height: 60px;
                     }
                     .row{
                         display: flex;
                         min-height: 22px;
+                        height: 33%;
                     }
                     .line{
                         width: 50%;
@@ -471,6 +515,7 @@
                     .playermark{
                         height: 100%;
                         width: 15%;
+                        min-width: 35px;
                         display:flex;
                         justify-content: center;
                         align-items: center;
@@ -503,7 +548,7 @@
                     }
                         .resourcecard{
                             display: flex;
-                            margin:0 2px;
+                            margin:0 0.5%;
                             border: 1px solid black; 
                             border-radius: 1px;
                             width: 20px;
@@ -545,6 +590,11 @@
                 #buttons{
                     width: 100%;
                     height: 140px;
+                }@media screen and (max-height:600px){
+                    #buttons{
+                        position: absolute;
+                        top: -140px;
+                    }
                 }
                     #button_area{
                         width: 100%;
@@ -554,7 +604,6 @@
                         flex-wrap: wrap;
                         justify-content: center;
                         align-items: center;
-
                     }
                         .action_button{
                             background:skyblue;
@@ -589,6 +638,15 @@
                             justify-content: center;
                             align-items: center;
                         }
+                            .quitprogressbutton{
+                                background-color: white;
+                                width: 60px;
+                                height: 30px;
+                                margin: 1px;
+                                padding: 0px;
+                                font-size: 1em;
+                                font-weight: bold;
+                            }
                     #harvest_area{
                         width: 100%;
                         height: 100%;
@@ -631,26 +689,34 @@
                     }
                     .numberinput{
                         display:flex;
-                        justify-content: center;
+                        justify-content:center;
                         align-items: center;
                         height: 50px;
-                        position:relative
+                        position:relative;
+                        width: 100%;
                     }
                     .give{
                         display:flex;
                     }
-                        .givetakeresource{
+                        .resourcecircle{
                             display: flex;
                             justify-content: center;
                             align-items: center;
                             height: 20px;
                             border-radius: 50%;
                             font-weight: bold;
+                        }@media screen and (max-width:1000px) {
+                            .resourcecircle{
+                                width: 100%;
+                            }
                         }
                         .resourcenumber{
                             width: 50px;
+                        }@media screen and (max-width:1000px) {
+                            .resourcenumber{
+                                width: 81%;
+                            }
                         }
-                        
                     .take{
                         display: flex;
                     }
@@ -661,15 +727,19 @@
                         align-items: center;
                     }
                     .propose_button{
-                        width: 70px;
+                        width: 16%;
                         height: 30px;
-                        margin: 1px;
+                        margin: 0.25%;
                         font-size: 14px;
                         font-weight: bold;
                     }
-                    .do{
-                        position: absolute;
-                        left: 0px;
+                    #quitnegotiatebutton{
+                        background-color: white;
+                        width: 16%;
+                        height: 30px;
+                        margin: 0.25%;
+                        font-size: 1em;
+                        font-weight: bold;
                     }
                     #propose_area{
                         width: 100%;
@@ -717,20 +787,15 @@
                         justify-content: center;
                         align-items: center;
                     }
-                    .house{
-                        width: 80%;
-                        height: auto;
+                    #quittradebutton{
+                        background-color: white;
+                        width: 60px;
+                        height: 30px;
+                        margin: 1px;
+                        padding: 0px;
+                        font-size: 1em;
+                        font-weight: bold;
                     }
-                    .city{
-                        width: 100%;
-                        height: auto;
-                    }
-                    .roadtoken{
-                        width: 80%;
-                        height: auto;
-                    }
-                    
-    }
 }
 
 
@@ -755,7 +820,7 @@
 
 
 
-#board{
+#board_frame{
     max-width:100%;
     height:auto;
     position:absolute;
@@ -846,6 +911,9 @@
     text-align: center;
     vertical-align: middle;
     background-color: rgb(179, 54, 54,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .nodex1{
     left:8.13599288200879%;
@@ -1153,6 +1221,18 @@
     border-radius:50%;
     text-align: center;
     vertical-align: middle;
+}
+.house{
+    width: 80%;
+    height: auto;
+}
+.city{
+    width: 100%;
+    height: auto;
+}
+.roadtoken{
+    width: 80%;
+    height: auto;
 }
 #initialize{
     text-align: center;

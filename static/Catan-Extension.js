@@ -312,7 +312,7 @@ $(`#trade_area`).on('click','#tradedecide',function(){
     socket.emit('tradedecide', data)
 });
 //貿易やめるボタンをクリック
-$(`#trade_area`).on('click','#quittrade',function(){
+$(`#trade_area`).on('click','#quittradebutton',function(){
     const data = {socketID:socket.id}
     socket.emit('quittrade', data)
 });
@@ -352,7 +352,7 @@ $(`#counterpart`).on('click','.propose_button',function(){
     }
 });
 //交渉やめるボタンをクリック
-$(`#negotiate_area`).on('click','#quitnegotiate',function(){
+$(`#negotiate_area`).on('click','#quitnegotiatebutton',function(){
     const data = {socketID:socket.id}
     socket.emit('quitnegotiate', data)
 });

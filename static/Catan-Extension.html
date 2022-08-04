@@ -51,333 +51,335 @@
             
         </div>
         <div id="tileamounts" class="numberinput">
-            <div>
-                <div class="givetakeresource ore">鉄</div>
-                <input id="oretileamount" class="resourcenumber" type="number" value="5" min="0" max="100" step="1">
+            <div class="resourcecircleandform">
+                <div class="resourcecircle ore">鉄</div>
+                <input id="oretileamount" class="tilenumberinput" type="number" value="5" min="0" max="100" step="1">
             </div>
-            <div>
-                <div class="givetakeresource grain">米</div>
-                <input id="ricetileamount" class="resourcenumber" type="number" value="6" min="0" max="100" step="1">
+            <div class="resourcecircleandform">
+                <div class="resourcecircle grain">米</div>
+                <input id="ricetileamount" class="tilenumberinput" type="number" value="6" min="0" max="100" step="1">
             </div>
-            <div>
-                <div class="givetakeresource wool">羊</div>
-                <input id="wooltileamount" class="resourcenumber" type="number" value="6" min="0" max="100" step="1">
+            <div class="resourcecircleandform">
+                <div class="resourcecircle wool">羊</div>
+                <input id="wooltileamount" class="tilenumberinput" type="number" value="6" min="0" max="100" step="1">
             </div>
-            <div>
-                <div class="givetakeresource lumber">木</div>
-                <input id="lumbertileamount" class="resourcenumber" type="number" value="6" min="0" max="100" step="1">
+            <div class="resourcecircleandform">
+                <div class="resourcecircle lumber">木</div>
+                <input id="lumbertileamount" class="tilenumberinput" type="number" value="6" min="0" max="100" step="1">
             </div>
-            <div>
-                <div class="givetakeresource brick">煉</div>
-                <input id="bricktileamount" class="resourcenumber" type="number" value="5" min="0" max="100" step="1">
+            <div class="resourcecircleandform">
+                <div class="resourcecircle brick">煉</div>
+                <input id="bricktileamount" class="tilenumberinput" type="number" value="5" min="0" max="100" step="1">
             </div>
         </div>
         <div id="gamestart"><button id="gamestartbutton" class="action_button">開始</button></div>
         <div id="field">
             <div id="board_area">
-                <div id="dice_area"></div>
-                <img id="board" src='./large_board.png'>
-                <img id="tile1" class="tilex1 tiley5 tile" data-direction="" src="./ocean.png">
-                <img id="tile2" class="tilex1 tiley7 tile" data-direction="" src="./ocean.png">
-                <img id="tile3" class="tilex1 tiley9 tile" data-direction="" src="./ocean.png">
-                <img id="tile4" class="tilex1 tiley11 tile" data-direction="" src="./ocean.png">
-                <img id="tile5" class="tilex2 tiley4 tile" data-direction="" src="./ocean.png">
-                <img id="tile6" class="tilex2 tiley6 tile" data-direction="" src="./desert.png">
-                <img id="tile7" class="tilex2 tiley8 tile" data-direction="" src="./desert.png">
-                <img id="tile8" class="tilex2 tiley10 tile" data-direction="" src="./desert.png">
-                <img id="tile9" class="tilex2 tiley12 tile" data-direction="" src="./ocean.png">
-                <img id="tile10" class="tilex3 tiley3 tile" data-direction="" src="./ocean.png">
-                <img id="tile11" class="tilex3 tiley5 tile" data-direction="" src="./desert.png">
-                <img id="tile12" class="tilex3 tiley7 tile" data-direction="" src="./desert.png">
-                <img id="tile13" class="tilex3 tiley9 tile" data-direction="" src="./desert.png">
-                <img id="tile14" class="tilex3 tiley11 tile" data-direction="" src="./desert.png">
-                <img id="tile15" class="tilex3 tiley13 tile" data-direction="" src="./ocean.png">
-                <img id="tile16" class="tilex4 tiley2 tile" data-direction="" src="./ocean.png">
-                <img id="tile17" class="tilex4 tiley4 tile" data-direction="" src="./desert.png">
-                <img id="tile18" class="tilex4 tiley6 tile" data-direction="" src="./desert.png">
-                <img id="tile19" class="tilex4 tiley8 tile" data-direction="" src="./desert.png">
-                <img id="tile20" class="tilex4 tiley10 tile" data-direction="" src="./desert.png">
-                <img id="tile21" class="tilex4 tiley12 tile" data-direction="" src="./desert.png">
-                <img id="tile22" class="tilex4 tiley14 tile" data-direction="" src="./ocean.png">
-                <img id="tile23" class="tilex5 tiley1 tile" data-direction="" src="./ocean.png">
-                <img id="tile24" class="tilex5 tiley3 tile" data-direction="" src="./desert.png">
-                <img id="tile25" class="tilex5 tiley5 tile" data-direction="" src="./desert.png">
-                <img id="tile26" class="tilex5 tiley7 tile" data-direction="" src="./desert.png">
-                <img id="tile27" class="tilex5 tiley9 tile" data-direction="" src="./desert.png">
-                <img id="tile28" class="tilex5 tiley11 tile" data-direction="" src="./desert.png">
-                <img id="tile29" class="tilex5 tiley13 tile" data-direction="" src="./desert.png">
-                <img id="tile30" class="tilex5 tiley15 tile" data-direction="" src="./ocean.png">
-                <img id="tile31" class="tilex6 tiley2 tile" data-direction="" src="./ocean.png">
-                <img id="tile32" class="tilex6 tiley4 tile" data-direction="" src="./desert.png">
-                <img id="tile33" class="tilex6 tiley6 tile" data-direction="" src="./desert.png">
-                <img id="tile34" class="tilex6 tiley8 tile" data-direction="" src="./desert.png">
-                <img id="tile35" class="tilex6 tiley10 tile" data-direction="" src="./desert.png">
-                <img id="tile36" class="tilex6 tiley12 tile" data-direction="" src="./desert.png">
-                <img id="tile37" class="tilex6 tiley14 tile" data-direction="" src="./ocean.png">
-                <img id="tile38" class="tilex7 tiley3 tile" data-direction="" src="./ocean.png">
-                <img id="tile39" class="tilex7 tiley5 tile" data-direction="" src="./desert.png">
-                <img id="tile40" class="tilex7 tiley7 tile" data-direction="" src="./desert.png">
-                <img id="tile41" class="tilex7 tiley9 tile" data-direction="" src="./desert.png">
-                <img id="tile42" class="tilex7 tiley11 tile" data-direction="" src="./desert.png">
-                <img id="tile43" class="tilex7 tiley13 tile" data-direction="" src="./ocean.png">
-                <img id="tile44" class="tilex8 tiley4 tile" data-direction="" src="./ocean.png">
-                <img id="tile45" class="tilex8 tiley6 tile" data-direction="" src="./desert.png">
-                <img id="tile46" class="tilex8 tiley8 tile" data-direction="" src="./desert.png">
-                <img id="tile47" class="tilex8 tiley10 tile" data-direction="" src="./desert.png">
-                <img id="tile48" class="tilex8 tiley12 tile" data-direction="" src="./ocean.png">
-                <img id="tile49" class="tilex9 tiley5 tile" data-direction="" src="./ocean.png">
-                <img id="tile50" class="tilex9 tiley7 tile" data-direction="" src="./ocean.png">
-                <img id="tile51" class="tilex9 tiley9 tile" data-direction="" src="./ocean.png">
-                <img id="tile52" class="tilex9 tiley11 tile" data-direction="" src="./ocean.png">
-                <div id="node1"  class="node nodex2 nodey4"></div>
-                <div id="node2"  class="node nodex1 nodey5"></div>
-                <div id="node3"  class="node nodex2 nodey6"></div>
-                <div id="node4"  class="node nodex1 nodey7"></div>
-                <div id="node5"  class="node nodex2 nodey8"></div>
-                <div id="node6"  class="node nodex1 nodey9"></div>
-                <div id="node7"  class="node nodex2 nodey10"></div>
-                <div id="node8"  class="node nodex4 nodey3"></div>
-                <div id="node9"  class="node nodex3 nodey4"></div>
-                <div id="node10"  class="node nodex4 nodey5"></div>
-                <div id="node11"  class="node nodex3 nodey6"></div>
-                <div id="node12"  class="node nodex4 nodey7"></div>
-                <div id="node13"  class="node nodex3 nodey8"></div>
-                <div id="node14"  class="node nodex4 nodey9"></div>
-                <div id="node15"  class="node nodex3 nodey10"></div>
-                <div id="node16"  class="node nodex4 nodey11"></div>
-                <div id="node17"  class="node nodex6 nodey2"></div>
-                <div id="node18"  class="node nodex5 nodey3"></div>
-                <div id="node19"  class="node nodex6 nodey4"></div>
-                <div id="node20"  class="node nodex5 nodey5"></div>
-                <div id="node21"  class="node nodex6 nodey6"></div>
-                <div id="node22"  class="node nodex5 nodey7"></div>
-                <div id="node23"  class="node nodex6 nodey8"></div>
-                <div id="node24"  class="node nodex5 nodey9"></div>
-                <div id="node25"  class="node nodex6 nodey10"></div>
-                <div id="node26"  class="node nodex5 nodey11"></div>
-                <div id="node27"  class="node nodex6 nodey12"></div>
-                <div id="node28"  class="node nodex8 nodey1"></div>
-                <div id="node29"  class="node nodex7 nodey2"></div>
-                <div id="node30"  class="node nodex8 nodey3"></div>
-                <div id="node31"  class="node nodex7 nodey4"></div>
-                <div id="node32"  class="node nodex8 nodey5"></div>
-                <div id="node33"  class="node nodex7 nodey6"></div>
-                <div id="node34"  class="node nodex8 nodey7"></div>
-                <div id="node35"  class="node nodex7 nodey8"></div>
-                <div id="node36"  class="node nodex8 nodey9"></div>
-                <div id="node37"  class="node nodex7 nodey10"></div>
-                <div id="node38"  class="node nodex8 nodey11"></div>
-                <div id="node39"  class="node nodex7 nodey12"></div>
-                <div id="node40"  class="node nodex8 nodey13"></div>
-                <div id="node41"  class="node nodex9 nodey1"></div>
-                <div id="node42"  class="node nodex10 nodey2"></div>
-                <div id="node43"  class="node nodex9 nodey3"></div>
-                <div id="node44"  class="node nodex10 nodey4"></div>
-                <div id="node45"  class="node nodex9 nodey5"></div>
-                <div id="node46"  class="node nodex10 nodey6"></div>
-                <div id="node47"  class="node nodex9 nodey7"></div>
-                <div id="node48"  class="node nodex10 nodey8"></div>
-                <div id="node49"  class="node nodex9 nodey9"></div>
-                <div id="node50"  class="node nodex10 nodey10"></div>
-                <div id="node51"  class="node nodex9 nodey11"></div>
-                <div id="node52"  class="node nodex10 nodey12"></div>
-                <div id="node53"  class="node nodex9 nodey13"></div>
-                <div id="node54"  class="node nodex11 nodey2"></div>
-                <div id="node55"  class="node nodex12 nodey3"></div>
-                <div id="node56"  class="node nodex11 nodey4"></div>
-                <div id="node57"  class="node nodex12 nodey5"></div>
-                <div id="node58"  class="node nodex11 nodey6"></div>
-                <div id="node59"  class="node nodex12 nodey7"></div>
-                <div id="node60"  class="node nodex11 nodey8"></div>
-                <div id="node61"  class="node nodex12 nodey9"></div>
-                <div id="node62"  class="node nodex11 nodey10"></div>
-                <div id="node63"  class="node nodex12 nodey11"></div>
-                <div id="node64"  class="node nodex11 nodey12"></div>
-                <div id="node65"  class="node nodex13 nodey3"></div>
-                <div id="node66"  class="node nodex14 nodey4"></div>
-                <div id="node67"  class="node nodex13 nodey5"></div>
-                <div id="node68"  class="node nodex14 nodey6"></div>
-                <div id="node69"  class="node nodex13 nodey7"></div>
-                <div id="node70"  class="node nodex14 nodey8"></div>
-                <div id="node71"  class="node nodex13 nodey9"></div>
-                <div id="node72"  class="node nodex14 nodey10"></div>
-                <div id="node73"  class="node nodex13 nodey11"></div>
-                <div id="node74"  class="node nodex15 nodey4"></div>
-                <div id="node75"  class="node nodex16 nodey5"></div>
-                <div id="node76"  class="node nodex15 nodey6"></div>
-                <div id="node77"  class="node nodex16 nodey7"></div>
-                <div id="node78"  class="node nodex15 nodey8"></div>
-                <div id="node79"  class="node nodex16 nodey9"></div>
-                <div id="node80"  class="node nodex15 nodey10"></div>
-                <div id="road1" class="road roadx1 roady8"></div>
-                <div id="road2" class="road roadx1 roady10"></div>
-                <div id="road3" class="road roadx1 roady12"></div>
-                <div id="road4" class="road roadx1 roady14"></div>
-                <div id="road5" class="road roadx1 roady16"></div>
-                <div id="road6" class="road roadx1 roady18"></div>
-                <div id="road7" class="road roadx2 roady7"></div>
-                <div id="road8" class="road roadx2 roady11"></div>
-                <div id="road9" class="road roadx2 roady15"></div>
-                <div id="road10" class="road roadx2 roady19"></div>
-                <div id="road11" class="road roadx3 roady6"></div>
-                <div id="road12" class="road roadx3 roady8"></div>
-                <div id="road13" class="road roadx3 roady10"></div>
-                <div id="road14" class="road roadx3 roady12"></div>
-                <div id="road15" class="road roadx3 roady14"></div>
-                <div id="road16" class="road roadx3 roady16"></div>
-                <div id="road17" class="road roadx3 roady18"></div>
-                <div id="road18" class="road roadx3 roady20"></div>
-                <div id="road19" class="road roadx4 roady5"></div>
-                <div id="road20" class="road roadx4 roady9"></div>
-                <div id="road21" class="road roadx4 roady13"></div>
-                <div id="road22" class="road roadx4 roady17"></div>
-                <div id="road23" class="road roadx4 roady21"></div>
-                <div id="road24" class="road roadx5 roady4"></div>
-                <div id="road25" class="road roadx5 roady6"></div>
-                <div id="road26" class="road roadx5 roady8"></div>
-                <div id="road27" class="road roadx5 roady10"></div>
-                <div id="road28" class="road roadx5 roady12"></div>
-                <div id="road29" class="road roadx5 roady14"></div>
-                <div id="road30" class="road roadx5 roady16"></div>
-                <div id="road31" class="road roadx5 roady18"></div>
-                <div id="road32" class="road roadx5 roady20"></div>
-                <div id="road33" class="road roadx5 roady22"></div>
-                <div id="road34" class="road roadx6 roady3"></div>
-                <div id="road35" class="road roadx6 roady7"></div>
-                <div id="road36" class="road roadx6 roady11"></div>
-                <div id="road37" class="road roadx6 roady15"></div>
-                <div id="road38" class="road roadx6 roady19"></div>
-                <div id="road39" class="road roadx6 roady23"></div>
-                <div id="road40" class="road roadx7 roady2"></div>
-                <div id="road41" class="road roadx7 roady4"></div>
-                <div id="road42" class="road roadx7 roady6"></div>
-                <div id="road43" class="road roadx7 roady8"></div>
-                <div id="road44" class="road roadx7 roady10"></div>
-                <div id="road45" class="road roadx7 roady12"></div>
-                <div id="road46" class="road roadx7 roady14"></div>
-                <div id="road47" class="road roadx7 roady16"></div>
-                <div id="road48" class="road roadx7 roady18"></div>
-                <div id="road49" class="road roadx7 roady20"></div>
-                <div id="road50" class="road roadx7 roady22"></div>
-                <div id="road51" class="road roadx7 roady24"></div>
-                <div id="road52" class="road roadx8 roady1"></div>
-                <div id="road53" class="road roadx8 roady5"></div>
-                <div id="road54" class="road roadx8 roady9"></div>
-                <div id="road55" class="road roadx8 roady13"></div>
-                <div id="road56" class="road roadx8 roady17"></div>
-                <div id="road57" class="road roadx8 roady21"></div>
-                <div id="road58" class="road roadx8 roady25"></div>
-                <div id="road59" class="road roadx9 roady2"></div>
-                <div id="road60" class="road roadx9 roady4"></div>
-                <div id="road61" class="road roadx9 roady6"></div>
-                <div id="road62" class="road roadx9 roady8"></div>
-                <div id="road63" class="road roadx9 roady10"></div>
-                <div id="road64" class="road roadx9 roady12"></div>
-                <div id="road65" class="road roadx9 roady14"></div>
-                <div id="road66" class="road roadx9 roady16"></div>
-                <div id="road67" class="road roadx9 roady18"></div>
-                <div id="road68" class="road roadx9 roady20"></div>
-                <div id="road69" class="road roadx9 roady22"></div>
-                <div id="road70" class="road roadx9 roady24"></div>
-                <div id="road71" class="road roadx10 roady3"></div>
-                <div id="road72" class="road roadx10 roady7"></div>
-                <div id="road73" class="road roadx10 roady11"></div>
-                <div id="road74" class="road roadx10 roady15"></div>
-                <div id="road75" class="road roadx10 roady19"></div>
-                <div id="road76" class="road roadx10 roady23"></div>
-                <div id="road77" class="road roadx11 roady4"></div>
-                <div id="road78" class="road roadx11 roady6"></div>
-                <div id="road79" class="road roadx11 roady8"></div>
-                <div id="road80" class="road roadx11 roady10"></div>
-                <div id="road81" class="road roadx11 roady12"></div>
-                <div id="road82" class="road roadx11 roady14"></div>
-                <div id="road83" class="road roadx11 roady16"></div>
-                <div id="road84" class="road roadx11 roady18"></div>
-                <div id="road85" class="road roadx11 roady20"></div>
-                <div id="road86" class="road roadx11 roady22"></div>
-                <div id="road87" class="road roadx12 roady5"></div>
-                <div id="road88" class="road roadx12 roady9"></div>
-                <div id="road89" class="road roadx12 roady13"></div>
-                <div id="road90" class="road roadx12 roady17"></div>
-                <div id="road91" class="road roadx12 roady21"></div>
-                <div id="road92" class="road roadx13 roady6"></div>
-                <div id="road93" class="road roadx13 roady8"></div>
-                <div id="road94" class="road roadx13 roady10"></div>
-                <div id="road95" class="road roadx13 roady12"></div>
-                <div id="road96" class="road roadx13 roady14"></div>
-                <div id="road97" class="road roadx13 roady16"></div>
-                <div id="road98" class="road roadx13 roady18"></div>
-                <div id="road99" class="road roadx13 roady20"></div>
-                <div id="road100" class="road roadx14 roady7"></div>
-                <div id="road101" class="road roadx14 roady11"></div>
-                <div id="road102" class="road roadx14 roady15"></div>
-                <div id="road103" class="road roadx14 roady19"></div>
-                <div id="road104" class="road roadx15 roady8"></div>
-                <div id="road105" class="road roadx15 roady10"></div>
-                <div id="road106" class="road roadx15 roady12"></div>
-                <div id="road107" class="road roadx15 roady14"></div>
-                <div id="road108" class="road roadx15 roady16"></div>
-                <div id="road109" class="road roadx15 roady18"></div>
-                <div id="tile_button1" class="tile_button tile_buttonx1 tile_buttony4"></div>
-                <div id="tile_button2" class="tile_button tile_buttonx1 tile_buttony6"></div>
-                <div id="tile_button3" class="tile_button tile_buttonx1 tile_buttony8"></div>
-                <div id="tile_button4" class="tile_button tile_buttonx2 tile_buttony3"></div>
-                <div id="tile_button5" class="tile_button tile_buttonx2 tile_buttony5"></div>
-                <div id="tile_button6" class="tile_button tile_buttonx2 tile_buttony7"></div>
-                <div id="tile_button7" class="tile_button tile_buttonx2 tile_buttony9"></div>
-                <div id="tile_button8" class="tile_button tile_buttonx3 tile_buttony2"></div>
-                <div id="tile_button9" class="tile_button tile_buttonx3 tile_buttony4"></div>
-                <div id="tile_button10" class="tile_button tile_buttonx3 tile_buttony6"></div>
-                <div id="tile_button11" class="tile_button tile_buttonx3 tile_buttony8"></div>
-                <div id="tile_button12" class="tile_button tile_buttonx3 tile_buttony10"></div>
-                <div id="tile_button13" class="tile_button tile_buttonx4 tile_buttony1"></div>
-                <div id="tile_button14" class="tile_button tile_buttonx4 tile_buttony3"></div>
-                <div id="tile_button15" class="tile_button tile_buttonx4 tile_buttony5"></div>
-                <div id="tile_button16" class="tile_button tile_buttonx4 tile_buttony7"></div>
-                <div id="tile_button17" class="tile_button tile_buttonx4 tile_buttony9"></div>
-                <div id="tile_button18" class="tile_button tile_buttonx4 tile_buttony11"></div>
-                <div id="tile_button19" class="tile_button tile_buttonx5 tile_buttony2"></div>
-                <div id="tile_button20" class="tile_button tile_buttonx5 tile_buttony4"></div>
-                <div id="tile_button21" class="tile_button tile_buttonx5 tile_buttony6"></div>
-                <div id="tile_button22" class="tile_button tile_buttonx5 tile_buttony8"></div>
-                <div id="tile_button23" class="tile_button tile_buttonx5 tile_buttony10"></div>
-                <div id="tile_button24" class="tile_button tile_buttonx6 tile_buttony3"></div>
-                <div id="tile_button25" class="tile_button tile_buttonx6 tile_buttony5"></div>
-                <div id="tile_button26" class="tile_button tile_buttonx6 tile_buttony7"></div>
-                <div id="tile_button27" class="tile_button tile_buttonx6 tile_buttony9"></div>
-                <div id="tile_button28" class="tile_button tile_buttonx7 tile_buttony4"></div>
-                <div id="tile_button29" class="tile_button tile_buttonx7 tile_buttony6"></div>
-                <div id="tile_button30" class="tile_button tile_buttonx7 tile_buttony8"></div>
-                <img id="chip1" class="chip tile_buttonx1 tile_buttony4" src="">
-                <img id="chip2" class="chip tile_buttonx1 tile_buttony6" src="">
-                <img id="chip3" class="chip tile_buttonx1 tile_buttony8" src="">
-                <img id="chip4" class="chip tile_buttonx2 tile_buttony3" src="">
-                <img id="chip5" class="chip tile_buttonx2 tile_buttony5" src="">
-                <img id="chip6" class="chip tile_buttonx2 tile_buttony7" src="">
-                <img id="chip7" class="chip tile_buttonx2 tile_buttony9" src="">
-                <img id="chip8" class="chip tile_buttonx3 tile_buttony2" src="">
-                <img id="chip9" class="chip tile_buttonx3 tile_buttony4" src="">
-                <img id="chip10" class="chip tile_buttonx3 tile_buttony6" src="">
-                <img id="chip11" class="chip tile_buttonx3 tile_buttony8" src ="">
-                <img id="chip12" class="chip tile_buttonx3 tile_buttony10" src ="">
-                <img id="chip13" class="chip tile_buttonx4 tile_buttony1" src ="">
-                <img id="chip14" class="chip tile_buttonx4 tile_buttony3" src ="">
-                <img id="chip15" class="chip tile_buttonx4 tile_buttony5" src ="">
-                <img id="chip16" class="chip tile_buttonx4 tile_buttony7" src ="">
-                <img id="chip17" class="chip tile_buttonx4 tile_buttony9" src ="">
-                <img id="chip18" class="chip tile_buttonx4 tile_buttony11" src ="">
-                <img id="chip19" class="chip tile_buttonx5 tile_buttony2" src ="">
-                <img id="chip20" class="chip tile_buttonx5 tile_buttony4" src ="">
-                <img id="chip21" class="chip tile_buttonx5 tile_buttony6" src ="">
-                <img id="chip22" class="chip tile_buttonx5 tile_buttony8" src ="">
-                <img id="chip23" class="chip tile_buttonx5 tile_buttony10" src ="">
-                <img id="chip24" class="chip tile_buttonx6 tile_buttony3" src ="">
-                <img id="chip25" class="chip tile_buttonx6 tile_buttony5" src ="">
-                <img id="chip26" class="chip tile_buttonx6 tile_buttony7" src ="">
-                <img id="chip27" class="chip tile_buttonx6 tile_buttony9" src ="">
-                <img id="chip28" class="chip tile_buttonx7 tile_buttony4" src ="">
-                <img id="chip29" class="chip tile_buttonx7 tile_buttony6" src ="">
-                <img id="chip30" class="chip tile_buttonx7 tile_buttony8" src ="">
+                <div id="board">
+                    <div id="dice_area"></div>
+                    <img id="board_frame" src='./large_board.png'>
+                    <img id="tile1" class="tilex1 tiley5 tile" data-direction="" src="./ocean.png">
+                    <img id="tile2" class="tilex1 tiley7 tile" data-direction="" src="./ocean.png">
+                    <img id="tile3" class="tilex1 tiley9 tile" data-direction="" src="./ocean.png">
+                    <img id="tile4" class="tilex1 tiley11 tile" data-direction="" src="./ocean.png">
+                    <img id="tile5" class="tilex2 tiley4 tile" data-direction="" src="./ocean.png">
+                    <img id="tile6" class="tilex2 tiley6 tile" data-direction="" src="./desert.png">
+                    <img id="tile7" class="tilex2 tiley8 tile" data-direction="" src="./desert.png">
+                    <img id="tile8" class="tilex2 tiley10 tile" data-direction="" src="./desert.png">
+                    <img id="tile9" class="tilex2 tiley12 tile" data-direction="" src="./ocean.png">
+                    <img id="tile10" class="tilex3 tiley3 tile" data-direction="" src="./ocean.png">
+                    <img id="tile11" class="tilex3 tiley5 tile" data-direction="" src="./desert.png">
+                    <img id="tile12" class="tilex3 tiley7 tile" data-direction="" src="./desert.png">
+                    <img id="tile13" class="tilex3 tiley9 tile" data-direction="" src="./desert.png">
+                    <img id="tile14" class="tilex3 tiley11 tile" data-direction="" src="./desert.png">
+                    <img id="tile15" class="tilex3 tiley13 tile" data-direction="" src="./ocean.png">
+                    <img id="tile16" class="tilex4 tiley2 tile" data-direction="" src="./ocean.png">
+                    <img id="tile17" class="tilex4 tiley4 tile" data-direction="" src="./desert.png">
+                    <img id="tile18" class="tilex4 tiley6 tile" data-direction="" src="./desert.png">
+                    <img id="tile19" class="tilex4 tiley8 tile" data-direction="" src="./desert.png">
+                    <img id="tile20" class="tilex4 tiley10 tile" data-direction="" src="./desert.png">
+                    <img id="tile21" class="tilex4 tiley12 tile" data-direction="" src="./desert.png">
+                    <img id="tile22" class="tilex4 tiley14 tile" data-direction="" src="./ocean.png">
+                    <img id="tile23" class="tilex5 tiley1 tile" data-direction="" src="./ocean.png">
+                    <img id="tile24" class="tilex5 tiley3 tile" data-direction="" src="./desert.png">
+                    <img id="tile25" class="tilex5 tiley5 tile" data-direction="" src="./desert.png">
+                    <img id="tile26" class="tilex5 tiley7 tile" data-direction="" src="./desert.png">
+                    <img id="tile27" class="tilex5 tiley9 tile" data-direction="" src="./desert.png">
+                    <img id="tile28" class="tilex5 tiley11 tile" data-direction="" src="./desert.png">
+                    <img id="tile29" class="tilex5 tiley13 tile" data-direction="" src="./desert.png">
+                    <img id="tile30" class="tilex5 tiley15 tile" data-direction="" src="./ocean.png">
+                    <img id="tile31" class="tilex6 tiley2 tile" data-direction="" src="./ocean.png">
+                    <img id="tile32" class="tilex6 tiley4 tile" data-direction="" src="./desert.png">
+                    <img id="tile33" class="tilex6 tiley6 tile" data-direction="" src="./desert.png">
+                    <img id="tile34" class="tilex6 tiley8 tile" data-direction="" src="./desert.png">
+                    <img id="tile35" class="tilex6 tiley10 tile" data-direction="" src="./desert.png">
+                    <img id="tile36" class="tilex6 tiley12 tile" data-direction="" src="./desert.png">
+                    <img id="tile37" class="tilex6 tiley14 tile" data-direction="" src="./ocean.png">
+                    <img id="tile38" class="tilex7 tiley3 tile" data-direction="" src="./ocean.png">
+                    <img id="tile39" class="tilex7 tiley5 tile" data-direction="" src="./desert.png">
+                    <img id="tile40" class="tilex7 tiley7 tile" data-direction="" src="./desert.png">
+                    <img id="tile41" class="tilex7 tiley9 tile" data-direction="" src="./desert.png">
+                    <img id="tile42" class="tilex7 tiley11 tile" data-direction="" src="./desert.png">
+                    <img id="tile43" class="tilex7 tiley13 tile" data-direction="" src="./ocean.png">
+                    <img id="tile44" class="tilex8 tiley4 tile" data-direction="" src="./ocean.png">
+                    <img id="tile45" class="tilex8 tiley6 tile" data-direction="" src="./desert.png">
+                    <img id="tile46" class="tilex8 tiley8 tile" data-direction="" src="./desert.png">
+                    <img id="tile47" class="tilex8 tiley10 tile" data-direction="" src="./desert.png">
+                    <img id="tile48" class="tilex8 tiley12 tile" data-direction="" src="./ocean.png">
+                    <img id="tile49" class="tilex9 tiley5 tile" data-direction="" src="./ocean.png">
+                    <img id="tile50" class="tilex9 tiley7 tile" data-direction="" src="./ocean.png">
+                    <img id="tile51" class="tilex9 tiley9 tile" data-direction="" src="./ocean.png">
+                    <img id="tile52" class="tilex9 tiley11 tile" data-direction="" src="./ocean.png">
+                    <div id="node1"  class="node nodex2 nodey4"></div>
+                    <div id="node2"  class="node nodex1 nodey5"></div>
+                    <div id="node3"  class="node nodex2 nodey6"></div>
+                    <div id="node4"  class="node nodex1 nodey7"></div>
+                    <div id="node5"  class="node nodex2 nodey8"></div>
+                    <div id="node6"  class="node nodex1 nodey9"></div>
+                    <div id="node7"  class="node nodex2 nodey10"></div>
+                    <div id="node8"  class="node nodex4 nodey3"></div>
+                    <div id="node9"  class="node nodex3 nodey4"></div>
+                    <div id="node10"  class="node nodex4 nodey5"></div>
+                    <div id="node11"  class="node nodex3 nodey6"></div>
+                    <div id="node12"  class="node nodex4 nodey7"></div>
+                    <div id="node13"  class="node nodex3 nodey8"></div>
+                    <div id="node14"  class="node nodex4 nodey9"></div>
+                    <div id="node15"  class="node nodex3 nodey10"></div>
+                    <div id="node16"  class="node nodex4 nodey11"></div>
+                    <div id="node17"  class="node nodex6 nodey2"></div>
+                    <div id="node18"  class="node nodex5 nodey3"></div>
+                    <div id="node19"  class="node nodex6 nodey4"></div>
+                    <div id="node20"  class="node nodex5 nodey5"></div>
+                    <div id="node21"  class="node nodex6 nodey6"></div>
+                    <div id="node22"  class="node nodex5 nodey7"></div>
+                    <div id="node23"  class="node nodex6 nodey8"></div>
+                    <div id="node24"  class="node nodex5 nodey9"></div>
+                    <div id="node25"  class="node nodex6 nodey10"></div>
+                    <div id="node26"  class="node nodex5 nodey11"></div>
+                    <div id="node27"  class="node nodex6 nodey12"></div>
+                    <div id="node28"  class="node nodex8 nodey1"></div>
+                    <div id="node29"  class="node nodex7 nodey2"></div>
+                    <div id="node30"  class="node nodex8 nodey3"></div>
+                    <div id="node31"  class="node nodex7 nodey4"></div>
+                    <div id="node32"  class="node nodex8 nodey5"></div>
+                    <div id="node33"  class="node nodex7 nodey6"></div>
+                    <div id="node34"  class="node nodex8 nodey7"></div>
+                    <div id="node35"  class="node nodex7 nodey8"></div>
+                    <div id="node36"  class="node nodex8 nodey9"></div>
+                    <div id="node37"  class="node nodex7 nodey10"></div>
+                    <div id="node38"  class="node nodex8 nodey11"></div>
+                    <div id="node39"  class="node nodex7 nodey12"></div>
+                    <div id="node40"  class="node nodex8 nodey13"></div>
+                    <div id="node41"  class="node nodex9 nodey1"></div>
+                    <div id="node42"  class="node nodex10 nodey2"></div>
+                    <div id="node43"  class="node nodex9 nodey3"></div>
+                    <div id="node44"  class="node nodex10 nodey4"></div>
+                    <div id="node45"  class="node nodex9 nodey5"></div>
+                    <div id="node46"  class="node nodex10 nodey6"></div>
+                    <div id="node47"  class="node nodex9 nodey7"></div>
+                    <div id="node48"  class="node nodex10 nodey8"></div>
+                    <div id="node49"  class="node nodex9 nodey9"></div>
+                    <div id="node50"  class="node nodex10 nodey10"></div>
+                    <div id="node51"  class="node nodex9 nodey11"></div>
+                    <div id="node52"  class="node nodex10 nodey12"></div>
+                    <div id="node53"  class="node nodex9 nodey13"></div>
+                    <div id="node54"  class="node nodex11 nodey2"></div>
+                    <div id="node55"  class="node nodex12 nodey3"></div>
+                    <div id="node56"  class="node nodex11 nodey4"></div>
+                    <div id="node57"  class="node nodex12 nodey5"></div>
+                    <div id="node58"  class="node nodex11 nodey6"></div>
+                    <div id="node59"  class="node nodex12 nodey7"></div>
+                    <div id="node60"  class="node nodex11 nodey8"></div>
+                    <div id="node61"  class="node nodex12 nodey9"></div>
+                    <div id="node62"  class="node nodex11 nodey10"></div>
+                    <div id="node63"  class="node nodex12 nodey11"></div>
+                    <div id="node64"  class="node nodex11 nodey12"></div>
+                    <div id="node65"  class="node nodex13 nodey3"></div>
+                    <div id="node66"  class="node nodex14 nodey4"></div>
+                    <div id="node67"  class="node nodex13 nodey5"></div>
+                    <div id="node68"  class="node nodex14 nodey6"></div>
+                    <div id="node69"  class="node nodex13 nodey7"></div>
+                    <div id="node70"  class="node nodex14 nodey8"></div>
+                    <div id="node71"  class="node nodex13 nodey9"></div>
+                    <div id="node72"  class="node nodex14 nodey10"></div>
+                    <div id="node73"  class="node nodex13 nodey11"></div>
+                    <div id="node74"  class="node nodex15 nodey4"></div>
+                    <div id="node75"  class="node nodex16 nodey5"></div>
+                    <div id="node76"  class="node nodex15 nodey6"></div>
+                    <div id="node77"  class="node nodex16 nodey7"></div>
+                    <div id="node78"  class="node nodex15 nodey8"></div>
+                    <div id="node79"  class="node nodex16 nodey9"></div>
+                    <div id="node80"  class="node nodex15 nodey10"></div>
+                    <div id="road1" class="road roadx1 roady8"></div>
+                    <div id="road2" class="road roadx1 roady10"></div>
+                    <div id="road3" class="road roadx1 roady12"></div>
+                    <div id="road4" class="road roadx1 roady14"></div>
+                    <div id="road5" class="road roadx1 roady16"></div>
+                    <div id="road6" class="road roadx1 roady18"></div>
+                    <div id="road7" class="road roadx2 roady7"></div>
+                    <div id="road8" class="road roadx2 roady11"></div>
+                    <div id="road9" class="road roadx2 roady15"></div>
+                    <div id="road10" class="road roadx2 roady19"></div>
+                    <div id="road11" class="road roadx3 roady6"></div>
+                    <div id="road12" class="road roadx3 roady8"></div>
+                    <div id="road13" class="road roadx3 roady10"></div>
+                    <div id="road14" class="road roadx3 roady12"></div>
+                    <div id="road15" class="road roadx3 roady14"></div>
+                    <div id="road16" class="road roadx3 roady16"></div>
+                    <div id="road17" class="road roadx3 roady18"></div>
+                    <div id="road18" class="road roadx3 roady20"></div>
+                    <div id="road19" class="road roadx4 roady5"></div>
+                    <div id="road20" class="road roadx4 roady9"></div>
+                    <div id="road21" class="road roadx4 roady13"></div>
+                    <div id="road22" class="road roadx4 roady17"></div>
+                    <div id="road23" class="road roadx4 roady21"></div>
+                    <div id="road24" class="road roadx5 roady4"></div>
+                    <div id="road25" class="road roadx5 roady6"></div>
+                    <div id="road26" class="road roadx5 roady8"></div>
+                    <div id="road27" class="road roadx5 roady10"></div>
+                    <div id="road28" class="road roadx5 roady12"></div>
+                    <div id="road29" class="road roadx5 roady14"></div>
+                    <div id="road30" class="road roadx5 roady16"></div>
+                    <div id="road31" class="road roadx5 roady18"></div>
+                    <div id="road32" class="road roadx5 roady20"></div>
+                    <div id="road33" class="road roadx5 roady22"></div>
+                    <div id="road34" class="road roadx6 roady3"></div>
+                    <div id="road35" class="road roadx6 roady7"></div>
+                    <div id="road36" class="road roadx6 roady11"></div>
+                    <div id="road37" class="road roadx6 roady15"></div>
+                    <div id="road38" class="road roadx6 roady19"></div>
+                    <div id="road39" class="road roadx6 roady23"></div>
+                    <div id="road40" class="road roadx7 roady2"></div>
+                    <div id="road41" class="road roadx7 roady4"></div>
+                    <div id="road42" class="road roadx7 roady6"></div>
+                    <div id="road43" class="road roadx7 roady8"></div>
+                    <div id="road44" class="road roadx7 roady10"></div>
+                    <div id="road45" class="road roadx7 roady12"></div>
+                    <div id="road46" class="road roadx7 roady14"></div>
+                    <div id="road47" class="road roadx7 roady16"></div>
+                    <div id="road48" class="road roadx7 roady18"></div>
+                    <div id="road49" class="road roadx7 roady20"></div>
+                    <div id="road50" class="road roadx7 roady22"></div>
+                    <div id="road51" class="road roadx7 roady24"></div>
+                    <div id="road52" class="road roadx8 roady1"></div>
+                    <div id="road53" class="road roadx8 roady5"></div>
+                    <div id="road54" class="road roadx8 roady9"></div>
+                    <div id="road55" class="road roadx8 roady13"></div>
+                    <div id="road56" class="road roadx8 roady17"></div>
+                    <div id="road57" class="road roadx8 roady21"></div>
+                    <div id="road58" class="road roadx8 roady25"></div>
+                    <div id="road59" class="road roadx9 roady2"></div>
+                    <div id="road60" class="road roadx9 roady4"></div>
+                    <div id="road61" class="road roadx9 roady6"></div>
+                    <div id="road62" class="road roadx9 roady8"></div>
+                    <div id="road63" class="road roadx9 roady10"></div>
+                    <div id="road64" class="road roadx9 roady12"></div>
+                    <div id="road65" class="road roadx9 roady14"></div>
+                    <div id="road66" class="road roadx9 roady16"></div>
+                    <div id="road67" class="road roadx9 roady18"></div>
+                    <div id="road68" class="road roadx9 roady20"></div>
+                    <div id="road69" class="road roadx9 roady22"></div>
+                    <div id="road70" class="road roadx9 roady24"></div>
+                    <div id="road71" class="road roadx10 roady3"></div>
+                    <div id="road72" class="road roadx10 roady7"></div>
+                    <div id="road73" class="road roadx10 roady11"></div>
+                    <div id="road74" class="road roadx10 roady15"></div>
+                    <div id="road75" class="road roadx10 roady19"></div>
+                    <div id="road76" class="road roadx10 roady23"></div>
+                    <div id="road77" class="road roadx11 roady4"></div>
+                    <div id="road78" class="road roadx11 roady6"></div>
+                    <div id="road79" class="road roadx11 roady8"></div>
+                    <div id="road80" class="road roadx11 roady10"></div>
+                    <div id="road81" class="road roadx11 roady12"></div>
+                    <div id="road82" class="road roadx11 roady14"></div>
+                    <div id="road83" class="road roadx11 roady16"></div>
+                    <div id="road84" class="road roadx11 roady18"></div>
+                    <div id="road85" class="road roadx11 roady20"></div>
+                    <div id="road86" class="road roadx11 roady22"></div>
+                    <div id="road87" class="road roadx12 roady5"></div>
+                    <div id="road88" class="road roadx12 roady9"></div>
+                    <div id="road89" class="road roadx12 roady13"></div>
+                    <div id="road90" class="road roadx12 roady17"></div>
+                    <div id="road91" class="road roadx12 roady21"></div>
+                    <div id="road92" class="road roadx13 roady6"></div>
+                    <div id="road93" class="road roadx13 roady8"></div>
+                    <div id="road94" class="road roadx13 roady10"></div>
+                    <div id="road95" class="road roadx13 roady12"></div>
+                    <div id="road96" class="road roadx13 roady14"></div>
+                    <div id="road97" class="road roadx13 roady16"></div>
+                    <div id="road98" class="road roadx13 roady18"></div>
+                    <div id="road99" class="road roadx13 roady20"></div>
+                    <div id="road100" class="road roadx14 roady7"></div>
+                    <div id="road101" class="road roadx14 roady11"></div>
+                    <div id="road102" class="road roadx14 roady15"></div>
+                    <div id="road103" class="road roadx14 roady19"></div>
+                    <div id="road104" class="road roadx15 roady8"></div>
+                    <div id="road105" class="road roadx15 roady10"></div>
+                    <div id="road106" class="road roadx15 roady12"></div>
+                    <div id="road107" class="road roadx15 roady14"></div>
+                    <div id="road108" class="road roadx15 roady16"></div>
+                    <div id="road109" class="road roadx15 roady18"></div>
+                    <div id="tile_button1" class="tile_button tile_buttonx1 tile_buttony4"></div>
+                    <div id="tile_button2" class="tile_button tile_buttonx1 tile_buttony6"></div>
+                    <div id="tile_button3" class="tile_button tile_buttonx1 tile_buttony8"></div>
+                    <div id="tile_button4" class="tile_button tile_buttonx2 tile_buttony3"></div>
+                    <div id="tile_button5" class="tile_button tile_buttonx2 tile_buttony5"></div>
+                    <div id="tile_button6" class="tile_button tile_buttonx2 tile_buttony7"></div>
+                    <div id="tile_button7" class="tile_button tile_buttonx2 tile_buttony9"></div>
+                    <div id="tile_button8" class="tile_button tile_buttonx3 tile_buttony2"></div>
+                    <div id="tile_button9" class="tile_button tile_buttonx3 tile_buttony4"></div>
+                    <div id="tile_button10" class="tile_button tile_buttonx3 tile_buttony6"></div>
+                    <div id="tile_button11" class="tile_button tile_buttonx3 tile_buttony8"></div>
+                    <div id="tile_button12" class="tile_button tile_buttonx3 tile_buttony10"></div>
+                    <div id="tile_button13" class="tile_button tile_buttonx4 tile_buttony1"></div>
+                    <div id="tile_button14" class="tile_button tile_buttonx4 tile_buttony3"></div>
+                    <div id="tile_button15" class="tile_button tile_buttonx4 tile_buttony5"></div>
+                    <div id="tile_button16" class="tile_button tile_buttonx4 tile_buttony7"></div>
+                    <div id="tile_button17" class="tile_button tile_buttonx4 tile_buttony9"></div>
+                    <div id="tile_button18" class="tile_button tile_buttonx4 tile_buttony11"></div>
+                    <div id="tile_button19" class="tile_button tile_buttonx5 tile_buttony2"></div>
+                    <div id="tile_button20" class="tile_button tile_buttonx5 tile_buttony4"></div>
+                    <div id="tile_button21" class="tile_button tile_buttonx5 tile_buttony6"></div>
+                    <div id="tile_button22" class="tile_button tile_buttonx5 tile_buttony8"></div>
+                    <div id="tile_button23" class="tile_button tile_buttonx5 tile_buttony10"></div>
+                    <div id="tile_button24" class="tile_button tile_buttonx6 tile_buttony3"></div>
+                    <div id="tile_button25" class="tile_button tile_buttonx6 tile_buttony5"></div>
+                    <div id="tile_button26" class="tile_button tile_buttonx6 tile_buttony7"></div>
+                    <div id="tile_button27" class="tile_button tile_buttonx6 tile_buttony9"></div>
+                    <div id="tile_button28" class="tile_button tile_buttonx7 tile_buttony4"></div>
+                    <div id="tile_button29" class="tile_button tile_buttonx7 tile_buttony6"></div>
+                    <div id="tile_button30" class="tile_button tile_buttonx7 tile_buttony8"></div>
+                    <img id="chip1" class="chip tile_buttonx1 tile_buttony4" src="">
+                    <img id="chip2" class="chip tile_buttonx1 tile_buttony6" src="">
+                    <img id="chip3" class="chip tile_buttonx1 tile_buttony8" src="">
+                    <img id="chip4" class="chip tile_buttonx2 tile_buttony3" src="">
+                    <img id="chip5" class="chip tile_buttonx2 tile_buttony5" src="">
+                    <img id="chip6" class="chip tile_buttonx2 tile_buttony7" src="">
+                    <img id="chip7" class="chip tile_buttonx2 tile_buttony9" src="">
+                    <img id="chip8" class="chip tile_buttonx3 tile_buttony2" src="">
+                    <img id="chip9" class="chip tile_buttonx3 tile_buttony4" src="">
+                    <img id="chip10" class="chip tile_buttonx3 tile_buttony6" src="">
+                    <img id="chip11" class="chip tile_buttonx3 tile_buttony8" src ="">
+                    <img id="chip12" class="chip tile_buttonx3 tile_buttony10" src ="">
+                    <img id="chip13" class="chip tile_buttonx4 tile_buttony1" src ="">
+                    <img id="chip14" class="chip tile_buttonx4 tile_buttony3" src ="">
+                    <img id="chip15" class="chip tile_buttonx4 tile_buttony5" src ="">
+                    <img id="chip16" class="chip tile_buttonx4 tile_buttony7" src ="">
+                    <img id="chip17" class="chip tile_buttonx4 tile_buttony9" src ="">
+                    <img id="chip18" class="chip tile_buttonx4 tile_buttony11" src ="">
+                    <img id="chip19" class="chip tile_buttonx5 tile_buttony2" src ="">
+                    <img id="chip20" class="chip tile_buttonx5 tile_buttony4" src ="">
+                    <img id="chip21" class="chip tile_buttonx5 tile_buttony6" src ="">
+                    <img id="chip22" class="chip tile_buttonx5 tile_buttony8" src ="">
+                    <img id="chip23" class="chip tile_buttonx5 tile_buttony10" src ="">
+                    <img id="chip24" class="chip tile_buttonx6 tile_buttony3" src ="">
+                    <img id="chip25" class="chip tile_buttonx6 tile_buttony5" src ="">
+                    <img id="chip26" class="chip tile_buttonx6 tile_buttony7" src ="">
+                    <img id="chip27" class="chip tile_buttonx6 tile_buttony9" src ="">
+                    <img id="chip28" class="chip tile_buttonx7 tile_buttony4" src ="">
+                    <img id="chip29" class="chip tile_buttonx7 tile_buttony6" src ="">
+                    <img id="chip30" class="chip tile_buttonx7 tile_buttony8" src ="">
+                </div>
             </div>
             <div id="player_and_button_area">
                 <div id="players">
@@ -407,7 +409,7 @@
                                 <button id="monopoly_brick" class="action_button resource_button brick">煉</button>
                             </div>
                             <div class="quitprogress">
-                                <button class="quitprogressbutton action_button">戻る</button>
+                                <button class="quitprogressbutton">戻る</button>
                             </div>
                         </div>
                         <div id="harvest_area" class="control_area">
@@ -419,7 +421,7 @@
                                 <button id="harvest_brick" class="action_button resource_button brick">煉</button>
                             </div>
                             <div class="quitprogress">
-                                <button class="quitprogressbutton action_button">戻る</button>
+                                <button class="quitprogressbutton">戻る</button>
                             </div>
                         </div>
                         <div id="burst_area" class="control_area">
@@ -437,24 +439,24 @@
                                 <div class="do">
                                     <p>あげる</p>
                                 </div>
-                                <div>
-                                    <div class="givetakeresource ore">鉄</div>
+                                <div class="resourcecircleandform">
+                                    <div class="resourcecircle ore">鉄</div>
                                     <input id="giveore" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
                                 </div>
-                                <div>
-                                    <div class="givetakeresource grain">米</div>
+                                <div class="resourcecircleandform">
+                                    <div class="resourcecircle grain">米</div>
                                     <input id="givegrain" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
                                 </div>
-                                <div>
-                                    <div class="givetakeresource wool">羊</div>
+                                <div class="resourcecircleandform">
+                                    <div class="resourcecircle wool">羊</div>
                                     <input id="givewool" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
                                 </div>
-                                <div>
-                                    <div class="givetakeresource lumber">木</div>
+                                <div class="resourcecircleandform">
+                                    <div class="resourcecircle lumber">木</div>
                                     <input id="givelumber" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
                                 </div>
-                                <div>
-                                    <div class="givetakeresource brick">煉</div>
+                                <div class="resourcecircleandform">
+                                    <div class="resourcecircle brick">煉</div>
                                     <input id="givebrick" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
                                 </div>
                             </div>
@@ -462,24 +464,24 @@
                                 <div class="do">
                                     <p>もらう</p>
                                 </div>
-                                <div>
-                                    <div class="givetakeresource ore">鉄</div>
+                                <div class="resourcecircleandform">
+                                    <div class="resourcecircle ore">鉄</div>
                                     <input id="takeore" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
                                 </div>
-                                <div>
-                                    <div class="givetakeresource grain">米</div>
+                                <div class="resourcecircleandform">
+                                    <div class="resourcecircle grain">米</div>
                                     <input id="takegrain" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
                                 </div>
-                                <div>
-                                    <div class="givetakeresource wool">羊</div>
+                                <div class="resourcecircleandform">
+                                    <div class="resourcecircle wool">羊</div>
                                     <input id="takewool" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
                                 </div>
-                                <div>
-                                    <div class="givetakeresource lumber">木</div>
+                                <div class="resourcecircleandform">
+                                    <div class="resourcecircle lumber">木</div>
                                     <input id="takelumber" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
                                 </div>
-                                <div>
-                                    <div class="givetakeresource brick">煉</div>
+                                <div class="resourcecircleandform">
+                                    <div class="resourcecircle brick">煉</div>
                                     <input id="takebrick" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
                                 </div>
                             </div>
@@ -490,7 +492,7 @@
                                 <button id="to3" class="propose_button player3color">player3</button>
                                 <button id="to4" class="propose_button player4color">player4</button>
                                 <button id="to5" class="propose_button player5color">player5</button>
-                                <button id="quitnegotiate" class="action_button">戻る</button>
+                                <button id="quitnegotiatebutton" class="action_button">戻る</button>
                             </div>
                         </div>
                         <div id="propose_area" class="control_area">
@@ -505,24 +507,24 @@
                                 <div class="do">
                                     <p>捨てる</p>
                                 </div>
-                                <div>
-                                    <div class="givetakeresource ore">鉄</div>
+                                <div class="resourcecircleandform">
+                                    <div class="resourcecircle ore">鉄</div>
                                     <input id="exportore" class="resourcenumber" type="number" value="" min="0" max="100" step="4">
                                 </div>
-                                <div>
-                                    <div class="givetakeresource grain">米</div>
+                                <div class="resourcecircleandform">
+                                    <div class="resourcecircle grain">米</div>
                                     <input id="exportgrain" class="resourcenumber" type="number" value="" min="0" max="100" step="4">
                                 </div>
-                                <div>
-                                    <div class="givetakeresource wool">羊</div>
+                                <div class="resourcecircleandform">
+                                    <div class="resourcecircle wool">羊</div>
                                     <input id="exportwool" class="resourcenumber" type="number" value="" min="0" max="100" step="4">
                                 </div>
-                                <div>
-                                    <div class="givetakeresource lumber">木</div>
+                                <div class="resourcecircleandform">
+                                    <div class="resourcecircle lumber">木</div>
                                     <input id="exportlumber" class="resourcenumber" type="number" value="" min="0" max="100" step="4">
                                 </div>
-                                <div>
-                                    <div class="givetakeresource brick">煉</div>
+                                <div class="resourcecircleandform">
+                                    <div class="resourcecircle brick">煉</div>
                                     <input id="exportbrick" class="resourcenumber" type="number" value="" min="0" max="100" step="4">
                                 </div>
                             </div>
@@ -530,30 +532,30 @@
                                 <div class="do">
                                     <p>もらう</p>
                                 </div>
-                                <div>
-                                    <div class="givetakeresource ore">鉄</div>
+                                <div class="resourcecircleandform">
+                                    <div class="resourcecircle ore">鉄</div>
                                     <input id="importore" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
                                 </div>
-                                <div>
-                                    <div class="givetakeresource grain">米</div>
+                                <div class="resourcecircleandform">
+                                    <div class="resourcecircle grain">米</div>
                                     <input id="importgrain" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
                                 </div>
-                                <div>
-                                    <div class="givetakeresource wool">羊</div>
+                                <div class="resourcecircleandform">
+                                    <div class="resourcecircle wool">羊</div>
                                     <input id="importwool" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
                                 </div>
-                                <div>
-                                    <div class="givetakeresource lumber">木</div>
+                                <div class="resourcecircleandform">
+                                    <div class="resourcecircle lumber">木</div>
                                     <input id="importlumber" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
                                 </div>
-                                <div>
-                                    <div class="givetakeresource brick">煉</div>
+                                <div class="resourcecircleandform">
+                                    <div class="resourcecircle brick">煉</div>
                                     <input id="importbrick" class="resourcenumber" type="number" value="" min="0" max="100" step="1">
                                 </div>
                             </div>
                             <div id="decidearea">
                                 <button id="tradedecide" class="action_button">決定</button>
-                                <button id="quittrade" class="action_button">戻る</button>
+                                <button id="quittradebutton" class="action_button">戻る</button>
                             </div>
                             
                         </div>
