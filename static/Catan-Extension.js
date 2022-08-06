@@ -511,8 +511,7 @@ const display = {
                 }
             }
         }
-        console.log('bb')
-        $(`#receiving_area`).hide()
+        //$(`#receiving_area`).hide()
     },
     allResource(game){
         $(`#receiving_area`).show();
@@ -605,8 +604,7 @@ const display = {
             $(`#nodetouch${city.nodeNumber}`).html(``)
             $(`#nodetouch${city.nodeNumber}`).append(`<img id="city${city.nodeNumber}" class="city" src="./city${city.owner.number+1}.png">`)
         }
-        console.log('aa')
-        $(`#receiving_area`).hide()
+        //$(`#receiving_area`).hide()
     },
     thief(buttonnumber){
         $(`#receiving_area`).show();
@@ -652,6 +650,7 @@ const display = {
             if(player.socketID === socket.id){
                 $(`#trash_area`).show()
                 $(`#burst_message`).append(`<p id="you_are_bursting"><b>バーストしました<br>あと${player.toTrash}枚捨ててください</b></p>`)
+                $(`#receiving_area`).hide();
                 return
             }
         }
@@ -863,6 +862,7 @@ const display = {
                     )
                     i += 1
                 }
+                $(`#receiving_area`).hide();
                 return
             }
         }
