@@ -223,7 +223,7 @@ socket.on('renounce',(renounce)=>{
 })
 socket.on('hidereceivingarea',()=>{
     console.log('受信')
-$(`#receiving_area`).hide();
+    $(`#receiving_area`).hide();
 })
 
 //nodeをクリック
@@ -481,8 +481,6 @@ const display = {
         $('#nameinputarea').hide();
         $('#tileamounts').hide();
         $('#field').show();
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     island(island){
         $('#field').show()
@@ -507,8 +505,6 @@ $(`#receiving_area`).hide();
                 }
             }
         }
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     allResource(game){
         for(let p of game.players){
@@ -526,15 +522,11 @@ $(`#receiving_area`).hide();
                 $(`#player${p.number}resource`).append(`資源:${numberOfResources}枚`);
             }
         };
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     allToken(game){
         for(let p of game.players){
             $(`#player${p.number}token`).html(`家:${p.token.house} 街:${p.token.city} 道:${p.token.road}`)
         };
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     allTitle(game){
         for(let p of game.players){
@@ -546,8 +538,6 @@ $(`#receiving_area`).hide();
                 $(`#player${p.number}title`).append(`<p class="titlesquare">長</p>`)
             }
         };
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     allProgress(game){
         for(let p of game.players){
@@ -571,8 +561,6 @@ $(`#receiving_area`).hide();
                 };
             }
         };
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     allUsed(game){
         for(let p of game.players){
@@ -585,8 +573,6 @@ $(`#receiving_area`).hide();
                 };
             };
         };
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     buildings(game){
         for(house of game.board.house){
@@ -601,44 +587,28 @@ $(`#receiving_area`).hide();
             $(`#nodetouch${city.nodeNumber}`).html(``)
             $(`#nodetouch${city.nodeNumber}`).append(`<img id="city${city.nodeNumber}" class="city" src="./city${city.owner.number+1}.png">`)
         }
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     thief(buttonnumber){
         $(`.tile_button`).html(``)
         $(`#tile_button${buttonnumber}`).html(`<div id="thief"></div>`)
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     deleteThief(){
         $(`.tile_button`).html(``)
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     hideMonopolyArea(){
         $(`#monopoly_area`).hide()
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     showMonopolyArea(){
         $(`#monopoly_area`).show()
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     hideHarvestArea(){
         $(`#harvest_area`).hide()
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     showHarvestArea(){
         $(`#harvest_area`).show()
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     hideBurstArea(){
         $(`#burst_area`).hide()
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     showBurstArea(burstPlayer){
         $(`#burst_area`).show()
@@ -647,8 +617,6 @@ $(`#receiving_area`).hide();
             if(player.socketID === socket.id){
                 $(`#trash_area`).show()
                 $(`#burst_message`).append(`<p id="you_are_bursting"><b>バーストしました<br>あと${player.toTrash}枚捨ててください</b></p>`)
-                console.log('受信')
-$(`#receiving_area`).hide();
                 return
             }
         }
@@ -659,30 +627,20 @@ $(`#receiving_area`).hide();
         }
         burst = burst.slice(1)
         $(`#burst_message`).append(`<p><b>${burst}がバースト中です</b></p>`)
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     hideTradeArea(){
         $(`#trade_area`).hide()
         $(`.resourcenumber`).val(``)
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     showTradeArea(){
         $(`#trade_area`).show()
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     hideNegotiateArea(){
         $(`#negotiate_area`).hide()
         $(`.resourcenumber`).val(``)
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     showNegotiateArea(){
         $(`#negotiate_area`).show()
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     showProposeArea(data){
         $(`#propose_area`).show()
@@ -728,20 +686,14 @@ $(`#receiving_area`).hide();
         }else{
             $(`#proposeterm`).append(`<div>${data.proposer.name}が${data.proposee.name}に交渉中</div>`)
         }
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     hideProposeArea(){
         $(`#propose_area`).hide()
         $(`#acceptordeny`).hide()
         $(`#proposeterm`).html(``)
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     hidePlayers(){
         $(`#players`).hide()
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     gameResult(game){
         $(`#message_area`).html(`<h1>${game.turnPlayer.name}の勝ちです!</h1>`)
@@ -771,19 +723,13 @@ $(`#receiving_area`).hide();
                 };
             };
         };
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     showGameEndArea(){
         $(`#gameend_area`).show()
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     hideGameEndArea(){
         $(`#gameend_area`).hide()
         $(`#message_area`).html(``)
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     turnPlayer(data){
         let i = 0;
@@ -796,8 +742,6 @@ $(`#receiving_area`).hide();
         }else{
             $(`#player${data.tn}`).css('border', '5px solid green');
         }
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     log(a){
         console.log(a)
@@ -860,8 +804,6 @@ $(`#receiving_area`).hide();
                     )
                     i += 1
                 }
-                console.log('受信')
-$(`#receiving_area`).hide();
                 return
             }
         }
@@ -892,18 +834,12 @@ $(`#receiving_area`).hide();
                 myNumber += 1
             }
         }
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     hideButtonArea(){
         $('#button_area').hide()
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     showButtonArea(){
         $('#button_area').show()
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     showNameInputArea(playersName){
         $(`#nameinputarea`).show()
@@ -926,21 +862,15 @@ $(`#receiving_area`).hide();
             }
             i += 1
         }
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     hideYesOrNoButton(){
         $(`#yesorno`).hide()
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     cleanUpBoard(){
         $(`.nodetouch`).html(``)
         $(`.road`).html(``)
         $(`.tile_button`).html(``)
         $(`#dice_area`).html(``)
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     dice(dice){
         $(`#dice_area`).show()
@@ -949,29 +879,19 @@ $(`#receiving_area`).hide();
         if(dice[0]+dice[1] === 7){
             $(`#dice_area`).css(`background-color`, `red`)
         }
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     diceBlack(){
         $(`#dice_area`).css(`background-color`, `rgb(131, 221, 131)`)
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     hidemessageArea(){
         $(`#message_area`).hide()
         $(`#message_area`).html(``)
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     showButton(string){
         $(`#${string}_button`).show()
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     hideButton(string){
         $(`#${string}_button`).hide()
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
     renounce(renounce){
         $(`.playermark`).css(`color`,``)
@@ -980,8 +900,6 @@ $(`#receiving_area`).hide();
                 $(`#player${player.number}mark`).css(`color`,`white`)
             }
         }
-        console.log('受信')
-$(`#receiving_area`).hide();
     },
 
 }
@@ -991,6 +909,7 @@ $(`#receiving_area`).hide();
 function game(){
     let e = ''
     socket.emit('console',e)
+    $(`#receiving_area`).show()
 }
 function translate(item){
     if(item === 'ore'){
