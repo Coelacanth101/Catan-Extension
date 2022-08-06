@@ -2684,8 +2684,8 @@ io.on("connection", (socket)=>{
             p.renounceBuilding()
           }else{
             display.hideReceivingArea()
-            return
           }
+          return
         }
       }
       game.takeOver(player)
