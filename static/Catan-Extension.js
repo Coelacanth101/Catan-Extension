@@ -484,6 +484,7 @@ const display = {
         $('#field').show();
     },
     island(island){
+        $(`#receiving_area`).show()
         $('#field').show()
         let tileNumber = 1
         for(line of island){
@@ -506,6 +507,7 @@ const display = {
                 }
             }
         }
+        $(`#receiving_area`).hide()
     },
     allResource(game){
         for(let p of game.players){
@@ -576,6 +578,7 @@ const display = {
         };
     },
     buildings(game){
+        $(`#receiving_area`).show()
         for(house of game.board.house){
             $(`#nodetouch${house.nodeNumber}`).html(``)
             $(`#nodetouch${house.nodeNumber}`).append(`<img id="house${house.nodeNumber}" class="house" src="./house${house.owner.number+1}.png">`)
@@ -588,6 +591,7 @@ const display = {
             $(`#nodetouch${city.nodeNumber}`).html(``)
             $(`#nodetouch${city.nodeNumber}`).append(`<img id="city${city.nodeNumber}" class="city" src="./city${city.owner.number+1}.png">`)
         }
+        $(`#receiving_area`).hide()
     },
     thief(buttonnumber){
         $(`.tile_button`).html(``)

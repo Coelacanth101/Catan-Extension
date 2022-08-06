@@ -2169,7 +2169,6 @@ const display = {
       display.diceTo(socketID);
       display.deleteMyThief(socketID);
       display.thiefTo(socketID);
-      display.buildingsTo(socketID);
       display.allPlayerInformationTo(socketID);
       display.renounceTo(socketID);
       display.reloadRate(socketID);
@@ -2199,6 +2198,7 @@ const display = {
         display.showMyGameEndArea(socketID)
       }
       display.islandTo(socketID)
+      display.buildingsTo(socketID);
       display.hideReceivingAreaTo(socketID)
     }
   },
@@ -2234,7 +2234,6 @@ const display = {
       display.dice()
       display.deleteThief()
       display.thief()
-      display.buildings()
       display.allPlayerInformation()
       display.renounce()
       display.showButtonArea()
@@ -2261,7 +2260,7 @@ const display = {
       }
     }
     display.island()
-    display.hideReceivingArea()
+    display.buildings()
   },
   initialize(){
     this.showNameInputArea(playersName)
