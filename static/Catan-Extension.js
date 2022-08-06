@@ -591,6 +591,7 @@ const display = {
             $(`#nodetouch${city.nodeNumber}`).html(``)
             $(`#nodetouch${city.nodeNumber}`).append(`<img id="city${city.nodeNumber}" class="city" src="./city${city.owner.number+1}.png">`)
         }
+        console.log('aa')
         $(`#receiving_area`).hide()
     },
     thief(buttonnumber){
