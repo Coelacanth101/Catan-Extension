@@ -2199,7 +2199,6 @@ const display = {
       }
       display.islandTo(socketID)
       display.buildingsTo(socketID);
-      display.hideReceivingAreaTo(socketID)
     }
   },
   allMighty(){
@@ -2427,6 +2426,8 @@ io.on("connection", (socket)=>{
           game.turnPlayer.build('house', position)
         }else if(board.nodeCondition(position).type === 'house'){
           game.turnPlayer.build('city', position)
+        }else{
+          display.hideReceivingArea()
         }
       }else if(game.phase === 'robresource'){
         game.turnPlayer.robResource(position)
