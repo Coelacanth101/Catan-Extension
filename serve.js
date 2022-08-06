@@ -188,7 +188,6 @@ class Player{
         //既に家がないか,周りに家がないか確認
         if(board.nodeCondition(position) !== 'blank'){
           display.hideReceivingArea()
-          return
         }//問題なければ建設
         else{
           recordLog()
@@ -201,385 +200,365 @@ class Player{
             let tile = board.island[tileposition[0]][tileposition[1]]
             tile.houseOwner.push(this)
           }
-        }
-        //二軒目なら資源獲得
-        if(this.house.length === 2){
-          let tiles = board.tilesAroundNode(position)
-          for(let tileposition of tiles){
-            let tile = board.island[tileposition[0]][tileposition[1]]
-            if(tile.produce){
-              this.resource[tile.type] += 1
+          //二軒目なら資源獲得
+          if(this.house.length === 2){
+            let tiles = board.tilesAroundNode(position)
+            for(let tileposition of tiles){
+              let tile = board.island[tileposition[0]][tileposition[1]]
+              if(tile.produce){
+                this.resource[tile.type] += 1
+              }
             }
           }
+          this.constructPort(position)
+          board.longestCheck()
+          game.pointReload()
+          display.allPlayerInformation()
+          display.buildings()
         }
-        this.constructPort(position)
-        board.longestCheck()
-        game.pointReload()
-        display.allPlayerInformation()
-        display.buildings()
-      }
-      if(game.phase === 'afterdice'|| game.phase === 'building'){
+      }else if(game.phase === 'afterdice'|| game.phase === 'building'){
         //既に家がないか確認
         if(board.nodeCheck(position) !== 'blank'){
           display.hideReceivingArea()
-          return
         }
         //資源の確認
-        if(!this.resourceCheck(item)){
+        else if(!this.resourceCheck(item)){
           display.hideReceivingArea()
-          return
         }
         //周りに家がないか確認
-        if(board.aroundNodesCheck(position) !== 'blank'){
+        else if(board.aroundNodesCheck(position) !== 'blank'){
           display.hideReceivingArea()
-          return
         }
         //道がつながっているか確認
-        if(!this.IhaveRoadAroundNode(position)){
+        else if(!this.IhaveRoadAroundNode(position)){
           display.hideReceivingArea()
-          return
         }
         //手元に家があるか確認
-        if(this.token[item] === 0){
+        else if(this.token[item] === 0){
           display.hideReceivingArea()
-          return
         }
         //問題なければ建設
-        recordLog()
-        game.lastActionPlayer = this
-        this.token.house -= 1
-        this.house.push({position:position, nodeNumber: board.nodePositionToNumber(position)})
-        board.house.push({type:'house', position:position, nodeNumber: board.nodePositionToNumber(position), owner:this})
-        let tiles = board.tilesAroundNode(position)
-        this.useResource(item)
-        for(let tileposition of tiles){
-          let tile = board.island[tileposition[0]][tileposition[1]]
-          tile.houseOwner.push(this)
+        else{
+          recordLog()
+          game.lastActionPlayer = this
+          this.token.house -= 1
+          this.house.push({position:position, nodeNumber: board.nodePositionToNumber(position)})
+          board.house.push({type:'house', position:position, nodeNumber: board.nodePositionToNumber(position), owner:this})
+          let tiles = board.tilesAroundNode(position)
+          this.useResource(item)
+          for(let tileposition of tiles){
+            let tile = board.island[tileposition[0]][tileposition[1]]
+            tile.houseOwner.push(this)
+          }
+          this.constructPort(position)
+          board.longestCheck()
+          game.pointReload()
+          display.allPlayerInformation()
+          display.buildings()
         }
-        this.constructPort(position)
-        board.longestCheck()
-        game.pointReload()
-        display.allPlayerInformation()
-        display.buildings()
+      }else{
+        display.hideReceivingArea()
       }
     }else if(item === 'city'){
       if(game.phase === 'afterdice'|| game.phase === 'building'){
         //自分の家があるか確認
         if(board.nodeCondition(position).type !== 'house' || board.nodeCondition(position).owner !== this){
           display.hideReceivingArea()
-          return
         }
         //資源の確認
-        if(!this.resourceCheck(item)){
+        else if(!this.resourceCheck(item)){
           display.hideReceivingArea()
-          return
         }
         //手元に都市があるか確認
-        if(this.token[item] === 0){
+        else if(this.token[item] === 0){
           display.hideReceivingArea()
-          return
         }
         //問題なければ建設
-        recordLog()
-        game.lastActionPlayer = this
-        this.token.city -= 1
-        this.token.house += 1
-        this.city.push({position:position, nodeNumber: board.nodePositionToNumber(position)})
-        board.city.push({type:'city', position:position, nodeNumber: board.nodePositionToNumber(position), owner:this})
-        let tiles = board.tilesAroundNode(position)
-        this.useResource(item)
-        for(let tileposition of tiles){
-          let tile = board.island[tileposition[0]][tileposition[1]]
-          tile.cityOwner.push(this)
-          discard(this, tile.houseOwner)
+        else{
+          recordLog()
+          game.lastActionPlayer = this
+          this.token.city -= 1
+          this.token.house += 1
+          this.city.push({position:position, nodeNumber: board.nodePositionToNumber(position)})
+          board.city.push({type:'city', position:position, nodeNumber: board.nodePositionToNumber(position), owner:this})
+          let tiles = board.tilesAroundNode(position)
+          this.useResource(item)
+          for(let tileposition of tiles){
+            let tile = board.island[tileposition[0]][tileposition[1]]
+            tile.cityOwner.push(this)
+            discard(this, tile.houseOwner)
+          }
+          let house = positionToObject(position, this.house)
+          discard(house, this.house)
+          house = positionToObject(position, board.house)
+          discard(house, board.house)
+          board.longestCheck()
+          game.pointReload()
+          display.allPlayerInformation()
+          display.buildings()
         }
-        let house = positionToObject(position, this.house)
-        discard(house, this.house)
-        house = positionToObject(position, board.house)
-        discard(house, board.house)
-        board.longestCheck()
-        game.pointReload()
-        display.allPlayerInformation()
-        display.buildings()
+      }else{
+        display.hideReceivingArea()
       }
     }else if(item === 'road'){
       if(game.phase === 'setup' && this.house.length === this.road.length+1){
         //既に道がないか確認
         if(board.roadCheck(position) !== 'blank'){
           display.hideReceivingArea()
-          return
         }//どちらかの端に今建てた家があるか確認
         else if(!this.justNowHouse(position)){
           display.hideReceivingArea()
-          return
         }
         //問題なければ建設
-        recordLog()
-        game.lastActionPlayer = this
-        this.token.road -= 1
-        this.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position)})
-        board.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), owner:this})
-        board.longestCheck()
-        game.pointReload()
-        display.allPlayerInformation()
-        display.buildings()
-        game.turnEndSetup()
+        else{
+          recordLog()
+          game.lastActionPlayer = this
+          this.token.road -= 1
+          this.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position)})
+          board.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), owner:this})
+          board.longestCheck()
+          game.pointReload()
+          display.allPlayerInformation()
+          display.buildings()
+          game.turnEndSetup()
+        }
       }else if(game.phase === 'afterdice'|| game.phase === 'building'){
         //既に道がないか確認
         if(board.roadCheck(position) !== 'blank'){
           display.hideReceivingArea()
-          return
         }
         //周りに自分の道があるか確認
-        if(!this.IhaveRoadAroundRoad(position)){
+        else if(!this.IhaveRoadAroundRoad(position)){
           display.hideReceivingArea()
-          return
         }
         //資源の確認
-        if(!this.resourceCheck(item)){
+        else if(!this.resourceCheck(item)){
           display.hideReceivingArea()
-          return
         }//手元に道があるか確認
-        if(this.token[item] === 0){
+        else if(this.token[item] === 0){
           display.hideReceivingArea()
-          return
         }
         //問題なければ建設
-        recordLog()
-        game.lastActionPlayer = this
-        this.token.road -= 1
-        this.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position)})
-        board.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), owner:this})
-        this.useResource(item)
-        board.longestCheck()
-        game.pointReload()
-        display.allPlayerInformation()
-        display.buildings()
+        else{
+          recordLog()
+          game.lastActionPlayer = this
+          this.token.road -= 1
+          this.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position)})
+          board.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), owner:this})
+          this.useResource(item)
+          board.longestCheck()
+          game.pointReload()
+          display.allPlayerInformation()
+          display.buildings()
+        }
       }else if(game.phase === 'roadbuild1'){
         //既に道がないか確認
         if(board.roadCheck(position) !== 'blank'){
           display.hideReceivingArea()
-          return
         }
         //周りに自分の道があるか確認
-        if(!this.IhaveRoadAroundRoad(position)){
+        else if(!this.IhaveRoadAroundRoad(position)){
           display.hideReceivingArea()
-          return
         }
         //手元に道があるか確認
-        if(this.token[item] === 0){
+        else if(this.token[item] === 0){
           display.hideReceivingArea()
-          return
         }
         //問題なければ建設
-        recordLog()
-        game.lastActionPlayer = this
-        this.token.road -= 1
-        this.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position)})
-        board.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), owner:this})
-        board.longestCheck()
-        game.pointReload()
-        display.allPlayerInformation()
-        display.buildings()
-        if(this.token.road >= 1){
-          game.phase = 'roadbuild2'
-        }else{
-          game.phase = 'afterdice'
+        else{
+          recordLog()
+          game.lastActionPlayer = this
+          this.token.road -= 1
+          this.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position)})
+          board.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), owner:this})
+          board.longestCheck()
+          game.pointReload()
+          display.allPlayerInformation()
+          display.buildings()
+          if(this.token.road >= 1){
+            game.phase = 'roadbuild2'
+          }else{
+            game.phase = 'afterdice'
+          }
+          display.toggleMyButtons(game.turnPlayer.socketID)
         }
-        display.toggleMyButtons(game.turnPlayer.socketID)
       }else if(game.phase === 'roadbuild2'){
         //既に道がないか確認
         if(board.roadCheck(position) !== 'blank'){
-          return
+          display.hideReceivingArea()
         }
         //周りに自分の道があるか確認
-        if(!this.IhaveRoadAroundRoad(position)){
-          return
+        else if(!this.IhaveRoadAroundRoad(position)){
+          display.hideReceivingArea()
         }
         //手元に道があるか確認
-        if(this.token[item] === 0){
-          return
+        else if(this.token[item] === 0){
+          display.hideReceivingArea()
         }
         //問題なければ建設
-        recordLog()
-        game.lastActionPlayer = this
-        this.token.road -= 1
-        this.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position)})
-        board.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), owner:this})
-        board.longestCheck()
-        game.pointReload()
-        display.allPlayerInformation()
-        display.buildings()
-        game.phase = 'afterdice'
-        display.toggleMyButtons(game.turnPlayer.socketID)
+        else{
+          recordLog()
+          game.lastActionPlayer = this
+          this.token.road -= 1
+          this.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position)})
+          board.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), owner:this})
+          board.longestCheck()
+          game.pointReload()
+          display.allPlayerInformation()
+          display.buildings()
+          game.phase = 'afterdice'
+          display.toggleMyButtons(game.turnPlayer.socketID)
+        }
+      }else{
+        display.hideReceivingArea()
       }
     }else{
       display.hideReceivingArea()
     }
-    
   };
   draw(){
     if(game.phase === 'afterdice'|| game.phase === 'building'){
       if(game.progressDeck.length === 0){
         display.hideReceivingArea()
-        return
-      }
-      if(!this.resourceCheck('progress')){
+      }else if(!this.resourceCheck('progress')){
         display.hideReceivingArea()
-        return
+      }else{
+        this.useResource('progress')
+        this.progress[game.progressDeck[0]] += 1
+        this.thisTurnDraw[game.progressDeck[0]] += 1
+        game.progressDeck.splice(0, 1)
+        game.pointReload()
+        display.allPlayerInformation()
+        recordLog()
+        game.lastActionPlayer = this
       }
-      this.useResource('progress')
-      this.progress[game.progressDeck[0]] += 1
-      this.thisTurnDraw[game.progressDeck[0]] += 1
-      game.progressDeck.splice(0, 1)
-      game.pointReload()
-      display.allPlayerInformation()
-      recordLog()
-      game.lastActionPlayer = this
+    }else{
+      display.hideReceivingArea()
     }
-    display.hideReceivingArea()
   };
   knightuse(){
     if(game.phase !== 'beforedice' && game.phase !== 'afterdice'){
       display.hideReceivingArea()
-      return
-    }
-    if(this.progress.knight - this.thisTurnDraw.knight <= 0){
+    }else if(this.progress.knight - this.thisTurnDraw.knight <= 0){
       display.hideReceivingArea()
-      return
-    }
-    if(this.progressUse >= 1){
+    }else if(this.progressUse >= 1){
       display.hideReceivingArea()
-      return
+    }else{
+      recordLog()
+      game.lastActionPlayer = this
+      game.phase = 'thiefmove'
+      this.progressUse += 1
+      this.progress.knight -= 1
+      this.used.knight += 1
+      this.largestArmyCheck()
+      game.pointReload()
+      display.allPlayerInformation()
+      display.toggleMyButtons(game.turnPlayer.socketID)
     }
-    recordLog()
-    game.lastActionPlayer = this
-    game.phase = 'thiefmove'
-    this.progressUse += 1
-    this.progress.knight -= 1
-    this.used.knight += 1
-    this.largestArmyCheck()
-    game.pointReload()
-    display.allPlayerInformation()
-    display.toggleMyButtons(game.turnPlayer.socketID)
-    display.hideReceivingArea()
+    
   };
   thiefmove(position){
     if(game.phase !== 'thiefmove'){
       display.hideReceivingArea()
-      return
-    }
-    if(arrayComparison(position, board.thief.position)){
+    }else if(arrayComparison(position, board.thief.position)){
       display.hideReceivingArea()
-      return
-    }
-    recordLog()
-    game.lastActionPlayer = this
-    display.deleteThief()
-    board.thief = board.island[position[0]][position[1]]
-    display.thief()
-    let targetplayer =[]
-    for(let owner of board.thief.houseOwner){
-      if(owner !== this){
-        if(owner.totalResource() !== 0){
-          targetplayer.push(owner)
-        }
-      }
-    }
-    for(let owner of board.thief.cityOwner){
-      if(owner !== this){
-        if(owner.totalResource() !== 0){
-          targetplayer.push(owner)
-        }
-      }
-    }
-    if(targetplayer.length !== 0){
-      game.phase = 'robresource'
-    }else if(this.dice === 1){
-      game.phase = 'beforedice'
-      display.diceBlack()
     }else{
-      game.phase = 'afterdice'
-      display.diceBlack()
+      recordLog()
+      game.lastActionPlayer = this
+      display.deleteThief()
+      board.thief = board.island[position[0]][position[1]]
+      display.thief()
+      let targetplayer =[]
+      for(let owner of board.thief.houseOwner){
+        if(owner !== this){
+          if(owner.totalResource() !== 0){
+            targetplayer.push(owner)
+          }
+        }
+      }
+      for(let owner of board.thief.cityOwner){
+        if(owner !== this){
+          if(owner.totalResource() !== 0){
+            targetplayer.push(owner)
+          }
+        }
+      }
+      if(targetplayer.length !== 0){
+        game.phase = 'robresource'
+      }else if(this.dice === 1){
+        game.phase = 'beforedice'
+        display.diceBlack()
+      }else{
+        game.phase = 'afterdice'
+        display.diceBlack()
+      }
     }
-    display.showMyButtonArea(game.turnPlayer.socketID)
   };
   robResource(position){
     let target = board.nodeCondition(position).owner
     if(target === this){
       display.hideReceivingArea()
-      return
-    }
-    if(target.totalResource() === 0){
+    }else if(target.totalResource() === 0){
       display.hideReceivingArea()
-      return
-    }
-    let random = Math.floor(Math.random()*target.totalResource())
-    let arr =[]
-    for(let key in target.resource){
-      let i = 1
-      while(i <= target.resource[key]){
-        arr.push(key)
-        i += 1
-      }
-    }
-    let rob = arr[random]
-    this.resource[rob] += 1
-    target.resource[rob] -= 1
-    display.allPlayerInformation()
-    if(this.dice === 1){
-      game.phase = 'beforedice'
     }else{
-      game.phase = 'afterdice'
+      let random = Math.floor(Math.random()*target.totalResource())
+      let arr =[]
+      for(let key in target.resource){
+        let i = 1
+        while(i <= target.resource[key]){
+          arr.push(key)
+          i += 1
+        }
+      }
+      let rob = arr[random]
+      this.resource[rob] += 1
+      target.resource[rob] -= 1
+      display.allPlayerInformation()
+      if(this.dice === 1){
+        game.phase = 'beforedice'
+      }else{
+        game.phase = 'afterdice'
+      }
+      display.diceBlack()
+      display.showMyButtonArea(game.turnPlayer.socketID)
+      recordLog()
+      game.lastActionPlayer = this
     }
-    display.diceBlack()
-    display.showMyButtonArea(game.turnPlayer.socketID)
-    recordLog()
-    game.lastActionPlayer = this
-    display.hideReceivingArea()
+    
   };
   monopoly(resource){
     if(game.phase !== 'monopoly'){
       display.hideReceivingArea()
-      return
-    }
-    if(this.progress.monopoly - this.thisTurnDraw.monopoly <= 0){
+    }else if(this.progress.monopoly - this.thisTurnDraw.monopoly <= 0){
       display.hideReceivingArea()
-      return
-    }
-    if(this.progressUse >= 1){
+    }else if(this.progressUse >= 1){
       display.hideReceivingArea()
-      return
-    }
-    this.progressUse += 1
-    this.progress.monopoly -= 1
-    this.used.monopoly += 1
-    for(let player of game.players){
-      if(player !== this){
-        this.resource[resource] += player.resource[resource]
-        player.resource[resource] = 0
+    }else{
+      this.progressUse += 1
+      this.progress.monopoly -= 1
+      this.used.monopoly += 1
+      for(let player of game.players){
+        if(player !== this){
+          this.resource[resource] += player.resource[resource]
+          player.resource[resource] = 0
+        }
       }
+      game.phase = 'afterdice'
+      recordLog()
+      game.lastActionPlayer = this
+      display.hideMyMonopolyArea(this.socketID)
+      display.allPlayerInformation()
     }
-    game.phase = 'afterdice'
-    recordLog()
-    game.lastActionPlayer = this
-    display.hideMyMonopolyArea(this.socketID)
-    display.allPlayerInformation()
-    display.hideReceivingArea()
   };
   harvest(resource){
     if(game.phase !== 'harvest1' && game.phase !== 'harvest2'){
       display.hideReceivingArea()
-      return
-    }
-    if(game.phase === 'harvest1'){
+    }else if(game.phase === 'harvest1'){
       if(this.progress.harvest - this.thisTurnDraw.harvest <= 0){
         display.hideReceivingArea()
-        return
       }
       if(this.progressUse >= 1){
         display.hideReceivingArea()
-        return
       }
       recordLog()
       game.lastActionPlayer = this
@@ -592,34 +571,29 @@ class Player{
       this.resource[resource] += 1
       game.phase = 'afterdice'
       display.hideMyHarvestArea(this.socketID)
+    }else{
+      display.allPlayerInformation()
     }
-    display.allPlayerInformation()
-    display.hideReceivingArea()
   }
   roadBuild(){
     if(game.phase !== 'afterdice'){
       display.hideReceivingArea()
-      return
-    }
-    if(this.progress.roadbuild - this.thisTurnDraw.roadbuild <= 0){
+    }else if(this.progress.roadbuild - this.thisTurnDraw.roadbuild <= 0){
       display.hideReceivingArea()
-      return
-    }
-    if(this.progressUse >= 1){
+    }else if(this.progressUse >= 1){
       display.hideReceivingArea()
-      return
+    }else{
+      recordLog()
+      game.lastActionPlayer = this
+      this.progressUse += 1
+      this.progress.roadbuild -= 1
+      this.used.roadbuild += 1
+      if(this.token.road >= 1){
+        game.phase = 'roadbuild1'
+      }
+      display.allPlayerInformation()
+      display.toggleMyButtons(game.turnPlayer.socketID)
     }
-    recordLog()
-    game.lastActionPlayer = this
-    this.progressUse += 1
-    this.progress.roadbuild -= 1
-    this.used.roadbuild += 1
-    if(this.token.road >= 1){
-      game.phase = 'roadbuild1'
-    }
-    display.allPlayerInformation()
-    display.toggleMyButtons(game.turnPlayer.socketID)
-    display.hideReceivingArea()
   }
   turnEnd(){
     recordLog()
@@ -628,30 +602,27 @@ class Player{
     this.dice = 1
     this.thisTurnDraw = {knight:0, roadbuild:0, harvest:0, monopoly:0, point:0}
     game.turnEnd()
-    display.hideReceivingArea()
   }
   trash(resource){
     if(this.resource[resource] < 1){
       display.hideReceivingArea()
-      return
-    }
-    if(this.toTrash >= 1){
+    }else if(this.toTrash >= 1){
       this.resource[resource] -= 1
-      this.toTrash -= 1 
-    }
-    if(this.toTrash === 0){
-      discard(this, game.burstPlayer)
-      if(game.burstPlayer.length === 0){
-        game.phase = 'thiefmove'
-        display.hideBurstArea()
+      this.toTrash -= 1
+      if(this.toTrash === 0){
+        discard(this, game.burstPlayer)
+        if(game.burstPlayer.length === 0){
+          game.phase = 'thiefmove'
+          display.hideBurstArea()
+        }else{
+          display.showBurstArea()
+        }
       }else{
         display.showBurstArea()
       }
-    }else{
-      display.showBurstArea()
+      display.allPlayerInformation()
     }
-    display.allPlayerInformation()
-    display.hideReceivingArea()
+    
   }
   myLongest(){
     //道に接した点を一つ選択
@@ -809,26 +780,26 @@ class Player{
       if(this.resource[resource] < data.exportresource[resource]){
         display.hideReceivingArea()
         return
-      }
-      if(data.exportresource[resource] % this.tradeRate[resource] !== 0){
+      }else if(data.exportresource[resource] % this.tradeRate[resource] !== 0){
         display.hideReceivingArea()
         return
+      }else{
+        ex += data.exportresource[resource] / this.tradeRate[resource]
       }
-      ex += data.exportresource[resource] / this.tradeRate[resource]
-      im += data.importresource[resource]
     }
     if(ex !== im){
       display.hideReceivingArea()
-      return
+    }else{
+      for(let resource in data.exportresource){
+        this.resource[resource] -= data.exportresource[resource]
+        this.resource[resource] += data.importresource[resource]
+      }
+      game.phase = 'afterdice'
+      display.hideMyTradeArea(data.socketID)
+      display.allPlayerInformation()
+      display.hideReceivingArea()
     }
-    for(let resource in data.exportresource){
-      this.resource[resource] -= data.exportresource[resource]
-      this.resource[resource] += data.importresource[resource]
-    }
-    game.phase = 'afterdice'
-    display.hideMyTradeArea(data.socketID)
-    display.allPlayerInformation()
-    display.hideReceivingArea()
+    
   }
   accepted(){
     let data = game.proposedata
@@ -836,8 +807,7 @@ class Player{
       if(data.proposer.resource[resource] < data.giveresource[resource]){
         display.hideReceivingArea()
         return
-      }
-      if(data.proposee.resource[resource] < data.takeresource[resource]){
+      }else if(data.proposee.resource[resource] < data.takeresource[resource]){
         display.hideReceivingArea()
         return
       }
@@ -855,7 +825,6 @@ class Player{
     display.showMyButtonArea(game.turnPlayer.socketID)
     recordLog()
     game.lastActionPlayer = this
-    display.hideReceivingArea()
   };
   denied(){
     game.phase = 'afterdice'
@@ -863,7 +832,6 @@ class Player{
     display.allPlayerInformation()
     display.hideProposeArea()
     display.showMyButtonArea(game.turnPlayer.socketID)
-    display.hideReceivingArea()
   }
   totalResource(){
     return this.resource.ore + this.resource.wool + this.resource.grain + this.resource.lumber + this.resource.brick
@@ -908,7 +876,6 @@ class Player{
       game.renounce.push(this)
     }
     display.renounce()
-    display.hideReceivingArea()
   }
 }
 
