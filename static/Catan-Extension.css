@@ -113,6 +113,16 @@
                     justify-content: center;
                     align-items: center;
                 }
+                .titlesquare{
+                    display: flex;
+                    margin:0 0.5%;
+                    border: 1px solid black; 
+                    border-radius: 1px;
+                    width: 20px;
+                    height: 20px;
+                    justify-content: center;
+                    align-items: center;
+                }
                 .progresscard{
                     display: flex;
                     margin:0 1px;

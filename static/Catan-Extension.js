@@ -99,17 +99,38 @@ socket.on('allProgress', (data)=>{
 socket.on('allUsed', (data)=>{
     display.allUsed(data)
 });
+
+
+
+socket.on('resourceof', (data)=>{
+    display.resourceOf(data)
+});
+socket.on('tokenof', (data)=>{
+    display.tokenOf(data)
+});
+socket.on('titleof', (data)=>{
+    display.titleOf(data)
+});
+socket.on('progressof', (data)=>{
+    display.progressOf(data)
+});
+socket.on('usedof', (data)=>{
+    display.usedOf(data)
+});
+
+
+
 socket.on('buildings', (buildings)=>{
     display.buildings(buildings)
 });
-socket.on('houses', (houses)=>{
-    display.houses(houses)
+socket.on('addhouse', (houseobj)=>{
+    display.addHouse(houseobj)
 });
-socket.on('cities', (cities)=>{
-    display.cities(cities)
+socket.on('addcity', (cityobj)=>{
+    display.addCity(cityobj)
 });
-socket.on('roads', (roads)=>{
-    display.roads(roads)
+socket.on('addroad', (roadobj)=>{
+    display.addRoad(roadobj)
 });
 socket.on('thief', (buttonnumber)=>{
     display.thief(buttonnumber)
@@ -541,30 +562,63 @@ const display = {
         };
         $(`#receiving_area`).hide();
     },
+    resourceOf(data){
+        $(`#receiving_area`).show();
+        $(`#player${data.number}resource`).html('')
+        if(data.socketID === socket.id){
+            for(r in data.resource){
+                let i = 1
+                while(i <= data.resource[r]){
+                    $(`#player${data.number}resource`).append(`<p class="resourcecard ${String(r)}">${translate(String(r))}</p>`);
+                    i += 1
+                };
+            };
+        }else{
+            let numberOfResources = data.resource.ore + data.resource.grain + data.resource.wool + data.resource.lumber + data.resource.brick
+            $(`#player${data.number}resource`).append(`資源:${numberOfResources}枚`);
+        }
+        $(`#receiving_area`).hide();
+    },
     allToken(game){
         $(`#receiving_area`).show();
         for(let p of game.players){
             $(`#player${p.number}token`).html(`家:${p.token.house} 街:${p.token.city} 道:${p.token.road}`)
         };
+        $(`#receiving_area`).hide();
+    },
+    tokenOf(data){
+        $(`#receiving_area`).show();
+        $(`#player${data.number}token`).html(`家:${data.token.house} 街:${data.token.city} 道:${data.token.road}`)
+        $(`#receiving_area`).hide();
     },
     allTitle(game){
         $(`#receiving_area`).show();
         for(let p of game.players){
             $(`#player${p.number}title`).html(``)
             if(p.largestArmy === 2){
-                $(`#player${p.number}title`).append(`<p class="titlesquare">大</p>`)
+                $(`#player${p.number}title`).append(`<div class="titlesquare">大</div>`)
             }
             if(p.longestRoad === 2){
-                $(`#player${p.number}title`).append(`<p class="titlesquare">長</p>`)
+                $(`#player${p.number}title`).append(`<div class="titlesquare">長</div>`)
             }
         };
+        $(`#receiving_area`).hide();
+    },
+    titleOf(data){
+        $(`#receiving_area`).show();
+        $(`#player${data.number}title`).html(``)
+        if(data.largestArmy === 2){
+            $(`#player${data.number}title`).append(`<div class="titlesquare">大</div>`)
+        }
+        if(data.longestRoad === 2){
+            $(`#player${data.number}title`).append(`<div class="titlesquare">長</div>`)
+        }
         $(`#receiving_area`).hide();
     },
     allProgress(game){
         $(`#receiving_area`).show();
         for(let p of game.players){
             $(`#player${p.number}progress`).html(``)
-            let numberOfProgress = p.progress.knight + p.progress.road + p.progress.harvest + p.progress.monopoly + p.progress.point
             if(p.socketID === socket.id){
                 for(pr in p.progress){
                     let i = 1
@@ -585,6 +639,28 @@ const display = {
         };
         $(`#receiving_area`).hide();
     },
+    progressOf(data){
+        $(`#receiving_area`).show();
+        $(`#player${data.number}progress`).html(``)
+        if(data.socketID === socket.id){
+            for(pr in data.progress){
+                let i = 1
+                while(i <= data.progress[pr]){
+                    $(`#player${data.number}progress`).append(`<p class="progresscard ${String(pr)}card">${translate(String(pr))}</p>`);
+                    i += 1
+                };
+            };
+        }else{
+            for(pr in data.progress){
+                let i = 1
+                while(i <= data.progress[pr]){
+                    $(`#player${data.number}progress`).append(`<p class="progresscard back">背</p>`);
+                    i += 1
+                };
+            };
+        }
+        $(`#receiving_area`).hide();
+    },
     allUsed(game){
         $(`#receiving_area`).show();
         for(let p of game.players){
@@ -595,6 +671,18 @@ const display = {
                     $(`#player${p.number}used`).append(`<p class="usedcard ${String(u)}card">${translate(String(u))}</p>`);
                     i += 1
                 };
+            };
+        };
+        $(`#receiving_area`).hide();
+    },
+    usedOf(data){
+        $(`#receiving_area`).show();
+        $(`#player${data.number}used`).html(``)
+        for(u in data.used){
+            let i = 1
+            while(i <= data.used[u]){
+                $(`#player${data.number}used`).append(`<p class="usedcard ${String(u)}card">${translate(String(u))}</p>`);
+                i += 1
             };
         };
         $(`#receiving_area`).hide();
@@ -615,28 +703,19 @@ const display = {
         }
         $(`#receiving_area`).hide()
     },
-    houses(houses){
+    addHouse(houseobj){
         $(`#receiving_area`).show()
-        for(let house of houses){
-            $(`#nodetouch${house.nodeNumber}`).html(``)
-            $(`#nodetouch${house.nodeNumber}`).append(`<img id="house${house.nodeNumber}" class="house" src="./house${house.owner.number+1}.png">`)
-        }
+        $(`#nodetouch${houseobj.nodeNumber}`).html(`<img id="house${houseobj.nodeNumber}" class="house" src="./house${houseobj.ownerNumber+1}.png">`)
         $(`#receiving_area`).hide()
     },
-    roads(roads){
+    addCity(cityobj){
         $(`#receiving_area`).show()
-        for(let road of roads){
-            $(`#road${road.roadNumber}`).html(``)
-            $(`#road${road.roadNumber}`).append(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./road_${road.roadDegree}${road.owner.number+1}.png">`)
-        }
+        $(`#nodetouch${cityobj.nodeNumber}`).html(`<img id="city${cityobj.nodeNumber}" class="city" src="./city${cityobj.ownerNumber+1}.png">`)
         $(`#receiving_area`).hide()
     },
-    cities(cities){
+    addRoad(roadobj){
         $(`#receiving_area`).show()
-        for(let city of cities){
-            $(`#nodetouch${city.nodeNumber}`).html(``)
-            $(`#nodetouch${city.nodeNumber}`).append(`<img id="city${city.nodeNumber}" class="city" src="./city${city.owner.number+1}.png">`)
-        }
+        $(`#road${roadobj.roadNumber}`).html(`<img id="roadtoken${roadobj.roadNumber}" class="roadtoken" src="./road_${roadobj.roadDegree}${roadobj.ownerNumber+1}.png">`)
         $(`#receiving_area`).hide()
     },
     thief(buttonnumber){

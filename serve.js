@@ -213,8 +213,9 @@ class Player{
           this.constructPort(position)
           board.longestCheck()
           game.pointReload()
-          display.allPlayerInformation()
-          display.houses()
+          display.tokenOf(this)
+          display.resourceOf(this)
+          display.addHouse({nodeNumber: board.nodePositionToNumber(position), ownerNumber:this.number})
         }
       }else if(game.phase === 'afterdice'|| game.phase === 'building'){
         //既に家がないか確認
@@ -253,8 +254,8 @@ class Player{
           this.constructPort(position)
           board.longestCheck()
           game.pointReload()
-          display.allPlayerInformation()
-          display.houses()
+          display.tokenOf(this)
+          display.addHouse({nodeNumber: board.nodePositionToNumber(position), ownerNumber:this.number})
         }
       }else{
         display.hideReceivingArea()
@@ -294,8 +295,8 @@ class Player{
           discard(house, board.house)
           board.longestCheck()
           game.pointReload()
-          display.allPlayerInformation()
-          display.cities()
+          display.tokenOf(this)
+          display.addCity({nodeNumber: board.nodePositionToNumber(position), ownerNumber:this.number})
         }
       }else{
         display.hideReceivingArea()
@@ -318,8 +319,8 @@ class Player{
           board.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), owner:this})
           board.longestCheck()
           game.pointReload()
-          display.allPlayerInformation()
-          display.roads()
+          display.tokenOf(this)
+          display.addRoad({roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), ownerNumber:this.number})
           game.turnEndSetup()
         }
       }else if(game.phase === 'afterdice'|| game.phase === 'building'){
@@ -348,8 +349,8 @@ class Player{
           this.useResource(item)
           board.longestCheck()
           game.pointReload()
-          display.allPlayerInformation()
-          display.roads()
+          display.tokenOf(this)
+          display.addRoad({roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), ownerNumber:this.number})
         }
       }else if(game.phase === 'roadbuild1'){
         //既に道がないか確認
@@ -373,8 +374,8 @@ class Player{
           board.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), owner:this})
           board.longestCheck()
           game.pointReload()
-          display.allPlayerInformation()
-          display.roads()
+          display.tokenOf(this)
+          display.addRoad({roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), ownerNumber:this.number})
           if(this.token.road >= 1){
             game.phase = 'roadbuild2'
           }else{
@@ -404,8 +405,8 @@ class Player{
           board.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), owner:this})
           board.longestCheck()
           game.pointReload()
-          display.allPlayerInformation()
-          display.roads()
+          display.tokenOf(this)
+          display.addRoad({roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), ownerNumber:this.number})
           game.phase = 'afterdice'
           display.toggleMyButtons(game.turnPlayer.socketID)
         }
@@ -428,7 +429,7 @@ class Player{
         this.thisTurnDraw[game.progressDeck[0]] += 1
         game.progressDeck.splice(0, 1)
         game.pointReload()
-        display.allPlayerInformation()
+        display.progressOf(this)
         recordLog()
         game.lastActionPlayer = this
       }
@@ -452,7 +453,8 @@ class Player{
       this.used.knight += 1
       this.largestArmyCheck()
       game.pointReload()
-      display.allPlayerInformation()
+      display.progressOf(this)
+      display.usedOf(this)
       display.toggleMyButtons(game.turnPlayer.socketID)
     }
     
@@ -515,7 +517,8 @@ class Player{
       let rob = arr[random]
       this.resource[rob] += 1
       target.resource[rob] -= 1
-      display.allPlayerInformation()
+      display.resourceOf(this)
+      display.resourceOf(target)
       if(this.dice === 1){
         game.phase = 'beforedice'
       }else{
@@ -549,7 +552,11 @@ class Player{
       recordLog()
       game.lastActionPlayer = this
       display.hideMyMonopolyArea(this.socketID)
-      display.allPlayerInformation()
+      for(let player of game.players){
+        display.resourceOf(player)
+      }
+      display.progressOf(this)
+      display.usedOf(this)
     }
   };
   harvest(resource){
@@ -558,23 +565,27 @@ class Player{
     }else if(game.phase === 'harvest1'){
       if(this.progress.harvest - this.thisTurnDraw.harvest <= 0){
         display.hideReceivingArea()
-      }
-      if(this.progressUse >= 1){
+      }else if(this.progressUse >= 1){
         display.hideReceivingArea()
+      }else{
+        recordLog()
+        game.lastActionPlayer = this
+        this.progressUse += 1
+        this.progress.harvest -= 1
+        this.used.harvest += 1
+        this.resource[resource] += 1
+        game.phase = 'harvest2'
       }
-      recordLog()
-      game.lastActionPlayer = this
-      this.progressUse += 1
-      this.progress.harvest -= 1
-      this.used.harvest += 1
-      this.resource[resource] += 1
-      game.phase = 'harvest2'
+      display.resourceOf(this)
+      display.progressOf(this)
+      display.usedOf(this)
     }else if(game.phase === 'harvest2'){
       this.resource[resource] += 1
       game.phase = 'afterdice'
       display.hideMyHarvestArea(this.socketID)
+      display.resourceOf(this)
     }else{
-      display.allPlayerInformation()
+      display.hideReceivingArea()
     }
   }
   roadBuild(){
@@ -593,7 +604,8 @@ class Player{
       if(this.token.road >= 1){
         game.phase = 'roadbuild1'
       }
-      display.allPlayerInformation()
+      display.progressOf(this)
+      display.usedOf(this)
       display.toggleMyButtons(game.turnPlayer.socketID)
     }
   }
@@ -615,6 +627,7 @@ class Player{
         discard(this, game.burstPlayer)
         if(game.burstPlayer.length === 0){
           game.phase = 'thiefmove'
+          recordLog()
           display.hideBurstArea()
         }else{
           display.showBurstArea()
@@ -622,7 +635,7 @@ class Player{
       }else{
         display.showBurstArea()
       }
-      display.allPlayerInformation()
+      display.resourceOf(this)
     }
     
   }
@@ -761,6 +774,7 @@ class Player{
     for(let resource in buildResource[item]){
       this.resource[resource] -= buildResource[item][resource]
     }
+    display.resourceOf(this)
   };
   //最大騎士力チェック
   largestArmyCheck(){
@@ -768,10 +782,13 @@ class Player{
       if(game.largestArmyPlayer === ''){
         game.largestArmyPlayer = this
         this.largestArmy = 2
+        display.titleOf(this)
       }else if(this.used.knight > game.largestArmyPlayer.used.knight){
         game.largestArmyPlayer.largestArmy = 0
+        display.titleOf(game.largestArmyPlayer)
         this.largestArmy = 2
         game.largestArmyPlayer = this
+        display.titleOf(this)
       }
     }
   };
@@ -788,6 +805,7 @@ class Player{
         return
       }else{
         ex += data.exportresource[resource] / this.tradeRate[resource]
+        im += data.importresource[resource]
       }
     }
     if(ex !== im){
@@ -799,10 +817,9 @@ class Player{
       }
       game.phase = 'afterdice'
       display.hideMyTradeArea(data.socketID)
-      display.allPlayerInformation()
+      display.resourceOf(this)
       display.hideReceivingArea()
     }
-    
   }
   accepted(){
     let data = game.proposedata
@@ -822,8 +839,9 @@ class Player{
       data.proposee.resource[resource] -= data.takeresource[resource]
       data.proposer.resource[resource] += data.takeresource[resource]
     }
+    display.resourceOf(this)
+    display.resourceOf(game.proposedata.proposee)
     game.proposedata = {proposer:'', proposee:'', giveresource:'', takeresource:''}
-    display.allPlayerInformation()
     display.hideProposeArea()
     display.showMyButtonArea(game.turnPlayer.socketID)
     recordLog()
@@ -832,7 +850,6 @@ class Player{
   denied(){
     game.phase = 'afterdice'
     game.proposedata = {proposer:'', proposee:'', giveresource:'', takeresource:''}
-    display.allPlayerInformation()
     display.hideProposeArea()
     display.showMyButtonArea(game.turnPlayer.socketID)
   }
@@ -1235,7 +1252,9 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
       }
     }
    }
-   display.allPlayerInformation()
+   for(let player of game.players){
+    display.resourceOf(player)
+   }
    display.hideReceivingArea()
   },
   //nodeの周りのroad座標
@@ -1338,6 +1357,7 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
     else false
   },
   longestCheck(){
+    let currentLongestPlayer = game.longestRoadPlayer
     let longestPlayer = []
     for(let player of game.players){
       player.longestLength = player.myLongest()
@@ -1361,6 +1381,13 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
       player.longestRoad = 0
     }
     game.longestRoadPlayer.longestRoad = 2
+    if(game.longestRoadPlayer !== currentLongestPlayer){
+      display.titleOf(currentLongestPlayer)
+    }
+    if(game.longestRoadPlayer){
+      display.titleOf(game.longestRoadPlayer)
+    }
+
   },
   ableDirectionOfOcean(oceanobject){
     let x = oceanobject.position[0]
@@ -1806,6 +1833,30 @@ const display = {
     let data = {players:game.players}
     io.to(socketID).emit('allUsed', data)
   },
+  resourceOf(player){
+    let resource = player.resource
+    let data = {number:player.number, resource:resource, socketID:player.socketID}
+    io.emit('resourceof', data)
+  },
+  tokenOf(player){
+    let token = player.token
+    let data = {number:player.number, token:token}
+    io.emit('tokenof', data)
+  },
+  titleOf(player){
+    let data = {number:player.number, largestArmy:player.largestArmy,longestRoad:player.longestRoad}
+    io.emit('titleof', data)
+  },
+  progressOf(player){
+    let progress = player.progress
+    let data = {number:player.number, progress:progress, socketID:player.socketID}
+    io.emit('progressof', data)
+  },
+  usedOf(player){
+    let used = player.used
+    let data = {number:player.number, used:used}
+    io.emit('usedof', data)
+  },
   allPlayerInformation(){
     this.allResource()
     this.allToken()
@@ -1828,29 +1879,14 @@ const display = {
     let buildings = {house:game.board.house,city:game.board.city,road:game.board.road}
     io.to(socketID).emit('buildings',buildings)
   },
-  houses(){
-    let houses = game.board.house
-    io.emit('houses',houses)
+  addHouse(houseobj){
+    io.emit('addhouse',houseobj)
   },
-  housesTo(socketID){
-    let houses = game.board.house
-    io.to(socketID).emit('houses',houses)
+  addCity(cityobj){
+    io.emit('addcity',cityobj)
   },
-  cities(){
-    let cities = game.board.city
-    io.emit('cities',cities)
-  },
-  citiesTo(socketID){
-    let cities = game.board.city
-    io.to(socketID).emit('cities',cities)
-  },
-  roads(){
-    let roads = game.board.road
-    io.emit('roads',roads)
-  },
-  roadsTo(socketID){
-    let roads = game.board.road
-    io.to(socketID).emit('roads',roads)
+  addRoad(roadobj){
+    io.emit('addroad',roadobj)
   },
   thief(){
     let buttonnumber = board.tileButtonPositionToNumber(board.thief.position)
@@ -2500,7 +2536,7 @@ io.on("connection", (socket)=>{
     socket.on('monopolybutton',(data)=>{
       if(data.socketID !== game.turnPlayer.socketID){
         display.hideReceivingArea()
-      }else if(game.phase === 'afterdice' && game.turnPlayer.progressUse === 0 && game.turnPlayer.progress.monopoly >= 1){
+      }else if(game.phase === 'afterdice' && game.turnPlayer.progressUse === 0 && game.turnPlayer.progress.monopoly - game.turnPlayer.thisTurnDraw.monopoly >= 1){
         game.phase = 'monopoly'
         display.showMyMonopolyArea(game.turnPlayer.socketID)
         display.hideReceivingArea()
@@ -2540,7 +2576,7 @@ io.on("connection", (socket)=>{
     socket.on('harvestbutton',(data)=>{
       if(data.socketID !== game.turnPlayer.socketID){
         display.hideReceivingArea()
-      }else if(game.phase === 'afterdice' && game.turnPlayer.progressUse === 0 && game.turnPlayer.progress.harvest >= 1){
+      }else if(game.phase === 'afterdice' && game.turnPlayer.progressUse === 0 && game.turnPlayer.progress.harvest - game.turnPlayer.thisTurnDraw.harvest >= 1){
         game.phase = 'harvest1'
         display.showMyHarvestArea(game.turnPlayer.socketID)
         display.hideReceivingArea()
