@@ -212,9 +212,18 @@
                     align-items: center;
                 }
                 #burst_message{
+                    display: flex;
+                    justify-content: center;
                     text-align: center;
+                    height: 60%;
                 }
-                
+                #you_are_bursting{
+                    margin-top: auto;
+                    margin-bottom: auto;
+                }
+                #trash_area{
+                    height: 40%
+                }
                 .lumber{
                     background-color: rgb(62, 187, 62);
                 }
@@ -358,6 +367,11 @@
         position:relative;
         justify-content: center;
         width: 100%;
+        aspect-ratio: 7 / 6.9282;
+    }
+    #board{
+        position: relative;
+        width:100%;
         aspect-ratio: 7 / 6.9282;
     }
             #receiving{

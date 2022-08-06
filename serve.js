@@ -186,7 +186,9 @@ class Player{
       //初期配置
       if(game.phase === 'setup' && this.house.length === this.road.length){
         //既に家がないか,周りに家がないか確認
+        display.log('190')
         if(board.nodeCondition(position) !== 'blank'){
+          display.log('190')
           display.hideReceivingArea()
           return
         }//問題なければ建設
@@ -262,6 +264,7 @@ class Player{
         display.allPlayerInformation()
         display.buildings()
       }
+      display.hideReceivingArea()
     }else if(item === 'city'){
       if(game.phase === 'afterdice'|| game.phase === 'building'){
         //自分の家があるか確認
@@ -302,6 +305,7 @@ class Player{
         display.allPlayerInformation()
         display.buildings()
       }
+      display.hideReceivingArea()
     }else if(item === 'road'){
       if(game.phase === 'setup' && this.house.length === this.road.length+1){
         //既に道がないか確認
@@ -413,6 +417,7 @@ class Player{
         game.phase = 'afterdice'
         display.toggleMyButtons(game.turnPlayer.socketID)
       }
+      display.hideReceivingArea()
     }
     display.hideReceivingArea()
   };
