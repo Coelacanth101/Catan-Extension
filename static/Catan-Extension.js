@@ -162,8 +162,8 @@ socket.on('hideField', (e)=>{
 socket.on('showField', (e)=>{
     display.showField()
 });
-socket.on('gameresult', (game)=>{
-    display.gameResult(game)
+socket.on('gameresult', (data)=>{
+    display.gameResult(data)
 })
 socket.on('showgameendarea', ()=>{
     display.showGameEndArea()
@@ -353,6 +353,7 @@ $(`#trade_area`).on('click','#tradedecide',function(){
     const importbrick = Number($(`#importbrick`).val())
     const importresource = {ore:importore,grain:importgrain,wool:importwool,lumber:importlumber,brick:importbrick}
     const data = {socketID:socket.id, exportresource:exportresource, importresource:importresource}
+    console.log(data)
     socket.emit('tradedecide', data)
 });
 //貿易やめるボタンをクリック

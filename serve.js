@@ -778,6 +778,7 @@ class Player{
   trade(data){
     let ex = 0
     let im = 0
+    display.log(data)
     for(let resource in data.exportresource){
       if(this.resource[resource] < data.exportresource[resource]){
         display.hideReceivingArea()
@@ -1972,8 +1973,8 @@ const display = {
     io.to(socketID).emit('showField', e)
   },
   gameResult(){
-    let game = {players:game.players, turnPlayer:game.turnPlayer}
-    io.emit('gameresult', game)
+    let data = {players:game.players, turnPlayer:game.turnPlayer}
+    io.emit('gameresult', data)
     this.showGameEndArea()
   },
   showGameEndArea(){
