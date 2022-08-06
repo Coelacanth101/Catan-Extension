@@ -28,6 +28,7 @@ socket.on("nameInput", (namedata)=>{
 
 //スタートボタンクリック発信
 $('#gamestartbutton').on('click', function(){
+    $(`#receiving_area`).show()
     let ore = Number($(`#oretileamount`).val())
     let grain = Number($(`#ricetileamount`).val())
     let wool = Number($(`#wooltileamount`).val())

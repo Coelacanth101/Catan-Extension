@@ -182,11 +182,11 @@ class Player{
     this.renounce = this.log.renounce
   }
   build(item, position){
+    display.log('190')
     if(item === 'house'){
       //初期配置
       if(game.phase === 'setup' && this.house.length === this.road.length){
         //既に家がないか,周りに家がないか確認
-        display.log('190')
         if(board.nodeCondition(position) !== 'blank'){
           display.hideReceivingArea()
           return
@@ -2383,6 +2383,7 @@ io.on("connection", (socket)=>{
       display.thief()
       display.allPlayerInformation()
     };
+    display.hideReceivingArea()
   });
     //nodeをクリック
     socket.on('nodeclick',(data)=>{
@@ -2455,9 +2456,11 @@ io.on("connection", (socket)=>{
       }else if(game.phase === 'afterdice' && game.turnPlayer.progressUse === 0 && game.turnPlayer.progress.monopoly >= 1){
         game.phase = 'monopoly'
         display.showMyMonopolyArea(game.turnPlayer.socketID)
+        display.hideReceivingArea()
       }else if(game.phase === 'monopoly'){
         game.phase = 'afterdice'
         display.hideMyMonopolyArea(game.turnPlayer.socketID)
+        display.hideReceivingArea()
       }else{
         display.hideReceivingArea()
       }
@@ -2470,6 +2473,7 @@ io.on("connection", (socket)=>{
       }else if(game.phase === 'monopoly'){
         game.phase = 'afterdice'
         display.hideMyMonopolyArea(data.socketID)
+        display.hideReceivingArea()
       }else{
         display.hideReceivingArea()
       }
@@ -2492,9 +2496,11 @@ io.on("connection", (socket)=>{
       }else if(game.phase === 'afterdice' && game.turnPlayer.progressUse === 0 && game.turnPlayer.progress.harvest >= 1){
         game.phase = 'harvest1'
         display.showMyHarvestArea(game.turnPlayer.socketID)
+        display.hideReceivingArea()
       }else if(game.phase === 'harvest1'){
         game.phase = 'afterdice'
         display.hideMyHarvestArea(game.turnPlayer.socketID)
+        display.hideReceivingArea()
       }else{
         display.hideReceivingArea()
       }
@@ -2506,6 +2512,7 @@ io.on("connection", (socket)=>{
       }else if(game.phase === 'harvest1'){
         game.phase = 'afterdice'
         display.hideMyHarvestArea(data.socketID)
+        display.hideReceivingArea()
       }else{
         display.hideReceivingArea()
       }
@@ -2560,9 +2567,11 @@ io.on("connection", (socket)=>{
       }else if(game.phase === 'afterdice'){
         game.phase = 'trade'
         display.showMyTradeArea(game.turnPlayer.socketID)
+        display.hideReceivingArea()
       }else if(game.phase === 'trade'){
         game.phase = 'afterdice'
         display.hideMyTradeArea(game.turnPlayer.socketID)
+        display.hideReceivingArea()
       }else{
         display.hideReceivingArea()
       }
@@ -2581,9 +2590,11 @@ io.on("connection", (socket)=>{
     socket.on('quittrade',(data)=>{
       if(data.socketID !== game.turnPlayer.socketID){
         display.hideReceivingArea()
+        display.hideReceivingArea()
       }else if(game.phase === 'trade'){
         game.phase = 'afterdice'
         display.hideMyTradeArea(data.socketID)
+        display.hideReceivingArea()
       }else{
         display.hideReceivingArea()
       }
@@ -2595,9 +2606,11 @@ io.on("connection", (socket)=>{
       }else if(game.phase === 'afterdice'){
         game.phase = 'negotiate'
         display.showMyNegotiateArea(game.turnPlayer.socketID)
+        display.hideReceivingArea()
       }else if(game.phase === 'negotiate'){
         game.phase = 'afterdice'
         display.hideMyNegotiateArea(game.turnPlayer.socketID)
+        display.hideReceivingArea()
       }else{
         display.hideReceivingArea()
       }
@@ -2611,6 +2624,7 @@ io.on("connection", (socket)=>{
         game.proposedata = {proposer:game.turnPlayer, proposee:game.players[data.counterpartnumber], giveresource:data.giveresource, takeresource:data.takeresource}
         display.hideMyNegotiateArea(game.proposedata.proposer.socketID)
         display.showProposeArea()
+        display.hideReceivingArea()
       }else{
         display.hideReceivingArea()
       }
@@ -2622,6 +2636,7 @@ io.on("connection", (socket)=>{
       }else if(game.phase === 'negotiate'){
         game.phase = 'afterdice'
         display.hideMyNegotiateArea(data.socketID)
+        display.hideReceivingArea()
       }else{
         display.hideReceivingArea()
       }
@@ -2685,6 +2700,7 @@ io.on("connection", (socket)=>{
         unDo()
         display.allMighty()
       }else{
+        display.hideReceivingArea()
         display.hideReceivingArea()
       }
     })
