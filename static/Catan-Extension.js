@@ -81,27 +81,35 @@ socket.on('island', (island)=>{
 
 
 
-socket.on('hideItems', (game)=>{
-    display.hideItems(game)
+socket.on('hideItems', (data)=>{
+    display.hideItems(data)
 });
-
-socket.on('allResource', (game)=>{
-    display.allResource(game)
+socket.on('allResource', (data)=>{
+    display.allResource(data)
 });
-socket.on('allToken', (game)=>{
-    display.allToken(game)
+socket.on('allToken', (data)=>{
+    display.allToken(data)
 });
-socket.on('allTitle', (game)=>{
-    display.allTitle(game)
+socket.on('allTitle', (data)=>{
+    display.allTitle(data)
 });
-socket.on('allProgress', (game)=>{
-    display.allProgress(game)
+socket.on('allProgress', (data)=>{
+    display.allProgress(data)
 });
-socket.on('allUsed', (game)=>{
-    display.allUsed(game)
+socket.on('allUsed', (data)=>{
+    display.allUsed(data)
 });
-socket.on('buildings', (game)=>{
-    display.buildings(game)
+socket.on('buildings', (buildings)=>{
+    display.buildings(buildings)
+});
+socket.on('houses', (houses)=>{
+    display.houses(houses)
+});
+socket.on('cities', (cities)=>{
+    display.cities(cities)
+});
+socket.on('roads', (roads)=>{
+    display.roads(roads)
 });
 socket.on('thief', (buttonnumber)=>{
     display.thief(buttonnumber)
@@ -511,7 +519,7 @@ const display = {
                 }
             }
         }
-        //$(`#receiving_area`).hide()
+        $(`#receiving_area`).hide()
     },
     allResource(game){
         $(`#receiving_area`).show();
@@ -590,21 +598,45 @@ const display = {
         };
         $(`#receiving_area`).hide();
     },
-    buildings(game){
+    buildings(buildings){
         $(`#receiving_area`).show()
-        for(house of game.board.house){
+        for(let house of buildings.house){
             $(`#nodetouch${house.nodeNumber}`).html(``)
             $(`#nodetouch${house.nodeNumber}`).append(`<img id="house${house.nodeNumber}" class="house" src="./house${house.owner.number+1}.png">`)
         }
-        for(road of game.board.road){
+        for(let road of buildings.road){
             $(`#road${road.roadNumber}`).html(``)
             $(`#road${road.roadNumber}`).append(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./road_${road.roadDegree}${road.owner.number+1}.png">`)
         }
-        for(city of game.board.city){
+        for(let city of buildings.city){
             $(`#nodetouch${city.nodeNumber}`).html(``)
             $(`#nodetouch${city.nodeNumber}`).append(`<img id="city${city.nodeNumber}" class="city" src="./city${city.owner.number+1}.png">`)
         }
-        //$(`#receiving_area`).hide()
+        $(`#receiving_area`).hide()
+    },
+    houses(houses){
+        $(`#receiving_area`).show()
+        for(let house of houses){
+            $(`#nodetouch${house.nodeNumber}`).html(``)
+            $(`#nodetouch${house.nodeNumber}`).append(`<img id="house${house.nodeNumber}" class="house" src="./house${house.owner.number+1}.png">`)
+        }
+        $(`#receiving_area`).hide()
+    },
+    roads(roads){
+        $(`#receiving_area`).show()
+        for(let road of roads){
+            $(`#road${road.roadNumber}`).html(``)
+            $(`#road${road.roadNumber}`).append(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./road_${road.roadDegree}${road.owner.number+1}.png">`)
+        }
+        $(`#receiving_area`).hide()
+    },
+    cities(cities){
+        $(`#receiving_area`).show()
+        for(let city of cities){
+            $(`#nodetouch${city.nodeNumber}`).html(``)
+            $(`#nodetouch${city.nodeNumber}`).append(`<img id="city${city.nodeNumber}" class="city" src="./city${city.owner.number+1}.png">`)
+        }
+        $(`#receiving_area`).hide()
     },
     thief(buttonnumber){
         $(`#receiving_area`).show();

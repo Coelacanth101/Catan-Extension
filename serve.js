@@ -214,7 +214,7 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.allPlayerInformation()
-          display.buildings()
+          display.houses()
         }
       }else if(game.phase === 'afterdice'|| game.phase === 'building'){
         //既に家がないか確認
@@ -254,7 +254,7 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.allPlayerInformation()
-          display.buildings()
+          display.houses()
         }
       }else{
         display.hideReceivingArea()
@@ -295,7 +295,7 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.allPlayerInformation()
-          display.buildings()
+          display.cities()
         }
       }else{
         display.hideReceivingArea()
@@ -319,7 +319,7 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.allPlayerInformation()
-          display.buildings()
+          display.roads()
           game.turnEndSetup()
         }
       }else if(game.phase === 'afterdice'|| game.phase === 'building'){
@@ -349,7 +349,7 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.allPlayerInformation()
-          display.buildings()
+          display.roads()
         }
       }else if(game.phase === 'roadbuild1'){
         //既に道がないか確認
@@ -374,7 +374,7 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.allPlayerInformation()
-          display.buildings()
+          display.roads()
           if(this.token.road >= 1){
             game.phase = 'roadbuild2'
           }else{
@@ -405,7 +405,7 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.allPlayerInformation()
-          display.buildings()
+          display.roads()
           game.phase = 'afterdice'
           display.toggleMyButtons(game.turnPlayer.socketID)
         }
@@ -488,9 +488,11 @@ class Player{
       }else if(this.dice === 1){
         game.phase = 'beforedice'
         display.diceBlack()
+        display.showMyButtonArea(this.socketID)
       }else{
         game.phase = 'afterdice'
         display.diceBlack()
+        display.showMyButtonArea(this.socketID)
       }
     }
   };
@@ -1748,7 +1750,8 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputti
 
 const display = {
   hideItems(){
-    io.emit('hideItems', game);
+    let data = {maxPlayer:game.maxPlayer, players:game.players}
+    io.emit('hideItems', data);
   },
   island(){
     const island = board.island
@@ -1759,37 +1762,48 @@ const display = {
     io.to(socketID).emit('island', island)
   },
   hideMyItems(socketID){
-    io.to(socketID).emit('hideItems', game)
+    let data = {maxPlayer:game.maxPlayer, players:game.players}
+    io.to(socketID).emit('hideItems', data)
   },
   allResource(){
-    io.emit('allResource', game);
+    let data = {players:game.players}
+    io.emit('allResource', data);
   },
   allResourceTo(socketID){
-    io.to(socketID).emit('allResource', game);
+    let data = {players:game.players}
+    io.to(socketID).emit('allResource', data);
   },
   allToken(){
-    io.emit('allToken',game)
+    let data = {players:game.players}
+    io.emit('allToken', data)
   },
   allTokenTo(socketID){
-    io.to(socketID).emit('allToken',game)
+    let data = {players:game.players}
+    io.to(socketID).emit('allToken', data)
   },
   allTitle(){
-    io.emit('allTitle',game)
+    let data = {players:game.players}
+    io.emit('allTitle', data)
   },
   allTitleTo(socketID){
-    io.to(socketID).emit('allTitle',game)
+    let data = {players:game.players}
+    io.to(socketID).emit('allTitle', data)
   },
   allProgress(){
-    io.emit('allProgress',game)
+    let data = {players:game.players}
+    io.emit('allProgress', data)
   },
   allProgressTo(socketID){
-    io.to(socketID).emit('allProgress',game)
+    let data = {players:game.players}
+    io.to(socketID).emit('allProgress', data)
   },
   allUsed(){
-    io.emit('allUsed',game)
+    let data = {players:game.players}
+    io.emit('allUsed', data)
   },
   allUsedTo(socketID){
-    io.to(socketID).emit('allUsed',game)
+    let data = {players:game.players}
+    io.to(socketID).emit('allUsed', data)
   },
   allPlayerInformation(){
     this.allResource()
@@ -1806,10 +1820,36 @@ const display = {
     this.allUsedTo(socketID)
   },
   buildings(){
-    io.emit('buildings',game)
+    let buildings = {house:game.board.house,city:game.board.city,road:game.board.road}
+    io.emit('buildings',buildings)
   },
   buildingsTo(socketID){
-    io.to(socketID).emit('buildings',game)
+    let buildings = {house:game.board.house,city:game.board.city,road:game.board.road}
+    io.to(socketID).emit('buildings',buildings)
+  },
+  houses(){
+    let houses = game.board.house
+    io.emit('houses',houses)
+  },
+  housesTo(socketID){
+    let houses = game.board.house
+    io.to(socketID).emit('houses',houses)
+  },
+  cities(){
+    let cities = game.board.city
+    io.emit('cities',cities)
+  },
+  citiesTo(socketID){
+    let cities = game.board.city
+    io.to(socketID).emit('cities',cities)
+  },
+  roads(){
+    let roads = game.board.road
+    io.emit('roads',roads)
+  },
+  roadsTo(socketID){
+    let roads = game.board.road
+    io.to(socketID).emit('roads',roads)
   },
   thief(){
     let buttonnumber = board.tileButtonPositionToNumber(board.thief.position)
@@ -1932,6 +1972,7 @@ const display = {
     io.to(socketID).emit('showField', e)
   },
   gameResult(){
+    let game = {players:game.players, turnPlayer:game.turnPlayer}
     io.emit('gameresult', game)
     this.showGameEndArea()
   },
