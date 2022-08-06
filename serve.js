@@ -1784,6 +1784,10 @@ const display = {
     const island = board.island
     io.emit('island', island)
   },
+  islandTo(socketID){
+    const island = board.island
+    io.to(socketID).emit('island', island)
+  },
   hideMyItems(socketID){
     io.to(socketID).emit('hideItems', game)
   },
@@ -1834,9 +1838,16 @@ const display = {
   buildings(){
     io.emit('buildings',game)
   },
+  buildingsTo(socketID){
+    io.to(socketID).emit('buildings',game)
+  },
   thief(){
     let buttonnumber = board.tileButtonPositionToNumber(board.thief.position)
     io.emit('thief', buttonnumber)
+  },
+  thiefTo(socketID){
+    let buttonnumber = board.tileButtonPositionToNumber(board.thief.position)
+    io.to(socketID).emit('thief', buttonnumber)
   },
   deleteThief(){
     io.emit('deletethief', '')
@@ -1990,6 +2001,12 @@ const display = {
     let data = {tn:tn,phase:phase}
     io.emit('turnplayer', data)
   },
+  turnPlayerTo(){
+    let tn = game.turnPlayer.number
+    let phase = game.phase
+    let data = {tn:tn,phase:phase}
+    io.to(socketID).emit('turnplayer', data)
+  },
   playerSort(){
     let players = game.players
     io.emit('playersort', players)
@@ -2042,8 +2059,20 @@ const display = {
       display.diceBlack()
     }
   },
+  diceTo(socketID){
+    let dice = board.dice
+    if(dice.length){
+      io.to(socketID).emit('dice', dice);
+    }
+    if(game.phase !== 'thiefmove' && game.phase !== 'burst' && game.phase !== 'robresource'){
+      display.diceBlack()
+    }
+  },
   diceBlack(){
     io.emit('diceblack','')
+  },
+  diceBlackTo(socketID){
+    io.to(socketID).emit('diceblack','')
   },
   hidemessageArea(){
     io.emit('hidemessagearea', );
@@ -2112,41 +2141,39 @@ const display = {
   },
   allMightyTo(socketID){
     if(game.phase === 'nameinputting'){
-      display.showMyNameInputArea(socketID,playersName)
-      display.hideMyField(socketID)
-      display.hideMyMonopolyArea(socketID)
-      display.hideMyHarvestArea(socketID)
-      display.hideMyBurstArea(socketID)
-      display.hideMyTradeArea(socketID)
-      display.hideMyNegotiateArea(socketID)
-      display.hideMyProposeArea(socketID)
-      display.hideMyGameEndArea(socketID)
-      display.cleanUpMyBoard(socketID)
-      display.deleteMyThief(socketID)
+      display.showMyNameInputArea(socketID,playersName);
+      display.hideMyField(socketID);
+      display.hideMyMonopolyArea(socketID);
+      display.hideMyHarvestArea(socketID);
+      display.hideMyBurstArea(socketID);
+      display.hideMyTradeArea(socketID);
+      display.hideMyNegotiateArea(socketID);
+      display.hideMyProposeArea(socketID);
+      display.hideMyGameEndArea(socketID);
+      display.cleanUpMyBoard(socketID);
+      display.deleteMyThief(socketID);
     }else{
-      display.showMyField(socketID)
-      ////////
-      display.toggleMyButtons(socketID)
-      display.hideMyMonopolyArea(socketID)
-      display.hideMyHarvestArea(socketID)
-      display.hideMyBurstArea(socketID)
-      display.hideMyTradeArea(socketID)
-      display.hideMyNegotiateArea(socketID)
-      display.hideMyProposeArea(socketID)
-      display.hideMyGameEndArea(socketID)
+      display.showMyField(socketID);
+      display.toggleMyButtons(socketID);
+      display.hideMyMonopolyArea(socketID);
+      display.hideMyHarvestArea(socketID);
+      display.hideMyBurstArea(socketID);
+      display.hideMyTradeArea(socketID);
+      display.hideMyNegotiateArea(socketID);
+      display.hideMyProposeArea(socketID);
+      display.hideMyGameEndArea(socketID);
       display.myPlayerSort(socketID);
       display.hideMyItems(socketID);
-      display.turnPlayer();
-      display.cleanUpMyBoard(socketID)
-      display.island()
-      display.dice()
-      display.deleteMyThief(socketID)
-      display.thief()
-      display.buildings()
-      display.allPlayerInformationTo(socketID)
-      display.renounce()
-      display.reloadRate(socketID)
-      display.showMyButtonArea(socketID)
+      display.turnPlayerTo(socketID);
+      display.cleanUpMyBoard(socketID);
+      display.diceTo(socketID);
+      display.deleteMyThief(socketID);
+      display.thiefTo(socketID);
+      display.buildingsTo(socketID);
+      display.allPlayerInformationTo(socketID);
+      display.renounceTo(socketID);
+      display.reloadRate(socketID);
+      display.showMyButtonArea(socketID);
       if(socketID === game.turnPlayer.socketID && game.phase === 'monopoly'){
         display.showMyMonopolyArea(socketID)
       }
@@ -2171,6 +2198,8 @@ const display = {
       if(game.phase === 'end'){
         display.showMyGameEndArea(socketID)
       }
+      display.islandTo(socketID)
+      display.hideReceivingAreaTo(socketID)
     }
   },
   allMighty(){
@@ -2202,7 +2231,6 @@ const display = {
       display.turnPlayer();
       display.cleanUpBoard()
       display.resetRate()
-      display.island()
       display.dice()
       display.deleteThief()
       display.thief()
@@ -2232,7 +2260,8 @@ const display = {
         display.showGameEndArea()
       }
     }
-    display.hideReceivingAreaTo(socketID)
+    display.island()
+    display.hideReceivingArea()
   },
   initialize(){
     this.showNameInputArea(playersName)
@@ -2253,6 +2282,10 @@ const display = {
   renounce(){
     let renounce = game.renounce
     io.emit('renounce', renounce)
+  },
+  renounceTo(){
+    let renounce = game.renounce
+    io.to(socketID).emit('renounce', renounce)
   },
   hideReceivingArea(){
     io.emit('hidereceivingarea', '')
