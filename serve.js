@@ -182,7 +182,6 @@ class Player{
     this.renounce = this.log.renounce
   }
   build(item, position){
-    display.log('190')
     if(item === 'house'){
       //初期配置
       if(game.phase === 'setup' && this.house.length === this.road.length){
@@ -414,8 +413,10 @@ class Player{
         game.phase = 'afterdice'
         display.toggleMyButtons(game.turnPlayer.socketID)
       }
+    }else{
+      display.hideReceivingArea()
     }
-    display.hideReceivingArea()
+    
   };
   draw(){
     if(game.phase === 'afterdice'|| game.phase === 'building'){
@@ -2410,11 +2411,13 @@ io.on("connection", (socket)=>{
       game.gameStart()
       board.islandData = data
       board.makeIsland(data)
+      display.buildings()
       display.island()
       display.thief()
       display.allPlayerInformation()
-    };
-    display.hideReceivingArea()
+    }else{
+      display.hideReceivingArea()
+    }
   });
     //nodeをクリック
     socket.on('nodeclick',(data)=>{
