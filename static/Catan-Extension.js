@@ -35,6 +35,7 @@ $('#gamestartbutton').on('click', function(){
     let brick = Number($(`#bricktileamount`).val())
     let tileamounts
     if(ore === 0 && grain === 0 && wool === 0 && lumber === 0 && brick === 0){
+        /////
         tileamounts = {ore:5,grain:6,wool:6,lumber:6,brick:5}
     }else{
         tileamounts = {ore:ore,grain:grain,wool:wool,lumber:lumber,brick:brick}
@@ -43,6 +44,7 @@ $('#gamestartbutton').on('click', function(){
     for(resource in tileamounts){
         total += tileamounts[resource]
     }
+    /////
     if(total > 28){
         return
     }
@@ -212,95 +214,115 @@ socket.on('hidebutton',(string)=>{
 socket.on('renounce',(renounce)=>{
     display.renounce(renounce)
 })
+socket.on(`receive`,()=>{
+    $(`#receiving_area`).hide()
+})
 
 //nodeをクリック
 $(`#board_area`).on('click','.nodetouch',function(){
+    $(`#receiving_area`).show()
     let nodeNumber = Number($(this).attr('id').slice(9))
     const data = {nodeNumber:nodeNumber, socketID:socket.id}
     socket.emit('nodeclick', data)
 });
 //roadをクリック
 $(`#board_area`).on('click','.road',function(){
+    $(`#receiving_area`).show()
     let roadNumber = Number($(this).attr('id').slice(4))
     const data = {roadNumber:roadNumber, socketID:socket.id}
     socket.emit('roadclick', data)
 });
 //ダイスボタンをクリック
 $(`#button_area`).on('click','#dice_button',function(){
+    $(`#receiving_area`).show()
     const data = {socketID:socket.id}
     socket.emit('diceclick', data)
 });
 //ドローボタンをクリック
 $(`#button_area`).on('click','#draw_button',function(){
+    $(`#receiving_area`).show()
     const data = {socketID:socket.id}
     socket.emit('drawclick', data)
 });
 //騎士ボタンをクリック
 $(`#button_area`).on('click','#knight_button',function(){
+    $(`#receiving_area`).show()
     const data = {socketID:socket.id}
     socket.emit('knightclick', data)
 });
 //タイルボタンをクリック
 $(`#board_area`).on('click','.tile_button',function(){
+    $(`#receiving_area`).show()
     let tileButtonNumber = Number($(this).attr('id').slice(11))
     const data = {tileButtonNumber:tileButtonNumber, socketID:socket.id}
     socket.emit('thiefmove', data)
 });
 //独占ボタンをクリック
 $(`#button_area`).on('click','#monopoly_button',function(){
+    $(`#receiving_area`).show()
     const data = {socketID:socket.id}
     socket.emit('monopolybutton', data)
 });
 //独占やめるボタンをクリック
 $(`#monopoly_area`).on('click','.quitprogressbutton',function(){
+    $(`#receiving_area`).show()
     const data = {socketID:socket.id}
     socket.emit('quitmonopoly', data)
 });
 //独占資源ボタンをクリック
 $(`#monopoly_area`).on(`click`, `.resource_button`, function(){
+    $(`#receiving_area`).show()
     let resource = $(this).attr('id').slice(9)
     const data = {resource:resource, socketID:socket.id}
     socket.emit('monopoly', data)
 })
 //収穫ボタンをクリック
 $(`#button_area`).on('click','#harvest_button',function(){
+    $(`#receiving_area`).show()
     const data = {socketID:socket.id}
     socket.emit('harvestbutton', data)
 });
 //収穫やめるボタンをクリック
 $(`#harvest_area`).on('click','.quitprogressbutton',function(){
+    $(`#receiving_area`).show()
     const data = {socketID:socket.id}
     socket.emit('quitharvest', data)
 });
 //収穫資源ボタンをクリック
 $(`#harvest_area`).on(`click`, `.resource_button`, function(){
+    $(`#receiving_area`).show()
     let resource = $(this).attr('id').slice(8)
     const data = {resource:resource, socketID:socket.id}
     socket.emit('harvest', data)
 })
 //街道建設ボタンをクリック
 $(`#button_area`).on('click','#roadbuild_button',function(){
+    $(`#receiving_area`).show()
     const data = {socketID:socket.id}
     socket.emit('roadbuildclick', data)
 });
 //終了ボタンをクリック
 $(`#button_area`).on('click','#end_button',function(){
+    $(`#receiving_area`).show()
     const data = {socketID:socket.id}
     socket.emit('endbuttonclick', data)
 });
 //バースト資源ボタンをクリック
 $(`#burst_area`).on(`click`, `.resource_button`, function(){
+    $(`#receiving_area`).show()
     let resource = $(this).attr('id').slice(6)
     const data = {resource:resource, socketID:socket.id}
     socket.emit('burst', data)
 })
 //貿易ボタンをクリック
 $(`#button_area`).on('click','#trade_button',function(){
+    $(`#receiving_area`).show()
     const data = {socketID:socket.id}
     socket.emit('tradebuttonclick', data)
 });
 //貿易決定ボタンをクリック
 $(`#trade_area`).on('click','#tradedecide',function(){
+    $(`#receiving_area`).show()
     const exportore = Number($(`#exportore`).val())
     const exportgrain = Number($(`#exportgrain`).val())
     const exportwool = Number($(`#exportwool`).val())
@@ -318,16 +340,19 @@ $(`#trade_area`).on('click','#tradedecide',function(){
 });
 //貿易やめるボタンをクリック
 $(`#trade_area`).on('click','#quittradebutton',function(){
+    $(`#receiving_area`).show()
     const data = {socketID:socket.id}
     socket.emit('quittrade', data)
 });
 //交渉ボタンをクリック
 $(`#button_area`).on('click','#negotiate_button',function(){
+    $(`#receiving_area`).show()
     const data = {socketID:socket.id}
     socket.emit('negotiatebuttonclick', data)
 });
 //交渉相手ボタンをクリック
 $(`#counterpart`).on('click','.propose_button',function(){
+    $(`#receiving_area`).show()
     const counterpartnumber = Number($(this).attr(`id`).slice(2))
     const giveore = Number($(`#giveore`).val())
     const givegrain = Number($(`#givegrain`).val())
@@ -358,16 +383,19 @@ $(`#counterpart`).on('click','.propose_button',function(){
 });
 //交渉やめるボタンをクリック
 $(`#negotiate_area`).on('click','#quitnegotiatebutton',function(){
+    $(`#receiving_area`).show()
     const data = {socketID:socket.id}
     socket.emit('quitnegotiate', data)
 });
 //同意ボタンをクリック
 $(`#acceptordeny`).on('click','#accept',function(){
+    $(`#receiving_area`).show()
     const data = {socketID:socket.id}
     socket.emit('accept', data)
 });
 //断るボタンをクリック
 $(`#acceptordeny`).on('click','#deny',function(){
+    $(`#receiving_area`).show()
     const data = {socketID:socket.id}
     socket.emit('deny', data)
 });
@@ -377,23 +405,27 @@ $(`#acceptordeny`).on('click','#deny',function(){
 
 //街道ボタンをクリック
 $(`#button_area`).on('click','#road_button',function(){
+    $(`#receiving_area`).show()
     const data = {socketID:socket.id}
     socket.emit('roadbuttonclick', data)
 });
 //収穫ボタンをクリック
 $(`#button_area`).on('click','#harvest_button',function(){
+    $(`#receiving_area`).show()
     const data = {socketID:socket.id}
     socket.emit('harvestclick', data)
 });
 
 //継承,建築フェイズ放棄
 $('#players').on('click', '.playermark', function(){
+    $(`#receiving_area`).show()
     let n = Number($(this).parent().parent().parent().data('number'))
     let player ={number:n, socketID:socket.id}
     socket.emit('takeover', player)
 });
 //戻す
 $(`#dice_area`).on('click',function(){
+    $(`#receiving_area`).show()
     let socketID = socket.id
     socket.emit('undo',socketID)
 })
@@ -404,6 +436,7 @@ $(`#dice_area`).on('click',function(){
 
 //もう一度遊ぶ
 $('#newgamebutton').on('click',function(){
+    $(`#receiving_area`).show()
     let e =''
     socket.emit('newgamebuttonclick', e)
 });

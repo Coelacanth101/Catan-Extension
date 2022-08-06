@@ -16,6 +16,15 @@
             background-color: rgb(131, 221, 131);
             z-index: 1;
         }
+        #receiving_area{
+            width: 25%;
+            height: 10%;
+            position: absolute;
+            right: 0px;
+            bottom: 0px;
+            display: none;
+        }
+
         .player0color{
             background-color: rgb(236, 28, 36);
         }
@@ -353,6 +362,12 @@
                 margin-right: 0.5px;
                 margin-left: 0.5px;
             }
+            #receiving{
+                text-align: right;
+                vertical-align: bottom;
+                font-size: 5vw;
+                margin: 0%;
+            }
     #player_and_button_area{
         width: 100%;
         max-width: 400px;
@@ -455,6 +470,12 @@
                         font-size: 8vh;
                         margin-right: 0.5px;
                         margin-left: 0.5px;
+                    }
+                    #receiving{
+                        text-align: right;
+                        vertical-align: bottom;
+                        font-size: 3vw;
+                        margin: 0%;
                     }
             #player_and_button_area{
                 width: 400px;

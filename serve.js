@@ -116,7 +116,6 @@ class Player{
   renounce:false}
   };
   recordLog(){
-    game.lastActionPlayer = this
     for(let resource in this.resource){
       this.log.resource[resource] = this.resource[resource]
       this.log.tradeRate[resource] = this.tradeRate[resource]
@@ -150,7 +149,6 @@ class Player{
     this.log.renounce = this.renounce
   };
   unDo(){
-    game.lastActionPlayer = this
     for(let resource in this.log.resource){
       this.resource[resource] = this.log.resource[resource]
       this.tradeRate[resource] = this.log.tradeRate[resource]
@@ -197,6 +195,7 @@ class Player{
         }//問題なければ建設
         else{
           recordLog()
+          game.lastActionPlayer = this
           this.token.house -= 1
           this.house.push({position:position, nodeNumber: board.nodePositionToNumber(position)})
           board.house.push({type:'house', position:position, nodeNumber: board.nodePositionToNumber(position), owner:this})
@@ -245,6 +244,7 @@ class Player{
         }
         //問題なければ建設
         recordLog()
+        game.lastActionPlayer = this
         this.token.house -= 1
         this.house.push({position:position, nodeNumber: board.nodePositionToNumber(position)})
         board.house.push({type:'house', position:position, nodeNumber: board.nodePositionToNumber(position), owner:this})
@@ -277,6 +277,7 @@ class Player{
         }
         //問題なければ建設
         recordLog()
+        game.lastActionPlayer = this
         this.token.city -= 1
         this.token.house += 1
         this.city.push({position:position, nodeNumber: board.nodePositionToNumber(position)})
@@ -309,6 +310,7 @@ class Player{
         }
         //問題なければ建設
         recordLog()
+        game.lastActionPlayer = this
         this.token.road -= 1
         this.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position)})
         board.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), owner:this})
@@ -336,6 +338,7 @@ class Player{
         }
         //問題なければ建設
         recordLog()
+        game.lastActionPlayer = this
         this.token.road -= 1
         this.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position)})
         board.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), owner:this})
@@ -360,6 +363,7 @@ class Player{
         }
         //問題なければ建設
         recordLog()
+        game.lastActionPlayer = this
         this.token.road -= 1
         this.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position)})
         board.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), owner:this})
@@ -390,6 +394,7 @@ class Player{
         }
         //問題なければ建設
         recordLog()
+        game.lastActionPlayer = this
         this.token.road -= 1
         this.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position)})
         board.road.push({position:position, roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), owner:this})
@@ -418,6 +423,7 @@ class Player{
       game.pointReload()
       display.allPlayerInformation()
       recordLog()
+      game.lastActionPlayer = this
     }
   };
   knightuse(){
@@ -431,6 +437,7 @@ class Player{
       return
     }
     recordLog()
+    game.lastActionPlayer = this
     game.phase = 'thiefmove'
     this.progressUse += 1
     this.progress.knight -= 1
@@ -448,6 +455,7 @@ class Player{
       return
     }
     recordLog()
+    game.lastActionPlayer = this
     display.deleteThief()
     board.thief = board.island[position[0]][position[1]]
     display.thief()
@@ -506,12 +514,13 @@ class Player{
     display.diceBlack()
     display.showMyButtonArea(game.turnPlayer.socketID)
     recordLog()
+    game.lastActionPlayer = this
   };
   monopoly(resource){
     if(game.phase !== 'monopoly'){
       return
     }
-    if(this.progress.monopoly - this.progress.monopoly <= 0){
+    if(this.progress.monopoly - this.thisTurnDraw.monopoly <= 0){
       return
     }
     if(this.progressUse >= 1){
@@ -528,6 +537,7 @@ class Player{
     }
     game.phase = 'afterdice'
     recordLog()
+    game.lastActionPlayer = this
     display.hideMyMonopolyArea(this.socketID)
     display.allPlayerInformation()
   };
@@ -536,13 +546,14 @@ class Player{
       return
     }
     if(game.phase === 'harvest1'){
-      if(this.progress.harvest - this.progress.harvest <= 0){
+      if(this.progress.harvest - this.thisTurnDraw.harvest <= 0){
         return
       }
       if(this.progressUse >= 1){
         return
       }
       recordLog()
+      game.lastActionPlayer = this
       this.progressUse += 1
       this.progress.harvest -= 1
       this.used.harvest += 1
@@ -559,13 +570,14 @@ class Player{
     if(game.phase !== 'afterdice'){
       return
     }
-    if(this.progress.roadbuild - this.progress.roadbuild <= 0){
+    if(this.progress.roadbuild - this.thisTurnDraw.roadbuild <= 0){
       return
     }
     if(this.progressUse >= 1){
       return
     }
     recordLog()
+    game.lastActionPlayer = this
     this.progressUse += 1
     this.progress.roadbuild -= 1
     this.used.roadbuild += 1
@@ -577,6 +589,7 @@ class Player{
   }
   turnEnd(){
     recordLog()
+    game.lastActionPlayer = this
     this.progressUse = 0
     this.dice = 1
     this.thisTurnDraw = {knight:0, roadbuild:0, harvest:0, monopoly:0, point:0}
@@ -798,6 +811,7 @@ class Player{
     display.hideProposeArea()
     display.showMyButtonArea(game.turnPlayer.socketID)
     recordLog()
+    game.lastActionPlayer = this
   };
   denied(){
     game.phase = 'afterdice'
@@ -1187,6 +1201,7 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
     }
     display.dice()
     recordLog()
+    game.lastActionPlayer = game.turnPlayer
     display.toggleMyButtons(game.turnPlayer.socketID)
   },
   //資源産出
@@ -2179,6 +2194,9 @@ const display = {
   renounce(){
     let renounce = game.renounce
     io.emit('renounce', renounce)
+  },
+  hideReceiving(){
+    io.emit('receive','')
   }
 }
 
@@ -2384,7 +2402,7 @@ io.on("connection", (socket)=>{
       if(data.socketID !== game.turnPlayer.socketID){
         return
       }else if(game.phase === 'monopoly'){
-        game.phase = 'aftedice'
+        game.phase = 'afterdice'
         display.hideMyMonopolyArea(data.socketID)
       }
     });
@@ -2414,7 +2432,7 @@ io.on("connection", (socket)=>{
       if(data.socketID !== game.turnPlayer.socketID){
         return
       }else if(game.phase === 'harvest1'){
-        game.phase = 'aftedice'
+        game.phase = 'afterdice'
         display.hideMyHarvestArea(data.socketID)
       }
     });
