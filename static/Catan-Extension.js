@@ -82,85 +82,112 @@ socket.on('island', (island)=>{
 
 socket.on('hideItems', (game)=>{
     display.hideItems(game)
+    $(`#receiving_area`).hide()
 });
 
 socket.on('allResource', (game)=>{
     display.allResource(game)
+    $(`#receiving_area`).hide()
 });
 socket.on('allToken', (game)=>{
     display.allToken(game)
+    $(`#receiving_area`).hide()
 });
 socket.on('allTitle', (game)=>{
     display.allTitle(game)
+    $(`#receiving_area`).hide()
 });
 socket.on('allProgress', (game)=>{
     display.allProgress(game)
+    $(`#receiving_area`).hide()
 });
 socket.on('allUsed', (game)=>{
     display.allUsed(game)
+    $(`#receiving_area`).hide()
 });
 socket.on('buildings', (game)=>{
     display.buildings(game)
+    $(`#receiving_area`).hide()
 });
 socket.on('thief', (buttonnumber)=>{
     display.thief(buttonnumber)
+    $(`#receiving_area`).hide()
 });
 socket.on('deletethief', ()=>{
     display.deleteThief()
+    $(`#receiving_area`).hide()
 });
 socket.on('hidemonopoly', (e)=>{
     display.hideMonopolyArea()
+    $(`#receiving_area`).hide()
 });
 socket.on('hideharvest', (e)=>{
     display.hideHarvestArea()
+    $(`#receiving_area`).hide()
 });
 socket.on('hideburst', (e)=>{
     display.hideBurstArea()
+    $(`#receiving_area`).hide()
 });
 socket.on('hidetrade', (e)=>{
     display.hideTradeArea()
+    $(`#receiving_area`).hide()
 });
 socket.on('hidenegotiate', (e)=>{
     display.hideNegotiateArea()
+    $(`#receiving_area`).hide()
 });
 socket.on('showmonopoly', (e)=>{
     display.showMonopolyArea()
+    $(`#receiving_area`).hide()
 });
 socket.on('showharvest', (e)=>{
     display.showHarvestArea()
+    $(`#receiving_area`).hide()
 });
 socket.on('showburst', (burstPlayer)=>{
     display.showBurstArea(burstPlayer)
+    $(`#receiving_area`).hide()
 });
 socket.on('showtrade', (e)=>{
     display.showTradeArea()
+    $(`#receiving_area`).hide()
 });
 socket.on('shownegotiate', (e)=>{
     display.showNegotiateArea()
+    $(`#receiving_area`).hide()
 });
 socket.on('showproposearea', (data)=>{
     display.showProposeArea(data)
+    $(`#receiving_area`).hide()
 });
 socket.on('hideproposearea', (e)=>{
     display.hideProposeArea()
+    $(`#receiving_area`).hide()
 });
 socket.on('hideplayers', (e)=>{
     display.hidePlayers()
+    $(`#receiving_area`).hide()
 })
 socket.on('hideField', (e)=>{
     display.hideField()
+    $(`#receiving_area`).hide()
 });
 socket.on('showField', (e)=>{
     display.showField()
+    $(`#receiving_area`).hide()
 });
 socket.on('gameresult', (game)=>{
     display.gameResult(game)
+    $(`#receiving_area`).hide()
 })
 socket.on('showgameendarea', ()=>{
     display.showGameEndArea()
+    $(`#receiving_area`).hide()
 })
 socket.on('hidegameendarea', ()=>{
     display.hideGameEndArea()
+    $(`#receiving_area`).hide()
 })
 socket.on('reloadrate', (data)=>{
     $(`#exportore`).attr(`step`, data.ore)
@@ -168,53 +195,76 @@ socket.on('reloadrate', (data)=>{
     $(`#exportwool`).attr(`step`, data.wool)
     $(`#exportlumber`).attr(`step`, data.lumber)
     $(`#exportbrick`).attr(`step`, data.brick)
+    $(`#receiving_area`).hide()
+}),
+socket.on('resetrate', ()=>{
+    $(`#exportore`).attr(`step`, 4)
+    $(`#exportgrain`).attr(`step`, 4)
+    $(`#exportwool`).attr(`step`, 4)
+    $(`#exportlumber`).attr(`step`, 4)
+    $(`#exportbrick`).attr(`step`, 4)
+    $(`#receiving_area`).hide()
 })
 socket.on('yesbuttonclick', (maxPlayer)=>{
     display.initialize(maxPlayer)
+    $(`#receiving_area`).hide()
 });
 socket.on('turnplayer', (data)=>{
     display.turnPlayer(data)
+    $(`#receiving_area`).hide()
 })
 socket.on('takeover', (player)=>{
     display.takeOver(player)
+    $(`#receiving_area`).hide()
 })
 socket.on('log', (a)=>{
     display.log(a)
 })
 socket.on('playersort', (players)=>{
     display.playerSort(players)
+    $(`#receiving_area`).hide()
 })
 socket.on('hidebuttonarea', (e)=>{
     display.hideButtonArea()
+    $(`#receiving_area`).hide()
 })
 socket.on('showbuttonarea', (e)=>{
     display.showButtonArea()
+    $(`#receiving_area`).hide()
 })
 socket.on('hideyesornobutton',()=>{
     display.hideYesOrNoButton()
+    $(`#receiving_area`).hide()
 })
 socket.on('cleanupboard',()=>{
     display.cleanUpBoard()
+    $(`#receiving_area`).hide()
 })
 socket.on('dice',(dice)=>{
     display.dice(dice)
+    $(`#receiving_area`).hide()
 })
 socket.on('diceblack',()=>{
     display.diceBlack()
+    $(`#receiving_area`).hide()
 })
 socket.on('hidemessagearea',()=>{
     display.hidemessageArea()
+    $(`#receiving_area`).hide()
 })
 socket.on('showbutton',(string)=>{
     display.showButton(string)
+    $(`#receiving_area`).hide()
 })
 socket.on('hidebutton',(string)=>{
     display.hideButton(string)
+    $(`#receiving_area`).hide()
 })
 socket.on('renounce',(renounce)=>{
     display.renounce(renounce)
+    $(`#receiving_area`).hide()
 })
-socket.on(`receive`,()=>{
+socket.on('hidereceivingarea',()=>{
     $(`#receiving_area`).hide()
 })
 
@@ -377,6 +427,7 @@ $(`#counterpart`).on('click','.propose_button',function(){
             take = true
         }
     }
+    $(`#receiving_area`).hide()
     if(give && take){
         socket.emit('propose', data)
     }
@@ -605,7 +656,7 @@ const display = {
         for(let player of burstPlayer){
             if(player.socketID === socket.id){
                 $(`#trash_area`).show()
-                $(`#burst_message`).append(`<p><b>あと${player.toTrash}枚捨ててください</b></p>`)
+                $(`#burst_message`).append(`<p><b>バーストしました<br>あと${player.toTrash}枚捨ててください</b></p>`)
                 return
             }
         }
@@ -864,17 +915,14 @@ const display = {
     },
     dice(dice){
         $(`#dice_area`).show()
-        $(`.dice`).css(`color`, ``)
-        $(`.dice`).css(`border-color`, ``)
-        $(`#dice_area`).html(`<div class="dice">${dice[0]}</div><div class="dice">${dice[1]}</div>`)
+        $(`#dice_area`).css(`background-color`, `rgb(131, 221, 131)`)
+        $(`#dice_area`).html(`<img class="dice" src="./dice${dice[0]}.png" alt="dice${dice[0]}"><img class="dice" src="./dice${dice[1]}.png" alt="dice${dice[1]}">`)
         if(dice[0]+dice[1] === 7){
-            $(`.dice`).css(`color`, `red`)
-            $(`.dice`).css(`border-color`, `red`)
+            $(`#dice_area`).css(`background-color`, `red`)
         }
     },
     diceBlack(){
-        $(`.dice`).css(`color`, ``)
-        $(`.dice`).css(`border-color`, ``)
+        $(`#dice_area`).css(`background-color`, `rgb(131, 221, 131)`)
     },
     hidemessageArea(){
         $(`#message_area`).hide()
@@ -893,7 +941,8 @@ const display = {
                 $(`#player${player.number}mark`).css(`color`,`white`)
             }
         }
-    }
+    },
+
 }
 
 

@@ -179,18 +179,15 @@ class Player{
     this.progressUse = this.log.progressUse
     this.dice = this.log.dice
     this.toTrash = this.log.toTrash
-
     this.renounce = this.log.renounce
   }
   build(item, position){
     if(item === 'house'){
       //初期配置
       if(game.phase === 'setup' && this.house.length === this.road.length){
-        //既に家がないか確認
-        if(board.nodeCheck(position) !== 'blank'){
-          return
-        }//周りに家がないか確認
-        else if(board.aroundNodesCheck(position) !== 'blank'){
+        //既に家がないか,周りに家がないか確認
+        if(board.nodeCondition(position) !== 'blank'){
+          display.hideReceivingArea()
           return
         }//問題なければ建設
         else{
@@ -224,22 +221,27 @@ class Player{
       if(game.phase === 'afterdice'|| game.phase === 'building'){
         //既に家がないか確認
         if(board.nodeCheck(position) !== 'blank'){
+          display.hideReceivingArea()
           return
         }
         //資源の確認
         if(!this.resourceCheck(item)){
+          display.hideReceivingArea()
           return
         }
         //周りに家がないか確認
         if(board.aroundNodesCheck(position) !== 'blank'){
+          display.hideReceivingArea()
           return
         }
         //道がつながっているか確認
         if(!this.IhaveRoadAroundNode(position)){
+          display.hideReceivingArea()
           return
         }
         //手元に家があるか確認
         if(this.token[item] === 0){
+          display.hideReceivingArea()
           return
         }
         //問題なければ建設
@@ -260,19 +262,21 @@ class Player{
         display.allPlayerInformation()
         display.buildings()
       }
-    }
-    if(item === 'city'){
+    }else if(item === 'city'){
       if(game.phase === 'afterdice'|| game.phase === 'building'){
         //自分の家があるか確認
         if(board.nodeCondition(position).type !== 'house' || board.nodeCondition(position).owner !== this){
+          display.hideReceivingArea()
           return
         }
         //資源の確認
         if(!this.resourceCheck(item)){
+          display.hideReceivingArea()
           return
         }
         //手元に都市があるか確認
         if(this.token[item] === 0){
+          display.hideReceivingArea()
           return
         }
         //問題なければ建設
@@ -298,14 +302,15 @@ class Player{
         display.allPlayerInformation()
         display.buildings()
       }
-    }
-    if(item === 'road'){
+    }else if(item === 'road'){
       if(game.phase === 'setup' && this.house.length === this.road.length+1){
         //既に道がないか確認
         if(board.roadCheck(position) !== 'blank'){
+          display.hideReceivingArea()
           return
         }//どちらかの端に今建てた家があるか確認
         else if(!this.justNowHouse(position)){
+          display.hideReceivingArea()
           return
         }
         //問題なければ建設
@@ -319,21 +324,24 @@ class Player{
         display.allPlayerInformation()
         display.buildings()
         game.turnEndSetup()
-      }
-      if(game.phase === 'afterdice'|| game.phase === 'building'){
+      }else if(game.phase === 'afterdice'|| game.phase === 'building'){
         //既に道がないか確認
         if(board.roadCheck(position) !== 'blank'){
+          display.hideReceivingArea()
           return
         }
         //周りに自分の道があるか確認
         if(!this.IhaveRoadAroundRoad(position)){
+          display.hideReceivingArea()
           return
         }
         //資源の確認
         if(!this.resourceCheck(item)){
+          display.hideReceivingArea()
           return
         }//手元に道があるか確認
         if(this.token[item] === 0){
+          display.hideReceivingArea()
           return
         }
         //問題なければ建設
@@ -347,18 +355,20 @@ class Player{
         game.pointReload()
         display.allPlayerInformation()
         display.buildings()
-      }
-      if(game.phase === 'roadbuild1'){
+      }else if(game.phase === 'roadbuild1'){
         //既に道がないか確認
         if(board.roadCheck(position) !== 'blank'){
+          display.hideReceivingArea()
           return
         }
         //周りに自分の道があるか確認
         if(!this.IhaveRoadAroundRoad(position)){
+          display.hideReceivingArea()
           return
         }
         //手元に道があるか確認
         if(this.token[item] === 0){
+          display.hideReceivingArea()
           return
         }
         //問題なければ建設
@@ -377,9 +387,7 @@ class Player{
           game.phase = 'afterdice'
         }
         display.toggleMyButtons(game.turnPlayer.socketID)
-        return
-      }
-      if(game.phase === 'roadbuild2'){
+      }else if(game.phase === 'roadbuild2'){
         //既に道がないか確認
         if(board.roadCheck(position) !== 'blank'){
           return
@@ -404,16 +412,18 @@ class Player{
         display.buildings()
         game.phase = 'afterdice'
         display.toggleMyButtons(game.turnPlayer.socketID)
-        return
       }
     }
+    display.hideReceivingArea()
   };
   draw(){
     if(game.phase === 'afterdice'|| game.phase === 'building'){
       if(game.progressDeck.length === 0){
+        display.hideReceivingArea()
         return
       }
       if(!this.resourceCheck('progress')){
+        display.hideReceivingArea()
         return
       }
       this.useResource('progress')
@@ -425,15 +435,19 @@ class Player{
       recordLog()
       game.lastActionPlayer = this
     }
+    display.hideReceivingArea()
   };
   knightuse(){
     if(game.phase !== 'beforedice' && game.phase !== 'afterdice'){
+      display.hideReceivingArea()
       return
     }
     if(this.progress.knight - this.thisTurnDraw.knight <= 0){
+      display.hideReceivingArea()
       return
     }
     if(this.progressUse >= 1){
+      display.hideReceivingArea()
       return
     }
     recordLog()
@@ -449,9 +463,11 @@ class Player{
   };
   thiefmove(position){
     if(game.phase !== 'thiefmove'){
+      display.hideReceivingArea()
       return
     }
     if(arrayComparison(position, board.thief.position)){
+      display.hideReceivingArea()
       return
     }
     recordLog()
@@ -488,9 +504,11 @@ class Player{
   robResource(position){
     let target = board.nodeCondition(position).owner
     if(target === this){
+      display.hideReceivingArea()
       return
     }
     if(target.totalResource() === 0){
+      display.hideReceivingArea()
       return
     }
     let random = Math.floor(Math.random()*target.totalResource())
@@ -518,12 +536,15 @@ class Player{
   };
   monopoly(resource){
     if(game.phase !== 'monopoly'){
+      display.hideReceivingArea()
       return
     }
     if(this.progress.monopoly - this.thisTurnDraw.monopoly <= 0){
+      display.hideReceivingArea()
       return
     }
     if(this.progressUse >= 1){
+      display.hideReceivingArea()
       return
     }
     this.progressUse += 1
@@ -543,13 +564,16 @@ class Player{
   };
   harvest(resource){
     if(game.phase !== 'harvest1' && game.phase !== 'harvest2'){
+      display.hideReceivingArea()
       return
     }
     if(game.phase === 'harvest1'){
       if(this.progress.harvest - this.thisTurnDraw.harvest <= 0){
+        display.hideReceivingArea()
         return
       }
       if(this.progressUse >= 1){
+        display.hideReceivingArea()
         return
       }
       recordLog()
@@ -568,12 +592,15 @@ class Player{
   }
   roadBuild(){
     if(game.phase !== 'afterdice'){
+      display.hideReceivingArea()
       return
     }
     if(this.progress.roadbuild - this.thisTurnDraw.roadbuild <= 0){
+      display.hideReceivingArea()
       return
     }
     if(this.progressUse >= 1){
+      display.hideReceivingArea()
       return
     }
     recordLog()
@@ -597,6 +624,7 @@ class Player{
   }
   trash(resource){
     if(this.resource[resource] < 1){
+      display.hideReceivingArea()
       return
     }
     if(this.toTrash >= 1){
@@ -770,15 +798,18 @@ class Player{
     let im = 0
     for(let resource in data.exportresource){
       if(this.resource[resource] < data.exportresource[resource]){
+        display.hideReceivingArea()
         return
       }
       if(data.exportresource[resource] % this.tradeRate[resource] !== 0){
+        display.hideReceivingArea()
         return
       }
       ex += data.exportresource[resource] / this.tradeRate[resource]
       im += data.importresource[resource]
     }
     if(ex !== im){
+      display.hideReceivingArea()
       return
     }
     for(let resource in data.exportresource){
@@ -791,15 +822,17 @@ class Player{
   }
   accepted(){
     let data = game.proposedata
-    game.phase = 'afterdice'
     for(let resource in data.giveresource){
       if(data.proposer.resource[resource] < data.giveresource[resource]){
+        display.hideReceivingArea()
         return
       }
       if(data.proposee.resource[resource] < data.takeresource[resource]){
+        display.hideReceivingArea()
         return
       }
-    }    
+    }
+    game.phase = 'afterdice'
     for(let resource in data.giveresource){
       data.proposer.resource[resource] -= data.giveresource[resource]
       data.proposee.resource[resource] += data.giveresource[resource]
@@ -849,7 +882,7 @@ class Player{
               }
             }
           }
-          io.to(this.socketID).emit('reloadrate', this.tradeRate)
+          display.reloadRate(this.socketID)
         }
       }
     }
@@ -1652,6 +1685,7 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputti
   },
   gameEnd(){
     game.phase = 'end'
+    recordLog()
     display.gameResult()
   },
   burstPlayerCheck(){
@@ -2020,6 +2054,14 @@ const display = {
     display.hideButton('trade')
     display.hideButton('end')
   },
+  reloadRate(socketID){
+    if(game.IDToPlayer(socketID)){
+      io.to(socketID).emit('reloadrate', game.IDToPlayer(socketID).tradeRate)
+    }
+  },
+  resetRate(){
+    io.emit('resetrate', '')
+  },
   toggleMyButtons(socketID){
     let myself = game.IDToPlayer(socketID)
     display.hideMyButton(socketID,'dice')
@@ -2090,6 +2132,7 @@ const display = {
       display.buildings()
       display.allPlayerInformationTo(socketID)
       display.renounce()
+      display.reloadRate(socketID)
       display.showMyButtonArea(socketID)
       if(socketID === game.turnPlayer.socketID && game.phase === 'monopoly'){
         display.showMyMonopolyArea(socketID)
@@ -2129,6 +2172,7 @@ const display = {
       display.hideProposeArea()
       display.hideGameEndArea()
       display.cleanUpBoard()
+      display.resetRate()
       display.deleteThief()
     }else{
       display.showField()
@@ -2144,6 +2188,7 @@ const display = {
       display.hideItems();
       display.turnPlayer();
       display.cleanUpBoard()
+      display.resetRate()
       display.island()
       display.dice()
       display.deleteThief()
@@ -2195,8 +2240,8 @@ const display = {
     let renounce = game.renounce
     io.emit('renounce', renounce)
   },
-  hideReceiving(){
-    io.emit('receive','')
+  hideReceivingArea(){
+    io.emit('hidereceivingarea', '')
   }
 }
 
@@ -2320,13 +2365,13 @@ io.on("connection", (socket)=>{
       display.island()
       display.thief()
       display.allPlayerInformation()
-
     };
   });
     //nodeをクリック
     socket.on('nodeclick',(data)=>{
       let position = board.nodeNumberToPosition(data.nodeNumber)
       if(data.socketID !== game.turnPlayer.socketID){
+        display.hideReceivingArea()
         return
       }
       if(game.phase === 'afterdice' || game.phase === 'building' || game.phase === 'setup'){
@@ -2339,21 +2384,24 @@ io.on("connection", (socket)=>{
       if(game.phase === 'robresource'){
         game.turnPlayer.robResource(position)
       }
-      
+      display.hideReceivingArea()
     });
     //roadをクリック
     socket.on('roadclick',(data)=>{
       let position = board.roadNumberToPosition(data.roadNumber)
       if(data.socketID !== game.turnPlayer.socketID){
+        display.hideReceivingArea()
         return
       }
       if(game.phase === 'afterdice' || game.phase === 'building' || game.phase === 'setup' || game.phase === 'roadbuild1' || game.phase === 'roadbuild2'){
         game.turnPlayer.build('road', position)
       }
+      display.hideReceivingArea()
     });
     //ダイスボタンをクリック
     socket.on('diceclick',(data)=>{
-      if(data.socketID !== game.turnPlayer.socketID/* /////////////|| game.phase !== 'beforedice'*/){
+      if(data.socketID !== game.turnPlayer.socketID|| game.phase !== 'beforedice'){
+        display.hideReceivingArea()
         return
       }else{
         board.rollDice()
@@ -2362,6 +2410,7 @@ io.on("connection", (socket)=>{
     //ドローボタンをクリック
     socket.on('drawclick',(data)=>{
       if(data.socketID !== game.turnPlayer.socketID){
+        display.hideReceivingArea()
         return
       }else{
         game.turnPlayer.draw()
@@ -2370,6 +2419,7 @@ io.on("connection", (socket)=>{
     //騎士ボタンをクリック
     socket.on('knightclick',(data)=>{
       if(data.socketID !== game.turnPlayer.socketID){
+        display.hideReceivingArea()
         return
       }else{
         game.turnPlayer.knightuse()
@@ -2380,14 +2430,17 @@ io.on("connection", (socket)=>{
       let position = board.tileButtonNumberToPosition(data.tileButtonNumber)
       board.tileButtonPositionToNumber(position)
       if(data.socketID !== game.turnPlayer.socketID){
+        display.hideReceivingArea()
         return
       }else if(game.phase === 'thiefmove'){
         game.turnPlayer.thiefmove(position)
       }
+      display.hideReceivingArea()
     });
     //独占ボタンをクリック
     socket.on('monopolybutton',(data)=>{
       if(data.socketID !== game.turnPlayer.socketID){
+        display.hideReceivingArea()
         return
       }else if(game.phase === 'afterdice' && game.turnPlayer.progressUse === 0 && game.turnPlayer.progress.monopoly >= 1){
         game.phase = 'monopoly'
@@ -2396,28 +2449,34 @@ io.on("connection", (socket)=>{
         game.phase = 'afterdice'
         display.hideMyMonopolyArea(game.turnPlayer.socketID)
       }
+      display.hideReceivingArea()
     });
     //独占やめるボタンをクリック
     socket.on('quitmonopoly',(data)=>{
       if(data.socketID !== game.turnPlayer.socketID){
+        display.hideReceivingArea()
         return
       }else if(game.phase === 'monopoly'){
         game.phase = 'afterdice'
         display.hideMyMonopolyArea(data.socketID)
       }
+      display.hideReceivingArea()
     });
     //独占資源ボタンをクリック
     socket.on('monopoly',(data)=>{
       let resource = data.resource
       if(data.socketID !== game.turnPlayer.socketID){
+        display.hideReceivingArea()
         return
       }else if(game.phase === 'monopoly'){
         game.turnPlayer.monopoly(resource)
       }
+      display.hideReceivingArea()
     });
     //収穫ボタンをクリック
     socket.on('harvestbutton',(data)=>{
       if(data.socketID !== game.turnPlayer.socketID){
+        display.hideReceivingArea()
         return
       }else if(game.phase === 'afterdice' && game.turnPlayer.progressUse === 0 && game.turnPlayer.progress.harvest >= 1){
         game.phase = 'harvest1'
@@ -2426,54 +2485,66 @@ io.on("connection", (socket)=>{
         game.phase = 'afterdice'
         display.hideMyHarvestArea(game.turnPlayer.socketID)
       }
+      display.hideReceivingArea()
     });
     //収穫やめるボタンをクリック
     socket.on('quitharvest',(data)=>{
       if(data.socketID !== game.turnPlayer.socketID){
+        display.hideReceivingArea()
         return
       }else if(game.phase === 'harvest1'){
         game.phase = 'afterdice'
         display.hideMyHarvestArea(data.socketID)
       }
+      display.hideReceivingArea()
     });
     //収穫資源ボタンをクリック
     socket.on('harvest',(data)=>{
       let resource = data.resource
       if(data.socketID !== game.turnPlayer.socketID){
+        display.hideReceivingArea()
         return
       }else if(game.phase === 'harvest1' || game.phase === 'harvest2'){
         game.turnPlayer.harvest(resource)
       }
+      display.hideReceivingArea()
     });
     //街道建設ボタンをクリック
     socket.on('roadbuildclick',(data)=>{
       if(data.socketID !== game.turnPlayer.socketID){
+        display.hideReceivingArea()
         return
       }else if(game.phase === 'afterdice'){
         game.turnPlayer.roadBuild()
       }
+      display.hideReceivingArea()
     });
     //終了ボタンをクリック
     socket.on('endbuttonclick',(data)=>{
       if(data.socketID !== game.turnPlayer.socketID){
+        display.hideReceivingArea()
         return
       }else if(game.phase === 'afterdice' || game.phase === 'building'){
         game.turnPlayer.turnEnd()
       }
+      display.hideReceivingArea()
     });
     //バースト資源ボタンをクリック
     socket.on('burst',(data)=>{
       let resource = data.resource
       let player = game.IDToPlayer(data.socketID)
       if(!game.burstPlayer.includes(player)){
+        display.hideReceivingArea()
         return
       }else if(game.phase === 'burst'){
         player.trash(resource)
       }
+      display.hideReceivingArea()
     });
     //貿易ボタンをクリック
     socket.on('tradebuttonclick',(data)=>{
       if(data.socketID !== game.turnPlayer.socketID){
+        display.hideReceivingArea()
         return
       }else if(game.phase === 'afterdice'){
         game.phase = 'trade'
@@ -2482,27 +2553,33 @@ io.on("connection", (socket)=>{
         game.phase = 'afterdice'
         display.hideMyTradeArea(game.turnPlayer.socketID)
       }
+      display.hideReceivingArea()
     });
     //貿易決定ボタンをクリック
     socket.on('tradedecide',(data)=>{
       if(data.socketID !== game.turnPlayer.socketID){
+        display.hideReceivingArea()
         return
       }else if(game.phase === 'trade'){
         game.turnPlayer.trade(data)
       }
+      display.hideReceivingArea()
     });
     //貿易やめるボタンをクリック
     socket.on('quittrade',(data)=>{
       if(data.socketID !== game.turnPlayer.socketID){
+        display.hideReceivingArea()
         return
       }else if(game.phase === 'trade'){
         game.phase = 'afterdice'
         display.hideMyTradeArea(data.socketID)
       }
+      display.hideReceivingArea()
     });
     //交渉ボタンをクリック
     socket.on('negotiatebuttonclick',(data)=>{
       if(data.socketID !== game.turnPlayer.socketID){
+        display.hideReceivingArea()
         return
       }else if(game.phase === 'afterdice'){
         game.phase = 'negotiate'
@@ -2511,10 +2588,12 @@ io.on("connection", (socket)=>{
         game.phase = 'afterdice'
         display.hideMyNegotiateArea(game.turnPlayer.socketID)
       }
+      display.hideReceivingArea()
     });
     //交渉相手ボタンをクリック
     socket.on('propose',(data)=>{
       if(data.socketID !== game.turnPlayer.socketID){
+        display.hideReceivingArea()
         return
       }else if(game.phase === 'negotiate'){
         game.phase = 'propose'
@@ -2522,35 +2601,44 @@ io.on("connection", (socket)=>{
         display.hideMyNegotiateArea(game.proposedata.proposer.socketID)
         display.showProposeArea()
       }
+      display.hideReceivingArea()
     });
     //交渉やめるボタンをクリック
     socket.on('quitnegotiate',(data)=>{
       if(data.socketID !== game.turnPlayer.socketID){
+        display.hideReceivingArea()
         return
       }else if(game.phase === 'negotiate'){
         game.phase = 'afterdice'
         display.hideMyNegotiateArea(data.socketID)
       }
+      display.hideReceivingArea()
     });
     //同意ボタンをクリック
     socket.on('accept',(data)=>{
       if(data.socketID !== game.proposedata.proposee.socketID){
+        display.hideReceivingArea()
         return
       }else if(game.phase === 'propose'){
         game.proposedata.proposer.accepted()
       }
+      display.hideReceivingArea()
     });
     //断るボタンをクリック
     socket.on('deny',(data)=>{
       if(data.socketID !== game.proposedata.proposee.socketID){
+        display.hideReceivingArea()
         return
       }else if(game.phase === 'propose'){
+        display.log('denied')
         game.proposedata.proposer.denied()
       }
+      display.hideReceivingArea()
     });
     //もう一度遊ぶ
     socket.on('newgamebuttonclick', (e)=>{
       game.newGame();
+      display.hideReceivingArea()
     })
     //初期化
     socket.on('yesbuttonclick', (e)=>{
@@ -2564,6 +2652,7 @@ io.on("connection", (socket)=>{
           if(socketID === game.players[player.number].socketID){
             p.renounceBuilding()
           }
+          display.hideReceivingArea()
           return
         }
       }
@@ -2571,13 +2660,11 @@ io.on("connection", (socket)=>{
     })
     socket.on('undo', (socketID)=>{
       if(game.phase === 'burst'){
-        display.log('2564')
         let myself = game.IDToPlayer(socketID)
         display.log(myself)
         myself.unDo()
         display.log(myself)
         if(myself.toTrash > 0 && !game.burstPlayer.includes(myself)){
-          display.log('2562')
           game.burstPlayer.push(myself)
         }
         display.showBurstArea()
@@ -2586,6 +2673,7 @@ io.on("connection", (socket)=>{
         unDo()
         display.allMighty()
       }
+      display.hideReceivingArea()
     })
     //コンソールに表示
     socket.on('console',(e)=>{
