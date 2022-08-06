@@ -2001,7 +2001,7 @@ const display = {
     let data = {tn:tn,phase:phase}
     io.emit('turnplayer', data)
   },
-  turnPlayerTo(){
+  turnPlayerTo(socketID){
     let tn = game.turnPlayer.number
     let phase = game.phase
     let data = {tn:tn,phase:phase}
@@ -2282,7 +2282,7 @@ const display = {
     let renounce = game.renounce
     io.emit('renounce', renounce)
   },
-  renounceTo(){
+  renounceTo(socketID){
     let renounce = game.renounce
     io.to(socketID).emit('renounce', renounce)
   },
