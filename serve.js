@@ -2232,6 +2232,7 @@ const display = {
         display.showGameEndArea()
       }
     }
+    display.hideReceivingAreaTo(socketID)
   },
   initialize(){
     this.showNameInputArea(playersName)
@@ -2255,6 +2256,9 @@ const display = {
   },
   hideReceivingArea(){
     io.emit('hidereceivingarea', '')
+  },
+  hideReceivingAreaTo(socketID){
+    io.to(socketID).emit('hidereceivingarea', '')
   }
 }
 
