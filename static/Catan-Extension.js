@@ -507,6 +507,7 @@ const display = {
                 }
             }
         }
+        console.log('bb')
         $(`#receiving_area`).hide()
     },
     allResource(game){
