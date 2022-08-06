@@ -459,14 +459,17 @@ $('#newgamebutton').on('click',function(){
 //画面表示
 const display = {
     hideField(){
+        $(`#receiving_area`).show();
         $('#field').hide()
         $(`#receiving_area`).hide()
     },
     showField(){
+        $(`#receiving_area`).show();
         $('#field').show()
         $(`#receiving_area`).hide()
       },
     hideItems(game){
+        $(`#receiving_area`).show();
         let i = 1
         while(i <= game.maxPlayer){
             $(`#player${i-1}`).show()
@@ -482,6 +485,7 @@ const display = {
         $('#nameinputarea').hide();
         $('#tileamounts').hide();
         $('#field').show();
+        $(`#receiving_area`).hide();
     },
     island(island){
         $(`#receiving_area`).show()
@@ -511,6 +515,7 @@ const display = {
         $(`#receiving_area`).hide()
     },
     allResource(game){
+        $(`#receiving_area`).show();
         for(let p of game.players){
             $(`#player${p.number}resource`).html('')
             let numberOfResources = p.resource.ore + p.resource.grain + p.resource.wool + p.resource.lumber + p.resource.brick
@@ -526,13 +531,16 @@ const display = {
                 $(`#player${p.number}resource`).append(`資源:${numberOfResources}枚`);
             }
         };
+        $(`#receiving_area`).hide();
     },
     allToken(game){
+        $(`#receiving_area`).show();
         for(let p of game.players){
             $(`#player${p.number}token`).html(`家:${p.token.house} 街:${p.token.city} 道:${p.token.road}`)
         };
     },
     allTitle(game){
+        $(`#receiving_area`).show();
         for(let p of game.players){
             $(`#player${p.number}title`).html(``)
             if(p.largestArmy === 2){
@@ -542,8 +550,10 @@ const display = {
                 $(`#player${p.number}title`).append(`<p class="titlesquare">長</p>`)
             }
         };
+        $(`#receiving_area`).hide();
     },
     allProgress(game){
+        $(`#receiving_area`).show();
         for(let p of game.players){
             $(`#player${p.number}progress`).html(``)
             let numberOfProgress = p.progress.knight + p.progress.road + p.progress.harvest + p.progress.monopoly + p.progress.point
@@ -565,8 +575,10 @@ const display = {
                 };
             }
         };
+        $(`#receiving_area`).hide();
     },
     allUsed(game){
+        $(`#receiving_area`).show();
         for(let p of game.players){
             $(`#player${p.number}used`).html(``)
             for(u in p.used){
@@ -577,6 +589,7 @@ const display = {
                 };
             };
         };
+        $(`#receiving_area`).hide();
     },
     buildings(game){
         $(`#receiving_area`).show()
@@ -596,28 +609,43 @@ const display = {
         $(`#receiving_area`).hide()
     },
     thief(buttonnumber){
+        $(`#receiving_area`).show();
         $(`.tile_button`).html(``)
         $(`#tile_button${buttonnumber}`).html(`<div id="thief"></div>`)
+        $(`#receiving_area`).hide();
     },
     deleteThief(){
+        $(`#receiving_area`).show();
         $(`.tile_button`).html(``)
+        $(`#receiving_area`).hide();
     },
     hideMonopolyArea(){
+        $(`#receiving_area`).show();
         $(`#monopoly_area`).hide()
+        $(`#receiving_area`).hide();
     },
     showMonopolyArea(){
+        $(`#receiving_area`).show();
         $(`#monopoly_area`).show()
+        $(`#receiving_area`).hide();
     },
     hideHarvestArea(){
+        $(`#receiving_area`).show();
         $(`#harvest_area`).hide()
+        $(`#receiving_area`).hide();
     },
     showHarvestArea(){
+        $(`#receiving_area`).show();
         $(`#harvest_area`).show()
+        $(`#receiving_area`).hide();
     },
     hideBurstArea(){
+        $(`#receiving_area`).show();
         $(`#burst_area`).hide()
+        $(`#receiving_area`).hide();
     },
     showBurstArea(burstPlayer){
+        $(`#receiving_area`).show();
         $(`#burst_area`).show()
         $(`#burst_message`).html(``)
         for(let player of burstPlayer){
@@ -634,22 +662,32 @@ const display = {
         }
         burst = burst.slice(1)
         $(`#burst_message`).append(`<p><b>${burst}がバースト中です</b></p>`)
+        $(`#receiving_area`).hide();
     },
     hideTradeArea(){
+        $(`#receiving_area`).show();
         $(`#trade_area`).hide()
         $(`.resourcenumber`).val(``)
+        $(`#receiving_area`).hide();
     },
     showTradeArea(){
+        $(`#receiving_area`).show();
         $(`#trade_area`).show()
+        $(`#receiving_area`).hide();
     },
     hideNegotiateArea(){
+        $(`#receiving_area`).show();
         $(`#negotiate_area`).hide()
         $(`.resourcenumber`).val(``)
+        $(`#receiving_area`).hide();
     },
     showNegotiateArea(){
+        $(`#receiving_area`).show();
         $(`#negotiate_area`).show()
+        $(`#receiving_area`).hide();
     },
     showProposeArea(data){
+        $(`#receiving_area`).show();
         $(`#propose_area`).show()
         $(`#proposeterm`).html(``)
         $(`#acceptordeny`).hide()
@@ -693,16 +731,22 @@ const display = {
         }else{
             $(`#proposeterm`).append(`<div>${data.proposer.name}が${data.proposee.name}に交渉中</div>`)
         }
+        $(`#receiving_area`).hide();
     },
     hideProposeArea(){
+        $(`#receiving_area`).show();
         $(`#propose_area`).hide()
         $(`#acceptordeny`).hide()
         $(`#proposeterm`).html(``)
+        $(`#receiving_area`).hide();
     },
     hidePlayers(){
+        $(`#receiving_area`).show();
         $(`#players`).hide()
+        $(`#receiving_area`).hide();
     },
     gameResult(game){
+        $(`#receiving_area`).show();
         $(`#message_area`).html(`<h1>${game.turnPlayer.name}の勝ちです!</h1>`)
         for(let p of game.players){
             $(`#player${p.number}resource`).html('')
@@ -730,15 +774,21 @@ const display = {
                 };
             };
         };
+        $(`#receiving_area`).hide();
     },
     showGameEndArea(){
+        $(`#receiving_area`).show();
         $(`#gameend_area`).show()
+        $(`#receiving_area`).hide();
     },
     hideGameEndArea(){
+        $(`#receiving_area`).show();
         $(`#gameend_area`).hide()
         $(`#message_area`).html(``)
+        $(`#receiving_area`).hide();
     },
     turnPlayer(data){
+        $(`#receiving_area`).show();
         let i = 0;
         while(i <= 5){
             $(`#player${i}`).css('border', '3px solid black');
@@ -749,12 +799,14 @@ const display = {
         }else{
             $(`#player${data.tn}`).css('border', '5px solid green');
         }
+        $(`#receiving_area`).hide();
     },
     log(a){
         console.log(a)
     },
     ////////////
     playerSort(players){
+        $(`#receiving_area`).show();
         let myNumber
         $(`.propose_button`).show()
         $('#playerinformation').html('')
@@ -816,6 +868,7 @@ const display = {
         }
         myNumber = 0
         for(p of players){
+            $(`#receiving_area`).show();
             $('#playerinformation').append(
                 `<div id="player${myNumber}" class="player" data-name="${players[myNumber].name}" data-number="${players[myNumber].number}">
                     <div id="player${myNumber}row1" class="row">
@@ -841,14 +894,20 @@ const display = {
                 myNumber += 1
             }
         }
+        $(`#receiving_area`).hide();
     },
     hideButtonArea(){
+        $(`#receiving_area`).show();
         $('#button_area').hide()
+        $(`#receiving_area`).hide();
     },
     showButtonArea(){
+        $(`#receiving_area`).show();
         $('#button_area').show()
+        $(`#receiving_area`).hide();
     },
     showNameInputArea(playersName){
+        $(`#receiving_area`).show();
         $(`#nameinputarea`).show()
         $('#tileamounts').show();
         $(`#gamestart`).show()
@@ -869,44 +928,61 @@ const display = {
             }
             i += 1
         }
+        $(`#receiving_area`).hide();
     },
     hideYesOrNoButton(){
+        $(`#receiving_area`).show();
         $(`#yesorno`).hide()
+        $(`#receiving_area`).hide();
     },
     cleanUpBoard(){
+        $(`#receiving_area`).show();
         $(`.nodetouch`).html(``)
         $(`.road`).html(``)
         $(`.tile_button`).html(``)
         $(`#dice_area`).html(``)
+        $(`#receiving_area`).hide();
     },
     dice(dice){
+        $(`#receiving_area`).show();
         $(`#dice_area`).show()
         $(`#dice_area`).css(`background-color`, `rgb(131, 221, 131)`)
         $(`#dice_area`).html(`<img class="dice" src="./dice${dice[0]}.png" alt="dice${dice[0]}"><img class="dice" src="./dice${dice[1]}.png" alt="dice${dice[1]}">`)
         if(dice[0]+dice[1] === 7){
             $(`#dice_area`).css(`background-color`, `red`)
         }
+        $(`#receiving_area`).hide();
     },
     diceBlack(){
+        $(`#receiving_area`).show();
         $(`#dice_area`).css(`background-color`, `rgb(131, 221, 131)`)
+        $(`#receiving_area`).hide();
     },
     hidemessageArea(){
+        $(`#receiving_area`).show();
         $(`#message_area`).hide()
         $(`#message_area`).html(``)
+        $(`#receiving_area`).hide();
     },
     showButton(string){
+        $(`#receiving_area`).show();
         $(`#${string}_button`).show()
+        $(`#receiving_area`).hide();
     },
     hideButton(string){
+        $(`#receiving_area`).show();
         $(`#${string}_button`).hide()
+        $(`#receiving_area`).hide();
     },
     renounce(renounce){
+        $(`#receiving_area`).show();
         $(`.playermark`).css(`color`,``)
         for(let player of renounce){
             if(player.socketID === socket.id){
                 $(`#player${player.number}mark`).css(`color`,`white`)
             }
         }
+        $(`#receiving_area`).hide();
     },
 
 }

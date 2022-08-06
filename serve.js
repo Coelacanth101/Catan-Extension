@@ -1239,17 +1239,17 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
     let dice2 = Math.ceil(Math.random()*6);
     this.dice = [dice1,dice2];
     game.turnPlayer.dice = 0
-    this.produce(dice1+dice2)
     if(dice1 + dice2 === 7){
       game.burstPlayerCheck()
     }else{
+      this.produce(dice1+dice2)
       game.phase = 'afterdice'
     }
     display.dice()
     recordLog()
     game.lastActionPlayer = game.turnPlayer
     display.toggleMyButtons(game.turnPlayer.socketID)
-    display.hideReceivingArea()
+    
   },
   //資源産出
   produce(add){
@@ -1266,6 +1266,7 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
     }
    }
    display.allPlayerInformation()
+   display.hideReceivingArea()
   },
   //nodeの周りのroad座標
   roadsArounNode(nodeposition){
@@ -1721,6 +1722,7 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputti
       this.phase = 'thiefmove'
     }
     display.toggleMyButtons(game.turnPlayer.socketID)
+    display.hideReceivingArea()
   },
   IDToPlayer(ID){
     for(let player of this.players){
