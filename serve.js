@@ -427,6 +427,7 @@ class Player{
         this.progress[game.progressDeck[0]] += 1
         this.thisTurnDraw[game.progressDeck[0]] += 1
         game.progressDeck.splice(0, 1)
+        display.deck()
         game.pointReload()
         display.progressOf(this)
         recordLog()
@@ -453,8 +454,9 @@ class Player{
       this.largestArmyCheck()
       game.pointReload()
       display.progressOf(this)
-      display.usedOf(this)
+      display.addUsed('knight')
       display.toggleMyButtons(game.turnPlayer.socketID)
+      display.thiefRed()
     }
     
   };
@@ -466,9 +468,7 @@ class Player{
     }else{
       recordLog()
       game.lastActionPlayer = this
-      display.deleteThief()
       board.thief = board.island[position[0]][position[1]]
-      display.thief()
       let targetplayer =[]
       for(let owner of board.thief.houseOwner){
         if(owner !== this){
@@ -495,6 +495,8 @@ class Player{
         display.diceBlack()
         display.showMyButtonArea(this.socketID)
       }
+      display.deleteThief()
+      display.thief()
     }
   };
   robResource(position){
@@ -555,7 +557,7 @@ class Player{
         display.resourceOf(player)
       }
       display.progressOf(this)
-      display.usedOf(this)
+      display.addUsed('monoopoly')
     }
   };
   harvest(resource){
@@ -577,7 +579,7 @@ class Player{
       }
       display.resourceOf(this)
       display.progressOf(this)
-      display.usedOf(this)
+      display.addUsed('harvest')
     }else if(game.phase === 'harvest2'){
       this.resource[resource] += 1
       game.phase = 'afterdice'
@@ -604,7 +606,7 @@ class Player{
         game.phase = 'roadbuild1'
       }
       display.progressOf(this)
-      display.usedOf(this)
+      display.addUsed('roadbuild')
       display.toggleMyButtons(game.turnPlayer.socketID)
     }
   }
@@ -628,6 +630,7 @@ class Player{
           game.phase = 'thiefmove'
           recordLog()
           display.hideBurstArea()
+          display.thiefRed()
         }else{
           display.showBurstArea()
         }
@@ -901,7 +904,7 @@ class Player{
 
 
 
-const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[], nodeLine:[],roadLine:[], dice:[],landLine:[],ports:{oreport:[], grainport:[], woolport:[], lumberport:[], brickport:[],genericport:[]},log:{island:[],thief:'',house:[], city:[], road:[]},islandData:'',
+const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[], nodeLine:[],roadLine:[], dice:[],landLine:[],ports:{oreport:[], grainport:[], woolport:[], lumberport:[], brickport:[],genericport:[]},log:{island:[],thief:'',house:[], city:[], road:[]},islandData:'',diceCount:{2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0},
   resizeBoard(size){
     if(size === 'large'){
       this.size = size
@@ -912,7 +915,6 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
       this.landLine = [3,7,12,18,23,27,30]
       this.log.island = [[],[],[],[],[],[],[],[],[]]
     }else if(size === 'regular'){
-      display.log(size)
       this.size = size
       this.island = [[],[],[],[],[],[],[]]
       this.numbers = [[],[],[],[],[],[],[]]
@@ -939,6 +941,7 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
     this.road = []
     this.dice = []
     this.ports = {oreport:[], grainport:[], woolport:[], lumberport:[], brickport:[],genericport:[]}
+    this.diceCount = {2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0}
   },
   recordLog(){
     for(let line of this.island){
@@ -1265,6 +1268,7 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
       this.produce(dice1+dice2)
       game.phase = 'afterdice'
     }
+    this.diceCount[dice1+dice2] += 1
     display.dice()
     recordLog()
     game.lastActionPlayer = game.turnPlayer
@@ -1519,6 +1523,7 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
     this.islandData = ''
     this.log = {island:[[],[],[],[],[],[],[],[],[]],thief:'',house:[], city:[], road:[]}
     this.size = ''
+    this.diceCount = {2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0}
   }
 }
 
@@ -1694,18 +1699,30 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputti
       if(game.turnPlayer.point >= 10){
         game.gameEnd()
         return
+      }else if(board.size === 'large'){
+        game.buildingPhase = 0
+        game.phase = 'building'
+      }else if(board.size === 'regular'){
+        let old = game.turnPlayer
+        if(this.turnPlayer.number === this.players.length-1){
+          this.turnPlayer = this.players[0];
+        } else {
+            this.turnPlayer = this.players[this.turnPlayer.number+1];
+        }
+        this.phase = 'beforedice'
+        display.thisTurnBlack()
+        display.turnPlayer()
+        display.toggleMyButtons(old.socketID)
+        display.toggleMyButtons(game.turnPlayer.socketID)
+        return
       }
-      game.buildingPhase = 0
-      game.phase = 'building'
     }
-    /////////////
     let old = game.turnPlayer
-    if(this.players.indexOf(this.turnPlayer) === this.players.length-1){
+    if(this.turnPlayer.number === this.players.length-1){
       this.turnPlayer = this.players[0];
     } else {
-        this.turnPlayer = this.players[this.players.indexOf(this.turnPlayer)+1];
+        this.turnPlayer = this.players[this.turnPlayer.number+1];
     }
-    
     if(this.buildingPhase === this.players.length){
       this.phase = 'beforedice'
     }
@@ -1762,6 +1779,7 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputti
       display.showBurstArea()
     }else{
       this.phase = 'thiefmove'
+      display.thiefRed()
     }
     display.toggleMyButtons(game.turnPlayer.socketID)
     display.hideReceivingArea()
@@ -1902,6 +1920,10 @@ const display = {
     let data = {number:player.number, used:used}
     io.emit('usedof', data)
   },
+  addUsed(progresscard){
+    let data = {number:game.turnPlayer.number, progresscard:progresscard}
+    io.emit('addused', data)
+  },
   allPlayerInformation(){
     this.allResource()
     this.allToken()
@@ -1936,10 +1958,27 @@ const display = {
   thief(){
     let buttonnumber = board.tileButtonPositionToNumber(board.thief.position)
     io.emit('thief', buttonnumber)
+    if(game.phase === 'thiefmove'){
+      this.thiefRed()
+    }else{
+      this.thiefBlack()
+    }
+  },
+  thiefRed(){
+    io.emit('thiefred','')
+  },
+  thiefRedTo(socketID){
+    io.to(socketID).emit('thiefred','')
+  },
+  thiefBlack(){
+    io.emit('thiefblack','')
   },
   thiefTo(socketID){
     let buttonnumber = board.tileButtonPositionToNumber(board.thief.position)
     io.to(socketID).emit('thief', buttonnumber)
+    if(game.phase === 'thiefmove'){
+      this.thiefRedTo(socketID)
+    }
   },
   deleteThief(){
     io.emit('deletethief', '')
@@ -2054,9 +2093,14 @@ const display = {
     io.to(socketID).emit('showField', e)
   },
   gameResult(){
-    let data = {players:game.players, turnPlayer:game.turnPlayer}
+    let data = {players:game.players, turnPlayer:game.turnPlayer, diceCount:board.diceCount}
     io.emit('gameresult', data)
     this.showGameEndArea()
+  },
+  gameResultTo(socketID){
+    let data = {players:game.players, turnPlayer:game.turnPlayer, diceCount:board.diceCount}
+    io.to(socketID).emit('gameresult', data)
+    this.showMyGameEndArea(socketID)
   },
   showGameEndArea(){
     io.emit('showgameendarea', '')
@@ -2184,7 +2228,6 @@ const display = {
     for(let card in progress){
       display.hideButton(card)
     }
-    display.hideButton('draw')
     display.hideButton('negotiate')
     display.hideButton('trade')
     display.hideButton('end')
@@ -2203,7 +2246,6 @@ const display = {
     for(let card in progress){
       display.hideMyButton(socketID, card)
     }
-    display.hideMyButton(socketID,'draw')
     display.hideMyButton(socketID,'negotiate')
     display.hideMyButton(socketID,'trade')
     display.hideMyButton(socketID,'end')
@@ -2223,7 +2265,6 @@ const display = {
         }
       }
       if(game.phase === 'building' || game.phase === 'afterdice'){
-        display.showMyButton(socketID,'draw')
         display.showMyButton(socketID,'end')
       }
       if(game.phase === 'afterdice'){
@@ -2243,6 +2284,7 @@ const display = {
       display.hideMyNegotiateArea(socketID);
       display.hideMyProposeArea(socketID);
       display.hideMyGameEndArea(socketID);
+      display.hideDicePercentageTo(socketID)
       display.cleanUpMyBoard(socketID);
       display.deleteMyThief(socketID);
     }else{
@@ -2256,11 +2298,13 @@ const display = {
       display.hideMyNegotiateArea(socketID);
       display.hideMyProposeArea(socketID);
       display.hideMyGameEndArea(socketID);
+      display.hideDicePercentageTo(socketID)
       display.myPlayerSort(socketID);
       display.hideMyItems(socketID);
       display.turnPlayerTo(socketID);
       display.cleanUpMyBoard(socketID);
       display.diceTo(socketID);
+      display.deckTo(socketID)
       display.deleteMyThief(socketID);
       display.thiefTo(socketID);
       display.allPlayerInformationTo(socketID);
@@ -2273,7 +2317,7 @@ const display = {
       if(socketID === game.turnPlayer.socketID && (game.phase === 'harvest1' || game.phase === 'harvest2')){
         display.showMyHarvestArea(socketID)
       }
-      if(game.IDToPlayer(socketID).toTrash !== 0 && game.phase === 'burst'){
+      if(game.phase === 'burst'){
         display.showMyBurstArea(socketID)
       }
       if(socketID === game.turnPlayer.socketID && game.phase === 'trade'){
@@ -2285,11 +2329,8 @@ const display = {
       if(game.phase === 'propose'){
         display.showMyProposeArea(socketID)
       }
-      if(game.phase === 'propose'){
-        display.showMyProposeArea(socketID)
-      }
       if(game.phase === 'end'){
-        display.showMyGameEndArea(socketID)
+        display.gameResultTo(socketID)
       }
       display.buildingsTo(socketID);
     }
@@ -2305,6 +2346,7 @@ const display = {
       display.hideNegotiateArea()
       display.hideProposeArea()
       display.hideGameEndArea()
+      display.hideDicePercentage()
       display.cleanUpBoard()
       display.resetRate()
       display.deleteThief()
@@ -2319,12 +2361,14 @@ const display = {
       display.hideNegotiateArea()
       display.hideProposeArea()
       display.hideGameEndArea()
+      display.hideDicePercentage()
       display.playerSort();
       display.hideItems();
       display.turnPlayer();
       display.cleanUpBoard()
       display.resetRate()
       display.dice()
+      display.deck()
       display.deleteThief()
       display.thief()
       display.allPlayerInformation()
@@ -2349,7 +2393,7 @@ const display = {
         display.showProposeArea()
       }
       if(game.phase === 'end'){
-        display.showGameEndArea()
+        display.gameResult()
       }
     }
     display.buildings()
@@ -2365,10 +2409,9 @@ const display = {
     this.hideNegotiateArea()
     this.hideProposeArea()
     this.hideGameEndArea()
-    ////////this.hidePlayers()
     this.cleanUpBoard()
-    //this.hideDiceArea()
     this.hidemessageArea()
+    this.hideDicePercentage()
   },
   renounce(){
     let renounce = game.renounce
@@ -2387,7 +2430,40 @@ const display = {
   resizeBoard(){
     let size = board.size
     io.emit('resizeboard',size)
-  }
+  },
+  hideDicePercentage(){
+    io.emit('hidedicepercentage','')
+  },
+  hideDicePercentageTo(socketID){
+    io.to(socketID).emit('hidedicepercentage','')
+  },
+  thisTurnBlack(){
+    io.emit('thisturnblack', '')
+  },
+  deck(){
+      let all
+      if(board.size === 'large'){
+          all = 34
+      }else if(board.size === 'regular'){
+          all = 25
+      }
+      let height = game.progressDeck.length / all * 100
+      let number = game.progressDeck.length
+      let data = {height:height, number:number}
+      io.emit('deck', data)
+  },
+  deckTo(socketID){
+      let all
+      if(board.size === 'large'){
+          all = 34
+      }else if(board.size === 'regular'){
+          all = 25
+      }
+      let height = game.progressDeck.length / all * 100
+      let number = game.progressDeck.length
+      let data = {height:height, number:number}
+      io.to(socketID).emit('deck', data)
+  },
 }
 
 function discard(item,array){

@@ -43,6 +43,32 @@
             right: 0px;
             bottom: 0px;
         }
+        #deck_area{
+            width: 20%;
+            height: 10%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            background-color: rgb(95, 164, 230);
+            z-index: 1;
+            font-size: large;
+            font-weight: bold;
+        }
+        #deckcase{
+            border: 1px solid black;
+            height: 85%;
+            width: 30%;
+            display: flex;
+            align-items: flex-end;
+        }
+        #deck{
+            width: 100%;
+            height: 100%;
+            background-color: black;
+        }
         .player0color{
             background-color: rgb(236, 28, 36);
         }
@@ -132,6 +158,7 @@
                     height: 20px;
                     justify-content: center;
                     align-items: center;
+                    font-weight: bold;
                 }
                 .progresscard{
                     display: flex;
@@ -142,6 +169,11 @@
                     height: 20px;
                     justify-content: center;
                     align-items: center;
+                    font-weight: bold;
+                }
+                #thisturn{
+                    border: 1px solid red; 
+                    color: red;
                 }
                 .back{
                     display: flex;
@@ -269,6 +301,7 @@
                     height: 30px;
                     margin: 0.25%;
                     font-size: 14px;
+                    color: black;
                     font-weight: bold;
                 }
                 #quitnegotiatebutton{
@@ -359,6 +392,11 @@
                     padding: 0px;
                     font-size: 1em;
                     font-weight: bold;
+                }
+                #dice_percentage{
+                    display: flex;
+                    justify-content: center;
+                    width: 100%;
                 }
 @media screen and (orientation:portrait){
     #field{
@@ -794,7 +832,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        z-index: 2;
     }
     .nodetouch{
         width: 75%;
@@ -1346,6 +1383,11 @@
         z-index:1;
         
         border-radius:50%;
+    }
+    .road{
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     #road1{
         position:absolute;
@@ -2472,7 +2514,7 @@
         vertical-align: middle;
     }
     .house{
-        width: 110%;
+        width: 100%;
         height: auto;
     }
     .city{
@@ -2497,5 +2539,8 @@
         display: none;
     }
     #city_button{
+        display: none;
+    }
+    #draw_button{
         display: none;
     }

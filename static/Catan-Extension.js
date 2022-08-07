@@ -46,8 +46,6 @@ $('#gamestartbutton').on('click', function(){
     }else{
         tileamounts = {ore:ore,grain:grain,wool:wool,lumber:lumber,brick:brick}
     }
-    
-    console.log(tileamounts)
     let total = 0
     for(resource in tileamounts){
         total += tileamounts[resource]
@@ -266,7 +264,28 @@ socket.on('hidereceivingarea',()=>{
 socket.on('resizeboard',(size)=>{
     display.resizeBoard(size)
 })
-
+socket.on('hidedicepercentage',()=>{
+    display.hideDicePercentage()
+})
+socket.on('thiefred',()=>{
+    $(`#thief`).css(`background-color`, 'rgb(255, 0, 0, 0.6)')
+})
+socket.on('thiefblack',()=>{
+    $(`#thief`).css(`background-color`, 'rgb(0, 0, 0, 0.6)')
+})
+socket.on('thisturnblack', ()=>{
+    $(`#thisturn`).attr('id','')
+})
+socket.on('addused', (data)=>{
+    $(`#player${data.number}used`).append(`<p id="thisturn" class="progresscard ${String(data.progresscard)}card">${translate(String(data.progresscard))}</p>`);
+})
+socket.on('deck',(data)=>{
+    console.log(data)
+    console.log(`${data.height}%`)
+    console.log(data.number)
+    $(`#deck_area`).html(`<div id="deckcase"><div id="deck"></div></div>&nbsp;×${data.number}`)
+    $(`#deck`).css(`height`, `${data.height}%`)
+})
 //nodeをクリック
 $(`#board_area`).on('click','.nodetouch',function(){
     $(`#receiving_area`).show()
@@ -287,8 +306,8 @@ $(`#button_area`).on('click','#dice_button',function(){
     const data = {socketID:socket.id}
     socket.emit('diceclick', data)
 });
-//ドローボタンをクリック
-$(`#button_area`).on('click','#draw_button',function(){
+//発展カードデッキをクリック
+$(`#board_area`).on('click','#deck_area',function(){
     $(`#receiving_area`).show()
     const data = {socketID:socket.id}
     socket.emit('drawclick', data)
@@ -538,6 +557,7 @@ const display = {
             $(`#board`).html(`
                 <div id="dice_area"></div>
                 <div id="receiving_area"><p id="receiving"><b>通信中…</b></p></div>
+                <div id="deck_area"><div id="deckcase"><div id="deck"></div></div>&nbsp;×34</div>
                 <img id="board_frame" src='./large_board.png'>
                 <img id="tile1" class="tilex1 tiley5 tile" data-direction="" src="./ocean.png">
                 <img id="tile2" class="tilex1 tiley7 tile" data-direction="" src="./ocean.png">
@@ -867,6 +887,7 @@ const display = {
             $(`#board`).html(`
                 <div id="dice_area"></div>
                 <div id="receiving_area"><p id="receiving"><b>通信中…</b></p></div>
+                <div id="deck_area"><div id="deckcase"><div id="deck"></div></div>&nbsp;×25</div>
                 <img id="board_frame" src='./regular_board.png'>
                 <img id="tile1" class="tile" data-direction="" src="./regular_ocean.png">
                 <img id="tile2" class="tile" data-direction="" src="./regular_ocean.png">
@@ -1414,10 +1435,10 @@ const display = {
         $(`#players`).hide()
         $(`#receiving_area`).hide();
     },
-    gameResult(game){
+    gameResult(data){
         $(`#receiving_area`).show();
-        $(`#message_area`).html(`<h1>${game.turnPlayer.name}の勝ちです!</h1>`)
-        for(let p of game.players){
+        $(`#message_area`).html(`<h1>${data.turnPlayer.name}の勝ちです!</h1>`)
+        for(let p of data.players){
             $(`#player${p.number}resource`).html('')
             $(`#player${p.number}progress`).html('')
             let numberOfResources = p.resource.ore + p.resource.grain + p.resource.wool + p.resource.lumber + p.resource.brick
@@ -1443,6 +1464,12 @@ const display = {
                 };
             };
         };
+        $(`#dice_percentage`).show()
+        let total = 0
+        for(let number in data.diceCount){
+            total += data.diceCount[number]
+        }
+        $(`#dice_percentage`).html(`2:${Math.round(data.diceCount[2]/total*100)}%<br>3:${Math.round(data.diceCount[3]/total*100)}%<br>4:${Math.round(data.diceCount[4]/total*100)}%<br>5:${Math.round(data.diceCount[5]/total*100)}%<br>6:${Math.round(data.diceCount[6]/total*100)}%<br>7:${Math.round(data.diceCount[7]/total*100)}%<br>8:${Math.round(data.diceCount[8]/total*100)}%<br>9:${Math.round(data.diceCount[9]/total*100)}%<br>10:${Math.round(data.diceCount[10]/total*100)}%<br>11:${Math.round(data.diceCount[11]/total*100)}%<br>12:${Math.round(data.diceCount[12]/total*100)}%`)
         $(`#receiving_area`).hide();
     },
     showGameEndArea(){
@@ -1452,8 +1479,8 @@ const display = {
     },
     hideGameEndArea(){
         $(`#receiving_area`).show();
-        $(`#gameend_area`).hide()
-        $(`#message_area`).html(``)
+        $(`#gameend_area`).hide();
+        $(`#message_area`).html(``);
         $(`#receiving_area`).hide();
     },
     turnPlayer(data){
@@ -2175,7 +2202,11 @@ const display = {
                 <img id="chip19" class="chip" src="">
             `)
         }
-    }
+    },
+    hideDicePercentage(){
+        $(`#dice_percentage`).html(``)
+        $(`#dice_percentage`).hide()
+    },
 }
 
 

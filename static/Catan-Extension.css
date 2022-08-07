@@ -43,6 +43,32 @@
             right: 0px;
             bottom: 0px;
         }
+        #deck_area{
+            width: 20%;
+            height: 10%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            background-color: rgb(85, 166, 241);
+            z-index: 1;
+            font-size: large;
+            font-weight: bold;
+        }
+        #deckcase{
+            border: 1px solid black;
+            height: 85%;
+            width: 30%;
+            display: flex;
+            align-items: flex-start;
+        }
+        #deck{
+            width: 100%;
+            height: 100%;
+            background-color: black;
+        }
         .player0color{
             background-color: rgb(236, 28, 36);
         }
@@ -73,7 +99,7 @@
             .player{
                 width: 100%;
                 margin:1px auto;
-                border: 1px solid black; 
+                border: 3px solid black; 
                 border-radius: 5px;
                 height: auto;
                 min-height: 60px;
@@ -132,6 +158,7 @@
                     height: 20px;
                     justify-content: center;
                     align-items: center;
+                    font-weight: bold;
                 }
                 .progresscard{
                     display: flex;
@@ -143,6 +170,10 @@
                     justify-content: center;
                     align-items: center;
                     font-weight: bold;
+                }
+                #thisturn{
+                    border: 1px solid red; 
+                    color: red;
                 }
                 .back{
                     display: flex;
@@ -280,6 +311,7 @@
                     height: 30px;
                     margin: 0.25%;
                     font-size: 14px;
+                    color: black;
                     font-weight: bold;
                 }
                 #quitnegotiatebutton{
@@ -371,6 +403,11 @@
                     font-size: 1em;
                     font-weight: bold;
                 }
+#dice_percentage{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
 @media screen and (orientation:portrait){
     #field{
         display: flex;
@@ -1005,5 +1042,8 @@
     display: none;
 }
 #city_button{
+    display: none;
+}
+#draw_button{
     display: none;
 }
