@@ -1,0 +1,2464 @@
+@charset "UTF-8";
+#container{
+    width: 100%;
+    max-width: 1500px;
+    margin: auto;
+}
+#nameinputarea{
+        margin: auto;
+        text-align: center;
+}
+    #size_select{
+        display: flex;
+        justify-content: center;
+    }
+    #gamestart{
+        margin: auto;
+        text-align: center;
+    }
+        #dice_area{
+            width: 20%;
+            height: 10%;
+            display: flex;
+            justify-content: center;
+            position: absolute;
+            right: 0px;
+            top: 0px;
+            background-color: rgb(131, 221, 131);
+            z-index: 1;
+        }
+        .dice{
+            width:48%;
+            height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 0.5px;
+            margin-left: 0.5px;
+        }
+        .player0color{
+            background-color: rgb(236, 28, 36);
+        }
+        .player1color{
+            background-color: rgb(62, 125, 35);
+        }
+        .player2color{
+            background-color: rgb(89, 119, 203);
+        }
+        .player3color{
+            background-color: rgb(255, 242, 0);
+        }
+        .player4color{
+            background-color: rgb(242, 169, 13);
+        }
+        .player5color{
+            background-color: rgb(184, 61, 186);
+        }
+        #playerinformation{
+            display: flex;
+            flex-wrap: wrap;
+            width:100%;
+            height:auto;
+            position: relative;
+            align-items: center;
+            font-size: 14.7px;
+        }
+            .player{
+                width: 100%;
+                margin:1px auto;
+                border: 3px solid black; 
+                border-radius: 5px;
+                height: auto;
+                min-height: 60px;
+            }
+            .row{
+                display: flex;
+                min-height: 22px;
+                height: 33%;
+            }
+            .line{
+                width: 50%;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+            }
+            .nameline{
+                width: 50%;
+                display: flex;
+                align-items: center;
+                border-right:2px solid black;
+                border-bottom:2px solid black;
+            }
+            .playermark{
+                height: 100%;
+                width: 15%;
+                min-width: 35px;
+                display:flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .name{
+                width: 85%;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+                .resourcecard{
+                    display: flex;
+                    margin:0 0.5%;
+                    border: 1px solid black; 
+                    border-radius: 1px;
+                    width: 20px;
+                    height: 20px;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .progresscard{
+                    display: flex;
+                    margin:0 1px;
+                    border: 1px solid black; 
+                    border-radius: 1px;
+                    width: 20px;
+                    height: 20px;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .back{
+                    display: flex;
+                    margin:0 1px;
+                    border: 1px solid black; 
+                    border-radius: 1px;
+                    width: 20px;
+                    height: 20px;
+                    justify-content: center;
+                    align-items: center;
+                    background-color: black;
+                }
+                .usedcard{
+                    display: flex;
+                    margin:0 2px;
+                    border: 1px solid black; 
+                    border-radius: 1px;
+                    width: 20px;
+                    height: 20px;
+                    justify-content: center;
+                    align-items: center;
+                }
+                #button_area{
+                    width: 100%;
+                    height: 100%;
+                    margin: auto;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    align-items: center;
+    
+                }
+                    .action_button{
+                        background:skyblue;
+                        width: 60px;
+                        height: 30px;
+                        margin: 1px;
+                        padding: 0px;
+                        font-size: 1em;
+                        font-weight: bold;
+                    }
+                
+                #monopoly_area{
+                    width: 100%;
+                    height: 100%;
+                    margin: auto;
+                    justify-content: center;
+                    align-items: center;
+                }
+                    .resource_button_area{
+                        display: flex;
+                        width: 100%;
+                        height: 75%;
+                        margin: auto;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                    .quitprogress{
+                        display: flex;
+                        width: 100%;
+                        height: 25%;
+                        margin: auto;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                    .quitprogressbutton{
+                        background-color: white;
+                        width: 60px;
+                        height: 30px;
+                        margin: 1px;
+                        padding: 0px;
+                        font-size: 1em;
+                        font-weight: bold;
+                    }
+                #harvest_area{
+                    width: 100%;
+                    height: 100%;
+                    margin: auto;
+                    justify-content: center;
+                    align-items: center;
+                }
+                #burst_area{
+                    width: 100%;
+                    height: 100%;
+                    margin: auto;
+                    justify-content: center;
+                    align-items: center;
+                }
+                #burst_message{
+                    text-align: center;
+                }
+                
+                .lumber{
+                    background-color: rgb(62, 187, 62);
+                }
+                .brick{
+                    background-color: rgb(179, 8, 8);
+                }
+                .ore{
+                    background-color: darkgray;
+                }
+                .grain{
+                    background-color: gold;
+                }
+                .wool{
+                    background-color: lightgreen;
+                }
+                #negotiate_area{
+                    width: 100%;
+                    height: 100%;
+                    margin: auto;
+                    justify-content: center;
+                    align-items: center;
+                }
+                #counterpart{
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .propose_button{
+                    width: 16%;
+                    height: 30px;
+                    margin: 0.25%;
+                    font-size: 14px;
+                    font-weight: bold;
+                }
+                #quitnegotiatebutton{
+                    background-color: white;
+                    width: 16%;
+                    height: 30px;
+                    margin: 0.25%;
+                    font-size: 1em;
+                    font-weight: bold;
+                }
+                #propose_area{
+                    width: 100%;
+                    height: 100%;
+                    margin: auto;
+                    font-size: large;
+                }
+                #proposeterm{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                    height: 75%;
+                }
+                #proposeterm div{
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    width: 100%;
+                }
+                .giveresource{
+                    display: flex;
+                    justify-content: center;
+                }
+                .takeresource{
+                    display: flex;
+                    justify-content: center;
+                }
+                #acceptordeny{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                    height: 25%;
+                }
+                #trade_area{
+                    width: 100%;
+                    height: 100%;
+                    margin: auto;
+                    justify-content: center;
+                    align-items: center;
+                }
+                #decidearea{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                #quittradebutton{
+                    background-color: white;
+                    width: 60px;
+                    height: 30px;
+                    margin: 1px;
+                    padding: 0px;
+                    font-size: 1em;
+                    font-weight: bold;
+                }
+                #gameend_area{
+                    width: 100%;
+                    height: 100%;
+                }
+                #message_area{
+                    width: 100%;
+                    height: 70%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                #newgame_area{
+                    width: 100%;
+                    height: 30%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                #newgamebutton{
+                    background-color: white;
+                    width: 120px;
+                    height: 30px;
+                    padding: 0px;
+                    font-size: 1em;
+                    font-weight: bold;
+                }
+@media screen and (orientation:portrait){
+    #field{
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        justify-content: center;
+    }
+    #board_area{
+        position:relative;
+        justify-content: center;
+        width: 100%;
+        aspect-ratio: 951.2/863.2;
+    }
+    #player_and_button_area{
+        width: 100%;
+        max-width: 400px;
+        height: 600px;
+        display: flex;
+        justify-content: center;
+        position: relative;
+        margin-top: 140px;
+    }
+        #players{
+            width: 100%;
+        }
+        
+        #buttons{
+            width: 100%;
+            height: 140px;
+            position: absolute;
+            top: -140px;
+        }
+            
+            .numberinput{
+                display:flex;
+                justify-content: center;
+                align-items: center;
+                height: 50px;
+                position:relative
+            }
+            .give{
+                display:flex;
+            }
+                .resourcecircle{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 20px;
+                    border-radius: 50%;
+                    font-weight: bold;
+                }
+                .resourcenumber{
+                    width: 50px;
+                }
+            .take{
+                display: flex;
+            }
+            
+}
+@media screen and (orientation: landscape){
+        #field{
+            width: 100%;
+            height: 98vh;
+            display: flex;
+            align-items: flex-start;
+        }@media screen and (min-height:600px){
+            #field{
+                align-items: center;
+            }
+        }
+            #board_area{
+                position:relative;
+                width: calc(100% - 400px);
+                display: flex;
+                justify-content: center;
+                max-height: 100%;
+                aspect-ratio: 951.2/863.2;
+            }@media screen and (min-width:850px) and (max-width:1000px) {
+                #board_area{
+                    width: 600px;
+                }
+            }@media screen and (max-width:850px) {
+                #board_area{
+                    width: calc(100% - 250px);
+                }
+            }
+            #board{
+                position: relative;
+                height:100%;
+                aspect-ratio: 951.2/863.2;
+            }
+            #player_and_button_area{
+                width: 400px;
+                height: 600px;
+            }@media screen and (min-width:850px) and (max-width:1000px) {
+                #player_and_button_area{
+                    width: calc(100% - 600px);
+                    min-width: 250px;
+                }
+            }@media screen and (max-width:850px) {
+                #player_and_button_area{
+                    width: 250px;
+                }
+            }
+                #players{
+                    width: 100%;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    align-items: center;
+                }@media screen and (max-height:600px){
+                    #players{
+                        position: relative;
+                        margin-top: 140px;
+                    }
+                }
+                #buttons{
+                    width: 100%;
+                    height: 140px;
+                }@media screen and (max-height:600px){
+                    #buttons{
+                        position: absolute;
+                        top: -140px;
+                    }
+                }
+                    .numberinput{
+                        display:flex;
+                        justify-content:center;
+                        align-items: center;
+                        height: 50px;
+                        position:relative;
+                        width: 100%;
+                    }
+                    .give{
+                        display:flex;
+                    }
+                        .resourcecircle{
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            height: 20px;
+                            border-radius: 50%;
+                            font-weight: bold;
+                        }@media screen and (max-width:1000px) {
+                            .resourcecircle{
+                                width: 100%;
+                            }
+                        }
+                        .resourcenumber{
+                            width: 50px;
+                        }@media screen and (max-width:1000px) {
+                            .resourcenumber{
+                                width: 81%;
+                            }
+                        }
+                    .take{
+                        display: flex;
+                    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#board_frame{
+    max-width:100%;
+    height:auto;
+    position:absolute;
+}
+
+#tile1{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:0.509731232622799%;
+    left:21.78301093%;}
+#tile2{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:0.509731232622799%;
+    left:35.9966358284272%;}
+#tile3{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:0.509731232622799%;
+    left:50.21026072%;}
+#tile4{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:0.509731232622799%;
+    left:64.4238856181665%;}
+#tile5{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:14.0871177015755%;
+    left:14.6761984861228%;}
+#tile6{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:14.0871177015755%;
+    left:28.8898233809924%;}
+#tile7{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:14.0871177015755%;
+    left:43.1034482758621%;}
+#tile8{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:14.0871177015755%;
+    left:57.3170731707317%;}
+#tile9{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:14.0871177015755%;
+    left:71.5306980656014%;}
+#tile10{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:27.6645041705283%;
+    left:7.569386039%;}
+#tile11{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:27.6645041705283%;
+    left:21.7830109335576%;}
+#tile12{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:27.6645041705283%;
+    left:35.9966358284272%;}
+#tile13{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:27.6645041705283%;
+    left:50.21026072%;}
+#tile14{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:27.6645041705283%;
+    left:64.4238856181665%;}
+#tile15{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:27.6645041705283%;
+    left:78.6375105130362%;}
+#tile16{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:41.241890639481%;
+    left:0.462573591253154%;}
+#tile17{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:41.241890639481%;
+    left:14.6761984861228%;}
+#tile18{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:41.241890639481%;
+    left:28.8898233809924%;}
+#tile19{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:41.241890639481%;
+    left:43.1034482758621%;}
+#tile20{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:41.241890639481%;
+    left:57.3170731707317%;}
+#tile21{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:41.241890639481%;
+    left:71.5306980656014%;}
+#tile22{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:41.241890639481%;
+    left:85.744322960471%;}
+#tile23{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:54.8192771084337%;
+    left:7.56938603868797%;}
+#tile24{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:54.8192771084337%;
+    left:21.7830109335576%;}
+#tile25{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:54.8192771084337%;
+    left:35.9966358284272%;}
+#tile26{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:54.8192771084337%;
+    left:50.21026072%;}
+#tile27{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:54.8192771084337%;
+    left:64.4238856181665%;}
+#tile28{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:54.8192771084337%;
+    left:78.6375105130362%;}
+#tile29{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:68.3966635773865%;
+    left:14.6761984861228%;}
+#tile30{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:68.3966635773865%;
+    left:28.8898233809924%;}
+#tile31{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:68.3966635773865%;
+    left:43.1034482758621%;}
+#tile32{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:68.3966635773865%;
+    left:57.3170731707317%;}
+#tile33{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:68.3966635773865%;
+    left:71.5306980656014%;}
+#tile34{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:81.9740500463392%;
+    left:21.7830109335576%;}
+#tile35{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:81.9740500463392%;
+    left:35.9966358284272%;}
+#tile36{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:81.9740500463392%;
+    left:50.21026072%;}
+#tile37{
+    position:absolute;
+    width:13.7931034483%;
+    height: auto;
+    top:81.9740500463392%;
+    left:64.4238856181665%;}
+    .node{
+        border-radius:50%;
+        text-align: center;
+        vertical-align: middle;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .nodetouch{
+        width: 75%;
+        height: 75%;
+        z-index:2;
+        border-radius:50%;
+        text-align: center;
+        vertical-align: middle;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #node1{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:14.7475275570986%;
+        left:25.494181862161%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node2{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:10.2989640723906%;
+        left:32.6009943095958%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node3{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:14.7475275570986%;
+        left:39.7078067570306%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node4{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:10.2989640723906%;
+        left:46.8146192044655%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node5{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:14.7475275570986%;
+        left:53.9214316519003%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node6{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:10.2989640723906%;
+        left:61.0282440993351%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node7{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:14.7475275570986%;
+        left:68.1350565467699%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node8{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:28.3249140260514%;
+        left:18.3873694147262%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node9{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:23.8763505413433%;
+        left:25.494181862161%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node10{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:28.3249140260514%;
+        left:32.6009943095958%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node11{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:23.8763505413433%;
+        left:39.7078067570306%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node12{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:28.3249140260514%;
+        left:46.8146192044655%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node13{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:23.8763505413433%;
+        left:53.9214316519003%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node14{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:28.3249140260514%;
+        left:61.0282440993351%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node15{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:23.8763505413433%;
+        left:68.1350565467699%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node16{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:28.3249140260514%;
+        left:75.2418689942047%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node17{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:41.9023004950041%;
+        left:11.2805569672914%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node18{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:37.453737010296%;
+        left:18.3873694147262%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node19{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:41.9023004950041%;
+        left:25.494181862161%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node20{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:37.453737010296%;
+        left:32.6009943095958%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node21{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:41.9023004950041%;
+        left:39.7078067570306%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node22{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:37.453737010296%;
+        left:46.8146192044655%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node23{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:41.9023004950041%;
+        left:53.9214316519003%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node24{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:37.453737010296%;
+        left:61.0282440993351%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node25{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:41.9023004950041%;
+        left:68.1350565467699%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node26{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:37.453737010296%;
+        left:75.2418689942047%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node27{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:41.9023004950041%;
+        left:82.3486814416396%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node28{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:51.0311234792488%;
+        left:11.2805569672914%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node29{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:55.4796869639568%;
+        left:18.3873694147262%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node30{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:51.0311234792488%;
+        left:25.494181862161%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node31{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:55.4796869639568%;
+        left:32.6009943095958%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node32{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:51.0311234792488%;
+        left:39.7078067570306%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node33{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:55.4796869639568%;
+        left:46.8146192044655%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node34{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:51.0311234792488%;
+        left:53.9214316519003%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node35{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:55.4796869639568%;
+        left:61.0282440993351%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node36{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:51.0311234792488%;
+        left:68.1350565467699%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node37{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:55.4796869639568%;
+        left:75.2418689942047%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node38{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:51.0311234792488%;
+        left:82.3486814416396%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node39{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:64.6085099482015%;
+        left:18.3873694147262%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node40{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:69.0570734329096%;
+        left:25.494181862161%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node41{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:64.6085099482015%;
+        left:32.6009943095958%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node42{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:69.0570734329096%;
+        left:39.7078067570306%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node43{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:64.6085099482015%;
+        left:46.8146192044655%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node44{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:69.0570734329096%;
+        left:53.9214316519003%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node45{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:64.6085099482015%;
+        left:61.0282440993351%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node46{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:69.0570734329096%;
+        left:68.1350565467699%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node47{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:64.6085099482015%;
+        left:75.2418689942047%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node48{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:78.1858964171542%;
+        left:25.494181862161%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node49{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:82.6344599018623%;
+        left:32.6009943095958%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node50{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:78.1858964171542%;
+        left:39.7078067570306%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node51{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:82.6344599018623%;
+        left:46.8146192044655%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node52{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:78.1858964171542%;
+        left:53.9214316519003%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node53{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:82.6344599018623%;
+        left:61.0282440993351%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #node54{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:78.1858964171542%;
+        left:68.1350565467699%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road1{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:12.5232458147446%;
+        left:29.0265620135487%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road2{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:12.5232458147446%;
+        left:36.1333744609835%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road3{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:12.5232458147446%;
+        left:43.2401869084184%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road4{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:12.5232458147446%;
+        left:50.3469993558532%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road5{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:12.5232458147446%;
+        left:57.453811803288%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road6{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:12.5232458147446%;
+        left:64.5606242507228%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road7{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:19.2887694477381%;
+        left:25.4521297175016%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road8{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:19.2887694477381%;
+        left:39.6657546123713%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road9{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:19.2887694477381%;
+        left:53.8793795072409%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road10{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:19.2887694477381%;
+        left:68.0930044021105%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road11{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:26.1006322836973%;
+        left:21.9197495661139%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road12{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:26.1006322836973%;
+        left:29.0265620135487%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road13{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:26.1006322836973%;
+        left:36.1333744609835%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road14{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:26.1006322836973%;
+        left:43.2401869084184%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road15{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:26.1006322836973%;
+        left:50.3469993558532%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road16{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:26.1006322836973%;
+        left:57.453811803288%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road17{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:26.1006322836973%;
+        left:64.5606242507228%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road18{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:26.1006322836973%;
+        left:71.6674366981577%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road19{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:32.8661559166909%;
+        left:18.3453172700668%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road20{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:32.8661559166909%;
+        left:32.5589421649364%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road21{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:32.8661559166909%;
+        left:46.7725670598061%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road22{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:32.8661559166909%;
+        left:60.9861919546757%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road23{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:32.8661559166909%;
+        left:75.1998168495454%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road24{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:39.6780187526501%;
+        left:14.8129371186791%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road25{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:39.6780187526501%;
+        left:21.9197495661139%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road26{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:39.6780187526501%;
+        left:29.0265620135487%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road27{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:39.6780187526501%;
+        left:36.1333744609835%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road28{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:39.6780187526501%;
+        left:43.2401869084184%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road29{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:39.6780187526501%;
+        left:50.3469993558532%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road30{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:39.6780187526501%;
+        left:57.453811803288%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road31{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:39.6780187526501%;
+        left:64.5606242507228%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road32{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:39.6780187526501%;
+        left:71.6674366981577%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road33{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:39.6780187526501%;
+        left:78.7742491455925%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road34{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:46.4435423856436%;
+        left:11.238504822632%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road35{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:46.4435423856436%;
+        left:25.4521297175016%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road36{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:46.4435423856436%;
+        left:39.6657546123713%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road37{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:46.4435423856436%;
+        left:53.8793795072409%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road38{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:46.4435423856436%;
+        left:68.0930044021105%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road39{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:46.4435423856436%;
+        left:82.3066292969802%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road40{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:53.2554052216028%;
+        left:14.8129371186791%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road41{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:53.2554052216028%;
+        left:21.9197495661139%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road42{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:53.2554052216028%;
+        left:29.0265620135487%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road43{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:53.2554052216028%;
+        left:36.1333744609835%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road44{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:53.2554052216028%;
+        left:43.2401869084184%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road45{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:53.2554052216028%;
+        left:50.3469993558532%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road46{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:53.2554052216028%;
+        left:57.453811803288%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road47{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:53.2554052216028%;
+        left:64.5606242507228%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road48{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:53.2554052216028%;
+        left:71.6674366981577%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road49{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:53.2554052216028%;
+        left:78.7742491455925%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road50{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:60.0209288545963%;
+        left:18.3453172700668%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road51{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:60.0209288545963%;
+        left:32.5589421649364%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road52{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:60.0209288545963%;
+        left:46.7725670598061%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road53{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:60.0209288545963%;
+        left:60.9861919546757%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road54{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:60.0209288545963%;
+        left:75.1998168495454%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road55{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:66.8327916905555%;
+        left:21.9197495661139%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road56{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:66.8327916905555%;
+        left:29.0265620135487%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road57{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:66.8327916905555%;
+        left:36.1333744609835%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road58{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:66.8327916905555%;
+        left:43.2401869084184%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road59{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:66.8327916905555%;
+        left:50.3469993558532%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road60{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:66.8327916905555%;
+        left:57.453811803288%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road61{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:66.8327916905555%;
+        left:64.5606242507228%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road62{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:66.8327916905555%;
+        left:71.6674366981577%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road63{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:73.5983153235491%;
+        left:25.4521297175016%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road64{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:73.5983153235491%;
+        left:39.6657546123713%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road65{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:73.5983153235491%;
+        left:53.8793795072409%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road66{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:73.5983153235491%;
+        left:68.0930044021105%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road67{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:80.4101781595083%;
+        left:29.0265620135487%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road68{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:80.4101781595083%;
+        left:36.1333744609835%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road69{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:80.4101781595083%;
+        left:43.2401869084184%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road70{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:80.4101781595083%;
+        left:50.3469993558532%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road71{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:80.4101781595083%;
+        left:57.453811803288%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #road72{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
+        top:80.4101781595083%;
+        left:64.5606242507228%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #tile_button1{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:18.70937698413%;
+        left:32.0331520318555%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #tile_button2{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:18.70937698413%;
+        left:46.2467769267252%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #tile_button3{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:18.70937698413%;
+        left:60.4604018215948%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #tile_button4{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:32.2867634530827%;
+        left:24.9263395844207%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #tile_button5{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:32.2867634530827%;
+        left:39.1399644792904%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #tile_button6{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:32.2867634530827%;
+        left:53.35358937416%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #tile_button7{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:32.2867634530827%;
+        left:67.5672142690296%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #tile_button8{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:45.8641499220354%;
+        left:17.8195271369859%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #tile_button9{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:45.8641499220354%;
+        left:32.0331520318555%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #tile_button10{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:45.8641499220354%;
+        left:46.2467769267252%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #tile_button11{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:45.8641499220354%;
+        left:60.4604018215948%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #tile_button12{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:45.8641499220354%;
+        left:74.6740267164644%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #tile_button13{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:59.4415363909882%;
+        left:24.9263395844207%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #tile_button14{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:59.4415363909882%;
+        left:39.1399644792904%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #tile_button15{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:59.4415363909882%;
+        left:53.35358937416%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #tile_button16{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:59.4415363909882%;
+        left:67.5672142690296%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #tile_button17{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:73.0189228599409%;
+        left:32.0331520318555%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #tile_button18{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:73.0189228599409%;
+        left:46.2467769267252%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #tile_button19{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:73.0189228599409%;
+        left:60.4604018215948%;
+        z-index:1;
+        
+        border-radius:50%;
+    }
+    #chip1{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:18.70937698413%;
+        left:32.0331520318555%;
+        z-index:0;
+        
+        border-radius:50%;
+    }
+    #chip2{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:18.70937698413%;
+        left:46.2467769267252%;
+        z-index:0;
+        
+        border-radius:50%;
+    }
+    #chip3{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:18.70937698413%;
+        left:60.4604018215948%;
+        z-index:0;
+        
+        border-radius:50%;
+    }
+    #chip4{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:32.2867634530827%;
+        left:24.9263395844207%;
+        z-index:0;
+        
+        border-radius:50%;
+    }
+    #chip5{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:32.2867634530827%;
+        left:39.1399644792904%;
+        z-index:0;
+        
+        border-radius:50%;
+    }
+    #chip6{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:32.2867634530827%;
+        left:53.35358937416%;
+        z-index:0;
+        
+        border-radius:50%;
+    }
+    #chip7{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:32.2867634530827%;
+        left:67.5672142690296%;
+        z-index:0;
+        
+        border-radius:50%;
+    }
+    #chip8{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:45.8641499220354%;
+        left:17.8195271369859%;
+        z-index:0;
+        
+        border-radius:50%;
+    }
+    #chip9{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:45.8641499220354%;
+        left:32.0331520318555%;
+        z-index:0;
+        
+        border-radius:50%;
+    }
+    #chip10{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:45.8641499220354%;
+        left:46.2467769267252%;
+        z-index:0;
+        
+        border-radius:50%;
+    }
+    #chip11{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:45.8641499220354%;
+        left:60.4604018215948%;
+        z-index:0;
+        
+        border-radius:50%;
+    }
+    #chip12{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:45.8641499220354%;
+        left:74.6740267164644%;
+        z-index:0;
+        
+        border-radius:50%;
+    }
+    #chip13{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:59.4415363909882%;
+        left:24.9263395844207%;
+        z-index:0;
+        
+        border-radius:50%;
+    }
+    #chip14{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:59.4415363909882%;
+        left:39.1399644792904%;
+        z-index:0;
+        
+        border-radius:50%;
+    }
+    #chip15{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:59.4415363909882%;
+        left:53.35358937416%;
+        z-index:0;
+        
+        border-radius:50%;
+    }
+    #chip16{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:59.4415363909882%;
+        left:67.5672142690296%;
+        z-index:0;
+        
+        border-radius:50%;
+    }
+    #chip17{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:73.0189228599409%;
+        left:32.0331520318555%;
+        z-index:0;
+        
+        border-radius:50%;
+    }
+    #chip18{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:73.0189228599409%;
+        left:46.2467769267252%;
+        z-index:0;
+        
+        border-radius:50%;
+    }
+    #chip19{
+        position:absolute;
+        width:7.4223418572309106%;
+        height:8.179021749997732%;
+        top:73.0189228599409%;
+        left:60.4604018215948%;
+        z-index:0;
+        
+        border-radius:50%;
+    }
+    [data-direction="1"]{
+        transform: rotate(-60deg)
+    }
+    [data-direction="2"]{
+        transform: rotate(-120deg)
+    }
+    [data-direction="3"]{
+        transform: rotate(-180deg)
+    }
+    [data-direction="4"]{
+        transform: rotate(-240deg)
+    }
+    [data-direction="5"]{
+        transform: rotate(-300deg)
+    }
+    #thief{
+        width:100%;
+        height:100%;
+        z-index:2;
+        background:rgba(0, 0, 0, 0.6);
+        border-radius:50%;
+        text-align: center;
+        vertical-align: middle;
+    }
+    .house{
+        width: 110%;
+        height: auto;
+    }
+    .city{
+        width: 100%;
+        height: auto;
+    }
+    .roadtoken{
+        width: 80%;
+        height: auto;
+    }
+    #initialize{
+        text-align: center;
+        margin: 100px auto auto auto
+    }
+    #yesorno{
+        display: none;
+    }
+    #road_button{
+        display: none;
+    }
+    #house_button{
+        display: none;
+    }
+    #city_button{
+        display: none;
+    }

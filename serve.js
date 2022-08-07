@@ -37,8 +37,7 @@ while(m <= maxPlayer){
   m += 1
 }
 const buildResource = {house:{ore:0,grain:1,wool:1,lumber:1,brick:1}, city:{ore:3,grain:2,wool:0,lumber:0,brick:0}, progress:{ore:1,grain:1,wool:1,lumber:0,brick:0}, road:{ore:0,grain:0,wool:0,lumber:1,brick:1}}
-const progress = {knight:20, roadbuild:3, harvest:3, monopoly:3, point:5}
-const resourceType = ['ore','mugi','wool','lumber','brick']
+const progress_large = {knight:20, roadbuild:3, harvest:3, monopoly:3, point:5}
 
 
 class Player{
@@ -902,17 +901,44 @@ class Player{
 
 
 
-const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[],[],[]],thief:'', house:[], city:[], road:[], nodeLine:[7,16,27,40,53,64,73,80],roadLine:[6,10,18,23,33,39,51,58,70,76,86,91,99,103,109], dice:[],landLine:[3,7,12,18,23,27,30],ports:{oreport:[], grainport:[], woolport:[], lumberport:[], brickport:[],genericport:[]},log:{island:[[],[],[],[],[],[],[],[],[]],thief:'',house:[], city:[], road:[]},islandData:'',
+const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[], nodeLine:[],roadLine:[], dice:[],landLine:[],ports:{oreport:[], grainport:[], woolport:[], lumberport:[], brickport:[],genericport:[]},log:{island:[],thief:'',house:[], city:[], road:[]},islandData:'',
+  resizeBoard(size){
+    if(size === 'large'){
+      this.size = size
+      this.island = [[],[],[],[],[],[],[],[],[]]
+      this.numbers = [[],[],[],[],[],[],[],[],[]]
+      this.nodeLine = [7,16,27,40,53,64,73,80]
+      this.roadLine = [6,10,18,23,33,39,51,58,70,76,86,91,99,103,109]
+      this.landLine = [3,7,12,18,23,27,30]
+      this.log.island = [[],[],[],[],[],[],[],[],[]]
+    }else if(size === 'regular'){
+      display.log(size)
+      this.size = size
+      this.island = [[],[],[],[],[],[],[]]
+      this.numbers = [[],[],[],[],[],[],[]]
+      this.nodeLine = [7,16,27,38,47,54]
+      this.roadLine = [6,10,18,23,33,39,49,54,62,66,72]
+      this.landLine = [3,7,12,16,19]
+      this.log.island = [[],[],[],[],[],[],[]]
+    }
+    display.resizeBoard(size)
+  },
   reset(){
-    this.island = [[],[],[],[],[],[],[],[],[]]
-    this.numbers = [[],[],[],[],[],[],[],[],[]]
+    if(this.size === 'large'){
+      this.island = [[],[],[],[],[],[],[],[],[]]
+      this.numbers = [[],[],[],[],[],[],[],[],[]]
+      this.log = {island:[[],[],[],[],[],[],[],[],[]],thief:'',house:[], city:[], road:[]}
+    }else if(this.size === 'regular'){
+      this.island = [[],[],[],[],[],[],[]]
+      this.numbers = [[],[],[],[],[],[],[]]
+      this.log = {island:[[],[],[],[],[],[],[]],thief:'',house:[], city:[], road:[]}
+    }
     this.thief = ''
     this.house = []
     this.city = []
     this.road = []
     this.dice = []
     this.ports = {oreport:[], grainport:[], woolport:[], lumberport:[], brickport:[],genericport:[]}
-    this.log = {island:[[],[],[],[],[],[],[],[],[]],thief:'',house:[], city:[], road:[]}
   },
   recordLog(){
     for(let line of this.island){
@@ -965,7 +991,6 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
     }
   },
   makeIsland(data){
-    this.island = [[],[],[],[],[],[],[],[],[]]
     let lands = []
     for(let resource in data.tileamounts){
       let i = 1
@@ -980,13 +1005,23 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
       lands.push('desert')
       i += 1
     }
-    let oceans = ['woolport','woolport','oreport','brickport','lumberport','grainport','genericport','genericport','genericport','genericport','genericport','ocean','ocean','ocean','ocean','ocean','ocean','ocean','ocean','ocean','ocean','ocean']
+    let oceans
+    let numberChips
+    let row
+    if(this.size === 'large'){
+      oceans = ['woolport','woolport','oreport','brickport','lumberport','grainport','genericport','genericport','genericport','genericport','genericport','ocean','ocean','ocean','ocean','ocean','ocean','ocean','ocean','ocean','ocean','ocean']
+      numberChips = [2,2,3,3,3,4,4,4,5,5,5,6,6,6,8,8,8,9,9,9,10,10,10,11,11,11,12,12]
+      row = [0,5,6,7,8,7,6,5,0]
+    }else if(this.size === 'regular'){
+      oceans = ['woolport','oreport','brickport','lumberport','grainport','genericport','genericport','genericport','genericport','ocean','ocean','ocean','ocean','ocean','ocean','ocean','ocean','ocean']
+      numberChips = [2,3,3,4,4,5,5,6,6,8,8,9,9,10,10,11,11,12]
+      row = [0,5,6,7,6,5,0]
+    }
     lands = shuffle(lands)
     oceans = shuffle(oceans)
     let x = 1
     while(x <= this.island.length){
       let  y = 1
-      let row = [0,5,6,7,8,7,6,5,0]
       if(x === 1|| x === this.island.length){
         let i = 1
         while(i <= 4){
@@ -1026,7 +1061,6 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
       }
       x += 1
     }
-    let numberChips = [2,2,3,3,3,4,4,4,5,5,5,6,6,6,8,8,8,9,9,9,10,10,10,11,11,11,12,12]
     numberChips = shuffle(numberChips)
     for(let line of this.island){
       for(let tile of line){
@@ -1467,16 +1501,24 @@ const board = {island:[[],[],[],[],[],[],[],[],[]],numbers:[[],[],[],[],[],[],[]
     }
   },
   initialize(){
-    this.island = [[],[],[],[],[],[],[],[],[]]
-    this.numbers = [[],[],[],[],[],[],[],[],[]]
+    if(this.size === 'large'){
+      this.island = [[],[],[],[],[],[],[],[],[]]
+      this.numbers = [[],[],[],[],[],[],[],[],[]]
+      this.log = {island:[[],[],[],[],[],[],[],[],[]],thief:'',house:[], city:[], road:[]}
+    }else if(this.size === 'regular'){
+      this.island = [[],[],[],[],[],[],[]]
+      this.numbers = [[],[],[],[],[],[],[]]
+      this.log = {island:[[],[],[],[],[],[],[]],thief:'',house:[], city:[], road:[]}
+    }
     this.thief = ''
     this.house = []
     this.city = []
     this.road = []
     this.dice = []
-    this.ports = {oreport:[], grainport:[], woolport:[], lumberport:[], brickport:[], genericport:[]}
+    this.ports = {oreport:[], grainport:[], woolport:[], lumberport:[], brickport:[],genericport:[]}
     this.islandData = ''
     this.log = {island:[[],[],[],[],[],[],[],[],[]],thief:'',house:[], city:[], road:[]}
+    this.size = ''
   }
 }
 
@@ -1608,27 +1650,27 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputti
     this.progressDeck = [];
     let arr =[]
     let i = 1;
-    while(i <= progress.knight){
+    while(i <= progress_large.knight){
       this.progressDeck.push('knight')
       i += 1
     }
     i = 1;
-    while(i <= progress.roadbuild){
+    while(i <= progress_large.roadbuild){
       this.progressDeck.push('roadbuild')
       i += 1
     }
     i = 1;
-    while(i <= progress.harvest){
+    while(i <= progress_large.harvest){
       this.progressDeck.push('harvest')
       i += 1
     }
     i = 1;
-    while(i <= progress.monopoly){
+    while(i <= progress_large.monopoly){
       this.progressDeck.push('monopoly')
       i += 1
     }
     i = 1;
-    while(i <= progress.point){
+    while(i <= progress_large.point){
       this.progressDeck.push('point')
       i += 1
     }
@@ -2135,7 +2177,7 @@ const display = {
   },
   hideAllButtons(){
     display.hideButton('dice')
-    for(let card in progress){
+    for(let card in progress_large){
       display.hideButton(card)
     }
     display.hideButton('draw')
@@ -2154,7 +2196,7 @@ const display = {
   toggleMyButtons(socketID){
     let myself = game.IDToPlayer(socketID)
     display.hideMyButton(socketID,'dice')
-    for(let card in progress){
+    for(let card in progress_large){
       display.hideMyButton(socketID, card)
     }
     display.hideMyButton(socketID,'draw')
@@ -2171,7 +2213,7 @@ const display = {
       if(myself.progress.knight - myself.thisTurnDraw.knight !== 0 && myself.progressUse === 0 && (game.phase === 'beforedice' || game.phase === 'afterdice')){
         display.showMyButton(socketID,'knight')
       }
-      for(let card in progress){
+      for(let card in progress_large){
         if(myself.progress[card] - myself.thisTurnDraw[card] !== 0 && myself.progressUse === 0 && game.phase === 'afterdice'){
           display.showMyButton(socketID,card)
         }
@@ -2201,6 +2243,7 @@ const display = {
       display.deleteMyThief(socketID);
     }else{
       display.showMyField(socketID);
+      display.islandTo(socketID)
       display.toggleMyButtons(socketID);
       display.hideMyMonopolyArea(socketID);
       display.hideMyHarvestArea(socketID);
@@ -2244,7 +2287,6 @@ const display = {
       if(game.phase === 'end'){
         display.showMyGameEndArea(socketID)
       }
-      display.islandTo(socketID)
       display.buildingsTo(socketID);
     }
   },
@@ -2264,6 +2306,7 @@ const display = {
       display.deleteThief()
     }else{
       display.showField()
+      display.island()
       display.toggleMyButtons(game.turnPlayer.socketID)
       display.hideMonopolyArea()
       display.hideHarvestArea()
@@ -2305,7 +2348,6 @@ const display = {
         display.showGameEndArea()
       }
     }
-    display.island()
     display.buildings()
   },
   initialize(){
@@ -2337,6 +2379,10 @@ const display = {
   },
   hideReceivingAreaTo(socketID){
     io.to(socketID).emit('hidereceivingarea', '')
+  },
+  resizeBoard(){
+    let size = board.size
+    io.emit('resizeboard',size)
   }
 }
 
@@ -2456,6 +2502,7 @@ io.on("connection", (socket)=>{
     if(playersName.length >= 1){
       game.gameStart()
       board.islandData = data
+      board.resizeBoard(data.size)
       board.makeIsland(data)
       display.buildings()
       display.island()
@@ -2464,6 +2511,7 @@ io.on("connection", (socket)=>{
     }else{
       display.hideReceivingArea()
     }
+
   });
     //nodeをクリック
     socket.on('nodeclick',(data)=>{
