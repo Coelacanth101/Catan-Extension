@@ -43,10 +43,11 @@ $('#gamestartbutton').on('click', function(){
         }else if(size === 'regular'){
             tileamounts = {ore:3,grain:4,wool:4,lumber:4,brick:3}
         }
-        
     }else{
         tileamounts = {ore:ore,grain:grain,wool:wool,lumber:lumber,brick:brick}
     }
+    
+    console.log(tileamounts)
     let total = 0
     for(resource in tileamounts){
         total += tileamounts[resource]
@@ -54,7 +55,7 @@ $('#gamestartbutton').on('click', function(){
     /////
     if(size === 'large' && total > 28){
         return
-    }else if(size === 'reguler' && total > 18){
+    }else if(size === 'regular' && total > 18){
         return
     }
     const data = {tileamounts:tileamounts,size:size}
@@ -1571,6 +1572,7 @@ const display = {
     },
     showButtonArea(){
         $(`#receiving_area`).show();
+        $(`#buttons`).show()
         $('#button_area').show()
         $(`#receiving_area`).hide();
     },
