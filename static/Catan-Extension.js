@@ -252,7 +252,6 @@ socket.on('renounce',(renounce)=>{
     display.renounce(renounce)
 })
 socket.on('hidereceivingarea',()=>{
-    console.log('受信')
     $(`#receiving_area`).hide();
 })
 
@@ -374,7 +373,6 @@ $(`#trade_area`).on('click','#tradedecide',function(){
     const importbrick = Number($(`#importbrick`).val())
     const importresource = {ore:importore,grain:importgrain,wool:importwool,lumber:importlumber,brick:importbrick}
     const data = {socketID:socket.id, exportresource:exportresource, importresource:importresource}
-    console.log(data)
     socket.emit('tradedecide', data)
 });
 //貿易やめるボタンをクリック
@@ -668,7 +666,7 @@ const display = {
             for(u in p.used){
                 let i = 1
                 while(i <= p.used[u]){
-                    $(`#player${p.number}used`).append(`<p class="usedcard ${String(u)}card">${translate(String(u))}</p>`);
+                    $(`#player${p.number}used`).append(`<p class="progresscard ${String(u)}card">${translate(String(u))}</p>`);
                     i += 1
                 };
             };
@@ -681,7 +679,7 @@ const display = {
         for(u in data.used){
             let i = 1
             while(i <= data.used[u]){
-                $(`#player${data.number}used`).append(`<p class="usedcard ${String(u)}card">${translate(String(u))}</p>`);
+                $(`#player${data.number}used`).append(`<p class="progresscard ${String(u)}card">${translate(String(u))}</p>`);
                 i += 1
             };
         };
@@ -902,13 +900,13 @@ const display = {
         $(`#receiving_area`).show();
         let i = 0;
         while(i <= 5){
-            $(`#player${i}`).css('border', '3px solid black');
+            $(`#player${i}name`).css('background-color', '');
             i += 1
         }
         if(data.phase !== 'building'){
-            $(`#player${data.tn}`).css('border', '5px solid purple');
+            $(`#player${data.tn}name`).css('background-color', 'rgb(255, 123, 0)');
         }else{
-            $(`#player${data.tn}`).css('border', '5px solid green');
+            $(`#player${data.tn}name`).css('background-color', 'rgba(38, 230, 38, 0.514)');
         }
         $(`#receiving_area`).hide();
     },

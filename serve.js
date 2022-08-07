@@ -795,7 +795,6 @@ class Player{
   trade(data){
     let ex = 0
     let im = 0
-    display.log(data)
     for(let resource in data.exportresource){
       if(this.resource[resource] < data.exportresource[resource]){
         display.hideReceivingArea()
@@ -2739,7 +2738,6 @@ io.on("connection", (socket)=>{
       if(data.socketID !== game.proposedata.proposee.socketID){
         display.hideReceivingArea()
       }else if(game.phase === 'propose'){
-        display.log('denied')
         game.proposedata.proposer.denied()
       }else{
         display.hideReceivingArea()
@@ -2771,9 +2769,7 @@ io.on("connection", (socket)=>{
     socket.on('undo', (socketID)=>{
       if(game.phase === 'burst'){
         let myself = game.IDToPlayer(socketID)
-        display.log(myself)
         myself.unDo()
-        display.log(myself)
         if(myself.toTrash > 0 && !game.burstPlayer.includes(myself)){
           game.burstPlayer.push(myself)
         }

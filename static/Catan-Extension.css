@@ -14,6 +14,7 @@
             right: 0px;
             top: 0px;
             background-color: rgb(131, 221, 131);
+            background-color: rgb(255, 123, 0);
             z-index: 1;
         }
         .dice{
@@ -63,7 +64,7 @@
             .player{
                 width: 100%;
                 margin:1px auto;
-                border: 3px solid black; 
+                border: 1px solid black; 
                 border-radius: 5px;
                 height: auto;
                 min-height: 60px;
@@ -132,6 +133,7 @@
                     height: 20px;
                     justify-content: center;
                     align-items: center;
+                    font-weight: bold;
                 }
                 .back{
                     display: flex;
