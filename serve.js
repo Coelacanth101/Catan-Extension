@@ -37,7 +37,7 @@ while(m <= maxPlayer){
   m += 1
 }
 const buildResource = {house:{ore:0,grain:1,wool:1,lumber:1,brick:1}, city:{ore:3,grain:2,wool:0,lumber:0,brick:0}, progress:{ore:1,grain:1,wool:1,lumber:0,brick:0}, road:{ore:0,grain:0,wool:0,lumber:1,brick:1}}
-const progress_large = {knight:20, roadbuild:3, harvest:3, monopoly:3, point:5}
+let progress = {knight:20, roadbuild:3, harvest:3, monopoly:3, point:5}
 
 
 class Player{
@@ -1647,30 +1647,35 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputti
     return false
   },
   progressDeckMake(){
+    if(board.size = 'large'){
+      progress = {knight:20, roadbuild:3, harvest:3, monopoly:3, point:5}
+    }else if(board.size = 'regular'){
+      progress = {knight:14, roadbuild:2, harvest:2, monopoly:2, point:5}
+    }
     this.progressDeck = [];
     let arr =[]
     let i = 1;
-    while(i <= progress_large.knight){
+    while(i <= progress.knight){
       this.progressDeck.push('knight')
       i += 1
     }
     i = 1;
-    while(i <= progress_large.roadbuild){
+    while(i <= progress.roadbuild){
       this.progressDeck.push('roadbuild')
       i += 1
     }
     i = 1;
-    while(i <= progress_large.harvest){
+    while(i <= progress.harvest){
       this.progressDeck.push('harvest')
       i += 1
     }
     i = 1;
-    while(i <= progress_large.monopoly){
+    while(i <= progress.monopoly){
       this.progressDeck.push('monopoly')
       i += 1
     }
     i = 1;
-    while(i <= progress_large.point){
+    while(i <= progress.point){
       this.progressDeck.push('point')
       i += 1
     }
@@ -2177,7 +2182,7 @@ const display = {
   },
   hideAllButtons(){
     display.hideButton('dice')
-    for(let card in progress_large){
+    for(let card in progress){
       display.hideButton(card)
     }
     display.hideButton('draw')
@@ -2196,7 +2201,7 @@ const display = {
   toggleMyButtons(socketID){
     let myself = game.IDToPlayer(socketID)
     display.hideMyButton(socketID,'dice')
-    for(let card in progress_large){
+    for(let card in progress){
       display.hideMyButton(socketID, card)
     }
     display.hideMyButton(socketID,'draw')
@@ -2213,7 +2218,7 @@ const display = {
       if(myself.progress.knight - myself.thisTurnDraw.knight !== 0 && myself.progressUse === 0 && (game.phase === 'beforedice' || game.phase === 'afterdice')){
         display.showMyButton(socketID,'knight')
       }
-      for(let card in progress_large){
+      for(let card in progress){
         if(myself.progress[card] - myself.thisTurnDraw[card] !== 0 && myself.progressUse === 0 && game.phase === 'afterdice'){
           display.showMyButton(socketID,card)
         }
