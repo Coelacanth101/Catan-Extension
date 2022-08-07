@@ -36,6 +36,18 @@
             margin-right: 0.5px;
             margin-left: 0.5px;
         }
+        #receiving_area{
+            width: 25%;
+            height: 10%;
+            position: absolute;
+            right: 0px;
+            bottom: 0px;
+            background-color: red;
+        }
+        #receiving{
+            margin-right: 0px;
+            background-color: blueviolet;
+        }
         .player0color{
             background-color: rgb(236, 28, 36);
         }

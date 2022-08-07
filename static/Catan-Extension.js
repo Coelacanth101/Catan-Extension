@@ -866,6 +866,7 @@ const display = {
             $('#cs').attr('href',"./regular.css")
             $(`#board`).html(`
                 <div id="dice_area"></div>
+                <div id="receiving_area"><p id="receiving"><b>通信中…</b></p></div>
                 <img id="board_frame" src='./regular_board.png'>
                 <img id="tile1" class="tile" data-direction="" src="./regular_ocean.png">
                 <img id="tile2" class="tile" data-direction="" src="./regular_ocean.png">
@@ -1969,6 +1970,7 @@ const display = {
             $('#cs').attr('href',"./regular.css")
             $(`#board`).html(`
                 <div id="dice_area"></div>
+                <div id="receiving_area"><p id="receiving"><b>通信中…</b></p></div>
                 <img id="board_frame" src='./regular_board.png'>
                 <img id="tile1" class="tile" data-direction="" src="./ocean.png">
                 <img id="tile2" class="tile" data-direction="" src="./ocean.png">
