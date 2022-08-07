@@ -42,7 +42,6 @@
             position: absolute;
             right: 0px;
             bottom: 0px;
-            background-color: red;
         }
         .player0color{
             background-color: rgb(236, 28, 36);
@@ -364,6 +363,17 @@
         width: 100%;
         aspect-ratio: 951.2/863.2;
     }
+    #board{
+        position: relative;
+        width:100%;
+        aspect-ratio: 951.2/863.2;
+    }
+            #receiving{
+                text-align: right;
+                vertical-align: bottom;
+                font-size: 5vw;
+                margin: 0%;
+            }
     #player_and_button_area{
         width: 100%;
         max-width: 400px;
@@ -441,6 +451,12 @@
                 position: relative;
                 height:100%;
                 aspect-ratio: 951.2/863.2;
+            }
+            #receiving{
+                text-align: right;
+                vertical-align: bottom;
+                font-size: 3vw;
+                margin: 0%;
             }
             #player_and_button_area{
                 width: 400px;
