@@ -1631,7 +1631,6 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputti
       i += 1
     }
     this.turnPlayer = this.players[0]
-    this.progressDeckMake();
     display.playerSort();
     display.hideItems();
     display.turnPlayer();
@@ -1647,9 +1646,9 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputti
     return false
   },
   progressDeckMake(){
-    if(board.size = 'large'){
+    if(board.size === 'large'){
       progress = {knight:20, roadbuild:3, harvest:3, monopoly:3, point:5}
-    }else if(board.size = 'regular'){
+    }else if(board.size === 'regular'){
       progress = {knight:14, roadbuild:2, harvest:2, monopoly:2, point:5}
     }
     this.progressDeck = [];
@@ -2509,6 +2508,7 @@ io.on("connection", (socket)=>{
       board.islandData = data
       board.resizeBoard(data.size)
       board.makeIsland(data)
+      game.progressDeckMake()
       display.buildings()
       display.island()
       display.thief()
