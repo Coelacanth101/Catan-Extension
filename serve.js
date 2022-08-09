@@ -564,7 +564,7 @@ class Player{
         display.resourceOf(player)
       }
       display.progressOf(this)
-      display.addUsed('monoopoly')
+      display.addUsed('monopoly')
     }
   };
   harvest(resource){
@@ -2442,7 +2442,6 @@ const display = {
     this.hideProposeArea()
     this.hideGameEndArea()
     this.cleanUpBoard()
-    this.hidemessageArea()
     this.hideDicePercentage()
   },
   renounce(){
