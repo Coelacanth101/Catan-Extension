@@ -283,6 +283,31 @@ socket.on('deck',(data)=>{
     $(`#deck_area`).html(`<div id="deckcase"><div id="deck"></div></div>&nbsp;×${data.number}`)
     $(`#deck`).css(`height`, `${data.height}%`)
 })
+socket.on('showexhaust',(data)=>{
+    $(`#receiving_area`).show();
+    $(`#button_area`).append(`<div id="exhaustmessage"></div>`)
+    for(let resource of data.exhaust){
+        $(`#exhaustmessage`).append(`<p class="resourcecard ${String(resource)}">${translate(String(resource))}</p>`)
+    }
+    $(`#exhaustmessage`).append(`が枯渇しました`)
+    $(`#receiving_area`).hide();
+})
+socket.on('hideexhaust',()=>{
+    $(`#exhaustmessage`).remove()
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
 //nodeをクリック
 $(`#board_area`).on('click','.nodetouch',function(){
     $(`#receiving_area`).show()

@@ -207,8 +207,24 @@
                     flex-wrap: wrap;
                     justify-content: center;
                     align-items: center;
-    
                 }
+                    #push{
+                        width: 100%;
+                        margin: auto;
+                        display: flex;
+                        flex-wrap: wrap;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                    #exhaustmessage{
+                        width: 100%;
+                        height: 20%;
+                        margin: auto;
+                        display: flex;
+                        flex-wrap: wrap;
+                        justify-content: center;
+                        align-items: center;
+                    }
                     .action_button{
                         background:skyblue;
                         width: 60px;

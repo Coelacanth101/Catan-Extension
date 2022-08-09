@@ -821,10 +821,14 @@ class Player{
       }else if(data.exportresource[resource] % this.tradeRate[resource] !== 0){
         display.hideReceivingArea()
         return
+      }else if(data.importresource[resource] > game.allResource[resource]){
+        display.hideReceivingArea()
+        return
       }else{
         ex += data.exportresource[resource] / this.tradeRate[resource]
         im += data.importresource[resource]
       }
+
     }
     if(ex !== im){
       display.hideReceivingArea()
@@ -1297,24 +1301,143 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
   },
   //資源産出
   produce(add){
-   for(let line of this.island){
-    for(let tile of line){
-      if(tile.number === add && tile !== this.thief){
-        for(let owner of tile.houseOwner){
-          owner.resource[tile.type] += 1
-          game.allResource[tile.type] -= 1
-        }
-        for(let owner of tile.cityOwner){
-          owner.resource[tile.type] += 2
-          game.allResource[tile.type] -= 2
+    let producingTile1 = {tile:'', owner:[], amount:0}
+    let producingTile2 = {tile:'', owner:[], amount:0}
+    let i = 1
+    let exhaust = []
+    for(let line of this.island){
+      for(let tile of line){
+        if(tile.number === add && tile !== this.thief){
+          if(i === 1){
+            producingTile1.tile = tile
+            for(let owner of tile.houseOwner){
+              if(!producingTile1.owner.includes(owner)){
+                producingTile1.owner.push(owner)
+              }
+              producingTile1.amount += 1
+            }
+            for(let owner of tile.cityOwner){
+              if(!producingTile1.owner.includes(owner)){
+                producingTile1.owner.push(owner)
+              }
+              producingTile1.amount += 2
+            }
+            i += 1
+          }else if(i === 2){
+            producingTile2.tile = tile
+            for(let owner of tile.houseOwner){
+              if(!producingTile2.owner.includes(owner)){
+                producingTile2.owner.push(owner)
+              }
+              producingTile2.amount += 1
+            }
+            for(let owner of tile.cityOwner){
+              if(!producingTile2.owner.includes(owner)){
+                producingTile2.owner.push(owner)
+              }
+              producingTile2.amount += 2
+            }
+            i += 1
+          }
         }
       }
     }
-   }
-   for(let player of game.players){
-    display.resourceOf(player)
-   }
-   display.hideReceivingArea()
+    if(producingTile2.tile){
+      if(producingTile1.tile.type === producingTile2.tile.type){
+        for(let owner of producingTile2.owner){
+          if(!producingTile1.owner.includes(owner)){
+            producingTile1.owner.push(owner)
+          }
+        }
+        producingTile1.amount += producingTile2.amount
+        display.log(producingTile1)
+        if(producingTile1.amount > game.allResource[producingTile1.tile.type]){
+          exhaust.push(producingTile1.tile.type)
+          if(producingTile1.owner.length >= 2){
+          }else{
+            producingTile1.owner[0].resource[producingTile1.tile.type] += game.allResource[producingTile1.tile.type]
+            game.allResource[producingTile1.tile.type] = 0
+          }
+        }else{
+          for(let owner of producingTile1.tile.houseOwner){
+            owner.resource[producingTile1.tile.type] += 1
+            game.allResource[producingTile1.tile.type] -= 1
+          }
+          for(let owner of producingTile1.tile.cityOwner){
+            owner.resource[producingTile1.tile.type] += 2
+            game.allResource[producingTile1.tile.type] -= 2
+          }
+          for(let owner of producingTile2.tile.houseOwner){
+            owner.resource[producingTile2.tile.type] += 1
+            game.allResource[producingTile2.tile.type] -= 1
+          }
+          for(let owner of producingTile2.tile.cityOwner){
+            owner.resource[producingTile2.tile.type] += 2
+            game.allResource[producingTile2.tile.type] -= 2
+          }
+        }
+      }else{
+        if(producingTile1.amount > game.allResource[producingTile1.tile.type]){
+          exhaust.push(producingTile1.tile.type)
+          if(producingTile1.owner.length >= 2){
+          }else{
+            producingTile1.owner[0].resource[producingTile1.tile.type] += game.allResource[producingTile1.tile.type]
+            game.allResource[producingTile1.tile.type] = 0
+          }
+        }else{
+          for(let owner of producingTile1.tile.houseOwner){
+            owner.resource[producingTile1.tile.type] += 1
+            game.allResource[producingTile1.tile.type] -= 1
+          }
+          for(let owner of producingTile1.tile.cityOwner){
+            owner.resource[producingTile1.tile.type] += 2
+            game.allResource[producingTile1.tile.type] -= 2
+          }
+        }
+        if(producingTile2.amount > game.allResource[producingTile2.tile.type]){
+          exhaust.push(producingTile2.tile.type)
+          if(producingTile2.owner.length >= 2){
+          }else{
+            producingTile2.owner[0].resource[producingTile2.tile.type] += game.allResource[producingTile2.tile.type]
+            game.allResource[producingTile2.tile.type] = 0
+          }
+        }else{
+          for(let owner of producingTile2.tile.houseOwner){
+            owner.resource[producingTile2.tile.type] += 1
+            game.allResource[producingTile2.tile.type] -= 1
+          }
+          for(let owner of producingTile2.tile.cityOwner){
+            owner.resource[producingTile2.tile.type] += 2
+            game.allResource[producingTile2.tile.type] -= 2
+          }
+        }
+      }
+    }else if(producingTile1.tile){
+      if(producingTile1.amount > game.allResource[producingTile1.tile.type]){
+        exhaust.push(producingTile1.tile.type)
+        if(producingTile1.owner.length >= 2){
+        }else{
+          producingTile1.owner[0].resource[producingTile1.tile.type] += producingTile1.amount
+          game.allResource[producingTile1.tile.type] -= producingTile1.amount
+        }
+      }else{
+        for(let owner of producingTile1.tile.houseOwner){
+          owner.resource[producingTile1.tile.type] += 1
+          game.allResource[producingTile1.tile.type] -= 1
+        }
+        for(let owner of producingTile1.tile.cityOwner){
+          owner.resource[producingTile1.tile.type] += 2
+          game.allResource[producingTile1.tile.type] -= 2
+        }
+      }
+    }
+    for(let player of game.players){
+      display.resourceOf(player)
+    }
+    if(exhaust.length !== 0){
+      display.showExhaust(exhaust)
+    }
+    display.hideReceivingArea()
   },
   //nodeの周りのroad座標
   roadsArounNode(nodeposition){
@@ -1745,6 +1868,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
         display.turnPlayer()
         display.toggleMyButtons(old.socketID)
         display.toggleMyButtons(game.turnPlayer.socketID)
+        display.hideExhaust()
         return
       }
     }
@@ -1796,7 +1920,8 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   burstPlayerCheck(){
     this.burstPlayer = []
     for(let player of this.players){
-      if(player.totalResource() >= 8){
+      ////////////////////////
+      if(player.totalResource() >= 1100){
         this.burstPlayer.push(player)
         player.toTrash = Math.floor(player.totalResource()/2)
       }
@@ -2317,6 +2442,7 @@ const display = {
       display.hideMyProposeArea(socketID);
       display.hideMyGameEndArea(socketID);
       display.hideDicePercentageTo(socketID)
+      display.hideExhaustTo(socketID)
       display.cleanUpMyBoard(socketID);
       display.deleteMyThief(socketID);
     }else{
@@ -2331,6 +2457,7 @@ const display = {
       display.hideMyProposeArea(socketID);
       display.hideMyGameEndArea(socketID);
       display.hideDicePercentageTo(socketID)
+      display.hideExhaustTo(socketID)
       display.myPlayerSort(socketID);
       display.hideMyItems(socketID);
       display.turnPlayerTo(socketID);
@@ -2379,6 +2506,7 @@ const display = {
       display.hideProposeArea()
       display.hideGameEndArea()
       display.hideDicePercentage()
+      display.hideExhaust()
       display.cleanUpBoard()
       display.resetRate()
       display.deleteThief()
@@ -2394,6 +2522,7 @@ const display = {
       display.hideProposeArea()
       display.hideGameEndArea()
       display.hideDicePercentage()
+      display.hideExhaust()
       display.playerSort();
       display.hideItems();
       display.turnPlayer();
@@ -2443,6 +2572,7 @@ const display = {
     this.hideGameEndArea()
     this.cleanUpBoard()
     this.hideDicePercentage()
+    this.hideExhaust()
   },
   renounce(){
     let renounce = game.renounce
@@ -2491,6 +2621,16 @@ const display = {
       let data = {height:height, number:number}
       io.to(socketID).emit('deck', data)
   },
+  showExhaust(exhaust){
+    let data = {exhaust:exhaust}
+    io.emit('showexhaust',data)
+  },
+  hideExhaust(){
+    io.emit('hideexhaust','')
+  },
+  hideExhaustTo(socketID){
+    io.to(socketID).emit('hideexhaust','')
+  }
 }
 
 function discard(item,array){
