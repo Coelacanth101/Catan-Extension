@@ -62,6 +62,7 @@ class Player{
     this.toTrash = 0
     this.tradeRate = {ore:4,grain:4,wool:4,lumber:4,brick:4}
     this.renounce = false
+    this.trashpool = {ore:0,grain:0,wool:0,lumber:0,brick:0}
     this.log = {resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     token:{house:5, city:4, road:15},
     house:[],
@@ -77,7 +78,8 @@ class Player{
     dice:1,
     toTrash:0,
     tradeRate:{ore:4,grain:4,wool:4,lumber:4,brick:4},
-  renounce:false}
+    renounce:false,
+    trashpool:{ore:0,grain:0,wool:0,lumber:0,brick:0}}
   };
   reset(){
     this.resource = {ore:0,grain:0,wool:0,lumber:0,brick:0}
@@ -97,6 +99,7 @@ class Player{
     this.toTrash = 0
     this.tradeRate = {ore:4,grain:4,wool:4,lumber:4,brick:4}
     this.renounce = false
+    this.trashpool = {ore:0,grain:0,wool:0,lumber:0,brick:0}
     this.log = {resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     token:{house:5, city:4, road:15},
     house:[],
@@ -112,12 +115,14 @@ class Player{
     dice:1,
     toTrash:0,
     tradeRate:{ore:4,grain:4,wool:4,lumber:4,brick:4},
-  renounce:false}
+    renounce:false,
+    trashpool:{ore:0,grain:0,wool:0,lumber:0,brick:0}}
   };
   recordLog(){
     for(let resource in this.resource){
       this.log.resource[resource] = this.resource[resource]
       this.log.tradeRate[resource] = this.tradeRate[resource]
+      this.log.trashpool[resource] = this.trashpool[resource]
     }
     for(let token in this.token){
       this.log.token[token] = this.token[token]
@@ -151,6 +156,7 @@ class Player{
     for(let resource in this.log.resource){
       this.resource[resource] = this.log.resource[resource]
       this.tradeRate[resource] = this.log.tradeRate[resource]
+      this.trashpool[resource] = this.log.trashpool[resource]
     }
     for(let token in this.log.token){
       this.token[token] = this.log.token[token]
@@ -206,6 +212,7 @@ class Player{
               let tile = board.island[tileposition[0]][tileposition[1]]
               if(tile.produce){
                 this.resource[tile.type] += 1
+                game.allResource[tile.type] -= 1
               }
             }
           }
@@ -575,6 +582,7 @@ class Player{
         this.progress.harvest -= 1
         this.used.harvest += 1
         this.resource[resource] += 1
+        game.allResource[resource] -= 1
         game.phase = 'harvest2'
       }
       display.resourceOf(this)
@@ -582,6 +590,7 @@ class Player{
       display.addUsed('harvest')
     }else if(game.phase === 'harvest2'){
       this.resource[resource] += 1
+      game.allResource[resource] -= 1
       game.phase = 'afterdice'
       display.hideMyHarvestArea(this.socketID)
       display.resourceOf(this)
@@ -624,9 +633,16 @@ class Player{
     }else if(this.toTrash >= 1){
       this.resource[resource] -= 1
       this.toTrash -= 1
+      this.trashpool[resource] += 1
       if(this.toTrash === 0){
         discard(this, game.burstPlayer)
         if(game.burstPlayer.length === 0){
+          for(let player of game.players){
+            for(let resource in game.allResource){
+              game.allResource[resource] += player.trashpool[resource]
+              player.trashpool[resource] = 0
+            }
+          }
           game.phase = 'thiefmove'
           recordLog()
           display.hideBurstArea()
@@ -775,6 +791,7 @@ class Player{
   useResource(item){
     for(let resource in buildResource[item]){
       this.resource[resource] -= buildResource[item][resource]
+      game.allResource[resource] += buildResource[item][resource]
     }
     display.resourceOf(this)
   };
@@ -814,7 +831,9 @@ class Player{
     }else{
       for(let resource in data.exportresource){
         this.resource[resource] -= data.exportresource[resource]
+        game.allResource[resource] += data.exportresource[resource]
         this.resource[resource] += data.importresource[resource]
+        game.allResource[resource] -= data.importresource[resource]
       }
       game.phase = 'afterdice'
       display.hideMyTradeArea(data.socketID)
@@ -914,6 +933,7 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
       this.roadLine = [6,10,18,23,33,39,51,58,70,76,86,91,99,103,109]
       this.landLine = [3,7,12,18,23,27,30]
       this.log.island = [[],[],[],[],[],[],[],[],[]]
+      game.allResource = {ore:25,grain:25,wool:25,lumber:25,brick:25}
     }else if(size === 'regular'){
       this.size = size
       this.island = [[],[],[],[],[],[],[]]
@@ -922,8 +942,8 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
       this.roadLine = [6,10,18,23,33,39,49,54,62,66,72]
       this.landLine = [3,7,12,16,19]
       this.log.island = [[],[],[],[],[],[],[]]
+      game.allResource = {ore:19,grain:19,wool:19,lumber:19,brick:19}
     }
-    display.resizeBoard(size)
   },
   reset(){
     if(this.size === 'large'){
@@ -1282,9 +1302,11 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
       if(tile.number === add && tile !== this.thief){
         for(let owner of tile.houseOwner){
           owner.resource[tile.type] += 1
+          game.allResource[tile.type] -= 1
         }
         for(let owner of tile.cityOwner){
           owner.resource[tile.type] += 2
+          game.allResource[tile.type] -= 2
         }
       }
     }
@@ -1532,7 +1554,9 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
 
 
 
-const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputting', progressDeck:[],board:board,buildingPhase:0,largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:'', takeresource:''},renounce:[],log:{turnPlayer:'', phase:'nameinputting', progressDeck:[],buildingPhase:0,largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}, takeresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}},renounce:[]},lastActionPlayer:'',
+const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputting', progressDeck:[],board:board,buildingPhase:0,largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:'', takeresource:''},renounce:[],
+log:{turnPlayer:'', phase:'nameinputting', progressDeck:[],buildingPhase:0,largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}, takeresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}},renounce:[],allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0}},
+lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   newGame(){
     for(let player of this.players){
       player.reset()
@@ -1561,8 +1585,9 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputti
     this.burstPlayer = [];
     this.proposedata = {proposer:'', proposee:'', giveresource:'', takeresource:''};
     this.renounce = []
-    this.log = {turnPlayer:'', phase:'setup', progressDeck:[],buildingPhase:0,largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}, takeresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}},renounce:[]}
+    this.log = {turnPlayer:'', phase:'setup', progressDeck:[],buildingPhase:0,largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}, takeresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}},renounce:[],allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0}}
     this.lastActionPlayer = ''
+    this.allResource = {ore:0,grain:0,wool:0,lumber:0,brick:0}
   },
   recordLog(){
     this.log.turnPlayer = this.turnPlayer
@@ -1588,6 +1613,9 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputti
     for(let player of this.renounce){
       this.log.renounce.push(player)
     }
+    for(let resource in this.allResource){
+      this.log.allResource[resource] = this.allResource[resource]
+    }
   },
   unDo(){
     this.turnPlayer = this.log.turnPlayer
@@ -1612,6 +1640,9 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputti
     this.renounce = []
     for(let player of this.log.renounce){
       this.renounce.push(player)
+    }
+    for(let resource in this.allResource){
+      this.allResource[resource] = this.log.allResource[resource]
     }
   },
   playerMake(){
@@ -1818,6 +1849,7 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputti
     this.proposedata = {proposer:'', proposee:'', giveresource:'', takeresource:''};
     this.renounce = []
     this.lastActionPlayer = ''
+    this.allResource = {ore:0,grain:0,wool:0,lumber:0,brick:0}
   },
 }
 
@@ -2426,10 +2458,6 @@ const display = {
   },
   hideReceivingAreaTo(socketID){
     io.to(socketID).emit('hidereceivingarea', '')
-  },
-  resizeBoard(){
-    let size = board.size
-    io.emit('resizeboard',size)
   },
   hideDicePercentage(){
     io.emit('hidedicepercentage','')
