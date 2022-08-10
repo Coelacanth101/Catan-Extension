@@ -871,9 +871,6 @@
         align-items: center;
     }
     .relativenode{
-        width: 100%;
-        height: 100%;
-        z-index: 0;
         background-color: rgba(159, 28, 192, 0.5);
     }
     #node1{
