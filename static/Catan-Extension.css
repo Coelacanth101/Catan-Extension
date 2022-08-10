@@ -822,8 +822,9 @@
     height:5.577934854026429%;
     z-index:1;
     border-radius:50%;
-    text-align: center;
-    vertical-align: middle;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .roadx1{
     left:9.84882087034698%;
