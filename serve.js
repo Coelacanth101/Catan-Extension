@@ -195,6 +195,7 @@ class Player{
           display.hideReceivingArea()
         }//問題なければ建設
         else{
+          display.addHouse({nodeNumber: board.nodePositionToNumber(position), ownerNumber:this.number})
           recordLog()
           game.lastActionPlayer = this
           this.token.house -= 1
@@ -221,7 +222,6 @@ class Player{
           game.pointReload()
           display.tokenOf(this)
           display.resourceOf(this)
-          display.addHouse({nodeNumber: board.nodePositionToNumber(position), ownerNumber:this.number})
         }
       }else if(game.phase === 'afterdice'|| game.phase === 'building'){
         //既に家がないか確認
@@ -246,6 +246,7 @@ class Player{
         }
         //問題なければ建設
         else{
+          display.addHouse({nodeNumber: board.nodePositionToNumber(position), ownerNumber:this.number})
           recordLog()
           game.lastActionPlayer = this
           this.token.house -= 1
@@ -261,7 +262,6 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.tokenOf(this)
-          display.addHouse({nodeNumber: board.nodePositionToNumber(position), ownerNumber:this.number})
         }
       }else{
         display.hideReceivingArea()
@@ -282,6 +282,7 @@ class Player{
         }
         //問題なければ建設
         else{
+          display.addCity({nodeNumber: board.nodePositionToNumber(position), ownerNumber:this.number})
           recordLog()
           game.lastActionPlayer = this
           this.token.city -= 1
@@ -302,7 +303,6 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.tokenOf(this)
-          display.addCity({nodeNumber: board.nodePositionToNumber(position), ownerNumber:this.number})
         }
       }else{
         display.hideReceivingArea()
@@ -318,6 +318,7 @@ class Player{
         }
         //問題なければ建設
         else{
+          display.addRoad({roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), ownerNumber:this.number})
           recordLog()
           game.lastActionPlayer = this
           this.token.road -= 1
@@ -326,7 +327,6 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.tokenOf(this)
-          display.addRoad({roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), ownerNumber:this.number})
           game.turnEndSetup()
           display.relativeNodes()
         }
@@ -348,6 +348,7 @@ class Player{
         }
         //問題なければ建設
         else{
+          display.addRoad({roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), ownerNumber:this.number})
           recordLog()
           game.lastActionPlayer = this
           this.token.road -= 1
@@ -357,7 +358,6 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.tokenOf(this)
-          display.addRoad({roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), ownerNumber:this.number})
         }
       }else if(game.phase === 'roadbuild1'){
         //既に道がないか確認
@@ -374,6 +374,7 @@ class Player{
         }
         //問題なければ建設
         else{
+          display.addRoad({roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), ownerNumber:this.number})
           recordLog()
           game.lastActionPlayer = this
           this.token.road -= 1
@@ -382,7 +383,6 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.tokenOf(this)
-          display.addRoad({roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), ownerNumber:this.number})
           if(this.token.road >= 1){
             game.phase = 'roadbuild2'
           }else{
@@ -405,6 +405,7 @@ class Player{
         }
         //問題なければ建設
         else{
+          display.addRoad({roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), ownerNumber:this.number})
           recordLog()
           game.lastActionPlayer = this
           this.token.road -= 1
@@ -413,7 +414,6 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.tokenOf(this)
-          display.addRoad({roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), ownerNumber:this.number})
           game.phase = 'afterdice'
           display.toggleMyButtons(game.turnPlayer.socketID)
         }
