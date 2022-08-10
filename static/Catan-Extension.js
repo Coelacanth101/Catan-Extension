@@ -295,8 +295,19 @@ socket.on('showexhaust',(data)=>{
 socket.on('hideexhaust',()=>{
     $(`#exhaustmessage`).remove()
 })
-
-
+socket.on('relativenodes',(data)=>{
+    $(`#receiving_area`).show();
+    $(`.relativenode`).removeClass(`relativenode`)
+    for(let node of data.nodes){
+        $(`#node${node+1}`).addClass(`relativenode`)
+    }
+    $(`#receiving_area`).hide();
+})
+socket.on('deleterelativenodes',()=>{
+    $(`#receiving_area`).show();
+    $(`.relativenode`).removeClass(`relativenode`)
+    $(`#receiving_area`).hide();
+})
 
 
 
@@ -1420,7 +1431,7 @@ const display = {
                 };
             };
             $(`#proposeterm .giveresource`).append(`をあげて`)
-            $(`#proposeterm .takeresource`).append(`をもらう`) 
+            $(`#proposeterm .takeresource`).append(`をもらう`)
         }else if(data.proposee.socketID === socket.id){
             $(`#acceptordeny`).show()
             $(`#proposeterm`).append(`<div><b>${data.proposer.name}</b>に</div>`)
@@ -1442,6 +1453,22 @@ const display = {
             $(`#proposeterm .takeresource`).append(`をもらう`) 
         }else{
             $(`#proposeterm`).append(`<div><b>${data.proposer.name}</b>&nbsp;が&nbsp;<b>${data.proposee.name}</b>&nbsp;に交渉中</div>`)
+            $(`#proposeterm`).append(`<div class='giveresource'></div>`)
+            $(`#proposeterm`).append(`<div class='takeresource'></div>`)
+            for(let resource in data.giveresource){
+                let i = 1
+                let j = 1
+                while(i <= data.giveresource[resource]){
+                    $(`#proposeterm .giveresource`).append(`<p class="resourcecard ${String(resource)}">${translate(String(resource))}</p>`);
+                    i += 1
+                };
+                while(j <= data.takeresource[resource]){
+                    $(`#proposeterm .takeresource`).append(`<p class="resourcecard ${String(resource)}">${translate(String(resource))}</p>`);
+                    j += 1
+                };
+            };
+            $(`#proposeterm .giveresource`).append(`をあげて`)
+            $(`#proposeterm .takeresource`).append(`をもらう`)
         }
         $(`#receiving_area`).hide();
     },

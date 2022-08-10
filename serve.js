@@ -328,6 +328,7 @@ class Player{
           display.tokenOf(this)
           display.addRoad({roadNumber: board.roadPositionToNumber(position), roadDegree: board.roadDegree(position), ownerNumber:this.number})
           game.turnEndSetup()
+          display.relativeNodes()
         }
       }else if(game.phase === 'afterdice'|| game.phase === 'building'){
         //既に道がないか確認
@@ -1649,6 +1650,50 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
       }
     }
   },
+  productivity(tileobj){
+    if(tileobj.number <= 6){
+      return tileobj.number - 1
+    }else if(tileobj.number >= 8){
+      return 13 - tileobj.number
+    }
+  },
+  relativeProductivity(tileobj){
+    if(tileobj.produce !== true){
+      return 0
+    }
+    let totalProductivity = 0
+    for(let line of this.island){
+      for(let tile of line){
+        if(tile.type === tileobj.type ){
+          totalProductivity += this.productivity(tile)
+        }
+      }
+    }
+    return this.productivity(tileobj) / totalProductivity
+  },
+  nodeRelativeProductivity(nodeNumber){
+    const nodePosition = this.nodeNumberToPosition(nodeNumber)
+    const tilepositions = this.tilesAroundNode(nodePosition)
+    let totalProductivity = 0
+    for(let tileposition of tilepositions){
+      let tile = this.island[tileposition[0]][tileposition[1]]
+      totalProductivity += this.relativeProductivity(tile)
+    }
+    return totalProductivity
+  },
+  allNodesRelativeProductivity(){
+    let i = 1
+    let productivity =[]
+    while(i <= this.nodeLine[this.nodeLine.length - 1]){
+      if(this.nodeCondition(this.nodeNumberToPosition(i)) === 'blank'){
+        productivity.push(this.nodeRelativeProductivity(i))
+      }else{
+        productivity.push(0)
+      }
+      i += 1
+    }
+    return productivity
+  },
   initialize(){
     if(this.size === 'large'){
       this.island = [[],[],[],[],[],[],[],[],[]]
@@ -1793,7 +1838,6 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     display.playerSort();
     display.hideItems();
     display.turnPlayer();
-    //////////////
     display.hideAllButtons()
   },
   arrayHasID(array, ID){
@@ -1882,7 +1926,6 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
       this.phase = 'beforedice'
     }
     this.buildingPhase += 1
-    /////////
     display.turnPlayer()
     display.toggleMyButtons(old.socketID)
     display.toggleMyButtons(game.turnPlayer.socketID)
@@ -1920,8 +1963,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   burstPlayerCheck(){
     this.burstPlayer = []
     for(let player of this.players){
-      ////////////////////////
-      if(player.totalResource() >= 1100){
+      if(player.totalResource() >= 8){
         this.burstPlayer.push(player)
         player.toTrash = Math.floor(player.totalResource()/2)
       }
@@ -2376,7 +2418,7 @@ const display = {
   },
   hideMyButton(socketID,string){
     io.to(socketID).emit('hidebutton',string)
-  },//////
+  },
   hideButton(string){
     io.emit('hidebutton',string)
   },
@@ -2448,6 +2490,7 @@ const display = {
     }else{
       display.showMyField(socketID);
       display.islandTo(socketID)
+      display.relativeNodesTo(socketID)
       display.toggleMyButtons(socketID);
       display.hideMyMonopolyArea(socketID);
       display.hideMyHarvestArea(socketID);
@@ -2513,6 +2556,7 @@ const display = {
     }else{
       display.showField()
       display.island()
+      display.relativeNodes()
       display.toggleMyButtons(game.turnPlayer.socketID)
       display.hideMonopolyArea()
       display.hideHarvestArea()
@@ -2630,6 +2674,23 @@ const display = {
   },
   hideExhaustTo(socketID){
     io.to(socketID).emit('hideexhaust','')
+  },
+  relativeNodes(){
+    let nodes = highestIndex(board.allNodesRelativeProductivity())
+    let data = {nodes:nodes}
+    if(game.phase === 'setup'){
+      io.emit('relativenodes',data)
+    }else{
+      io.emit('deleterelativenodes','')
+    }
+  },
+  relativeNodesTo(socketID){
+    let nodes = highestIndex(board.allNodesRelativeProductivity())
+    let data = {nodes:nodes}
+    if(game.phase === 'setup'){
+      display.log(board.allNodesRelativeProductivity())
+      io.to(socketID).emit('relativenodes',data)
+    }
   }
 }
 
@@ -2724,6 +2785,17 @@ function unDo(){
   board.unDo()
   game.unDo()
 }
+function highestIndex(array){
+  let highestIndex = [0]
+  for(let item of array){
+    if(item > array[highestIndex[0]]){
+      highestIndex = [array.indexOf(item)]
+    }else if(item === array[highestIndex[0]]){
+      highestIndex.push(array.indexOf(item))
+    }
+  }
+  return highestIndex
+}
 
 io.on("connection", (socket)=>{
 
@@ -2754,6 +2826,7 @@ io.on("connection", (socket)=>{
       game.progressDeckMake()
       display.buildings()
       display.island()
+      display.relativeNodes()
       display.thief()
       display.allPlayerInformation()
     }else{
