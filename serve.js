@@ -1289,11 +1289,12 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
     game.turnPlayer.dice = 0
     if(dice1 + dice2 === 7){
       game.burstPlayerCheck()
+      display.dice()
     }else{
+      display.dice()
       this.produce(dice1+dice2)
       game.phase = 'afterdice'
     }
-    display.dice()
     this.diceCount[dice1+dice2] += 1
     recordLog()
     game.lastActionPlayer = game.turnPlayer
@@ -2406,9 +2407,6 @@ const display = {
   },
   diceBlack(){
     io.emit('diceblack','')
-  },
-  diceBlackTo(socketID){
-    io.to(socketID).emit('diceblack','')
   },
   hidemessageArea(){
     io.emit('hidemessagearea', );
