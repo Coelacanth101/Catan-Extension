@@ -1286,6 +1286,7 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
     let dice1 = Math.ceil(Math.random()*6);
     let dice2 = Math.ceil(Math.random()*6);
     this.dice = [dice1,dice2];
+    display.dice()
     game.turnPlayer.dice = 0
     if(dice1 + dice2 === 7){
       game.burstPlayerCheck()
@@ -1294,7 +1295,6 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
       game.phase = 'afterdice'
     }
     this.diceCount[dice1+dice2] += 1
-    display.dice()
     recordLog()
     game.lastActionPlayer = game.turnPlayer
     display.toggleMyButtons(game.turnPlayer.socketID)
