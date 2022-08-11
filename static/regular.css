@@ -852,17 +852,20 @@
     top:81.9740500463392%;
     left:64.4238856181665%;}
     .node{
+        position:absolute;
+        width:6.37076159106909%;
+        height:7.02023682278142%;
         border-radius:50%;
         text-align: center;
         vertical-align: middle;
         display: flex;
         justify-content: center;
         align-items: center;
+        z-index:2;
     }
     .nodetouch{
         width: 75%;
         height: 75%;
-        z-index:2;
         border-radius:50%;
         text-align: center;
         vertical-align: middle;
@@ -874,544 +877,220 @@
         background-color: rgba(159, 28, 192, 0.5);
     }
     #node1{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:14.7475275570986%;
         left:25.494181862161%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node2{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:10.2989640723906%;
         left:32.6009943095958%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node3{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:14.7475275570986%;
         left:39.7078067570306%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node4{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:10.2989640723906%;
         left:46.8146192044655%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node5{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:14.7475275570986%;
         left:53.9214316519003%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node6{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:10.2989640723906%;
         left:61.0282440993351%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node7{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:14.7475275570986%;
         left:68.1350565467699%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node8{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:28.3249140260514%;
         left:18.3873694147262%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node9{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:23.8763505413433%;
         left:25.494181862161%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node10{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:28.3249140260514%;
         left:32.6009943095958%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node11{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:23.8763505413433%;
         left:39.7078067570306%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node12{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:28.3249140260514%;
         left:46.8146192044655%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node13{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:23.8763505413433%;
         left:53.9214316519003%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node14{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:28.3249140260514%;
         left:61.0282440993351%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node15{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:23.8763505413433%;
         left:68.1350565467699%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node16{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:28.3249140260514%;
         left:75.2418689942047%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node17{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:41.9023004950041%;
         left:11.2805569672914%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node18{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:37.453737010296%;
         left:18.3873694147262%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node19{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:41.9023004950041%;
         left:25.494181862161%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node20{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:37.453737010296%;
         left:32.6009943095958%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node21{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:41.9023004950041%;
         left:39.7078067570306%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node22{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:37.453737010296%;
         left:46.8146192044655%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node23{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:41.9023004950041%;
         left:53.9214316519003%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node24{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:37.453737010296%;
         left:61.0282440993351%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node25{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:41.9023004950041%;
         left:68.1350565467699%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node26{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:37.453737010296%;
         left:75.2418689942047%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node27{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:41.9023004950041%;
         left:82.3486814416396%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node28{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:51.0311234792488%;
         left:11.2805569672914%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node29{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:55.4796869639568%;
         left:18.3873694147262%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node30{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:51.0311234792488%;
         left:25.494181862161%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node31{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:55.4796869639568%;
         left:32.6009943095958%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node32{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:51.0311234792488%;
         left:39.7078067570306%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node33{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:55.4796869639568%;
         left:46.8146192044655%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node34{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:51.0311234792488%;
         left:53.9214316519003%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node35{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:55.4796869639568%;
         left:61.0282440993351%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node36{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:51.0311234792488%;
         left:68.1350565467699%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node37{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:55.4796869639568%;
         left:75.2418689942047%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node38{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:51.0311234792488%;
         left:82.3486814416396%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node39{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:64.6085099482015%;
         left:18.3873694147262%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node40{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:69.0570734329096%;
         left:25.494181862161%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node41{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:64.6085099482015%;
         left:32.6009943095958%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node42{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:69.0570734329096%;
         left:39.7078067570306%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node43{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:64.6085099482015%;
         left:46.8146192044655%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node44{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:69.0570734329096%;
         left:53.9214316519003%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node45{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:64.6085099482015%;
         left:61.0282440993351%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node46{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:69.0570734329096%;
         left:68.1350565467699%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node47{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:64.6085099482015%;
         left:75.2418689942047%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node48{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:78.1858964171542%;
         left:25.494181862161%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node49{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:82.6344599018623%;
         left:32.6009943095958%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node50{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:78.1858964171542%;
         left:39.7078067570306%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node51{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:82.6344599018623%;
         left:46.8146192044655%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node52{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:78.1858964171542%;
         left:53.9214316519003%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node53{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:82.6344599018623%;
         left:61.0282440993351%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     #node54{
-        position:absolute;
-        width:6.37076159106909%;
-        height:7.02023682278142%;
         top:78.1858964171542%;
         left:68.1350565467699%;
-        z-index:1;
-        
-        border-radius:50%;
     }
     .road{
         display: flex;
@@ -1425,7 +1104,6 @@
         top:12.5232458147446%;
         left:29.0265620135487%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road2{
@@ -1435,7 +1113,6 @@
         top:12.5232458147446%;
         left:36.1333744609835%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road3{
@@ -1445,7 +1122,6 @@
         top:12.5232458147446%;
         left:43.2401869084184%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road4{
@@ -1455,7 +1131,6 @@
         top:12.5232458147446%;
         left:50.3469993558532%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road5{
@@ -1465,7 +1140,6 @@
         top:12.5232458147446%;
         left:57.453811803288%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road6{
@@ -1475,7 +1149,6 @@
         top:12.5232458147446%;
         left:64.5606242507228%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road7{
@@ -1485,7 +1158,6 @@
         top:19.2887694477381%;
         left:25.4521297175016%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road8{
@@ -1495,7 +1167,6 @@
         top:19.2887694477381%;
         left:39.6657546123713%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road9{
@@ -1505,7 +1176,6 @@
         top:19.2887694477381%;
         left:53.8793795072409%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road10{
@@ -1515,7 +1185,6 @@
         top:19.2887694477381%;
         left:68.0930044021105%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road11{
@@ -1525,7 +1194,6 @@
         top:26.1006322836973%;
         left:21.9197495661139%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road12{
@@ -1535,7 +1203,6 @@
         top:26.1006322836973%;
         left:29.0265620135487%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road13{
@@ -1545,7 +1212,6 @@
         top:26.1006322836973%;
         left:36.1333744609835%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road14{
@@ -1555,7 +1221,6 @@
         top:26.1006322836973%;
         left:43.2401869084184%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road15{
@@ -1565,7 +1230,6 @@
         top:26.1006322836973%;
         left:50.3469993558532%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road16{
@@ -1575,7 +1239,6 @@
         top:26.1006322836973%;
         left:57.453811803288%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road17{
@@ -1585,7 +1248,6 @@
         top:26.1006322836973%;
         left:64.5606242507228%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road18{
@@ -1595,7 +1257,6 @@
         top:26.1006322836973%;
         left:71.6674366981577%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road19{
@@ -1605,7 +1266,6 @@
         top:32.8661559166909%;
         left:18.3453172700668%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road20{
@@ -1615,7 +1275,6 @@
         top:32.8661559166909%;
         left:32.5589421649364%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road21{
@@ -1625,7 +1284,6 @@
         top:32.8661559166909%;
         left:46.7725670598061%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road22{
@@ -1635,7 +1293,6 @@
         top:32.8661559166909%;
         left:60.9861919546757%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road23{
@@ -1645,7 +1302,6 @@
         top:32.8661559166909%;
         left:75.1998168495454%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road24{
@@ -1655,7 +1311,6 @@
         top:39.6780187526501%;
         left:14.8129371186791%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road25{
@@ -1665,7 +1320,6 @@
         top:39.6780187526501%;
         left:21.9197495661139%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road26{
@@ -1675,7 +1329,6 @@
         top:39.6780187526501%;
         left:29.0265620135487%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road27{
@@ -1685,7 +1338,6 @@
         top:39.6780187526501%;
         left:36.1333744609835%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road28{
@@ -1695,7 +1347,6 @@
         top:39.6780187526501%;
         left:43.2401869084184%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road29{
@@ -1705,7 +1356,6 @@
         top:39.6780187526501%;
         left:50.3469993558532%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road30{
@@ -1715,7 +1365,6 @@
         top:39.6780187526501%;
         left:57.453811803288%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road31{
@@ -1725,7 +1374,6 @@
         top:39.6780187526501%;
         left:64.5606242507228%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road32{
@@ -1735,7 +1383,6 @@
         top:39.6780187526501%;
         left:71.6674366981577%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road33{
@@ -1745,7 +1392,6 @@
         top:39.6780187526501%;
         left:78.7742491455925%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road34{
@@ -1755,7 +1401,6 @@
         top:46.4435423856436%;
         left:11.238504822632%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road35{
@@ -1765,7 +1410,6 @@
         top:46.4435423856436%;
         left:25.4521297175016%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road36{
@@ -1775,7 +1419,6 @@
         top:46.4435423856436%;
         left:39.6657546123713%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road37{
@@ -1785,7 +1428,6 @@
         top:46.4435423856436%;
         left:53.8793795072409%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road38{
@@ -1795,7 +1437,6 @@
         top:46.4435423856436%;
         left:68.0930044021105%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road39{
@@ -1805,7 +1446,6 @@
         top:46.4435423856436%;
         left:82.3066292969802%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road40{
@@ -1815,7 +1455,6 @@
         top:53.2554052216028%;
         left:14.8129371186791%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road41{
@@ -1825,7 +1464,6 @@
         top:53.2554052216028%;
         left:21.9197495661139%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road42{
@@ -1835,7 +1473,6 @@
         top:53.2554052216028%;
         left:29.0265620135487%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road43{
@@ -1845,7 +1482,6 @@
         top:53.2554052216028%;
         left:36.1333744609835%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road44{
@@ -1855,7 +1491,6 @@
         top:53.2554052216028%;
         left:43.2401869084184%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road45{
@@ -1865,7 +1500,6 @@
         top:53.2554052216028%;
         left:50.3469993558532%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road46{
@@ -1875,7 +1509,6 @@
         top:53.2554052216028%;
         left:57.453811803288%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road47{
@@ -1885,7 +1518,6 @@
         top:53.2554052216028%;
         left:64.5606242507228%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road48{
@@ -1895,7 +1527,6 @@
         top:53.2554052216028%;
         left:71.6674366981577%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road49{
@@ -1905,7 +1536,6 @@
         top:53.2554052216028%;
         left:78.7742491455925%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road50{
@@ -1915,7 +1545,6 @@
         top:60.0209288545963%;
         left:18.3453172700668%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road51{
@@ -1925,7 +1554,6 @@
         top:60.0209288545963%;
         left:32.5589421649364%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road52{
@@ -1935,7 +1563,6 @@
         top:60.0209288545963%;
         left:46.7725670598061%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road53{
@@ -1945,7 +1572,6 @@
         top:60.0209288545963%;
         left:60.9861919546757%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road54{
@@ -1955,7 +1581,6 @@
         top:60.0209288545963%;
         left:75.1998168495454%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road55{
@@ -1965,7 +1590,6 @@
         top:66.8327916905555%;
         left:21.9197495661139%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road56{
@@ -1975,7 +1599,6 @@
         top:66.8327916905555%;
         left:29.0265620135487%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road57{
@@ -1985,7 +1608,6 @@
         top:66.8327916905555%;
         left:36.1333744609835%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road58{
@@ -1995,7 +1617,6 @@
         top:66.8327916905555%;
         left:43.2401869084184%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road59{
@@ -2005,7 +1626,6 @@
         top:66.8327916905555%;
         left:50.3469993558532%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road60{
@@ -2015,7 +1635,6 @@
         top:66.8327916905555%;
         left:57.453811803288%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road61{
@@ -2025,7 +1644,6 @@
         top:66.8327916905555%;
         left:64.5606242507228%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road62{
@@ -2035,7 +1653,6 @@
         top:66.8327916905555%;
         left:71.6674366981577%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road63{
@@ -2045,7 +1662,6 @@
         top:73.5983153235491%;
         left:25.4521297175016%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road64{
@@ -2055,7 +1671,6 @@
         top:73.5983153235491%;
         left:39.6657546123713%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road65{
@@ -2065,7 +1680,6 @@
         top:73.5983153235491%;
         left:53.8793795072409%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road66{
@@ -2075,7 +1689,6 @@
         top:73.5983153235491%;
         left:68.0930044021105%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road67{
@@ -2085,7 +1698,6 @@
         top:80.4101781595083%;
         left:29.0265620135487%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road68{
@@ -2095,7 +1707,6 @@
         top:80.4101781595083%;
         left:36.1333744609835%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road69{
@@ -2105,7 +1716,6 @@
         top:80.4101781595083%;
         left:43.2401869084184%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road70{
@@ -2115,7 +1725,6 @@
         top:80.4101781595083%;
         left:50.3469993558532%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road71{
@@ -2125,7 +1734,6 @@
         top:80.4101781595083%;
         left:57.453811803288%;
         z-index:1;
-        
         border-radius:50%;
     }
     #road72{
@@ -2135,7 +1743,6 @@
         top:80.4101781595083%;
         left:64.5606242507228%;
         z-index:1;
-        
         border-radius:50%;
     }
     #tile_button1{
@@ -2145,7 +1752,6 @@
         top:18.70937698413%;
         left:32.0331520318555%;
         z-index:1;
-        
         border-radius:50%;
     }
     #tile_button2{
@@ -2155,7 +1761,6 @@
         top:18.70937698413%;
         left:46.2467769267252%;
         z-index:1;
-        
         border-radius:50%;
     }
     #tile_button3{
@@ -2165,7 +1770,6 @@
         top:18.70937698413%;
         left:60.4604018215948%;
         z-index:1;
-        
         border-radius:50%;
     }
     #tile_button4{
@@ -2175,7 +1779,6 @@
         top:32.2867634530827%;
         left:24.9263395844207%;
         z-index:1;
-        
         border-radius:50%;
     }
     #tile_button5{
@@ -2185,7 +1788,6 @@
         top:32.2867634530827%;
         left:39.1399644792904%;
         z-index:1;
-        
         border-radius:50%;
     }
     #tile_button6{
@@ -2195,7 +1797,6 @@
         top:32.2867634530827%;
         left:53.35358937416%;
         z-index:1;
-        
         border-radius:50%;
     }
     #tile_button7{
@@ -2205,7 +1806,6 @@
         top:32.2867634530827%;
         left:67.5672142690296%;
         z-index:1;
-        
         border-radius:50%;
     }
     #tile_button8{
@@ -2215,7 +1815,6 @@
         top:45.8641499220354%;
         left:17.8195271369859%;
         z-index:1;
-        
         border-radius:50%;
     }
     #tile_button9{
@@ -2225,7 +1824,6 @@
         top:45.8641499220354%;
         left:32.0331520318555%;
         z-index:1;
-        
         border-radius:50%;
     }
     #tile_button10{
@@ -2235,7 +1833,6 @@
         top:45.8641499220354%;
         left:46.2467769267252%;
         z-index:1;
-        
         border-radius:50%;
     }
     #tile_button11{
@@ -2245,7 +1842,6 @@
         top:45.8641499220354%;
         left:60.4604018215948%;
         z-index:1;
-        
         border-radius:50%;
     }
     #tile_button12{
@@ -2255,7 +1851,6 @@
         top:45.8641499220354%;
         left:74.6740267164644%;
         z-index:1;
-        
         border-radius:50%;
     }
     #tile_button13{
@@ -2265,7 +1860,6 @@
         top:59.4415363909882%;
         left:24.9263395844207%;
         z-index:1;
-        
         border-radius:50%;
     }
     #tile_button14{
@@ -2275,7 +1869,6 @@
         top:59.4415363909882%;
         left:39.1399644792904%;
         z-index:1;
-        
         border-radius:50%;
     }
     #tile_button15{
@@ -2285,7 +1878,6 @@
         top:59.4415363909882%;
         left:53.35358937416%;
         z-index:1;
-        
         border-radius:50%;
     }
     #tile_button16{
@@ -2295,7 +1887,6 @@
         top:59.4415363909882%;
         left:67.5672142690296%;
         z-index:1;
-        
         border-radius:50%;
     }
     #tile_button17{
@@ -2305,7 +1896,6 @@
         top:73.0189228599409%;
         left:32.0331520318555%;
         z-index:1;
-        
         border-radius:50%;
     }
     #tile_button18{
@@ -2315,7 +1905,6 @@
         top:73.0189228599409%;
         left:46.2467769267252%;
         z-index:1;
-        
         border-radius:50%;
     }
     #tile_button19{
@@ -2325,7 +1914,6 @@
         top:73.0189228599409%;
         left:60.4604018215948%;
         z-index:1;
-        
         border-radius:50%;
     }
     #chip1{
