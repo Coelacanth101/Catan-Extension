@@ -1751,7 +1751,12 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     this.renounce = []
     this.log = {turnPlayer:'', phase:'setup', progressDeck:[],buildingPhase:0,largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}, takeresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}},renounce:[],allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0}}
     this.lastActionPlayer = ''
-    this.allResource = {ore:0,grain:0,wool:0,lumber:0,brick:0}
+    if(this.size === 'large'){
+      this.allResource = {ore:25,grain:25,wool:25,lumber:25,brick:25}
+    }else if(this.size === 'regular'){
+      this.allResource = {ore:19,grain:19,wool:19,lumber:19,brick:19}
+    }
+    
   },
   recordLog(){
     this.log.turnPlayer = this.turnPlayer
