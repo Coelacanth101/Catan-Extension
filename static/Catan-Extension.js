@@ -1553,7 +1553,6 @@ const display = {
     log(a){
         console.log(a)
     },
-    ////////////
     playerSort(players){
         $(`#receiving_area`).show();
         let myNumber
@@ -1658,7 +1657,6 @@ const display = {
         $(`#receiving_area`).hide();
     },
     showNameInputArea(playersName){
-        console.log(playersName)
         $(`#receiving_area`).show();
         $(`#nameinputarea`).show();
         $('#size_select').show();

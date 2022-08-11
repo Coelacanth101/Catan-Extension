@@ -1084,15 +1084,30 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
       }
       x += 1
     }
-    numberChips = shuffle(numberChips)
-    for(let line of this.island){
-      for(let tile of line){
-        if(tile.type === 'ore'|| tile.type === 'grain'|| tile.type === 'brick'|| tile.type === 'lumber'|| tile.type === 'wool'){
-          tile.number = numberChips[0]
-          numberChips.splice(0,1)
-        }else{
-          tile.number = 0
+    while(true){
+      numberChips = shuffle(numberChips)
+      let n = 1
+      for(let line of this.island){
+        for(let tile of line){
+          if(tile.type === 'ore'|| tile.type === 'grain'|| tile.type === 'brick'|| tile.type === 'lumber'|| tile.type === 'wool'){
+            tile.number = numberChips[n-1]
+            n += 1
+          }else{
+            tile.number = 0
+          }
         }
+      }
+      let productivityCheck = true
+      let i = 1
+      while(i <= this.nodeLine[this.nodeLine.length - 1]){
+        if(this.nodeAbsouluteProductivity(i) >= 14){
+          productivityCheck = false
+          break
+        }
+        i += 1
+      }
+      if(productivityCheck === true){
+        break
       }
     }
     for(let line of this.island){
@@ -1347,7 +1362,6 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
           }
         }
         producingTile1.amount += producingTile2.amount
-        display.log(producingTile1)
         if(producingTile1.amount > game.allResource[producingTile1.tile.type]){
           exhaust.push(producingTile1.tile.type)
           if(producingTile1.owner.length >= 2){
@@ -1647,10 +1661,12 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
     }
   },
   productivity(tileobj){
-    if(tileobj.number <= 6){
+    if(tileobj.number <= 6 && tileobj.number >= 2){
       return tileobj.number - 1
-    }else if(tileobj.number >= 8){
+    }else if(tileobj.number >= 8 && tileobj.number <= 12){
       return 13 - tileobj.number
+    }else{
+      return 0
     }
   },
   relativeProductivity(tileobj){
@@ -1689,6 +1705,16 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
       i += 1
     }
     return productivity
+  },
+  nodeAbsouluteProductivity(nodeNumber){
+    const nodePosition = this.nodeNumberToPosition(nodeNumber)
+    const tilepositions = this.tilesAroundNode(nodePosition)
+    let totalProductivity = 0
+    for(let tileposition of tilepositions){
+      let tile = this.island[tileposition[0]][tileposition[1]]
+      totalProductivity += this.productivity(tile)
+    }
+    return totalProductivity
   },
   initialize(){
     if(this.size === 'large'){
@@ -1751,9 +1777,9 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     this.renounce = []
     this.log = {turnPlayer:'', phase:'setup', progressDeck:[],buildingPhase:0,largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}, takeresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}},renounce:[],allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0}}
     this.lastActionPlayer = ''
-    if(this.size === 'large'){
+    if(board.size === 'large'){
       this.allResource = {ore:25,grain:25,wool:25,lumber:25,brick:25}
-    }else if(this.size === 'regular'){
+    }else if(board.size === 'regular'){
       this.allResource = {ore:19,grain:19,wool:19,lumber:19,brick:19}
     }
     
@@ -2682,7 +2708,6 @@ const display = {
     let nodes = highestIndex(board.allNodesRelativeProductivity())
     let data = {nodes:nodes}
     if(game.phase === 'setup'){
-      display.log(board.allNodesRelativeProductivity())
       io.to(socketID).emit('relativenodes',data)
     }
   }
