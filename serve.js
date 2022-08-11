@@ -31,11 +31,6 @@ app.get("/:file", (req, res)=>{
 const maxPlayer = 6
 const properPlayer = 6
 let playersName = []
-let m = 1
-while(m <= maxPlayer){
-  playersName.push('')
-  m += 1
-}
 const buildResource = {house:{ore:0,grain:1,wool:1,lumber:1,brick:1}, city:{ore:3,grain:2,wool:0,lumber:0,brick:0}, progress:{ore:1,grain:1,wool:1,lumber:0,brick:0}, road:{ore:0,grain:0,wool:0,lumber:1,brick:1}}
 let progress = {knight:20, roadbuild:3, harvest:3, monopoly:3, point:5}
 
@@ -1830,11 +1825,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   gameStart(){
     this.phase = 'setup'
     this.playerMake();
-    let i = 1
-    while(i <= maxPlayer){
-      playersName[i-1] = ''
-      i += 1
-    }
+    playersName = []
     this.turnPlayer = this.players[0]
     display.playerSort();
     display.hideItems();
@@ -2764,11 +2755,6 @@ function initialize(){
   game.initialize();
   board.initialize();
   playersName = []
-  let m = 1
-  while(m <= maxPlayer){
-    playersName.push('')
-    m += 1
-  }
   display.initialize()
 }
 function recordLog(){
@@ -2802,19 +2788,14 @@ io.on("connection", (socket)=>{
   
   //名前の入力
   socket.on("nameInput", (namedata)=>{
-    if(!game.arrayHasID(playersName, socket.id)){
-      playersName[namedata.number] = {name:namedata.name, socketID:namedata.socketID};
-      io.emit("nameInput", namedata);     
+    if(!game.arrayHasID(playersName, socket.id) && playersName.length < maxPlayer){
+      playersName.push({name:namedata.name, socketID:namedata.socketID})
+      io.emit("nameInput", playersName);     
     }
   });
 
   //スタートボタンクリック
   socket.on('start', (data)=>{
-    let i = 1
-    while(i <= maxPlayer){
-        discard('', playersName);
-        i += 1;
-    };
     playersName = shuffle(playersName)
     if(playersName.length >= 1){
       game.gameStart()

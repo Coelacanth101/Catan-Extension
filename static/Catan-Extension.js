@@ -16,15 +16,17 @@ $('#nobutton').on('click', function(){
 $('#nameinputarea').on('click', '.namebutton', function(){
     if($(this).prev().val()){
         myName = $(this).prev().val()
-        let nameNumber = Number($(this).prev().data('namenumber'));
-        namedata = {name:myName, number:nameNumber, socketID:socket.id}
+        namedata = {name:myName, socketID:socket.id}
         socket.emit("nameInput", namedata)
     }
 })
 
 //名前の入力受信
-socket.on("nameInput", (namedata)=>{
-    $(`.player${namedata.number}`).html(`<p><b>${namedata.name}</b></p>`)
+socket.on("nameInput", (playersName)=>{
+    $(`#currentplayers`).html(``)
+    for(let player of playersName){
+        $(`#currentplayers`).append(`<p><b>${player.name}</b></p>`)
+    }
 })
 
 //スタートボタンクリック発信
@@ -1654,27 +1656,15 @@ const display = {
         $(`#receiving_area`).hide();
     },
     showNameInputArea(playersName){
+        console.log(playersName)
         $(`#receiving_area`).show();
         $(`#nameinputarea`).show();
         $('#size_select').show();
         $('#tileamounts').show();
         $(`#gamestart`).show()
-        $('#nameinputarea').html('<h1>九州の開拓者たち</h1><h2>名前を入力してください</h2>')
-        let i = 1
+        $('#currentplayers').html(``)
         for(let player of playersName){
-            if(player.name){
-                $('#nameinputarea').append(`<div class="player${i-1}">
-                    <p><b>${player.name}</b></p>
-                </div>`)
-            }else{
-                $('#nameinputarea').append(`<div class="player${i-1}">
-                    <div class="playername">
-                        <input type="text" class="nameinput" data-namenumber="${i-1}">
-                        <input type="button" value="決定" class="namebutton action_button">
-                    </div>
-                </div>`)
-            }
-            i += 1
+            $('#currentplayers').append(`<p><b>${player.name}</b></p>`)
         }
         $(`#receiving_area`).hide();
     },
