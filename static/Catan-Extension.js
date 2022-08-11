@@ -15,9 +15,11 @@ $('#nobutton').on('click', function(){
 //名前の入力発信
 $('#nameinputarea').on('click', '.namebutton', function(){
     if($(this).prev().val()){
+        $(`#playername`).hide()
         myName = $(this).prev().val()
         namedata = {name:myName, socketID:socket.id}
         socket.emit("nameInput", namedata)
+        $(`#nameinput`).val('')
     }
 })
 
@@ -1662,6 +1664,7 @@ const display = {
         $('#size_select').show();
         $('#tileamounts').show();
         $(`#gamestart`).show()
+        $(`#playername`).show()
         $('#currentplayers').html(``)
         for(let player of playersName){
             $('#currentplayers').append(`<p><b>${player.name}</b></p>`)
