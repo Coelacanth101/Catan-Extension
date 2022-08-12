@@ -322,7 +322,7 @@ socket.on('playlog',(logdata)=>{
     }else if(logdata.action === 'thiefmove'){
         $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が盗賊を移動しました</p>`)
     }else if(logdata.action === 'robresource'){
-        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が${logdata.robbed}から強奪しました</p>`)
+        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が<b>${logdata.robbed}</b>から強奪しました</p>`)
     }else if(logdata.action === 'monopoly'){
         $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が<span class="logresource ${logdata.resource}">${translate(logdata.resource)}</span>を独占しました</p>`)
     }else if(logdata.action === 'harvest'){
