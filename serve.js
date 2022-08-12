@@ -180,6 +180,8 @@ class Player{
     this.dice = this.log.dice
     this.toTrash = this.log.toTrash
     this.renounce = this.log.renounce
+    const logdata = {action:'undo', playername:game.turnPlayer.name}
+    display.playLog(logdata)
   }
   build(item, position){
     if(item === 'house'){
@@ -217,6 +219,8 @@ class Player{
           game.pointReload()
           display.tokenOf(this)
           display.resourceOf(this)
+          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'house'}
+          display.playLog(logdata)
         }
       }else if(game.phase === 'afterdice'|| game.phase === 'building'){
         //既に家がないか確認
@@ -257,6 +261,8 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.tokenOf(this)
+          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'house'}
+          display.playLog(logdata)
         }
       }else{
         display.hideReceivingArea()
@@ -298,6 +304,8 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.tokenOf(this)
+          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'city'}
+          display.playLog(logdata)
         }
       }else{
         display.hideReceivingArea()
@@ -324,6 +332,8 @@ class Player{
           display.tokenOf(this)
           game.turnEndSetup()
           display.relativeNodes()
+          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'road'}
+          display.playLog(logdata)
         }
       }else if(game.phase === 'afterdice'|| game.phase === 'building'){
         //既に道がないか確認
@@ -353,6 +363,8 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.tokenOf(this)
+          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'road'}
+          display.playLog(logdata)
         }
       }else if(game.phase === 'roadbuild1'){
         //既に道がないか確認
@@ -378,6 +390,8 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.tokenOf(this)
+          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'road'}
+          display.playLog(logdata)
           if(this.token.road >= 1){
             game.phase = 'roadbuild2'
           }else{
@@ -411,6 +425,8 @@ class Player{
           display.tokenOf(this)
           game.phase = 'afterdice'
           display.toggleMyButtons(game.turnPlayer.socketID)
+          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'road'}
+          display.playLog(logdata)
         }
       }else{
         display.hideReceivingArea()
@@ -435,6 +451,8 @@ class Player{
         display.progressOf(this)
         recordLog()
         game.lastActionPlayer = this
+        const logdata = {action:'draw', playername:game.turnPlayer.name}
+        display.playLog(logdata)
       }
     }else{
       display.hideReceivingArea()
@@ -460,6 +478,8 @@ class Player{
       display.addUsed('knight')
       display.toggleMyButtons(game.turnPlayer.socketID)
       display.thiefRed()
+      const logdata = {action:'progress', playername:game.turnPlayer.name, progress:'knight'}
+      display.playLog(logdata)
     }
     
   };
@@ -500,6 +520,8 @@ class Player{
       }
       display.deleteThief()
       display.thief()
+      const logdata = {action:'thiefmove', playername:game.turnPlayer.name}
+      display.playLog(logdata)
     }
   };
   robResource(position){
@@ -532,6 +554,8 @@ class Player{
       display.showMyButtonArea(game.turnPlayer.socketID)
       recordLog()
       game.lastActionPlayer = this
+      const logdata = {action:'robresource', playername:game.turnPlayer.name, robbed:target.name}
+      display.playLog(logdata)
     }
     
   };
@@ -561,6 +585,8 @@ class Player{
       }
       display.progressOf(this)
       display.addUsed('monopoly')
+      const logdata = {action:'monopoly', playername:game.turnPlayer.name, resource:resource}
+      display.playLog(logdata)
     }
   };
   harvest(resource){
@@ -580,6 +606,8 @@ class Player{
         this.resource[resource] += 1
         game.allResource[resource] -= 1
         game.phase = 'harvest2'
+        const logdata = {action:'harvest', playername:game.turnPlayer.name, resource:resource}
+        display.playLog(logdata)
       }
       display.resourceOf(this)
       display.progressOf(this)
@@ -590,6 +618,8 @@ class Player{
       game.phase = 'afterdice'
       display.hideMyHarvestArea(this.socketID)
       display.resourceOf(this)
+      const logdata = {action:'harvest', playername:game.turnPlayer.name, resource:resource}
+      display.playLog(logdata)
     }else{
       display.hideReceivingArea()
     }
@@ -613,6 +643,8 @@ class Player{
       display.progressOf(this)
       display.addUsed('roadbuild')
       display.toggleMyButtons(game.turnPlayer.socketID)
+      const logdata = {action:'progress', playername:game.turnPlayer.name, progress:'roadbuild'}
+      display.playLog(logdata)
     }
   }
   turnEnd(){
@@ -634,6 +666,15 @@ class Player{
         discard(this, game.burstPlayer)
         if(game.burstPlayer.length === 0){
           for(let player of game.players){
+            let totaltrash = 0
+            for(let r in player.trashpool){
+              totaltrash += player.trashpool[r]
+            }
+            display.log(totaltrash)
+            if(totaltrash !== 0){
+            const logdata = {action:'trash', playername:player.name, resource:player.trashpool}
+            display.playLog(logdata)
+            }
             for(let resource in game.allResource){
               game.allResource[resource] += player.trashpool[resource]
               player.trashpool[resource] = 0
@@ -824,7 +865,6 @@ class Player{
         ex += data.exportresource[resource] / this.tradeRate[resource]
         im += data.importresource[resource]
       }
-
     }
     if(ex !== im){
       display.hideReceivingArea()
@@ -839,6 +879,8 @@ class Player{
       display.hideMyTradeArea(data.socketID)
       display.resourceOf(this)
       display.hideReceivingArea()
+      const logdata = {action:'trade', playername:game.turnPlayer.name, exportresource:data.exportresource, importresource:data.importresource}
+      display.playLog(logdata)
     }
   }
   accepted(){
@@ -861,6 +903,8 @@ class Player{
     }
     display.resourceOf(this)
     display.resourceOf(game.proposedata.proposee)
+    const logdata = {action:'accept', playername:game.proposedata.proposee.name}
+    display.playLog(logdata)
     game.proposedata = {proposer:'', proposee:'', giveresource:'', takeresource:''}
     display.hideProposeArea()
     display.showMyButtonArea(game.turnPlayer.socketID)
@@ -869,6 +913,8 @@ class Player{
   };
   denied(){
     game.phase = 'afterdice'
+    const logdata = {action:'deny', playername:game.proposedata.proposee.name}
+    display.playLog(logdata)
     game.proposedata = {proposer:'', proposee:'', giveresource:'', takeresource:''}
     display.hideProposeArea()
     display.showMyButtonArea(game.turnPlayer.socketID)
@@ -1998,6 +2044,8 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
         player.recordLog()
       }
       display.showBurstArea()
+      const logdata = {action:'burst', players:this.burstPlayer}
+      display.playLog(logdata)
     }else{
       this.phase = 'thiefmove'
       display.thiefRed()
@@ -2599,6 +2647,7 @@ const display = {
       display.allPlayerInformation()
       display.renounce()
       display.showButtonArea()
+      display.deletePlayLog()
       if(game.phase === 'monopoly'){
         display.showMyMonopolyArea(game.turnPlayer.socketID)
       }
@@ -2637,6 +2686,7 @@ const display = {
     this.cleanUpBoard()
     this.hideDicePercentage()
     this.hideExhaust()
+    this.deletePlayLog()
   },
   renounce(){
     let renounce = game.renounce
@@ -2710,7 +2760,14 @@ const display = {
     if(game.phase === 'setup'){
       io.to(socketID).emit('relativenodes',data)
     }
+  },
+  playLog(logdata){
+    io.emit('playlog',logdata)
+  },
+  deletePlayLog(){
+    io.emit('deleteplaylog','')
   }
+
 }
 
 function discard(item,array){
@@ -3085,6 +3142,8 @@ io.on("connection", (socket)=>{
         display.hideMyNegotiateArea(game.proposedata.proposer.socketID)
         display.showProposeArea()
         display.hideReceivingArea()
+        const logdata = {action:'propose', playername:game.turnPlayer.name, proposee:game.proposedata.proposee.name, giveresource:data.giveresource, takeresource:data.takeresource}
+        display.playLog(logdata)
       }else{
         display.hideReceivingArea()
       }

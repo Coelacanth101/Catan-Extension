@@ -281,7 +281,7 @@ socket.on('thisturnblack', ()=>{
     $(`#thisturn`).attr('id','')
 })
 socket.on('addused', (data)=>{
-    $(`#player${data.number}used`).append(`<p id="thisturn" class="progresscard ${String(data.progresscard)}card">${translate(String(data.progresscard))}</p>`);
+    $(`#player${data.number}used`).append(`<div id="thisturn" class="progresscard ${String(data.progresscard)}card">${translate(String(data.progresscard))}</div>`);
 })
 socket.on('deck',(data)=>{
     $(`#deck_area`).html(`<div id="deckcase"><div id="deck"></div></div>&nbsp;×${data.number}`)
@@ -291,7 +291,7 @@ socket.on('showexhaust',(data)=>{
     $(`#receiving_area`).show();
     $(`#button_area`).append(`<div id="exhaustmessage"></div>`)
     for(let resource of data.exhaust){
-        $(`#exhaustmessage`).append(`<p class="resourcecard ${String(resource)}">${translate(String(resource))}</p>`)
+        $(`#exhaustmessage`).append(`<div class="resourcecard ${String(resource)}">${translate(String(resource))}</div>`)
     }
     $(`#exhaustmessage`).append(`が枯渇しました`)
     $(`#receiving_area`).hide();
@@ -312,7 +312,86 @@ socket.on('deleterelativenodes',()=>{
     $(`.relativenode`).removeClass(`relativenode`)
     $(`#receiving_area`).hide();
 })
-
+socket.on('playlog',(logdata)=>{
+    if(logdata.action === 'build'){
+        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が${translate(logdata.builditem)}を建設しました</p>`)
+    }else if(logdata.action === 'draw'){
+        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>がカードを引きました</p>`)
+    }else if(logdata.action === 'progress'){
+        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が<span class="logprogress ${logdata.progress}card">${translate(logdata.progress)}</span>を使いました</p>`)
+    }else if(logdata.action === 'thiefmove'){
+        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が盗賊を移動しました</p>`)
+    }else if(logdata.action === 'robresource'){
+        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が${logdata.robbed}から強奪しました</p>`)
+    }else if(logdata.action === 'monopoly'){
+        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が<span class="logresource ${logdata.resource}">${translate(logdata.resource)}</span>を独占しました</p>`)
+    }else if(logdata.action === 'harvest'){
+        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が<div class="logresource ${logdata.resource}">${translate(logdata.resource)}</div>を収穫しました</p>`)
+    }else if(logdata.action === 'undo'){
+        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が取り消しました</p>`)
+    }else if(logdata.action === 'trash'){
+        let trashresource = ''
+        for(let resource in logdata.resource){
+            let i = 1
+            while(i <= logdata.resource[resource]){
+                trashresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
+                i += 1
+            }
+        }
+        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が${trashresource}を捨てました</p>`)
+    }else if(logdata.action === 'propose'){
+        let giveresource = ''
+        for(let resource in logdata.giveresource){
+            let i = 1
+            while(i <= logdata.giveresource[resource]){
+                giveresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
+                i += 1
+            }
+        }
+        let takeresource = ''
+        for(let resource in logdata.takeresource){
+            let i = 1
+            while(i <= logdata.takeresource[resource]){
+                takeresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
+                i += 1
+            }
+        }
+        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が<b>${logdata.proposee}</b>に${giveresource}と${takeresource}の交換を提案しました</p>`)
+    }else if(logdata.action === 'accept'){
+        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が同意しました</p>`)
+    }else if(logdata.action === 'deny'){
+        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が拒否しました</p>`)
+    }else if(logdata.action === 'trade'){
+        let exportresource = ''
+        for(let resource in logdata.exportresource){
+            let i = 1
+            while(i <= logdata.exportresource[resource]){
+                exportresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
+                i += 1
+            }
+        }
+        let importresource = ''
+        for(let resource in logdata.importresource){
+            let i = 1
+            while(i <= logdata.importresource[resource]){
+                importresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
+                i += 1
+            }
+        }
+        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が${exportresource}を${importresource}と交換しました</p>`)
+    }else if(logdata.action === 'burst'){
+        let burstPlayers = ``
+        for(let player of logdata.players){
+            burstPlayers += `と<b>${player.name}</b>`
+        }
+        burstPlayers = burstPlayers.slice(1)
+        $(`#logmessage`).append(`<p class="log">${burstPlayers}がバーストしました</p>`)
+    }
+})
+socket.on('deleteplaylog',()=>{
+    $(`#logmessage`).html(``)
+    $(`#log_area`).hide()
+})
 
 
 
@@ -535,17 +614,23 @@ $(`#board_area`).on('click','#dice_area',function(){
     let socketID = socket.id
     socket.emit('undo',socketID)
 })
-
-
-
-
-
 //もう一度遊ぶ
 $('#newgamebutton').on('click',function(){
     $(`#receiving_area`).show()
     let e =''
     socket.emit('newgamebuttonclick', e)
 });
+
+//ゲームログ非表示
+$('#logclose').on('click',function(){
+    $(`#log_area`).hide()
+});
+
+//ゲームログ表示
+$(`#playerinformation`).on(`click`,`.showlog`, function(){
+    $(`#log_area`).show()
+})
+
 
 
 
@@ -909,10 +994,10 @@ const display = {
             for(line of island){
                 for(tile of line){
                     if(tile.type === 'ore'|| tile.type === 'grain'|| tile.type === 'brick'|| tile.type === 'lumber'|| tile.type === 'wool'|| tile.type === 'desert'){
-                        if(tile.type !== 'desert'){
+                        if(tile.type !== 'desert' /*&& tile.number !== 0*/){
                             $(`#chip${tileNumber}`).attr(`src`, `./${tile.number}.png`)
                         }else{
-                            $(`#chip${tileNumber}`).attr(`src`, ``)
+                            $(`#chip${tileNumber}`).remove()
                         }
                         tileNumber += 1
                     }
@@ -1142,7 +1227,7 @@ const display = {
                         if(tile.type !== 'desert'){
                             $(`#chip${tileNumber}`).attr(`src`, `./${tile.number}.png`)
                         }else{
-                            $(`#chip${tileNumber}`).attr(`src`, ``)
+                            $(`#chip${tileNumber}`).remove()
                         }
                         tileNumber += 1
                     }
@@ -1161,7 +1246,7 @@ const display = {
                 for(r in p.resource){
                     let i = 1
                     while(i <= p.resource[r]){
-                        $(`#player${p.number}resource`).append(`<p class="resourcecard ${String(r)}">${translate(String(r))}</p>`);
+                        $(`#player${p.number}resource`).append(`<div class="resourcecard ${String(r)}">${translate(String(r))}</div>`);
                         i += 1
                     };
                 };
@@ -1178,7 +1263,7 @@ const display = {
             for(r in data.resource){
                 let i = 1
                 while(i <= data.resource[r]){
-                    $(`#player${data.number}resource`).append(`<p class="resourcecard ${String(r)}">${translate(String(r))}</p>`);
+                    $(`#player${data.number}resource`).append(`<div class="resourcecard ${String(r)}">${translate(String(r))}</div>`);
                     i += 1
                 };
             };
@@ -1232,7 +1317,7 @@ const display = {
                 for(pr in p.progress){
                     let i = 1
                     while(i <= p.progress[pr]){
-                        $(`#player${p.number}progress`).append(`<p class="progresscard ${String(pr)}card">${translate(String(pr))}</p>`);
+                        $(`#player${p.number}progress`).append(`<div class="progresscard ${String(pr)}card">${translate(String(pr))}</div>`);
                         i += 1
                     };
                 };
@@ -1240,7 +1325,7 @@ const display = {
                 for(pr in p.progress){
                     let i = 1
                     while(i <= p.progress[pr]){
-                        $(`#player${p.number}progress`).append(`<p class="progresscard back">背</p>`);
+                        $(`#player${p.number}progress`).append(`<div class="progresscard back">背</div>`);
                         i += 1
                     };
                 };
@@ -1255,7 +1340,7 @@ const display = {
             for(pr in data.progress){
                 let i = 1
                 while(i <= data.progress[pr]){
-                    $(`#player${data.number}progress`).append(`<p class="progresscard ${String(pr)}card">${translate(String(pr))}</p>`);
+                    $(`#player${data.number}progress`).append(`<div class="progresscard ${String(pr)}card">${translate(String(pr))}</div>`);
                     i += 1
                 };
             };
@@ -1263,7 +1348,7 @@ const display = {
             for(pr in data.progress){
                 let i = 1
                 while(i <= data.progress[pr]){
-                    $(`#player${data.number}progress`).append(`<p class="progresscard back">背</p>`);
+                    $(`#player${data.number}progress`).append(`<div class="progresscard back">背</div>`);
                     i += 1
                 };
             };
@@ -1277,7 +1362,7 @@ const display = {
             for(u in p.used){
                 let i = 1
                 while(i <= p.used[u]){
-                    $(`#player${p.number}used`).append(`<p class="progresscard ${String(u)}card">${translate(String(u))}</p>`);
+                    $(`#player${p.number}used`).append(`<div class="progresscard ${String(u)}card">${translate(String(u))}</div>`);
                     i += 1
                 };
             };
@@ -1290,7 +1375,7 @@ const display = {
         for(u in data.used){
             let i = 1
             while(i <= data.used[u]){
-                $(`#player${data.number}used`).append(`<p class="progresscard ${String(u)}card">${translate(String(u))}</p>`);
+                $(`#player${data.number}used`).append(`<div class="progresscard ${String(u)}card">${translate(String(u))}</div>`);
                 i += 1
             };
         };
@@ -1419,18 +1504,18 @@ const display = {
         $(`#proposeterm`).html(``)
         $(`#acceptordeny`).hide()
         if(data.proposer.socketID === socket.id){
-            $(`#proposeterm`).append(`<div><b>${data.proposee.name}</b>に</div>`)
-            $(`#proposeterm`).append(`<div class='giveresource'></div>`)
-            $(`#proposeterm`).append(`<div class='takeresource'></div>`)
+            $(`#proposeterm`).append(`<div class='proposetermblock'><b>${data.proposee.name}</b>に</div>`)
+            $(`#proposeterm`).append(`<div class='giveresource proposetermblock'></div>`)
+            $(`#proposeterm`).append(`<div class='takeresource proposetermblock'></div>`)
             for(let resource in data.giveresource){
                 let i = 1
                 let j = 1
                 while(i <= data.giveresource[resource]){
-                    $(`#proposeterm .giveresource`).append(`<p class="resourcecard ${String(resource)}">${translate(String(resource))}</p>`);
+                    $(`#proposeterm .giveresource`).append(`<div class="resourcecard ${String(resource)}">${translate(String(resource))}</div>`);
                     i += 1
                 };
                 while(j <= data.takeresource[resource]){
-                    $(`#proposeterm .takeresource`).append(`<p class="resourcecard ${String(resource)}">${translate(String(resource))}</p>`);
+                    $(`#proposeterm .takeresource`).append(`<div class="resourcecard ${String(resource)}">${translate(String(resource))}</div>`);
                     j += 1
                 };
             };
@@ -1438,36 +1523,36 @@ const display = {
             $(`#proposeterm .takeresource`).append(`をもらう`)
         }else if(data.proposee.socketID === socket.id){
             $(`#acceptordeny`).show()
-            $(`#proposeterm`).append(`<div><b>${data.proposer.name}</b>に</div>`)
-            $(`#proposeterm`).append(`<div class='giveresource'></div>`)
-            $(`#proposeterm`).append(`<div class='takeresource'></div>`)
+            $(`#proposeterm`).append(`<div class='proposetermblock'><b>${data.proposer.name}</b>に</div>`)
+            $(`#proposeterm`).append(`<div class='giveresource proposetermblock'></div>`)
+            $(`#proposeterm`).append(`<div class='takeresource proposetermblock'></div>`)
             for(let resource in data.giveresource){
                 let i = 1
                 let j = 1
                 while(i <= data.takeresource[resource]){
-                    $(`#proposeterm .giveresource`).append(`<p class="resourcecard ${String(resource)}">${translate(String(resource))}</p>`);
+                    $(`#proposeterm .giveresource`).append(`<div class="resourcecard ${String(resource)}">${translate(String(resource))}</div>`);
                     i += 1
                 };
                 while(j <= data.giveresource[resource]){
-                    $(`#proposeterm .takeresource`).append(`<p class="resourcecard ${String(resource)}">${translate(String(resource))}</p>`);
+                    $(`#proposeterm .takeresource`).append(`<div class="resourcecard ${String(resource)}">${translate(String(resource))}</div>`);
                     j += 1
                 };
             };
             $(`#proposeterm .giveresource`).append(`をあげて`)
             $(`#proposeterm .takeresource`).append(`をもらう`) 
         }else{
-            $(`#proposeterm`).append(`<div><b>${data.proposer.name}</b>&nbsp;が&nbsp;<b>${data.proposee.name}</b>&nbsp;に交渉中</div>`)
-            $(`#proposeterm`).append(`<div class='giveresource'></div>`)
-            $(`#proposeterm`).append(`<div class='takeresource'></div>`)
+            $(`#proposeterm`).append(`<div class='proposetermblock'><b>${data.proposer.name}</b>&nbsp;が&nbsp;<b>${data.proposee.name}</b>&nbsp;に交渉中</div>`)
+            $(`#proposeterm`).append(`<div class='giveresource proposetermblock'></div>`)
+            $(`#proposeterm`).append(`<div class='takeresource proposetermblock'></div>`)
             for(let resource in data.giveresource){
                 let i = 1
                 let j = 1
                 while(i <= data.giveresource[resource]){
-                    $(`#proposeterm .giveresource`).append(`<p class="resourcecard ${String(resource)}">${translate(String(resource))}</p>`);
+                    $(`#proposeterm .giveresource`).append(`<div class="resourcecard ${String(resource)}">${translate(String(resource))}</div>`);
                     i += 1
                 };
                 while(j <= data.takeresource[resource]){
-                    $(`#proposeterm .takeresource`).append(`<p class="resourcecard ${String(resource)}">${translate(String(resource))}</p>`);
+                    $(`#proposeterm .takeresource`).append(`<div class="resourcecard ${String(resource)}">${translate(String(resource))}</div>`);
                     j += 1
                 };
             };
@@ -1505,14 +1590,14 @@ const display = {
             for(r in p.resource){
                 let i = 1
                 while(i <= p.resource[r]){
-                    $(`#player${p.number}resource`).append(`<p class="resourcecard ${String(r)}">${translate(String(r))}</p>`);
+                    $(`#player${p.number}resource`).append(`<div class="resourcecard ${String(r)}">${translate(String(r))}</div>`);
                     i += 1
                 };
             }
             for(pr in p.progress){
                 let i = 1
                 while(i <= p.progress[pr]){
-                    $(`#player${p.number}progress`).append(`<p class="resourcecard ${String(pr)}card">${translate(String(pr))}</p>`);
+                    $(`#player${p.number}progress`).append(`<div class="resourcecard ${String(pr)}card">${translate(String(pr))}</div>`);
                     i += 1
                 };
             };
@@ -1567,7 +1652,7 @@ const display = {
                         <div id="player${myNumber}row1" class="row">
                             <div class="nameline">
                                 <div id="player${myNumber}mark" class="playermark player${myNumber}color"><b>${myNumber+1}</b></div>
-                                <div id="player${myNumber}name" class="name"><b>${players[myNumber].name}</b></div>
+                                <div id="player${myNumber}name" class="name showlog"><b>${players[myNumber].name}</b></div>
                             </div>
                             <div id="player${myNumber}token" class="token line" >家:${players[myNumber].token.house} 街:${players[myNumber].token.city} 道:${players[myNumber].token.road}</div>
                         </div>
@@ -1623,7 +1708,7 @@ const display = {
                     <div id="player${myNumber}row1" class="row">
                         <div class="nameline">
                         <div id="player${myNumber}mark" class="playermark player${myNumber}color"><b>${myNumber+1}</b></div>
-                        <div id="player${myNumber}name" class="name"><b>${players[myNumber].name}</b></div>
+                        <div id="player${myNumber}name" class="name showlog"><b>${players[myNumber].name}</b></div>
                         </div>
                         <div id="player${myNumber}token" class="token line" >家:${players[myNumber].token.house} 街:${players[myNumber].token.city} 道:${players[myNumber].token.road}</div>
                     </div>
@@ -1757,6 +1842,12 @@ function translate(item){
         return '独'
     }else if(item === 'point'){
         return '点'
+    }else if(item === 'house'){
+        return '家'
+    }else if(item === 'city'){
+        return '都市'
+    }else if(item === 'road'){
+        return '道'
     }
 }
 socket.on('console',(game)=>{
