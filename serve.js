@@ -330,10 +330,10 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.tokenOf(this)
-          game.turnEndSetup()
-          display.relativeNodes()
           const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'road'}
           display.playLog(logdata)
+          game.turnEndSetup()
+          display.relativeNodes()
         }
       }else if(game.phase === 'afterdice'|| game.phase === 'building'){
         //既に道がないか確認
