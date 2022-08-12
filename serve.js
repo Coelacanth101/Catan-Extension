@@ -1810,6 +1810,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     board.makeIsland(board.islandData)
     display.allMighty()
     display.hideAllButtons()
+    display.deletePlayLog()
   },
   reset(){
     this.turnPlayer = '';
@@ -2647,7 +2648,6 @@ const display = {
       display.allPlayerInformation()
       display.renounce()
       display.showButtonArea()
-      display.deletePlayLog()
       if(game.phase === 'monopoly'){
         display.showMyMonopolyArea(game.turnPlayer.socketID)
       }
