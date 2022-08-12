@@ -326,7 +326,7 @@ socket.on('playlog',(logdata)=>{
     }else if(logdata.action === 'monopoly'){
         $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が<span class="logresource ${logdata.resource}">${translate(logdata.resource)}</span>を独占しました</p>`)
     }else if(logdata.action === 'harvest'){
-        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が<div class="logresource ${logdata.resource}">${translate(logdata.resource)}</div>を収穫しました</p>`)
+        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が<span class="logresource ${logdata.resource}">${translate(logdata.resource)}</span>を収穫しました</p>`)
     }else if(logdata.action === 'undo'){
         $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が取り消しました</p>`)
     }else if(logdata.action === 'trash'){
