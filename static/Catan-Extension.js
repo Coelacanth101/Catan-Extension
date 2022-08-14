@@ -173,11 +173,11 @@ socket.on('showharvest', (e)=>{
 socket.on('showburst', (burstPlayer)=>{
     display.showBurstArea(burstPlayer)
 });
-socket.on('showtrade', (e)=>{
-    display.showTradeArea()
+socket.on('showtrade', (data)=>{
+    display.showTradeArea(data)
 });
-socket.on('shownegotiate', (e)=>{
-    display.showNegotiateArea()
+socket.on('shownegotiate', (data)=>{
+    display.showNegotiateArea(data)
 });
 socket.on('showproposearea', (data)=>{
     display.showProposeArea(data)
@@ -1482,8 +1482,11 @@ const display = {
         $(`.resourcenumber`).val(``)
         $(`#receiving_area`).hide();
     },
-    showTradeArea(){
+    showTradeArea(data){
         $(`#receiving_area`).show();
+        for(let resource in data.resource){
+            $(`#export${resource}`).attr(`placeholder`,`<=${data.resource[resource]}`)
+        }
         $(`#trade_area`).show()
         $(`#receiving_area`).hide();
     },
@@ -1493,8 +1496,11 @@ const display = {
         $(`.resourcenumber`).val(``)
         $(`#receiving_area`).hide();
     },
-    showNegotiateArea(){
+    showNegotiateArea(data){
         $(`#receiving_area`).show();
+        for(let resource in data.resource){
+            $(`#give${resource}`).attr(`placeholder`,`<=${data.resource[resource]}`)
+        }
         $(`#negotiate_area`).show()
         $(`#receiving_area`).hide();
     },

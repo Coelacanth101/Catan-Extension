@@ -2294,10 +2294,6 @@ const display = {
     io.to(socketID).emit('showproposearea', data)
     this.hideMyButtonArea(socketID)
   },
-  /*hidePlayers(){
-    let e
-    io.emit('hideplayers', e)
-  },*/
   hideMyMonopolyArea(socketID){
     let e
     io.to(socketID).emit('hidemonopoly',e)
@@ -2334,8 +2330,8 @@ const display = {
     this.showMyButtonArea(socketID)
   },
   showMyTradeArea(socketID){
-    let e
-    io.to(socketID).emit('showtrade',e)
+    let data = {resource:game.turnPlayer.resource}
+    io.to(socketID).emit('showtrade',data)
     this.hideMyButtonArea(socketID)
   },
   hideMyNegotiateArea(socketID){
@@ -2344,8 +2340,8 @@ const display = {
     this.showMyButtonArea(socketID)
   },
   showMyNegotiateArea(socketID){
-    let e
-    io.to(socketID).emit('shownegotiate',e)
+    let data = {resource:game.turnPlayer.resource}
+    io.to(socketID).emit('shownegotiate',data)
     this.hideMyButtonArea(socketID)
   },
   hideField(){
