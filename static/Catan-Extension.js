@@ -1610,10 +1610,20 @@ const display = {
         };
         $(`#dice_percentage`).show()
         let total = 0
-        for(let number in data.diceCount){
-            total += data.diceCount[number]
+        let blocktotal = 0
+        for(let number in data.diceCount.count){
+            total += data.diceCount.count[number]
         }
-        $(`#dice_percentage`).html(`2:${Math.round(data.diceCount[2]/total*100)}%<br>3:${Math.round(data.diceCount[3]/total*100)}%<br>4:${Math.round(data.diceCount[4]/total*100)}%<br>5:${Math.round(data.diceCount[5]/total*100)}%<br>6:${Math.round(data.diceCount[6]/total*100)}%<br>7:${Math.round(data.diceCount[7]/total*100)}%<br>8:${Math.round(data.diceCount[8]/total*100)}%<br>9:${Math.round(data.diceCount[9]/total*100)}%<br>10:${Math.round(data.diceCount[10]/total*100)}%<br>11:${Math.round(data.diceCount[11]/total*100)}%<br>12:${Math.round(data.diceCount[12]/total*100)}%`)
+        for(let dicenumber in data.diceCount.count){
+            $(`#percentage${dicenumber}`).html(`${Math.round(data.diceCount.count[dicenumber]/total*100)}%`)
+            $(`#count${dicenumber}`).html(`${data.diceCount.count[dicenumber]}`)
+            for(let index in data.diceCount.block[dicenumber]){
+                $(`#thiefblock${dicenumber}-${index}`).html(`${data.diceCount.block[dicenumber][index]}`)
+                blocktotal += Number(data.diceCount.block[dicenumber][index])
+            }
+        }
+        $(`#counttotal`).html(`${total}`)
+        $(`#thiefblocktotal`).html(`${blocktotal}`)
         $(`#receiving_area`).hide();
     },
     showGameEndArea(){
@@ -1815,7 +1825,6 @@ const display = {
         $(`#receiving_area`).hide();
     },
     hideDicePercentage(){
-        $(`#dice_percentage`).html(``)
         $(`#dice_percentage`).hide()
     },
 }

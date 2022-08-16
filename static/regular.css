@@ -466,6 +466,14 @@
                     justify-content: center;
                     width: 100%;
                 }
+                th{
+                    background-color: aqua;
+                    font-weight: bold;
+                    text-align: center;
+                }
+                td{
+                    text-align: center;
+                }
 @media screen and (orientation:portrait){
     #field{
         display: flex;
