@@ -1811,6 +1811,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     this.progressDeckMake();
     board.makeIsland(board.islandData)
     display.allMighty()
+    display.resetRate()
     display.hideAllButtons()
     display.deletePlayLog()
   },
@@ -2652,7 +2653,6 @@ const display = {
       display.hideItems();
       display.turnPlayer();
       display.cleanUpBoard()
-      display.resetRate()
       display.dice()
       display.deck()
       display.deleteThief()

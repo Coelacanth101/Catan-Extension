@@ -62,7 +62,7 @@
             height: 85%;
             width: 30%;
             display: flex;
-            align-items: flex-start;
+            align-items: flex-end;
         }
         #deck{
             width: 100%;
