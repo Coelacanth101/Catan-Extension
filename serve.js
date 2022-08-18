@@ -1384,12 +1384,10 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
         }
       }
     }
-    display.log(produceAmount)
     for(let line of this.island){
       for(let tile of line){
         if(tile.number === add && tile !== this.thief){
           if(produceAmount[tile.type].amount <= game.allResource[tile.type]){
-            display.log('通常通り産出')
             for(let owner of tile.houseOwner){
               owner.resource[tile.type] += 1
               game.allResource[tile.type] -= 1
@@ -1401,10 +1399,6 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
               produceAmount[tile.type].amount -= 2
             }
           }else if(produceAmount[tile.type].owner.length === 1){
-            display.log('資源が足りないが、一人なのである分だけ産出')
-            display.log(produceAmount[tile.type].owner[0].name)
-            display.log(tile.type)
-            display.log(game.allResource[tile.type])
             if(!exhaust.includes(tile.type)){
               exhaust.push(tile.type)
             }
@@ -1412,7 +1406,6 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
             game.allResource[tile.type] = 0
           }else{
             if(!exhaust.includes(tile.type)){
-              display.log('資源が足りないので産出なし')
               exhaust.push(tile.type)
             }
           }
