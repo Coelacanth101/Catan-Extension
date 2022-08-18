@@ -388,6 +388,12 @@ socket.on('playlog',(logdata)=>{
         $(`#logmessage`).append(`<p class="log">${burstPlayers}がバーストしました</p>`)
     }else if(logdata.action === 'dice'){
         $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>がダイスを振りました</p>`)
+    }else if(logdata.action === 'exhaust'){
+        let exhaustresource = ''
+        for(let resource of logdata.exhaust){
+            exhaustresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
+        }
+        $(`#logmessage`).append(`<p class="log">${exhaustresource}が枯渇しました</p>`)
     }
 })
 socket.on('deleteplaylog',()=>{
@@ -1245,11 +1251,17 @@ const display = {
             $(`#player${p.number}resource`).html('')
             let numberOfResources = p.resource.ore + p.resource.grain + p.resource.wool + p.resource.lumber + p.resource.brick
             if(p.socketID === socket.id){
+                let t = 0
                 for(r in p.resource){
                     let i = 1
                     while(i <= p.resource[r]){
+                        if(t % 7 === 0 && t > 0){
+                            $(`#player${p.number}resource`).append(`<br>`);
+                            t = 0
+                        }
                         $(`#player${p.number}resource`).append(`<div class="resourcecard ${String(r)}">${translate(String(r))}</div>`);
                         i += 1
+                        t += 1
                     };
                 };
             }else{
@@ -1611,7 +1623,6 @@ const display = {
             };
         };
         $(`#dice_percentage`).show()
-        console.log(data)
         let total = 0
         let blocktotal = 0
         for(let number in data.diceData.diceCount){
@@ -1622,6 +1633,8 @@ const display = {
             $(`#count${dicenumber}`).html(`${data.diceData.diceCount[dicenumber]}`)
             for(let index in data.diceData.thiefBlock[dicenumber]){
                 $(`#thiefblock${dicenumber}-${index}`).html(`${data.diceData.thiefBlock[dicenumber][index]}/${data.diceData.thiefStay[dicenumber][index]}`)
+                $(`#thiefblock${dicenumber}-${index}`).removeClass()
+                $(`#thiefblock${dicenumber}-${index}`).addClass(`${data.diceData.resource[dicenumber][index]}`)
                 blocktotal += Number(data.diceData.thiefBlock[dicenumber][index])
             }
         }

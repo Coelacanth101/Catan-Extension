@@ -1361,61 +1361,151 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
   },
   //資源産出
   produce(add){
-    let produceAmount = {ore:{amount:0, owner:[]}, grain:{amount:0, owner:[]}, wool:{amount:0, owner:[]}, lumber:{amount:0, owner:[]}, brick:{amount:0, owner:[]}}
+    let producingTile1 = {tile:'', owner:[], amount:0}
+    let producingTile2 = {tile:'', owner:[], amount:0}
+    let producingTile3 = {tile:'', owner:[], amount:0}
+    let produceAmount = {ore:0, grain:0, wool:0, lumber:0, brick:0}
     let i = 1
     let exhaust = []
     for(let line of this.island){
       for(let tile of line){
         if(tile.number === add && tile !== this.thief){
-          for(let owner of tile.houseOwner){
-            produceAmount[tile.type].amount += 1
-            if(!produceAmount[tile.type].owner.includes(owner)){
-              produceAmount[tile.type].owner.push(owner)
+          if(i === 1){
+            producingTile1.tile = tile
+            for(let owner of tile.houseOwner){
+              if(!producingTile1.owner.includes(owner)){
+                producingTile1.owner.push(owner)
+              }
+              producingTile1.amount += 1
             }
-          }
-          for(let owner of tile.cityOwner){
-            produceAmount[tile.type].amount += 2
-            if(!produceAmount[tile.type].owner.includes(owner)){
-              produceAmount[tile.type].owner.push(owner)
+            for(let owner of tile.cityOwner){
+              if(!producingTile1.owner.includes(owner)){
+                producingTile1.owner.push(owner)
+              }
+              producingTile1.amount += 2
             }
+            i += 1
+          }else if(i === 2){
+            producingTile2.tile = tile
+            for(let owner of tile.houseOwner){
+              if(!producingTile2.owner.includes(owner)){
+                producingTile2.owner.push(owner)
+              }
+              producingTile2.amount += 1
+            }
+            for(let owner of tile.cityOwner){
+              if(!producingTile2.owner.includes(owner)){
+                producingTile2.owner.push(owner)
+              }
+              producingTile2.amount += 2
+            }
+            i += 1
+          }else if(i === 3){
+            producingTile3.tile = tile
+            for(let owner of tile.houseOwner){
+              if(!producingTile3.owner.includes(owner)){
+                producingTile3.owner.push(owner)
+              }
+              producingTile3.amount += 1
+            }
+            for(let owner of tile.cityOwner){
+              if(!producingTile3.owner.includes(owner)){
+                producingTile3.owner.push(owner)
+              }
+              producingTile3.amount += 2
+            }
+            i += 1
           }
         }else if(tile.number === add && tile === this.thief){
           tile.thiefBlock += 1
         }
       }
     }
-    display.log(produceAmount)
-    for(let line of this.island){
-      for(let tile of line){
-        if(tile.number === add && tile !== this.thief){
-          if(produceAmount[tile.type].amount <= game.allResource[tile.type]){
-            display.log('通常通り産出')
-            for(let owner of tile.houseOwner){
-              owner.resource[tile.type] += 1
-              game.allResource[tile.type] -= 1
-              produceAmount[tile.type].amount -= 1
-            }
-            for(let owner of tile.cityOwner){
-              owner.resource[tile.type] += 2
-              game.allResource[tile.type] -= 2
-              produceAmount[tile.type].amount -= 2
-            }
-          }else if(produceAmount[tile.type].owner.length === 1){
-            display.log('資源が足りないが、一人なのである分だけ産出')
-            display.log(produceAmount[tile.type].owner[0].name)
-            display.log(tile.type)
-            display.log(game.allResource[tile.type])
-            if(!exhaust.includes(tile.type)){
-              exhaust.push(tile.type)
-            }
-            produceAmount[tile.type].owner[0].resource[tile.type] += game.allResource[tile.type]
-            game.allResource[tile.type] = 0
-          }else{
-            if(!exhaust.includes(tile.type)){
-              display.log('資源が足りないので産出なし')
-              exhaust.push(tile.type)
-            }
+    if(producingTile2.tile){
+      if(producingTile1.tile.type === producingTile2.tile.type){
+        for(let owner of producingTile2.owner){
+          if(!producingTile1.owner.includes(owner)){
+            producingTile1.owner.push(owner)
           }
+        }
+        producingTile1.amount += producingTile2.amount
+        if(producingTile1.amount > game.allResource[producingTile1.tile.type]){
+          exhaust.push(producingTile1.tile.type)
+          if(producingTile1.owner.length >= 2){
+          }else{
+            producingTile1.owner[0].resource[producingTile1.tile.type] += game.allResource[producingTile1.tile.type]
+            game.allResource[producingTile1.tile.type] = 0
+          }
+        }else{
+          for(let owner of producingTile1.tile.houseOwner){
+            owner.resource[producingTile1.tile.type] += 1
+            game.allResource[producingTile1.tile.type] -= 1
+          }
+          for(let owner of producingTile1.tile.cityOwner){
+            owner.resource[producingTile1.tile.type] += 2
+            game.allResource[producingTile1.tile.type] -= 2
+          }
+          for(let owner of producingTile2.tile.houseOwner){
+            owner.resource[producingTile2.tile.type] += 1
+            game.allResource[producingTile2.tile.type] -= 1
+          }
+          for(let owner of producingTile2.tile.cityOwner){
+            owner.resource[producingTile2.tile.type] += 2
+            game.allResource[producingTile2.tile.type] -= 2
+          }
+        }
+      }else{
+        if(producingTile1.amount > game.allResource[producingTile1.tile.type]){
+          exhaust.push(producingTile1.tile.type)
+          if(producingTile1.owner.length >= 2){
+          }else{
+            producingTile1.owner[0].resource[producingTile1.tile.type] += game.allResource[producingTile1.tile.type]
+            game.allResource[producingTile1.tile.type] = 0
+          }
+        }else{
+          for(let owner of producingTile1.tile.houseOwner){
+            owner.resource[producingTile1.tile.type] += 1
+            game.allResource[producingTile1.tile.type] -= 1
+          }
+          for(let owner of producingTile1.tile.cityOwner){
+            owner.resource[producingTile1.tile.type] += 2
+            game.allResource[producingTile1.tile.type] -= 2
+          }
+        }
+        if(producingTile2.amount > game.allResource[producingTile2.tile.type]){
+          exhaust.push(producingTile2.tile.type)
+          if(producingTile2.owner.length >= 2){
+          }else{
+            producingTile2.owner[0].resource[producingTile2.tile.type] += game.allResource[producingTile2.tile.type]
+            game.allResource[producingTile2.tile.type] = 0
+          }
+        }else{
+          for(let owner of producingTile2.tile.houseOwner){
+            owner.resource[producingTile2.tile.type] += 1
+            game.allResource[producingTile2.tile.type] -= 1
+          }
+          for(let owner of producingTile2.tile.cityOwner){
+            owner.resource[producingTile2.tile.type] += 2
+            game.allResource[producingTile2.tile.type] -= 2
+          }
+        }
+      }
+    }else if(producingTile1.tile){
+      if(producingTile1.amount > game.allResource[producingTile1.tile.type]){
+        exhaust.push(producingTile1.tile.type)
+        if(producingTile1.owner.length >= 2){
+        }else{
+          producingTile1.owner[0].resource[producingTile1.tile.type] += producingTile1.amount
+          game.allResource[producingTile1.tile.type] -= producingTile1.amount
+        }
+      }else{
+        for(let owner of producingTile1.tile.houseOwner){
+          owner.resource[producingTile1.tile.type] += 1
+          game.allResource[producingTile1.tile.type] -= 1
+        }
+        for(let owner of producingTile1.tile.cityOwner){
+          owner.resource[producingTile1.tile.type] += 2
+          game.allResource[producingTile1.tile.type] -= 2
         }
       }
     }
@@ -1424,8 +1514,6 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
     }
     if(exhaust.length !== 0){
       display.showExhaust(exhaust)
-      const logdata = {action:'exhaust', exhaust:exhaust}
-      display.playLog(logdata)
     }
     display.hideReceivingArea()
   },
@@ -1969,8 +2057,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   burstPlayerCheck(){
     this.burstPlayer = []
     for(let player of this.players){
-      /////////////////////
-      if(player.totalResource() >= 100){
+      if(player.totalResource() >= 8){
         this.burstPlayer.push(player)
         player.toTrash = Math.floor(player.totalResource()/2)
       }

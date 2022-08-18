@@ -300,6 +300,7 @@
                 }
                 .brick{
                     background-color: rgb(179, 8, 8);
+                    color: white;
                 }
                 .ore{
                     background-color: darkgray;
@@ -501,7 +502,7 @@ td{
     #player_and_button_area{
         width: 100%;
         max-width: 400px;
-        height: 600px;
+        height: auto;
         display: flex;
         justify-content: center;
         position: relative;
