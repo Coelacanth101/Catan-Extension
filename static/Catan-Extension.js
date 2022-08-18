@@ -386,6 +386,8 @@ socket.on('playlog',(logdata)=>{
         }
         burstPlayers = burstPlayers.slice(1)
         $(`#logmessage`).append(`<p class="log">${burstPlayers}がバーストしました</p>`)
+    }else if(logdata.action === 'dice'){
+        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>がダイスを振りました</p>`)
     }
 })
 socket.on('deleteplaylog',()=>{
@@ -1603,23 +1605,24 @@ const display = {
             for(pr in p.progress){
                 let i = 1
                 while(i <= p.progress[pr]){
-                    $(`#player${p.number}progress`).append(`<div class="resourcecard ${String(pr)}card">${translate(String(pr))}</div>`);
+                    $(`#player${p.number}progress`).append(`<div class="progresscard ${String(pr)}card">${translate(String(pr))}</div>`);
                     i += 1
                 };
             };
         };
         $(`#dice_percentage`).show()
+        console.log(data)
         let total = 0
         let blocktotal = 0
-        for(let number in data.diceCount.count){
-            total += data.diceCount.count[number]
+        for(let number in data.diceData.diceCount){
+            total += data.diceData.diceCount[number]
         }
-        for(let dicenumber in data.diceCount.count){
-            $(`#percentage${dicenumber}`).html(`${Math.round(data.diceCount.count[dicenumber]/total*100)}%`)
-            $(`#count${dicenumber}`).html(`${data.diceCount.count[dicenumber]}`)
-            for(let index in data.diceCount.block[dicenumber]){
-                $(`#thiefblock${dicenumber}-${index}`).html(`${data.diceCount.block[dicenumber][index]}`)
-                blocktotal += Number(data.diceCount.block[dicenumber][index])
+        for(let dicenumber in data.diceData.diceCount){
+            $(`#percentage${dicenumber}`).html(`${Math.round(data.diceData.diceCount[dicenumber]/total*100)}%`)
+            $(`#count${dicenumber}`).html(`${data.diceData.diceCount[dicenumber]}`)
+            for(let index in data.diceData.thiefBlock[dicenumber]){
+                $(`#thiefblock${dicenumber}-${index}`).html(`${data.diceData.thiefBlock[dicenumber][index]}/${data.diceData.thiefStay[dicenumber][index]}`)
+                blocktotal += Number(data.diceData.thiefBlock[dicenumber][index])
             }
         }
         $(`#counttotal`).html(`${total}`)
@@ -1832,9 +1835,9 @@ const display = {
 
 //コンソールに表示
 function game(){
+    $(`#receiving_area`).show()
     let e = ''
     socket.emit('console',e)
-    $(`#receiving_area`).show()
 }
 function translate(item){
     if(item === 'ore'){
@@ -1867,4 +1870,5 @@ function translate(item){
 }
 socket.on('console',(game)=>{
     console.log(game)
+    $(`#receiving_area`).hide()
 })

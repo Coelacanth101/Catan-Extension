@@ -969,7 +969,7 @@ class Player{
 
 
 
-const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[], nodeLine:[],roadLine:[], dice:[],landLine:[],ports:{oreport:[], grainport:[], woolport:[], lumberport:[], brickport:[],genericport:[]},log:{island:[],thief:'',house:[], city:[], road:[]},islandData:'',diceCount:{count:{2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0}, block:{2:{1:'',2:''},3:{1:'',2:'',3:''},4:{1:'',2:'',3:''},5:{1:'',2:'',3:''},6:{1:'',2:'',3:''},8:{1:'',2:'',3:''},9:{1:'',2:'',3:''},10:{1:'',2:'',3:''},11:{1:'',2:'',3:''},12:{1:'',2:''}}},
+const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[], nodeLine:[],roadLine:[], dice:[],landLine:[],ports:{oreport:[], grainport:[], woolport:[], lumberport:[], brickport:[],genericport:[]},log:{island:[],thief:'',house:[], city:[], road:[]},islandData:'', diceCount:{2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0},
   resizeBoard(size){
     if(size === 'large'){
       this.size = size
@@ -1007,7 +1007,7 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
     this.road = []
     this.dice = []
     this.ports = {oreport:[], grainport:[], woolport:[], lumberport:[], brickport:[],genericport:[]}
-    this.diceCount = {count:{2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0}, block:{2:{1:'',2:''},3:{1:'',2:''},4:{1:'',2:''},5:{1:'',2:''},6:{1:'',2:''},7:{1:'',2:''},8:{1:'',2:''},9:{1:'',2:''},10:{1:'',2:''},11:{1:'',2:''},12:{1:'',2:''}}}
+    this.diceCount = {2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0}
   },
   recordLog(){
     for(let line of this.island){
@@ -1112,7 +1112,7 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
             oceans.splice(0,1)            
           }else{
             if(lands[0] !== 'desert'){
-              let tile = {type:lands[0],position:[x-1,y-1],houseOwner:[], cityOwner:[],produce:true, direction:0, blocked:0}
+              let tile = {type:lands[0],position:[x-1,y-1],houseOwner:[], cityOwner:[],produce:true, direction:0, thiefBlock:0, thiefStay:0}
               let logtile = {houseOwner:[], cityOwner:[]}
               board.island[x-1].push(tile)
               board.log.island[x-1].push(logtile)
@@ -1339,9 +1339,12 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
   },
   //ダイス
   rollDice(){
+    const logdata = {action:'dice', playername:game.turnPlayer.name}
+    display.playLog(logdata)
     let dice1 = Math.ceil(Math.random()*6);
     let dice2 = Math.ceil(Math.random()*6);
     this.dice = [dice1,dice2];
+    board.thief.thiefStay += 1
     game.turnPlayer.dice = 0
     if(dice1 + dice2 === 7){
       game.burstPlayerCheck()
@@ -1351,7 +1354,7 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
       this.produce(dice1+dice2)
       game.phase = 'afterdice'
     }
-    this.diceCount.count[dice1+dice2] += 1
+    this.diceCount[dice1+dice2] += 1
     recordLog()
     game.lastActionPlayer = game.turnPlayer
     display.toggleMyButtons(game.turnPlayer.socketID)
@@ -1398,7 +1401,7 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
             i += 1
           }
         }else if(tile.number === add && tile === this.thief){
-          tile.blocked += 1
+          tile.thiefBlock += 1
         }
       }
     }
@@ -1783,7 +1786,7 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
     this.islandData = ''
     this.log = {island:[[],[],[],[],[],[],[],[],[]],thief:'',house:[], city:[], road:[]}
     this.size = ''
-    this.diceCount = {count:{2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0}, block:{2:{1:'',2:''},3:{1:'',2:'',3:''},4:{1:'',2:'',3:''},5:{1:'',2:'',3:''},6:{1:'',2:'',3:''},7:{1:'',2:''},8:{1:'',2:'',3:''},9:{1:'',2:'',3:''},10:{1:'',2:'',3:''},11:{1:'',2:'',3:''},12:{1:'',2:''}}}
+    this.diceCount = {2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0}
   }
 }
 
@@ -2363,26 +2366,31 @@ const display = {
     io.to(socketID).emit('showField', e)
   },
   gameResult(){
+    let thiefBlock = {2:{1:'',2:''},3:{1:'',2:'',3:''},4:{1:'',2:'',3:''},5:{1:'',2:'',3:''},6:{1:'',2:'',3:''},8:{1:'',2:'',3:''},9:{1:'',2:'',3:''},10:{1:'',2:'',3:''},11:{1:'',2:'',3:''},12:{1:'',2:''}}
+    let thiefStay = {2:{1:'',2:''},3:{1:'',2:'',3:''},4:{1:'',2:'',3:''},5:{1:'',2:'',3:''},6:{1:'',2:'',3:''},8:{1:'',2:'',3:''},9:{1:'',2:'',3:''},10:{1:'',2:'',3:''},11:{1:'',2:'',3:''},12:{1:'',2:''}}
     for(let line of board.island){
       for(let tile of line){
         if(tile.number >= 2){
-          if(board.diceCount.block[tile.number][1] === ''){
-            board.diceCount.block[tile.number][1] = tile.blocked
-          }else if(board.diceCount.block[tile.number][2] === ''){
-            board.diceCount.block[tile.number][2] = tile.blocked
-          }else if(board.diceCount.block[tile.number][3] === ''){
-            board.diceCount.block[tile.number][3] = tile.blocked
+          if(thiefBlock[tile.number][1] === ''){
+            thiefBlock[tile.number][1] = tile.thiefBlock
+            thiefStay[tile.number][1] = tile.thiefStay
+          }else if(thiefBlock[tile.number][2] === ''){
+            thiefBlock[tile.number][2] = tile.thiefBlock
+            thiefStay[tile.number][2] = tile.thiefStay
+          }else if(thiefBlock[tile.number][3] === ''){
+            thiefBlock[tile.number][3] = tile.thiefBlock
+            thiefStay[tile.number][3] = tile.thiefStay
           }
         }
       }
     }
-    /*diceCount:{count:{2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0}, block:{2:{1:'',2:''},3:{1:'',2:''},4:{1:'',2:''},5:{1:'',2:''},6:{1:'',2:''},7:{1:'',2:''},8:{1:'',2:''},9:{1:'',2:''},10:{1:'',2:''},11:{1:'',2:''},12:{1:'',2:''}}}*/
-    let data = {players:game.players, turnPlayer:game.turnPlayer, diceCount:board.diceCount}
+    let diceData = {diceCount:board.diceCount, thiefBlock:thiefBlock, thiefStay:thiefStay}
+    let data = {players:game.players, turnPlayer:game.turnPlayer, diceData:diceData}
     io.emit('gameresult', data)
     this.showGameEndArea()
   },
   gameResultTo(socketID){
-    let data = {players:game.players, turnPlayer:game.turnPlayer, diceCount:board.diceCount}
+    let data = {players:game.players, turnPlayer:game.turnPlayer, dicedata:dicedata}
     io.to(socketID).emit('gameresult', data)
     this.showMyGameEndArea(socketID)
   },
@@ -3235,6 +3243,6 @@ io.on("connection", (socket)=>{
     //コンソールに表示
     socket.on('console',(e)=>{
       socket.emit('console', game)
-      display.hideReceivingArea()
+      display.gameResult()
     })
 })
