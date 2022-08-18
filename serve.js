@@ -1969,8 +1969,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   burstPlayerCheck(){
     this.burstPlayer = []
     for(let player of this.players){
-      /////////////////////
-      if(player.totalResource() >= 100){
+      if(player.totalResource() >= 8){
         this.burstPlayer.push(player)
         player.toTrash = Math.floor(player.totalResource()/2)
       }
