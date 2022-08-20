@@ -542,6 +542,9 @@ td{
                 display: none;
                 background-color: rgb(255, 255, 255);
             }
+            #dice_percentage{
+                width: 100%;
+            }
             
 }
 @media screen and (orientation: landscape){
@@ -669,6 +672,17 @@ td{
                             border: 5px double rgb(0, 0, 0);
                             display: none;
                             background-color: rgb(255, 255, 255);
+                        }
+                    }
+                    #dice_percentage{
+                        width: calc(100% - 400px);
+                    }@media screen and (min-width:850px) and (max-width:1000px) {
+                        #dice_percentage{
+                            width: 600px;
+                        }
+                    }@media screen and (max-width:850px) {
+                        #dice_percentage{
+                            width: calc(100% - 250px);
                         }
                     }
 }
