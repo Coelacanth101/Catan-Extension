@@ -204,18 +204,22 @@ socket.on('hidegameendarea', ()=>{
     display.hideGameEndArea()
 })
 socket.on('reloadrate', (data)=>{
+    $(`#receiving_area`).show();
     $(`#exportore`).attr(`step`, data.ore)
     $(`#exportgrain`).attr(`step`, data.grain)
     $(`#exportwool`).attr(`step`, data.wool)
     $(`#exportlumber`).attr(`step`, data.lumber)
     $(`#exportbrick`).attr(`step`, data.brick)
+    $(`#receiving_area`).hide();
 }),
 socket.on('resetrate', ()=>{
+    $(`#receiving_area`).show();
     $(`#exportore`).attr(`step`, 4)
     $(`#exportgrain`).attr(`step`, 4)
     $(`#exportwool`).attr(`step`, 4)
     $(`#exportlumber`).attr(`step`, 4)
     $(`#exportbrick`).attr(`step`, 4)
+    $(`#receiving_area`).hide();
 })
 socket.on('yesbuttonclick', (maxPlayer)=>{
     display.initialize(maxPlayer)
@@ -272,20 +276,30 @@ socket.on('hidedicepercentage',()=>{
     display.hideDicePercentage()
 })
 socket.on('thiefred',()=>{
+    $(`#receiving_area`).show();
     $(`#thief`).css(`background-color`, 'rgb(255, 0, 0, 0.6)')
+    $(`#receiving_area`).hide();
 })
 socket.on('thiefblack',()=>{
+    $(`#receiving_area`).show();
     $(`#thief`).css(`background-color`, 'rgb(0, 0, 0, 0.6)')
+    $(`#receiving_area`).hide();
 })
 socket.on('thisturnblack', ()=>{
+    $(`#receiving_area`).show();
     $(`#thisturn`).attr('id','')
+    $(`#receiving_area`).hide();
 })
 socket.on('addused', (data)=>{
+    $(`#receiving_area`).show();
     $(`#player${data.number}used`).append(`<div id="thisturn" class="progresscard ${String(data.progresscard)}card">${translate(String(data.progresscard))}</div>`);
+    $(`#receiving_area`).hide();
 })
 socket.on('deck',(data)=>{
+    $(`#receiving_area`).show();
     $(`#deck_area`).html(`<div id="deckcase"><div id="deck"></div></div>&nbsp;×${data.number}`)
     $(`#deck`).css(`height`, `${data.height}%`)
+    $(`#receiving_area`).hide();
 })
 socket.on('showexhaust',(data)=>{
     $(`#receiving_area`).show();
@@ -297,7 +311,9 @@ socket.on('showexhaust',(data)=>{
     $(`#receiving_area`).hide();
 })
 socket.on('hideexhaust',()=>{
+    $(`#receiving_area`).show();
     $(`#exhaustmessage`).remove()
+    $(`#receiving_area`).hide();
 })
 socket.on('relativenodes',(data)=>{
     $(`#receiving_area`).show();
@@ -313,6 +329,7 @@ socket.on('deleterelativenodes',()=>{
     $(`#receiving_area`).hide();
 })
 socket.on('playlog',(logdata)=>{
+    $(`#receiving_area`).show();
     if(logdata.action === 'build'){
         $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が${translate(logdata.builditem)}を建設しました</p>`)
     }else if(logdata.action === 'draw'){
@@ -395,10 +412,13 @@ socket.on('playlog',(logdata)=>{
         }
         $(`#logmessage`).append(`<p class="log">${exhaustresource}が枯渇しました</p>`)
     }
+    $(`#receiving_area`).hide();
 })
 socket.on('deleteplaylog',()=>{
+    $(`#receiving_area`).show();
     $(`#logmessage`).html(``)
     $(`#log_area`).hide()
+    $(`#receiving_area`).hide();
 })
 
 
