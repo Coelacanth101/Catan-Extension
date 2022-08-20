@@ -80,6 +80,7 @@ socket.on('shownameinputarea', (playersName)=>{
 
 
 socket.on('island', (island)=>{
+    $(`#receiving_area`).show();
     display.island(island)
 })
 
@@ -93,114 +94,149 @@ socket.on('island', (island)=>{
 
 
 socket.on('hideItems', (data)=>{
+    $(`#receiving_area`).show();
     display.hideItems(data)
 });
 socket.on('allResource', (data)=>{
+    $(`#receiving_area`).show();
     display.allResource(data)
 });
 socket.on('allToken', (data)=>{
+    $(`#receiving_area`).show();
     display.allToken(data)
 });
 socket.on('allTitle', (data)=>{
+    $(`#receiving_area`).show();
     display.allTitle(data)
 });
 socket.on('allProgress', (data)=>{
+    $(`#receiving_area`).show();
     display.allProgress(data)
 });
 socket.on('allUsed', (data)=>{
+    $(`#receiving_area`).show();
     display.allUsed(data)
 });
 
 
 
 socket.on('resourceof', (data)=>{
+    $(`#receiving_area`).show();
     display.resourceOf(data)
 });
 socket.on('tokenof', (data)=>{
+    $(`#receiving_area`).show();
     display.tokenOf(data)
 });
 socket.on('titleof', (data)=>{
+    $(`#receiving_area`).show();
     display.titleOf(data)
 });
 socket.on('progressof', (data)=>{
+    $(`#receiving_area`).show();
     display.progressOf(data)
 });
 socket.on('usedof', (data)=>{
+    $(`#receiving_area`).show();
     display.usedOf(data)
 });
 
 
 
 socket.on('buildings', (buildings)=>{
+    $(`#receiving_area`).show();
     display.buildings(buildings)
 });
 socket.on('addhouse', (houseobj)=>{
+    $(`#receiving_area`).show();
     display.addHouse(houseobj)
 });
 socket.on('addcity', (cityobj)=>{
+    $(`#receiving_area`).show();
     display.addCity(cityobj)
 });
 socket.on('addroad', (roadobj)=>{
+    $(`#receiving_area`).show();
     display.addRoad(roadobj)
 });
 socket.on('thief', (buttonnumber)=>{
+    $(`#receiving_area`).show();
     display.thief(buttonnumber)
 });
 socket.on('deletethief', ()=>{
+    $(`#receiving_area`).show();
     display.deleteThief()
 });
 socket.on('hidemonopoly', (e)=>{
+    $(`#receiving_area`).show();
     display.hideMonopolyArea()
 });
 socket.on('hideharvest', (e)=>{
+    $(`#receiving_area`).show();
     display.hideHarvestArea()
 });
 socket.on('hideburst', (e)=>{
+    $(`#receiving_area`).show();
     display.hideBurstArea()
 });
 socket.on('hidetrade', (e)=>{
+    $(`#receiving_area`).show();
     display.hideTradeArea()
 });
 socket.on('hidenegotiate', (e)=>{
+    $(`#receiving_area`).show();
     display.hideNegotiateArea()
 });
 socket.on('showmonopoly', (e)=>{
+    $(`#receiving_area`).show();
     display.showMonopolyArea()
 });
 socket.on('showharvest', (e)=>{
+    $(`#receiving_area`).show();
     display.showHarvestArea()
 });
 socket.on('showburst', (burstPlayer)=>{
+    $(`#receiving_area`).show();
     display.showBurstArea(burstPlayer)
 });
 socket.on('showtrade', (data)=>{
+    $(`#receiving_area`).show();
     display.showTradeArea(data)
 });
 socket.on('shownegotiate', (data)=>{
+    $(`#receiving_area`).show();
     display.showNegotiateArea(data)
 });
 socket.on('showproposearea', (data)=>{
+    $(`#receiving_area`).show();
     display.showProposeArea(data)
 });
 socket.on('hideproposearea', (e)=>{
+    $(`#receiving_area`).show();
     display.hideProposeArea()
 });
 socket.on('hideplayers', (e)=>{
+    $(`#receiving_area`).show();
     display.hidePlayers()
 })
 socket.on('hideField', (e)=>{
+    $(`#receiving_area`).show();
     display.hideField()
 });
 socket.on('showField', (e)=>{
+    $(`#receiving_area`).show();
     display.showField()
 });
 socket.on('gameresult', (data)=>{
+    $(`#receiving_area`).show();
     display.gameResult(data)
 })
 socket.on('showgameendarea', ()=>{
+    $(`#receiving_area`).show();
     display.showGameEndArea()
 })
 socket.on('hidegameendarea', ()=>{
+    $(`#receiving_area`).show();
     display.hideGameEndArea()
 })
 socket.on('reloadrate', (data)=>{
@@ -222,57 +258,74 @@ socket.on('resetrate', ()=>{
     $(`#receiving_area`).hide();
 })
 socket.on('yesbuttonclick', (maxPlayer)=>{
+    $(`#receiving_area`).show();
     display.initialize(maxPlayer)
 });
 socket.on('turnplayer', (data)=>{
+    $(`#receiving_area`).show();
     display.turnPlayer(data)
 })
 socket.on('takeover', (player)=>{
+    $(`#receiving_area`).show();
     display.takeOver(player)
 })
 socket.on('log', (a)=>{
+    $(`#receiving_area`).show();
     display.log(a)
 })
 socket.on('playersort', (players)=>{
+    $(`#receiving_area`).show();
     display.playerSort(players)
 })
 socket.on('hidebuttonarea', (e)=>{
+    $(`#receiving_area`).show();
     display.hideButtonArea()
 })
 socket.on('showbuttonarea', (e)=>{
+    $(`#receiving_area`).show();
     display.showButtonArea()
 })
 socket.on('hideyesornobutton',()=>{
+    $(`#receiving_area`).show();
     display.hideYesOrNoButton()
 })
 socket.on('cleanupboard',()=>{
+    $(`#receiving_area`).show();
     display.cleanUpBoard()
 })
 socket.on('dice',(dice)=>{
+    $(`#receiving_area`).show();
     display.dice(dice)
 })
 socket.on('diceblack',()=>{
+    $(`#receiving_area`).show();
     display.diceBlack()
 })
 socket.on('hidemessagearea',()=>{
+    $(`#receiving_area`).show();
     display.hidemessageArea()
 })
 socket.on('showbutton',(string)=>{
+    $(`#receiving_area`).show();
     display.showButton(string)
 })
 socket.on('hidebutton',(string)=>{
+    $(`#receiving_area`).show();
     display.hideButton(string)
 })
 socket.on('renounce',(renounce)=>{
+    $(`#receiving_area`).show();
     display.renounce(renounce)
 })
 socket.on('hidereceivingarea',()=>{
     $(`#receiving_area`).hide();
 })
 socket.on('resizeboard',(size)=>{
+    $(`#receiving_area`).show();
     display.resizeBoard(size)
 })
 socket.on('hidedicepercentage',()=>{
+    $(`#receiving_area`).show();
     display.hideDicePercentage()
 })
 socket.on('thiefred',()=>{
