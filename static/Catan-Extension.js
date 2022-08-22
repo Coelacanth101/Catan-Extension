@@ -716,7 +716,6 @@ $(`#playerinformation`).on(`click`,`.showlog`, function(){
 $(`#board_area`).on('click','#cost_card',function(){
     if($('#cost_card').css(`width`) !== '300px'){
         $('#cost_card').css(`width`, `300px`)
-        console.log(Number($('#board_area').css(`width`).slice(0,-2)))
         if(Number($('#board_area').css(`height`).slice(0,-2)) < 339.609){
             $('#cost_card').css(`top`, `0px`)
         }
