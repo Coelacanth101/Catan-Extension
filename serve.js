@@ -1145,7 +1145,7 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
       let productivityCheck = true
       let i = 1
       while(i <= this.nodeLine[this.nodeLine.length - 1]){
-        if(this.nodeAbsouluteProductivity(i) >= 14){
+        if(this.nodeAbsouluteProductivity(i) > 13){
           productivityCheck = false
           break
         }

@@ -69,6 +69,14 @@
             height: 100%;
             background-color: black;
         }
+        #cost_card{
+            width: 10%;
+            height: auto;
+            position: absolute;
+            left: 0px;
+            bottom: 0px;
+            z-index: 3;
+        }
         .player0color{
             background-color: rgb(236, 28, 36);
         }

@@ -712,6 +712,19 @@ $(`#playerinformation`).on(`click`,`.showlog`, function(){
     $(`#log_area`).show()
 })
 
+//資源表をクリック
+$(`#board_area`).on('click','#cost_card',function(){
+    if($('#cost_card').css(`width`) !== '300px'){
+        $('#cost_card').css(`width`, `300px`)
+        console.log(Number($('#board_area').css(`width`).slice(0,-2)))
+        if(Number($('#board_area').css(`height`).slice(0,-2)) < 339.609){
+            $('#cost_card').css(`top`, `0px`)
+        }
+    }else{
+        $('#cost_card').css(`width`, `10%`)
+        $('#cost_card').css(`top`, ``)
+    }
+})
 
 
 
@@ -761,6 +774,7 @@ const display = {
                 <div id="dice_area"></div>
                 <div id="receiving_area"><p id="receiving"><b>通信中…</b></p></div>
                 <div id="deck_area"><div id="deckcase"><div id="deck"></div></div>&nbsp;×34</div>
+                <img id="cost_card" src='./cost_card.jpg'>
                 <img id="board_frame" src='./large_board.png'>
                 <img id="tile1" class="tilex1 tiley5 tile" data-direction="" src="./ocean.png">
                 <img id="tile2" class="tilex1 tiley7 tile" data-direction="" src="./ocean.png">
@@ -1091,6 +1105,7 @@ const display = {
                 <div id="dice_area"></div>
                 <div id="receiving_area"><p id="receiving"><b>通信中…</b></p></div>
                 <div id="deck_area"><div id="deckcase"><div id="deck"></div></div>&nbsp;×25</div>
+                <img id="cost_card" src='./cost_card.jpg'>
                 <img id="board_frame" src='./regular_board.png'>
                 <img id="tile1" class="tile" data-direction="" src="./regular_ocean.png">
                 <img id="tile2" class="tile" data-direction="" src="./regular_ocean.png">
