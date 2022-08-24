@@ -1987,6 +1987,8 @@ const display = {
     renderRecord(){
         let situation = record[turn].players
         let pn = 0
+        $(`.nodetouch`).html(``)
+        $(`.road`).html(``)
         for(let player of situation){
             //token
             $(`#player${pn}token`).html(`家:${player.token.house} 街:${player.token.city} 道:${player.token.road}`)
@@ -2026,12 +2028,10 @@ const display = {
                 };
             };
             //house
-            $(`.nodetouch`).html(``)
             for(let houseNumber of player.house){
                 $(`#nodetouch${houseNumber}`).html(`<img id="house${houseNumber}" class="house" src="./house${pn+1}.png">`)
             }
             //road
-            $(`.road`).html(``)
             if(board_size === 'large'){
                 for(let road of player.road){
                     $(`#road${road.roadNumber}`).html(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./road_${road.roadDegree}${pn+1}.png">`)
