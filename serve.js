@@ -58,6 +58,7 @@ class Player{
     this.tradeRate = {ore:4,grain:4,wool:4,lumber:4,brick:4}
     this.renounce = false
     this.trashpool = {ore:0,grain:0,wool:0,lumber:0,brick:0}
+    this.replay = false
     this.log = {resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     token:{house:5, city:4, road:15},
     house:[],
@@ -95,6 +96,7 @@ class Player{
     this.tradeRate = {ore:4,grain:4,wool:4,lumber:4,brick:4}
     this.renounce = false
     this.trashpool = {ore:0,grain:0,wool:0,lumber:0,brick:0}
+    this.replay = false
     this.log = {resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     token:{house:5, city:4, road:15},
     house:[],
@@ -1756,7 +1758,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     }else if(board.size === 'regular'){
       this.allResource = {ore:19,grain:19,wool:19,lumber:19,brick:19}
     }
-    
+    gameRecord = []
   },
   recordLog(){
     this.log.turnPlayer = this.turnPlayer
@@ -1890,6 +1892,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     this.progressDeck = arr
   },
   turnEnd(){
+    takeRecord()
     if(game.phase === 'afterdice'){
       if(game.turnPlayer.point >= 10){
         game.gameEnd()
@@ -1933,6 +1936,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     }
   },
   turnEndSetup(){
+    takeRecord()
     if(this.turnPlayer.house.length === 2){
       if(this.turnPlayer === this.players[0]){
         this.phase = 'beforedice'
@@ -1958,6 +1962,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     game.phase = 'end'
     recordLog()
     display.gameResult()
+    display.gameRecord()
   },
   burstPlayerCheck(){
     this.burstPlayer = []
@@ -2018,6 +2023,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     this.renounce = []
     this.lastActionPlayer = ''
     this.allResource = {ore:0,grain:0,wool:0,lumber:0,brick:0}
+    gameRecord = []
   },
 }
 
@@ -2736,8 +2742,11 @@ const display = {
   },
   deletePlayLog(){
     io.emit('deleteplaylog','')
+  },
+  gameRecord(){
+    let data = {gameRecord:gameRecord}
+    io.emit('gamerecord', data)
   }
-
 }
 
 function discard(item,array){
@@ -3151,7 +3160,14 @@ io.on("connection", (socket)=>{
       }
     });
     //もう一度遊ぶ
-    socket.on('newgamebuttonclick', (e)=>{
+    socket.on('newgamebuttonclick', (data)=>{
+      game.IDToPlayer(data.socketID).replay = true
+      for(let player of game.players){
+        if(player.replay === false){
+          display.hideReceivingArea()
+          return
+        }
+      }
       game.newGame();
     })
     //初期化
@@ -3194,4 +3210,52 @@ io.on("connection", (socket)=>{
     socket.on('console',(e)=>{
       socket.emit('console', game)
     })
+    //記録確認
+    socket.on('checkrecord',()=>{
+      socket.emit('checkrecord', gameRecord)
+    })
 })
+
+let gameRecord = []
+function takeRecord(){
+  let record = []
+  for(let player of game.players){
+    let playerRecord = {
+      resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
+      token:{house:5, city:4, road:15},
+      house:[],
+      city:[],
+      road:[],
+      progress:{knight:0, roadbuild:0, harvest:0, monopoly:0, point:0},
+      used:{knight:0, roadbuild:0, harvest:0, monopoly:0, point:0},
+      largestArmy:0,
+      longestRoad:0
+    }
+    for(let r in player.resource){
+      playerRecord.resource[r] = player.resource[r]
+    }
+    for(let t in player.token){
+      playerRecord.token[t] = player.token[t]
+    }
+    for(let h of player.house){
+      playerRecord.house.push(h.nodeNumber)
+    }
+    for(let c of player.city){
+      playerRecord.city.push(c.nodeNumber)
+    }
+    for(let r of player.road){
+      let road = {roadNumber:r.roadNumber, roadDegree:r.roadDegree}
+      playerRecord.road.push(road)
+    }
+    for(let p in player.progress){
+      playerRecord.progress[p] = player.progress[p]
+    }
+    for(let u in player.used){
+      playerRecord.used[u] = player.used[u]
+    }
+    playerRecord.largestArmy = player.largestArmy
+    playerRecord.longestRoad = player.longestRoad
+    record.push(playerRecord)
+  }
+  gameRecord.push(record)
+}

@@ -1,5 +1,8 @@
 const socket = io();
 let board_size
+let record
+let endturn
+let turn
 //画面初期化
 $('#initializebutton').on('click', function(){
     $('#yesorno').show()
@@ -473,8 +476,42 @@ socket.on('deleteplaylog',()=>{
     $(`#log_area`).hide()
     $(`#receiving_area`).hide();
 })
+socket.on('gamerecord',(data)=>{
+    record = data.gameRecord
+    endturn = record.length - 1
+    turn = record.length
+    console.log(record)
+})
 
-
+//firstturnをクリック
+$(`#firstturn`).on(`click`, function(){
+    console.log('clickfirstturn')
+    turn = 0
+    display.renderRecord()
+})
+//previousturnをクリック
+$(`#previousturn`).on(`click`, function(){
+    console.log('clickpreviousturn')
+    if(turn > 0){
+        turn -= 1
+        console.log(turn)
+        display.renderRecord()
+    }
+})
+//nextturnをクリック
+$(`#nextturn`).on(`click`, function(){
+    console.log('clicknextturn')
+    if(turn < endturn){
+        turn += 1
+        display.renderRecord()
+    }
+})
+//finalturnをクリック
+$(`#finalturn`).on(`click`, function(){
+    console.log('clickfinalturn')
+    turn = endturn
+    display.renderRecord()
+})
 
 
 
@@ -698,8 +735,8 @@ $(`#board_area`).on('click','#dice_area',function(){
 //もう一度遊ぶ
 $('#newgamebutton').on('click',function(){
     $(`#receiving_area`).show()
-    let e =''
-    socket.emit('newgamebuttonclick', e)
+    let data = {socketID:socket.id}
+    socket.emit('newgamebuttonclick', data)
 });
 
 //ゲームログ非表示
@@ -724,7 +761,19 @@ $(`#board_area`).on('click','#cost_card',function(){
         $('#cost_card').css(`top`, ``)
     }
 })
-
+//プラスボタンをクリック
+$(`#tileamounts`).on(`click`, `.plusbutton`, function(){
+    let plus = Number($(this).prev().attr("value")) + Number($(this).prev().attr(`step`))
+    $(this).prev().attr(`value`, plus)
+})
+//マイナスボタンをクリック
+$(`#tileamounts`).on(`click`, `.minusbutton`, function(){
+    let minus = Number($(this).next().attr("value")) - Number($(this).next().attr(`step`))
+    if(minus < 0){
+        return
+    }
+    $(this).next().attr(`value`, minus)
+})
 
 
 
@@ -1930,15 +1979,80 @@ const display = {
     hideDicePercentage(){
         $(`#dice_percentage`).hide()
     },
+    renderRecord(){
+        let situation = record[turn]
+        console.log(situation)
+        let pn = 0
+        for(let player of situation){
+            //token
+            $(`#player${pn}token`).html(`家:${player.token.house} 街:${player.token.city} 道:${player.token.road}`)
+            //resource
+            $(`#player${pn}resource`).html('')
+            for(let r in player.resource){
+                let i = 1
+                while(i <= player.resource[r]){
+                    $(`#player${pn}resource`).append(`<div class="resourcecard ${String(r)}">${translate(String(r))}</div>`);
+                    i += 1
+                };
+            };
+            //title
+            $(`#player${pn}title`).html(``)
+            if(player.largestArmy === 2){
+                $(`#player${pn}title`).append(`<div class="titlesquare">大</div>`)
+            }
+            if(player.longestRoad === 2){
+                $(`#player${pn}title`).append(`<div class="titlesquare">長</div>`)
+            }
+            //progress
+            $(`#player${pn}progress`).html(``)
+            for(let pr in player.progress){
+                let i = 1
+                while(i <= player.progress[pr]){
+                    $(`#player${pn}progress`).append(`<div class="progresscard ${String(pr)}card">${translate(String(pr))}</div>`);
+                    i += 1
+                };
+            };
+            //used
+            $(`#player${pn}used`).html(``)
+            for(let u in player.used){
+                let i = 1
+                while(i <= player.used[u]){
+                    $(`#player${pn}used`).append(`<div class="progresscard ${String(u)}card">${translate(String(u))}</div>`);
+                    i += 1
+                };
+            };
+            //house
+            $(`.nodetouch`).html(``)
+            for(let houseNumber of player.house){
+                $(`#nodetouch${houseNumber}`).html(`<img id="house${houseNumber}" class="house" src="./house${pn+1}.png">`)
+            }
+            //road
+            $(`.road`).html(``)
+            if(board_size === 'large'){
+                for(let road of player.road){
+                    $(`#road${road.roadNumber}`).html(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./road_${road.roadDegree}${pn+1}.png">`)
+                }
+            }else if(board_size === 'regular'){
+                for(let road of player.road){
+                    $(`#road${road.roadNumber}`).html(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./regular_road_${road.roadDegree}${pn+1}.png">`)
+                }
+            }
+            //city
+            for(let cityNumber of player.city){
+                $(`#nodetouch${cityNumber}`).html(`<img id="city${cityNumber}" class="city" src="./city${pn+1}.png">`)
+            }
+            pn += 1
+        }
+    }
 }
 
 
 //コンソールに表示
-/*function game(){
+function game(){
     $(`#receiving_area`).show()
     let e = ''
     socket.emit('console',e)
-}*/
+}
 function translate(item){
     if(item === 'ore'){
         return '鉄'
@@ -1969,6 +2083,12 @@ function translate(item){
     }
 }
 socket.on('console',(game)=>{
+    $(`#receiving_area`).show()
     console.log(game)
+    $(`#receiving_area`).hide()
+})
+socket.on('checkrecord',(gameRecord)=>{
+    $(`#receiving_area`).show()
+    console.log(gameRecord)
     $(`#receiving_area`).hide()
 })
