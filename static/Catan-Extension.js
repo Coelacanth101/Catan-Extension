@@ -3,6 +3,7 @@ let board_size
 let record
 let endturn
 let turn
+let playerNumber
 //画面初期化
 $('#initializebutton').on('click', function(){
     $('#yesorno').show()
@@ -480,37 +481,41 @@ socket.on('gamerecord',(data)=>{
     record = data.gameRecord
     endturn = record.length - 1
     turn = record.length
-    console.log(record)
+    playerNumber = record[0].players.length
 })
 
 //firstturnをクリック
 $(`#firstturn`).on(`click`, function(){
-    console.log('clickfirstturn')
     turn = 0
     display.renderRecord()
+    $(`#turn`).html(`${turn - playerNumber*2}`)
 })
 //previousturnをクリック
 $(`#previousturn`).on(`click`, function(){
-    console.log('clickpreviousturn')
     if(turn > 0){
         turn -= 1
-        console.log(turn)
         display.renderRecord()
+        $(`#turn`).html(`${turn - playerNumber*2}`)
     }
 })
 //nextturnをクリック
 $(`#nextturn`).on(`click`, function(){
-    console.log('clicknextturn')
     if(turn < endturn){
         turn += 1
         display.renderRecord()
+        if(turn !== endturn){
+            $(`#turn`).html(`${turn - playerNumber*2}`)
+        }
+        else{
+            $(`#turn`).html(`終局`)
+        }
     }
 })
 //finalturnをクリック
 $(`#finalturn`).on(`click`, function(){
-    console.log('clickfinalturn')
     turn = endturn
     display.renderRecord()
+    $(`#turn`).html(`終局`)
 })
 
 
@@ -1980,8 +1985,7 @@ const display = {
         $(`#dice_percentage`).hide()
     },
     renderRecord(){
-        let situation = record[turn]
-        console.log(situation)
+        let situation = record[turn].players
         let pn = 0
         for(let player of situation){
             //token
@@ -2042,6 +2046,15 @@ const display = {
                 $(`#nodetouch${cityNumber}`).html(`<img id="city${cityNumber}" class="city" src="./city${pn+1}.png">`)
             }
             pn += 1
+        }
+        //thief
+        $(`.tile_button`).html(``)
+        $(`#tile_button${record[turn].thief}`).html(`<div id="thief"></div>`)
+        //dice
+        if(record[turn].dice[0]){
+            $(`#dice_area`).html(`<img class="dice" src="./dice${record[turn].dice[0]}.png" alt="dice${record[turn].dice[0]}"><img class="dice" src="./dice${record[turn].dice[1]}.png" alt="dice${record[turn].dice[1]}">`)
+        }else{
+            $(`#dice_area`).html(``)
         }
     }
 }

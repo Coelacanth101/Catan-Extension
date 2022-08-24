@@ -517,6 +517,7 @@ class Player{
         display.showMyButtonArea(this.socketID)
       }else{
         game.phase = 'afterdice'
+        takeRecord()
         display.diceBlack()
         display.showMyButtonArea(this.socketID)
       }
@@ -551,6 +552,7 @@ class Player{
         game.phase = 'beforedice'
       }else{
         game.phase = 'afterdice'
+        takeRecord()
       }
       display.diceBlack()
       display.showMyButtonArea(game.turnPlayer.socketID)
@@ -1354,6 +1356,7 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
       display.dice()
       this.produce(dice1+dice2)
       game.phase = 'afterdice'
+      takeRecord()
     }
     this.diceCount[dice1+dice2] += 1
     recordLog()
@@ -1892,9 +1895,10 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     this.progressDeck = arr
   },
   turnEnd(){
-    takeRecord()
     if(game.phase === 'afterdice'){
-      if(game.turnPlayer.point >= 10){
+      ///////
+      if(game.turnPlayer.point >= 3){
+        takeRecord()
         game.gameEnd()
         return
       }else if(board.size === 'large'){
@@ -2579,6 +2583,7 @@ const display = {
       }
       if(game.phase === 'end'){
         display.gameResultTo(socketID)
+        display.gameRecord()
       }
       display.buildingsTo(socketID);
     }
@@ -2874,6 +2879,7 @@ io.on("connection", (socket)=>{
       display.relativeNodes()
       display.thief()
       display.allPlayerInformation()
+      takeRecord()
     }else{
       display.hideReceivingArea()
     }
@@ -3218,7 +3224,7 @@ io.on("connection", (socket)=>{
 
 let gameRecord = []
 function takeRecord(){
-  let record = []
+  let record = {players:[],thief:'',dice:[]}
   for(let player of game.players){
     let playerRecord = {
       resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
@@ -3255,7 +3261,10 @@ function takeRecord(){
     }
     playerRecord.largestArmy = player.largestArmy
     playerRecord.longestRoad = player.longestRoad
-    record.push(playerRecord)
+    record.players.push(playerRecord)
   }
+  record.thief = board.tileButtonPositionToNumber(board.thief.position)
+  record.dice[0] = board.dice[0]
+  record.dice[1] = board.dice[1]
   gameRecord.push(record)
 }

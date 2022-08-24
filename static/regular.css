@@ -436,6 +436,9 @@
                 .recordbutton{
                     margin:0 2%;
                 }
+                #turn{
+                    font-weight: bold;
+                }
                 #newgame_area{
                     width: 100%;
                     height: 30%;
