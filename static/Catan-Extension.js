@@ -742,6 +742,7 @@ $('#newgamebutton').on('click',function(){
     $(`#receiving_area`).show()
     let data = {socketID:socket.id}
     socket.emit('newgamebuttonclick', data)
+    $(`newgame_area`).hide()
 });
 
 //ゲームログ非表示
@@ -1786,6 +1787,7 @@ const display = {
     showGameEndArea(){
         $(`#receiving_area`).show();
         $(`#gameend_area`).show()
+        $(`#newgamebutton`).show()
         $(`#receiving_area`).hide();
     },
     hideGameEndArea(){
