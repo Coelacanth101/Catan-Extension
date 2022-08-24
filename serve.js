@@ -1174,6 +1174,7 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
         }
       }
     }
+    takeRecord()
   },
   //node番号を座標に変換
   nodeNumberToPosition(number){
@@ -1896,8 +1897,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   },
   turnEnd(){
     if(game.phase === 'afterdice'){
-      ///////
-      if(game.turnPlayer.point >= 3){
+      if(game.turnPlayer.point >= 10){
         takeRecord()
         game.gameEnd()
         return
@@ -2879,7 +2879,6 @@ io.on("connection", (socket)=>{
       display.relativeNodes()
       display.thief()
       display.allPlayerInformation()
-      takeRecord()
     }else{
       display.hideReceivingArea()
     }

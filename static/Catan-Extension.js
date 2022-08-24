@@ -58,7 +58,6 @@ $('#gamestartbutton').on('click', function(){
     for(resource in tileamounts){
         total += tileamounts[resource]
     }
-    /////
     if(size === 'large' && total > 28){
         return
     }else if(size === 'regular' && total > 18){
@@ -742,7 +741,7 @@ $('#newgamebutton').on('click',function(){
     $(`#receiving_area`).show()
     let data = {socketID:socket.id}
     socket.emit('newgamebuttonclick', data)
-    $(`newgame_area`).hide()
+    $(`#newgame_area`).hide()
 });
 
 //ゲームログ非表示
@@ -1787,7 +1786,8 @@ const display = {
     showGameEndArea(){
         $(`#receiving_area`).show();
         $(`#gameend_area`).show()
-        $(`#newgamebutton`).show()
+        $(`#newgame_area`).show()
+        $(`#turn`).html(`終局`)
         $(`#receiving_area`).hide();
     },
     hideGameEndArea(){
