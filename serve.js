@@ -33,6 +33,7 @@ const properPlayer = 6
 let playersName = []
 const buildResource = {house:{ore:0,grain:1,wool:1,lumber:1,brick:1}, city:{ore:3,grain:2,wool:0,lumber:0,brick:0}, progress:{ore:1,grain:1,wool:1,lumber:0,brick:0}, road:{ore:0,grain:0,wool:0,lumber:1,brick:1}}
 let progress = {knight:20, roadbuild:3, harvest:3, monopoly:3, point:5}
+let gameRecord = []
 
 
 class Player{
@@ -223,6 +224,7 @@ class Player{
           display.resourceOf(this)
           const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'house'}
           display.playLog(logdata)
+          takeRecord()
         }
       }else if(game.phase === 'afterdice'|| game.phase === 'building'){
         //既に家がないか確認
@@ -265,6 +267,7 @@ class Player{
           display.tokenOf(this)
           const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'house'}
           display.playLog(logdata)
+          takeRecord()
         }
       }else{
         display.hideReceivingArea()
@@ -308,6 +311,7 @@ class Player{
           display.tokenOf(this)
           const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'city'}
           display.playLog(logdata)
+          takeRecord()
         }
       }else{
         display.hideReceivingArea()
@@ -334,6 +338,7 @@ class Player{
           display.tokenOf(this)
           const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'road'}
           display.playLog(logdata)
+          takeRecord()
           game.turnEndSetup()
           display.relativeNodes()
         }
@@ -367,6 +372,7 @@ class Player{
           display.tokenOf(this)
           const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'road'}
           display.playLog(logdata)
+          takeRecord()
         }
       }else if(game.phase === 'roadbuild1'){
         //既に道がないか確認
@@ -400,6 +406,7 @@ class Player{
             game.phase = 'afterdice'
           }
           display.toggleMyButtons(game.turnPlayer.socketID)
+          takeRecord()
         }
       }else if(game.phase === 'roadbuild2'){
         //既に道がないか確認
@@ -429,6 +436,7 @@ class Player{
           display.toggleMyButtons(game.turnPlayer.socketID)
           const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'road'}
           display.playLog(logdata)
+          takeRecord()
         }
       }else{
         display.hideReceivingArea()
@@ -455,6 +463,7 @@ class Player{
         game.lastActionPlayer = this
         const logdata = {action:'draw', playername:game.turnPlayer.name}
         display.playLog(logdata)
+        takeRecordUndeletable()
       }
     }else{
       display.hideReceivingArea()
@@ -515,6 +524,7 @@ class Player{
         game.phase = 'beforedice'
         display.diceBlack()
         display.showMyButtonArea(this.socketID)
+        takeRecord()
       }else{
         game.phase = 'afterdice'
         takeRecord()
@@ -552,7 +562,6 @@ class Player{
         game.phase = 'beforedice'
       }else{
         game.phase = 'afterdice'
-        takeRecord()
       }
       display.diceBlack()
       display.showMyButtonArea(game.turnPlayer.socketID)
@@ -560,6 +569,7 @@ class Player{
       game.lastActionPlayer = this
       const logdata = {action:'robresource', playername:game.turnPlayer.name, robbed:target.name}
       display.playLog(logdata)
+      takeRecordUndeletable()
     }
     
   };
@@ -591,6 +601,7 @@ class Player{
       display.addUsed('monopoly')
       const logdata = {action:'monopoly', playername:game.turnPlayer.name, resource:resource}
       display.playLog(logdata)
+      takeRecordUndeletable()
     }
   };
   harvest(resource){
@@ -624,6 +635,7 @@ class Player{
       display.resourceOf(this)
       const logdata = {action:'harvest', playername:game.turnPlayer.name, resource:resource}
       display.playLog(logdata)
+      takeRecord()
     }else{
       display.hideReceivingArea()
     }
@@ -884,6 +896,7 @@ class Player{
       display.hideReceivingArea()
       const logdata = {action:'trade', playername:game.turnPlayer.name, exportresource:data.exportresource, importresource:data.importresource}
       display.playLog(logdata)
+      takeRecord()
     }
   }
   accepted(){
@@ -913,6 +926,7 @@ class Player{
     display.showMyButtonArea(game.turnPlayer.socketID)
     recordLog()
     game.lastActionPlayer = this
+    takeRecordUndeletable()
   };
   denied(){
     game.phase = 'afterdice'
@@ -1174,7 +1188,8 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
         }
       }
     }
-    takeRecord()
+    makeNewTurnRecord()
+    takeRecordUndeletable()
   },
   //node番号を座標に変換
   nodeNumberToPosition(number){
@@ -1896,7 +1911,9 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     this.progressDeck = arr
   },
   turnEnd(){
+    makeNewTurnRecord()
     if(game.phase === 'afterdice'){
+      //////////
       if(game.turnPlayer.point >= 10){
         takeRecord()
         game.gameEnd()
@@ -1940,9 +1957,9 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     }
   },
   turnEndSetup(){
-    takeRecord()
     if(this.turnPlayer.house.length === 2){
       if(this.turnPlayer === this.players[0]){
+        makeNewTurnRecord()
         this.phase = 'beforedice'
       }else{
         this.turnPlayer = this.players[this.players.indexOf(this.turnPlayer)-1];
@@ -2608,6 +2625,7 @@ const display = {
       display.showField()
       display.island()
       display.relativeNodes()
+      display.hideAllButtons()
       display.toggleMyButtons(game.turnPlayer.socketID)
       display.hideMonopolyArea()
       display.hideHarvestArea()
@@ -2834,8 +2852,10 @@ function recordLog(){
   }
   board.recordLog()
   game.recordLog()
+  lastActionUndeletable()
 }
 function unDo(){
+  deleteLastAction()
   game.lastActionPlayer.unDo()
   board.unDo()
   game.unDo()
@@ -3221,9 +3241,8 @@ io.on("connection", (socket)=>{
     })
 })
 
-let gameRecord = []
 function takeRecord(){
-  let record = {players:[],thief:'',dice:[]}
+  let record = {players:[],thief:'',dice:[], undo:true}
   for(let player of game.players){
     let playerRecord = {
       resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
@@ -3265,5 +3284,100 @@ function takeRecord(){
   record.thief = board.tileButtonPositionToNumber(board.thief.position)
   record.dice[0] = board.dice[0]
   record.dice[1] = board.dice[1]
-  gameRecord.push(record)
+  let lastTurn = gameRecord[gameRecord.length-1]
+  if(lastTurn.length > 0){
+    let lastAction = lastTurn[lastTurn.length-1]
+    lastAction.undo = false
+  }else if(gameRecord.length >= 2){
+    let previousTurn = gameRecord[gameRecord.length-2]
+    let lastAction = previousTurn[previousTurn.length-1]
+    lastAction.undo = false
+  }
+  gameRecord[gameRecord.length-1].push(record)
+}
+function takeRecordUndeletable(){
+  let record = {players:[],thief:'',dice:[], undo:false}
+  for(let player of game.players){
+    let playerRecord = {
+      resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
+      token:{house:5, city:4, road:15},
+      house:[],
+      city:[],
+      road:[],
+      progress:{knight:0, roadbuild:0, harvest:0, monopoly:0, point:0},
+      used:{knight:0, roadbuild:0, harvest:0, monopoly:0, point:0},
+      largestArmy:0,
+      longestRoad:0
+    }
+    for(let r in player.resource){
+      playerRecord.resource[r] = player.resource[r]
+    }
+    for(let t in player.token){
+      playerRecord.token[t] = player.token[t]
+    }
+    for(let h of player.house){
+      playerRecord.house.push(h.nodeNumber)
+    }
+    for(let c of player.city){
+      playerRecord.city.push(c.nodeNumber)
+    }
+    for(let r of player.road){
+      let road = {roadNumber:r.roadNumber, roadDegree:r.roadDegree}
+      playerRecord.road.push(road)
+    }
+    for(let p in player.progress){
+      playerRecord.progress[p] = player.progress[p]
+    }
+    for(let u in player.used){
+      playerRecord.used[u] = player.used[u]
+    }
+    playerRecord.largestArmy = player.largestArmy
+    playerRecord.longestRoad = player.longestRoad
+    record.players.push(playerRecord)
+  }
+  record.thief = board.tileButtonPositionToNumber(board.thief.position)
+  record.dice[0] = board.dice[0]
+  record.dice[1] = board.dice[1]
+  let lastTurn = gameRecord[gameRecord.length-1]
+  if(lastTurn.length > 0){
+    let lastAction = lastTurn[lastTurn.length-1]
+    lastAction.undo = false
+  }else if(gameRecord.length >= 2){
+    let previousTurn = gameRecord[gameRecord.length-2]
+    let lastAction = previousTurn[previousTurn.length-1]
+    lastAction.undo = false
+  }
+  gameRecord[gameRecord.length-1].push(record)
+}
+function makeNewTurnRecord(){
+  gameRecord.push([])
+}
+function deleteLastAction(){
+  let lastTurn = gameRecord[gameRecord.length-1]
+  if(lastTurn.length > 0){
+    let lastAction = lastTurn[lastTurn.length-1]
+    if(lastAction.undo === true){
+      lastTurn.pop()
+    }
+  }else{
+    let previousTurn = gameRecord[gameRecord.length-2]
+    let lastAction = previousTurn[previousTurn.length-1]
+    if(lastAction.undo === true || game.phase === 'beforedice'){
+      gameRecord.pop()
+    }
+    if(gameRecord.length === 1){
+      gameRecord[0].pop()
+    }
+  }
+}
+function lastActionUndeletable(){
+  let lastTurn = gameRecord[gameRecord.length-1]
+  let lastAction
+  if(lastTurn.length > 0){
+    lastAction = lastTurn[lastTurn.length-1]
+  }else{
+    let previousTurn = gameRecord[gameRecord.length-2]
+    lastAction = previousTurn[previousTurn.length-1]
+  }
+  lastAction.undo = false
 }

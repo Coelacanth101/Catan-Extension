@@ -478,43 +478,61 @@ socket.on('deleteplaylog',()=>{
 })
 socket.on('gamerecord',(data)=>{
     record = data.gameRecord
-    endturn = record.length - 1
-    turn = record.length
-    playerNumber = record[0].players.length
+    endturn = record.length-1
+    turn = endturn
+    actionInTurn = 0
+    playerNumber = record[0][0].players.length
 })
 
 //firstturnをクリック
 $(`#firstturn`).on(`click`, function(){
     turn = 0
+    actionInTurn = 0
     display.renderRecord()
-    $(`#turn`).html(`${turn - playerNumber*2}`)
 })
 //previousturnをクリック
 $(`#previousturn`).on(`click`, function(){
-    if(turn > 0){
+    if(turn !== 0){
         turn -= 1
+        actionInTurn = 0
         display.renderRecord()
-        $(`#turn`).html(`${turn - playerNumber*2}`)
+    }
+})
+//previousactionをクリック
+$(`#previousaction`).on(`click`, function(){
+    if(actionInTurn !== 0){
+        actionInTurn -= 1
+        display.renderRecord()
+    }else if(turn !== 0){
+        turn -= 1
+        actionInTurn = record[turn].length-1
+        display.renderRecord()
+    }
+})
+//nextactionをクリック
+$(`#nextaction`).on(`click`, function(){
+    if(actionInTurn !== record[turn].length - 1){
+        actionInTurn += 1
+        display.renderRecord()
+    }else if(turn !== endturn){
+        turn += 1
+        actionInTurn = 0
+        display.renderRecord()
     }
 })
 //nextturnをクリック
 $(`#nextturn`).on(`click`, function(){
-    if(turn < endturn){
+    if(turn !== endturn){
         turn += 1
+        actionInTurn = 0
         display.renderRecord()
-        if(turn !== endturn){
-            $(`#turn`).html(`${turn - playerNumber*2}`)
-        }
-        else{
-            $(`#turn`).html(`終局`)
-        }
     }
 })
 //finalturnをクリック
 $(`#finalturn`).on(`click`, function(){
     turn = endturn
+    actionInTurn = 0
     display.renderRecord()
-    $(`#turn`).html(`終局`)
 })
 
 
@@ -1811,7 +1829,9 @@ const display = {
         $(`#receiving_area`).hide();
     },
     log(a){
+        $(`#receiving_area`).show();
         console.log(a)
+        $(`#receiving_area`).hide();
     },
     playerSort(players){
         $(`#receiving_area`).show();
@@ -1987,7 +2007,7 @@ const display = {
         $(`#dice_percentage`).hide()
     },
     renderRecord(){
-        let situation = record[turn].players
+        let situation = record[turn][actionInTurn].players
         let pn = 0
         $(`.nodetouch`).html(``)
         $(`.road`).html(``)
@@ -2051,13 +2071,18 @@ const display = {
         }
         //thief
         $(`.tile_button`).html(``)
-        $(`#tile_button${record[turn].thief}`).html(`<div id="thief"></div>`)
+        $(`#tile_button${record[turn][actionInTurn].thief}`).html(`<div id="thief"></div>`)
         //dice
-        if(record[turn].dice[0]){
-            $(`#dice_area`).html(`<img class="dice" src="./dice${record[turn].dice[0]}.png" alt="dice${record[turn].dice[0]}"><img class="dice" src="./dice${record[turn].dice[1]}.png" alt="dice${record[turn].dice[1]}">`)
+        if(record[turn][actionInTurn].dice[0]){
+            $(`#dice_area`).html(`<img class="dice" src="./dice${record[turn][actionInTurn].dice[0]}.png" alt="dice${record[turn][actionInTurn].dice[0]}"><img class="dice" src="./dice${record[turn][actionInTurn].dice[1]}.png" alt="dice${record[turn][actionInTurn].dice[1]}">`)
         }else{
             $(`#dice_area`).html(``)
         }
+        if(turn === endturn){
+            $(`#turn`).html(`終局`)
+        }else[
+            $(`#turn`).html(`${turn}`)
+        ]
     }
 }
 
