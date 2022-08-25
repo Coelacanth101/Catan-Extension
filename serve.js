@@ -3296,7 +3296,6 @@ function takeRecord(){
     lastAction.undo = false
   }
   gameRecord[gameRecord.length-1].push(record)
-  display.log(gameRecord)
 }
 function takeRecordUndeletable(){
   let record = {players:[],thief:'',dice:[], undo:false}
@@ -3351,11 +3350,9 @@ function takeRecordUndeletable(){
     lastAction.undo = false
   }
   gameRecord[gameRecord.length-1].push(record)
-  display.log(gameRecord)
 }
 function makeNewTurnRecord(){
   gameRecord.push([])
-  display.log(gameRecord)
 }
 function deleteLastAction(){
   let lastTurn = gameRecord[gameRecord.length-1]
@@ -3374,7 +3371,6 @@ function deleteLastAction(){
       gameRecord[0].pop()
     }
   }
-  display.log(gameRecord)
 }
 function lastActionUndeletable(){
   let lastTurn = gameRecord[gameRecord.length-1]
