@@ -884,6 +884,7 @@ class Player{
     if(ex !== im){
       display.hideReceivingArea()
     }else{
+      recordLog()
       for(let resource in data.exportresource){
         this.resource[resource] -= data.exportresource[resource]
         game.allResource[resource] += data.exportresource[resource]
