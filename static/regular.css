@@ -21,16 +21,16 @@
         justify-content: center;
     }
     .tilenumberinputa{
-        width: 20px;
+        width: 40px;
     }
     .plusbutton{
-        width: 20px;
+        width: 4px;
         display: flex;
         justify-content: center;
         align-items: center;
     }
     .minusbutton{
-        width: 20px;
+        width: 4px;
         display: flex;
         justify-content: center;
         align-items: center;

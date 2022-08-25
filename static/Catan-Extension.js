@@ -836,6 +836,7 @@ const display = {
     },
     island(island){
         $(`#receiving_area`).show()
+        $(`.tilenumberinput`).val(``)
         $('#field').show()
         let tileNumber = 1
         if(island.length === 9){
