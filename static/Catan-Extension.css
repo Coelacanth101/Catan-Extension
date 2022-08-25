@@ -419,6 +419,7 @@
                 #gameend_area{
                     width: 100%;
                     height: 100%;
+                    position: relative;
                 }
                 #message_area{
                     width: 100%;
@@ -733,6 +734,33 @@ td{
                             width: 12.5%;
                             font-size: 10%;
                             padding: 0%
+                        }
+                    }
+                    @media screen and (min-height:601px) {
+                        #controlrecord{
+                            position: fixed;
+                            width: 400px;
+                            bottom: 2.5vh;
+                            right: 0%;
+                        }@media screen and (min-width:1500px){
+                            #controlrecord{
+                                bottom: 2.5vh;
+                                right: calc(50% - 750px);
+                            }
+                        }@media screen and (min-width:850px) and (max-width:1000px) {
+                            #controlrecord{
+                                position: fixed;
+                                width: calc(100% - 600px);
+                                bottom: 2.5vh;
+                                right: 0%;
+                            }
+                        }@media screen and (max-width:850px) {
+                            #controlrecord{
+                                position: fixed;
+                                width: 250px;
+                                bottom: 2.5vh;
+                                right: 0%;
+                            }
                         }
                     }
 }
