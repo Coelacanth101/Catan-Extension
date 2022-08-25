@@ -2083,6 +2083,20 @@ const display = {
         }else[
             $(`#turn`).html(`${turn}`)
         ]
+        let turnPlayerNumber
+        $(`.name`).css(`background-color`, ``)
+        if(turn === endturn){
+            turnPlayerNumber = (turn-1) % playerNumber
+        }else if(turn === 0){
+            turnPlayerNumber = 1
+        }else{
+            turnPlayerNumber = turn % playerNumber
+        }
+        if(turnPlayerNumber !== 0){
+            $(`#player${turnPlayerNumber - 1}name`).css(`background-color`, `rgb(255, 123, 0)`)
+        }else{
+            $(`#player${playerNumber - 1}name`).css(`background-color`, `rgb(255, 123, 0)`)
+        }
     }
 }
 

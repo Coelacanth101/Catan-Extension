@@ -1911,10 +1911,9 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     this.progressDeck = arr
   },
   turnEnd(){
-    makeNewTurnRecord()
     if(game.phase === 'afterdice'){
-      //////////
       if(game.turnPlayer.point >= 10){
+        makeNewTurnRecord()
         takeRecord()
         game.gameEnd()
         return
@@ -1924,6 +1923,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
         display.thisTurnBlack()
         display.hideExhaust()
       }else if(board.size === 'regular'){
+        makeNewTurnRecord()
         let old = game.turnPlayer
         if(this.turnPlayer.number === this.players.length-1){
           this.turnPlayer = this.players[0];
@@ -1946,6 +1946,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
         this.turnPlayer = this.players[this.turnPlayer.number+1];
     }
     if(this.buildingPhase === this.players.length){
+      makeNewTurnRecord()
       this.phase = 'beforedice'
     }
     this.buildingPhase += 1
@@ -3294,6 +3295,7 @@ function takeRecord(){
     lastAction.undo = false
   }
   gameRecord[gameRecord.length-1].push(record)
+  display.log(gameRecord)
 }
 function takeRecordUndeletable(){
   let record = {players:[],thief:'',dice:[], undo:false}
@@ -3348,9 +3350,11 @@ function takeRecordUndeletable(){
     lastAction.undo = false
   }
   gameRecord[gameRecord.length-1].push(record)
+  display.log(gameRecord)
 }
 function makeNewTurnRecord(){
   gameRecord.push([])
+  display.log(gameRecord)
 }
 function deleteLastAction(){
   let lastTurn = gameRecord[gameRecord.length-1]
@@ -3369,6 +3373,7 @@ function deleteLastAction(){
       gameRecord[0].pop()
     }
   }
+  display.log(gameRecord)
 }
 function lastActionUndeletable(){
   let lastTurn = gameRecord[gameRecord.length-1]
