@@ -183,7 +183,7 @@ class Player{
     this.dice = this.log.dice
     this.toTrash = this.log.toTrash
     this.renounce = this.log.renounce
-    const logdata = {action:'undo', playername:game.turnPlayer.name}
+    const logdata = {action:'undo', playername:game.lastActionPlayer.name}
     display.playLog(logdata)
   }
   build(item, position){
