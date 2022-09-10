@@ -1817,14 +1817,11 @@ const display = {
     },
     turnPlayer(data){
         $(`#receiving_area`).show();
-        let i = 0;
-        while(i <= 5){
-            $(`#player${i}name`).css('background-color', '');
-            i += 1
-        }
+        $(`.name`).css('background-color', '');
         if(data.phase !== 'building'){
             $(`#player${data.tn}name`).css('background-color', 'rgb(255, 123, 0)');
         }else{
+            $(`#player${data.bn}name`).css('background-color', 'rgb(255, 123, 0)');
             $(`#player${data.tn}name`).css('background-color', 'rgba(38, 230, 38, 0.514)');
         }
         $(`#receiving_area`).hide();

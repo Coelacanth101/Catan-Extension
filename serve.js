@@ -1738,8 +1738,8 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
 
 
 
-const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', phase:'nameinputting', progressDeck:[],board:board,buildingPhase:0,largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:'', takeresource:''},renounce:[],
-log:{turnPlayer:'', phase:'nameinputting', progressDeck:[],buildingPhase:0,largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}, takeresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}},renounce:[],allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0}},
+const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', basePlayer:'', phase:'nameinputting', progressDeck:[],board:board,largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:'', takeresource:''},renounce:[],
+log:{turnPlayer:'', phase:'nameinputting', progressDeck:[],largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}, takeresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}},renounce:[],allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0}},
 lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   newGame(){
     for(let player of this.players){
@@ -1763,15 +1763,15 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   },
   reset(){
     this.turnPlayer = '';
+    this.basePlayer = '';
     this.phase = 'setup';
     this.progressDeck = [];
-    this.buildingPhase = 0;
     this.largestArmyPlayer = '';
     this.longestRoadPlayer = '';
     this.burstPlayer = [];
     this.proposedata = {proposer:'', proposee:'', giveresource:'', takeresource:''};
     this.renounce = []
-    this.log = {turnPlayer:'', phase:'setup', progressDeck:[],buildingPhase:0,largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}, takeresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}},renounce:[],allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0}}
+    this.log = {turnPlayer:'', phase:'setup', progressDeck:[],largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}, takeresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}},renounce:[],allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0}}
     this.lastActionPlayer = ''
     if(board.size === 'large'){
       this.allResource = {ore:25,grain:25,wool:25,lumber:25,brick:25}
@@ -1782,8 +1782,8 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   },
   recordLog(){
     this.log.turnPlayer = this.turnPlayer
+    this.log.basePlayer = this.basePlayer
     this.log.phase = this.phase
-    this.log.buildingPhase = this.buildingPhase
     this.log.largestArmyPlayer = this.largestArmyPlayer
     this.log.longestRoadPlayer = this.longestRoadPlayer
     this.log.progressDeck = []
@@ -1810,8 +1810,8 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   },
   unDo(){
     this.turnPlayer = this.log.turnPlayer
+    this.basePlayer = this.log.basePlayer
     this.phase = this.log.phase
-    this.buildingPhase = this.log.buildingPhase
     this.largestArmyPlayer = this.log.largestArmyPlayer
     this.longestRoadPlayer = this.log.longestRoadPlayer
     this.progressDeck = []
@@ -1912,20 +1912,19 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     this.progressDeck = arr
   },
   turnEnd(){
-    if(game.phase === 'afterdice'){
-      if(game.turnPlayer.point >= 10){
+    if(this.phase === 'afterdice'){
+      if(this.turnPlayer.point >= 10){
         makeNewTurnRecord()
         takeRecord()
-        game.gameEnd()
+        this.gameEnd()
         return
       }else if(board.size === 'large'){
-        game.buildingPhase = 0
-        game.phase = 'building'
+        this.phase = 'building'
         display.thisTurnBlack()
         display.hideExhaust()
       }else if(board.size === 'regular'){
         makeNewTurnRecord()
-        let old = game.turnPlayer
+        this.basePlayer = this.turnPlayer
         if(this.turnPlayer.number === this.players.length-1){
           this.turnPlayer = this.players[0];
         } else {
@@ -1934,27 +1933,29 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
         this.phase = 'beforedice'
         display.thisTurnBlack()
         display.turnPlayer()
-        display.toggleMyButtons(old.socketID)
-        display.toggleMyButtons(game.turnPlayer.socketID)
+        display.toggleMyButtons(this.basePlayer.socketID)
+        display.toggleMyButtons(this.turnPlayer.socketID)
         display.hideExhaust()
         return
       }
     }
-    let old = game.turnPlayer
+    if(this.basePlayer === ''){
+      this.basePlayer = this.turnPlayer
+    }else if(this.basePlayer === this.turnPlayer){
+      makeNewTurnRecord()
+      this.phase = 'beforedice'
+      this.basePlayer = ''
+    }
+    let previousPlayer = this.turnPlayer
     if(this.turnPlayer.number === this.players.length-1){
       this.turnPlayer = this.players[0];
     } else {
         this.turnPlayer = this.players[this.turnPlayer.number+1];
     }
-    if(this.buildingPhase === this.players.length){
-      makeNewTurnRecord()
-      this.phase = 'beforedice'
-    }
-    this.buildingPhase += 1
     display.turnPlayer()
-    display.toggleMyButtons(old.socketID)
-    display.toggleMyButtons(game.turnPlayer.socketID)
-    if(game.phase === 'building' && game.turnPlayer.renounce === true){
+    display.toggleMyButtons(previousPlayer.socketID)
+    display.toggleMyButtons(this.turnPlayer.socketID)
+    if(this.phase === 'building' && this.turnPlayer.renounce === true){
       this.turnPlayer.turnEnd()
     }
   },
@@ -1973,7 +1974,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
         this.turnPlayer = this.players[this.players.indexOf(this.turnPlayer)+1];
       }
     }
-    display.toggleMyButtons(game.turnPlayer.socketID)
+    display.toggleMyButtons(this.turnPlayer.socketID)
     display.turnPlayer()
   },
   pointReload(){
@@ -1982,7 +1983,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     }
   },
   gameEnd(){
-    game.phase = 'end'
+    this.phase = 'end'
     recordLog()
     display.gameResult()
     display.gameRecord()
@@ -1998,7 +1999,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     if(this.burstPlayer.length !== 0){
       this.phase = 'burst'
       recordLog()
-      for(let player of game.players){
+      for(let player of this.players){
         player.recordLog()
       }
       display.showBurstArea()
@@ -2008,7 +2009,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
       this.phase = 'thiefmove'
       display.thiefRed()
     }
-    display.toggleMyButtons(game.turnPlayer.socketID)
+    display.toggleMyButtons(this.turnPlayer.socketID)
     display.hideReceivingArea()
   },
   IDToPlayer(ID){
@@ -2038,7 +2039,6 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     this.turnPlayer = '';
     this.phase = 'nameinputting';
     this.progressDeck = [];
-    this.buildingPhase = 0;
     this.largestArmyPlayer = '';
     this.longestRoadPlayer = '';
     this.burstPlayer = [];
@@ -2405,14 +2405,16 @@ const display = {
   },
   turnPlayer(){
     let tn = game.turnPlayer.number
+    let bn = game.basePlayer.number
     let phase = game.phase
-    let data = {tn:tn,phase:phase}
+    let data = {tn:tn, bn:bn, phase:phase}
     io.emit('turnplayer', data)
   },
   turnPlayerTo(socketID){
     let tn = game.turnPlayer.number
+    let bn = game.basePlayer.number
     let phase = game.phase
-    let data = {tn:tn,phase:phase}
+    let data = {tn:tn, bn:bn, phase:phase}
     io.to(socketID).emit('turnplayer', data)
   },
   playerSort(){
