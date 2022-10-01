@@ -478,7 +478,6 @@ socket.on('deleteplaylog',()=>{
 })
 socket.on('gamerecord',(data)=>{
     record = data.gameRecord
-    console.log(record)
     endturn = record.length-1
     turn = endturn
     actionInTurn = 0
