@@ -478,6 +478,7 @@ socket.on('deleteplaylog',()=>{
 })
 socket.on('gamerecord',(data)=>{
     record = data.gameRecord
+    console.log(record)
     endturn = record.length-1
     turn = endturn
     actionInTurn = 0
@@ -2143,7 +2144,4 @@ socket.on('checkrecord',(gameRecord)=>{
     $(`#receiving_area`).show()
     console.log(gameRecord)
     $(`#receiving_area`).hide()
-})
-socket.on('check',(data)=>{
-    console.log(data)
 })

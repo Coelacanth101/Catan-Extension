@@ -2750,7 +2750,6 @@ const display = {
   },
   relativeNodes(){
     let nodes = highestIndex(board.allNodesRelativeProductivity())
-    io.emit('check',board.allNodesRelativeProductivity())
     let data = {nodes:nodes}
     if(game.phase === 'setup'){
       io.emit('relativenodes',data)
