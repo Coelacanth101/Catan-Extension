@@ -1675,7 +1675,7 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
         }
       }
     }
-    return this.productivity(tileobj) / totalProductivity
+    return this.productivity(tileobj)**2 / totalProductivity
   },
   nodeRelativeProductivity(nodeNumber){
     const nodePosition = this.nodeNumberToPosition(nodeNumber)
@@ -2750,6 +2750,7 @@ const display = {
   },
   relativeNodes(){
     let nodes = highestIndex(board.allNodesRelativeProductivity())
+    io.emit('check',board.allNodesRelativeProductivity())
     let data = {nodes:nodes}
     if(game.phase === 'setup'){
       io.emit('relativenodes',data)

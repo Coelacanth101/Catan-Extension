@@ -2144,3 +2144,6 @@ socket.on('checkrecord',(gameRecord)=>{
     console.log(gameRecord)
     $(`#receiving_area`).hide()
 })
+socket.on('check',(data)=>{
+    console.log(data)
+})
