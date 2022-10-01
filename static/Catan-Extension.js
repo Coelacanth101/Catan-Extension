@@ -2100,11 +2100,13 @@ const display = {
 
 
 //コンソールに表示
+/*
 function game(){
     $(`#receiving_area`).show()
     let e = ''
     socket.emit('console',e)
 }
+*/
 function translate(item){
     if(item === 'ore'){
         return '鉄'
