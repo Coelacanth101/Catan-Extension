@@ -218,6 +218,11 @@ socket.on('hideproposearea', (e)=>{
     $(`#receiving_area`).show();
     display.hideProposeArea()
 });
+socket.on('hidemessagearea', (e)=>{
+    $(`#receiving_area`).show();
+    $(`#message_area`).hide();
+    $(`#receiving_area`).hide();
+});
 socket.on('hideplayers', (e)=>{
     $(`#receiving_area`).show();
     display.hidePlayers()
@@ -304,9 +309,9 @@ socket.on('diceblack',()=>{
     $(`#receiving_area`).show();
     display.diceBlack()
 })
-socket.on('hidemessagearea',()=>{
+socket.on('hideendmessagearea',()=>{
     $(`#receiving_area`).show();
-    display.hidemessageArea()
+    display.hideendmessageArea()
 })
 socket.on('showbutton',(string)=>{
     $(`#receiving_area`).show();
@@ -474,6 +479,112 @@ socket.on('deleteplaylog',()=>{
     $(`#receiving_area`).show();
     $(`#logmessage`).html(``)
     $(`#log_area`).hide()
+    $(`#receiving_area`).hide();
+})
+socket.on('message',(logdata)=>{
+    if(socket.id === logdata.turnPlayerID){
+        return
+    }
+    $(`#receiving_area`).show();
+    $(`#button_area`).hide()
+    $(`#message_area`).show()
+    if(logdata.action === 'build'){
+        $(`#message_area`).html(``)
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が${translate(logdata.builditem)}を建設しました</div>`)
+    }else if(logdata.action === 'draw'){
+        $(`#message_area`).html(``)
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>がカードを引きました</div>`)
+    }else if(logdata.action === 'progress'){
+        $(`#message_area`).html(``)
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<span class="logprogress ${logdata.progress}card">${translate(logdata.progress)}</span>を使いました</div>`)
+    }else if(logdata.action === 'thiefmove'){
+        $(`#message_area`).html(``)
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が盗賊を移動しました</div>`)
+    }else if(logdata.action === 'robresource'){
+        $(`#message_area`).html(``)
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<b>${logdata.robbed}</b>から強奪しました</div>`)
+    }else if(logdata.action === 'monopoly'){
+        $(`#message_area`).html(``)
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<span class="logresource ${logdata.resource}">${translate(logdata.resource)}</span>を独占しました</div>`)
+    }else if(logdata.action === 'harvest'){
+        $(`#message_area`).html(``)
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<span class="logresource ${logdata.resource}">${translate(logdata.resource)}</span>を収穫しました</div>`)
+    }else if(logdata.action === 'undo'){
+        $(`#message_area`).html(``)
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が取り消しました</div>`)
+    }else if(logdata.action === 'trash'){
+        $(`#message_area`).html(``)
+        let trashresource = ''
+        for(let resource in logdata.resource){
+            let i = 1
+            while(i <= logdata.resource[resource]){
+                trashresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
+                i += 1
+            }
+        }
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が${trashresource}を捨てました</div>`)
+    }else if(logdata.action === 'propose'){
+        $(`#message_area`).html(``)
+        let giveresource = ''
+        for(let resource in logdata.giveresource){
+            let i = 1
+            while(i <= logdata.giveresource[resource]){
+                giveresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
+                i += 1
+            }
+        }
+        let takeresource = ''
+        for(let resource in logdata.takeresource){
+            let i = 1
+            while(i <= logdata.takeresource[resource]){
+                takeresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
+                i += 1
+            }
+        }
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<b>${logdata.proposee}</b>に${giveresource}と${takeresource}の交換を提案しました</div>`)
+    }else if(logdata.action === 'accept'){
+        $(`#message_area`).html(``)
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が同意しました</div>`)
+    }else if(logdata.action === 'deny'){
+        $(`#message_area`).html(``)
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が拒否しました</div>`)
+    }else if(logdata.action === 'trade'){
+        $(`#message_area`).html(``)
+        let exportresource = ''
+        for(let resource in logdata.exportresource){
+            let i = 1
+            while(i <= logdata.exportresource[resource]){
+                exportresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
+                i += 1
+            }
+        }
+        let importresource = ''
+        for(let resource in logdata.importresource){
+            let i = 1
+            while(i <= logdata.importresource[resource]){
+                importresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
+                i += 1
+            }
+        }
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が${exportresource}を${importresource}と交換しました</div>`)
+    }else if(logdata.action === 'burst'){
+        $(`#message_area`).html(``)
+        let burstPlayers = ``
+        for(let player of logdata.players){
+            burstPlayers += `と<b>${player.name}</b>`
+        }
+        burstPlayers = burstPlayers.slice(1)
+        $(`#message_area`).append(`<div class="message">${burstPlayers}がバーストしました</div>`)
+    }else if(logdata.action === 'dice'){
+        $(`#message_area`).html(``)
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>がダイスを振りました</div>`)
+    }else if(logdata.action === 'exhaust'){
+        let exhaustresource = ''
+        for(let resource of logdata.exhaust){
+            exhaustresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
+        }
+        $(`#message_area`).append(`<div class="message">${exhaustresource}が枯渇しました</div>`)
+    }
     $(`#receiving_area`).hide();
 })
 socket.on('gamerecord',(data)=>{
@@ -1632,6 +1743,7 @@ const display = {
     showBurstArea(burstPlayer){
         $(`#receiving_area`).show();
         $(`#burst_area`).show()
+        $('#button_area').hide()
         $(`#burst_message`).html(``)
         for(let player of burstPlayer){
             if(player.socketID === socket.id){
@@ -1755,7 +1867,7 @@ const display = {
     },
     gameResult(data){
         $(`#receiving_area`).show();
-        $(`#message_area`).html(`<h1>${data.turnPlayer.name}の勝ちです!</h1>`)
+        $(`#endmessage_area`).html(`<h1>${data.turnPlayer.name}の勝ちです!</h1>`)
         for(let p of data.players){
             $(`#player${p.number}resource`).html('')
             $(`#player${p.number}progress`).html('')
@@ -1806,13 +1918,14 @@ const display = {
         $(`#receiving_area`).show();
         $(`#gameend_area`).show()
         $(`#newgame_area`).show()
+        $(`#message_area`).hide()
         $(`#turn`).html(`終局`)
         $(`#receiving_area`).hide();
     },
     hideGameEndArea(){
         $(`#receiving_area`).show();
         $(`#gameend_area`).hide();
-        $(`#message_area`).html(``);
+        $(`#endmessage_area`).html(``);
         $(`#receiving_area`).hide();
     },
     turnPlayer(data){
@@ -1975,10 +2088,10 @@ const display = {
         $(`#dice_area`).css(`background-color`, `rgb(131, 221, 131)`)
         $(`#receiving_area`).hide();
     },
-    hidemessageArea(){
+    hideendmessageArea(){
         $(`#receiving_area`).show();
-        $(`#message_area`).hide()
-        $(`#message_area`).html(``)
+        $(`#endmessage_area`).hide()
+        $(`#endmessage_area`).html(``)
         $(`#receiving_area`).hide();
     },
     showButton(string){
@@ -2100,13 +2213,11 @@ const display = {
 
 
 //コンソールに表示
-/*
-function game(){
+/*function game(){
     $(`#receiving_area`).show()
     let e = ''
     socket.emit('console',e)
-}
-*/
+}*/
 function translate(item){
     if(item === 'ore'){
         return '鉄'

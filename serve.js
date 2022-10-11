@@ -183,7 +183,7 @@ class Player{
     this.dice = this.log.dice
     this.toTrash = this.log.toTrash
     this.renounce = this.log.renounce
-    const logdata = {action:'undo', playername:game.lastActionPlayer.name}
+    const logdata = {action:'undo', playername:game.lastActionPlayer.name, turnPlayerID:game.turnPlayer.socketID}
     display.playLog(logdata)
   }
   build(item, position){
@@ -222,7 +222,8 @@ class Player{
           game.pointReload()
           display.tokenOf(this)
           display.resourceOf(this)
-          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'house'}
+          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'house', turnPlayerID:game.turnPlayer.socketID}
+          display.message(logdata)
           display.playLog(logdata)
           takeRecord()
         }
@@ -265,7 +266,8 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.tokenOf(this)
-          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'house'}
+          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'house', turnPlayerID:game.turnPlayer.socketID}
+          display.message(logdata)
           display.playLog(logdata)
           takeRecord()
         }
@@ -309,7 +311,8 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.tokenOf(this)
-          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'city'}
+          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'city', turnPlayerID:game.turnPlayer.socketID}
+          display.message(logdata)
           display.playLog(logdata)
           takeRecord()
         }
@@ -336,7 +339,8 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.tokenOf(this)
-          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'road'}
+          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'road', turnPlayerID:game.turnPlayer.socketID}
+          display.message(logdata)
           display.playLog(logdata)
           takeRecord()
           game.turnEndSetup()
@@ -370,7 +374,8 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.tokenOf(this)
-          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'road'}
+          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'road', turnPlayerID:game.turnPlayer.socketID}
+          display.message(logdata)
           display.playLog(logdata)
           takeRecord()
         }
@@ -398,7 +403,8 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.tokenOf(this)
-          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'road'}
+          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'road', turnPlayerID:game.turnPlayer.socketID}
+          display.message(logdata)
           display.playLog(logdata)
           if(this.token.road >= 1){
             game.phase = 'roadbuild2'
@@ -434,7 +440,8 @@ class Player{
           display.tokenOf(this)
           game.phase = 'afterdice'
           display.toggleMyButtons(game.turnPlayer.socketID)
-          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'road'}
+          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'road', turnPlayerID:game.turnPlayer.socketID}
+          display.message(logdata)
           display.playLog(logdata)
           takeRecord()
         }
@@ -461,7 +468,8 @@ class Player{
         display.progressOf(this)
         recordLog()
         game.lastActionPlayer = this
-        const logdata = {action:'draw', playername:game.turnPlayer.name}
+        const logdata = {action:'draw', playername:game.turnPlayer.name, turnPlayerID:game.turnPlayer.socketID}
+        display.message(logdata)
         display.playLog(logdata)
         takeRecordUndeletable()
       }
@@ -489,10 +497,10 @@ class Player{
       display.addUsed('knight')
       display.toggleMyButtons(game.turnPlayer.socketID)
       display.thiefRed()
-      const logdata = {action:'progress', playername:game.turnPlayer.name, progress:'knight'}
+      const logdata = {action:'progress', playername:game.turnPlayer.name, progress:'knight', turnPlayerID:game.turnPlayer.socketID}
+      display.message(logdata)
       display.playLog(logdata)
     }
-    
   };
   thiefmove(position){
     if(game.phase !== 'thiefmove'){
@@ -523,17 +531,18 @@ class Player{
       }else if(this.dice === 1){
         game.phase = 'beforedice'
         display.diceBlack()
-        display.showMyButtonArea(this.socketID)
+        display.toggleMyButtons(this.socketID)
         takeRecord()
       }else{
         game.phase = 'afterdice'
         takeRecord()
         display.diceBlack()
-        display.showMyButtonArea(this.socketID)
+        display.toggleMyButtons(this.socketID)
       }
       display.deleteThief()
       display.thief()
-      const logdata = {action:'thiefmove', playername:game.turnPlayer.name}
+      const logdata = {action:'thiefmove', playername:game.turnPlayer.name, turnPlayerID:game.turnPlayer.socketID}
+      display.message(logdata)
       display.playLog(logdata)
     }
   };
@@ -564,10 +573,11 @@ class Player{
         game.phase = 'afterdice'
       }
       display.diceBlack()
-      display.showMyButtonArea(game.turnPlayer.socketID)
+      display.toggleMyButtons(game.turnPlayer.socketID)
       recordLog()
       game.lastActionPlayer = this
-      const logdata = {action:'robresource', playername:game.turnPlayer.name, robbed:target.name}
+      const logdata = {action:'robresource', playername:game.turnPlayer.name, robbed:target.name, turnPlayerID:game.turnPlayer.socketID}
+      display.message(logdata)
       display.playLog(logdata)
       takeRecordUndeletable()
     }
@@ -599,7 +609,8 @@ class Player{
       }
       display.progressOf(this)
       display.addUsed('monopoly')
-      const logdata = {action:'monopoly', playername:game.turnPlayer.name, resource:resource}
+      const logdata = {action:'monopoly', playername:game.turnPlayer.name, resource:resource, turnPlayerID:game.turnPlayer.socketID}
+      display.message(logdata)
       display.playLog(logdata)
       takeRecordUndeletable()
     }
@@ -621,7 +632,8 @@ class Player{
         this.resource[resource] += 1
         game.allResource[resource] -= 1
         game.phase = 'harvest2'
-        const logdata = {action:'harvest', playername:game.turnPlayer.name, resource:resource}
+        const logdata = {action:'harvest', playername:game.turnPlayer.name, resource:resource, turnPlayerID:game.turnPlayer.socketID}
+        display.message(logdata)
         display.playLog(logdata)
       }
       display.resourceOf(this)
@@ -633,7 +645,8 @@ class Player{
       game.phase = 'afterdice'
       display.hideMyHarvestArea(this.socketID)
       display.resourceOf(this)
-      const logdata = {action:'harvest', playername:game.turnPlayer.name, resource:resource}
+      const logdata = {action:'harvest', playername:game.turnPlayer.name, resource:resource, turnPlayerID:game.turnPlayer.socketID}
+      display.message(logdata)
       display.playLog(logdata)
       takeRecord()
     }else{
@@ -659,7 +672,8 @@ class Player{
       display.progressOf(this)
       display.addUsed('roadbuild')
       display.toggleMyButtons(game.turnPlayer.socketID)
-      const logdata = {action:'progress', playername:game.turnPlayer.name, progress:'roadbuild'}
+      const logdata = {action:'progress', playername:game.turnPlayer.name, progress:'roadbuild', turnPlayerID:game.turnPlayer.socketID}
+      display.message(logdata)
       display.playLog(logdata)
     }
   }
@@ -687,7 +701,8 @@ class Player{
               totaltrash += player.trashpool[r]
             }
             if(totaltrash !== 0){
-            const logdata = {action:'trash', playername:player.name, resource:player.trashpool}
+            const logdata = {action:'trash', playername:player.name, resource:player.trashpool, turnPlayerID:game.turnPlayer.socketID}
+            display.message(logdata)
             display.playLog(logdata)
             }
             for(let resource in game.allResource){
@@ -895,7 +910,8 @@ class Player{
       display.hideMyTradeArea(data.socketID)
       display.resourceOf(this)
       display.hideReceivingArea()
-      const logdata = {action:'trade', playername:game.turnPlayer.name, exportresource:data.exportresource, importresource:data.importresource}
+      const logdata = {action:'trade', playername:game.turnPlayer.name, exportresource:data.exportresource, importresource:data.importresource, turnPlayerID:game.turnPlayer.socketID}
+      display.message(logdata)
       display.playLog(logdata)
       takeRecord()
     }
@@ -920,22 +936,24 @@ class Player{
     }
     display.resourceOf(this)
     display.resourceOf(game.proposedata.proposee)
-    const logdata = {action:'accept', playername:game.proposedata.proposee.name}
+    const logdata = {action:'accept', playername:game.proposedata.proposee.name, turnPlayerID:game.turnPlayer.socketID}
+    display.message(logdata)
     display.playLog(logdata)
     game.proposedata = {proposer:'', proposee:'', giveresource:'', takeresource:''}
     display.hideProposeArea()
-    display.showMyButtonArea(game.turnPlayer.socketID)
+    display.toggleMyButtons(game.turnPlayer.socketID)
     recordLog()
     game.lastActionPlayer = this
     takeRecordUndeletable()
   };
   denied(){
     game.phase = 'afterdice'
-    const logdata = {action:'deny', playername:game.proposedata.proposee.name}
+    const logdata = {action:'deny', playername:game.proposedata.proposee.name, turnPlayerID:game.turnPlayer.socketID}
+    display.message(logdata)
     display.playLog(logdata)
     game.proposedata = {proposer:'', proposee:'', giveresource:'', takeresource:''}
     display.hideProposeArea()
-    display.showMyButtonArea(game.turnPlayer.socketID)
+    display.toggleMyButtons(game.turnPlayer.socketID)
   }
   totalResource(){
     return this.resource.ore + this.resource.wool + this.resource.grain + this.resource.lumber + this.resource.brick
@@ -1359,7 +1377,8 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
   },
   //ダイス
   rollDice(){
-    const logdata = {action:'dice', playername:game.turnPlayer.name}
+    const logdata = {action:'dice', playername:game.turnPlayer.name, turnPlayerID:game.turnPlayer.socketID}
+    display.message(logdata)
     display.playLog(logdata)
     let dice1 = Math.ceil(Math.random()*6);
     let dice2 = Math.ceil(Math.random()*6);
@@ -1373,13 +1392,12 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
       display.dice()
       this.produce(dice1+dice2)
       game.phase = 'afterdice'
+      display.toggleMyButtons(game.turnPlayer.socketID)
       takeRecord()
     }
     this.diceCount[dice1+dice2] += 1
     recordLog()
     game.lastActionPlayer = game.turnPlayer
-    display.toggleMyButtons(game.turnPlayer.socketID)
-    
   },
   //資源産出
   produce(add){
@@ -1439,7 +1457,8 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
     }
     if(exhaust.length !== 0){
       display.showExhaust(exhaust)
-      const logdata = {action:'exhaust', exhaust:exhaust}
+      const logdata = {action:'exhaust', exhaust:exhaust, turnPlayerID:game.turnPlayer.socketID}
+      display.message(logdata)
       display.playLog(logdata)
     }
     display.hideReceivingArea()
@@ -2003,13 +2022,13 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
         player.recordLog()
       }
       display.showBurstArea()
-      const logdata = {action:'burst', players:this.burstPlayer}
+      const logdata = {action:'burst', players:this.burstPlayer, turnPlayerID:game.turnPlayer.socketID}
       display.playLog(logdata)
     }else{
       this.phase = 'thiefmove'
       display.thiefRed()
+      display.toggleMyButtons(game.turnPlayer.socketID)
     }
-    display.toggleMyButtons(this.turnPlayer.socketID)
     display.hideReceivingArea()
   },
   IDToPlayer(ID){
@@ -2226,18 +2245,17 @@ const display = {
   hideBurstArea(){
     let e
     io.emit('hideburst',e)
-    this.showButtonArea()
-    this.showMyButtonArea(game.turnPlayer.socketID)
+    this.toggleMyButtons(game.turnPlayer.socketID)
   },
   showBurstArea(){
     let burstPlayer = game.burstPlayer
     io.emit('showburst', burstPlayer)
     this.hideButtonArea()
+    this.hideMessageArea()
   },
   hideTradeArea(){
     let e
     io.emit('hidetrade',e)
-    this.showButtonArea()
   },
   hideNegotiateArea(){
     let e
@@ -2245,7 +2263,7 @@ const display = {
   },
   hideMyProposeArea(socketID){
     io.to(socketID).emit('hideproposearea', '')
-    this.showMyButtonArea(socketID)
+    this.toggleMyButtons(socketID)
   },
   showMyProposeArea(socketID){
     let data  = game.proposedata
@@ -2255,7 +2273,7 @@ const display = {
   hideMyMonopolyArea(socketID){
     let e
     io.to(socketID).emit('hidemonopoly',e)
-    this.showMyButtonArea(socketID)
+    this.toggleMyButtons(socketID)
   },
   showMyMonopolyArea(socketID){
     let e
@@ -2265,7 +2283,7 @@ const display = {
   hideMyHarvestArea(socketID){
     let e
     io.to(socketID).emit('hideharvest',e)
-    this.showMyButtonArea(socketID)
+    this.toggleMyButtons(socketID)
   },
   showMyHarvestArea(socketID){
     let e
@@ -2275,7 +2293,7 @@ const display = {
   hideMyBurstArea(socketID){
     let e
     io.to(socketID).emit('hideburst',e)
-    this.showMyButtonArea(socketID)
+    this.toggleMyButtons(socketID)
   },
   showMyBurstArea(socketID){
     let burstPlayer = game.burstPlayer
@@ -2285,7 +2303,7 @@ const display = {
   hideMyTradeArea(socketID){
     let e
     io.to(socketID).emit('hidetrade',e)
-    this.showMyButtonArea(socketID)
+    this.toggleMyButtons(socketID)
   },
   showMyTradeArea(socketID){
     let data = {resource:game.turnPlayer.resource}
@@ -2295,7 +2313,7 @@ const display = {
   hideMyNegotiateArea(socketID){
     let e
     io.to(socketID).emit('hidenegotiate',e)
-    this.showMyButtonArea(socketID)
+    this.toggleMyButtons(socketID)
   },
   showMyNegotiateArea(socketID){
     let data = {resource:game.turnPlayer.resource}
@@ -2379,7 +2397,6 @@ const display = {
   },
   hideGameEndArea(){
     io.emit('hidegameendarea', '')
-    this.showButtonArea()
   },
   showMyGameEndArea(socketID){
     io.to(socketID).emit('showgameendarea', '')
@@ -2387,7 +2404,7 @@ const display = {
   },
   hideMyGameEndArea(socketID){
     io.to(socketID).emit('hidegameendarea', '')
-    this.showMyButtonArea(socketID)
+    this.toggleMyButtons(socketID)
   },
   showProposeArea(){
     let data = game.proposedata
@@ -2397,7 +2414,12 @@ const display = {
   hideProposeArea(){
     let e
     io.emit('hideproposearea', e)
-    display.showButtonArea()
+  },
+  hideMessageArea(){
+    io.emit('hidemessagearea', '')
+  },
+  hideMyMessageArea(socketID){
+    io.to(socketID).emit('hidemessagearea', '')
   },
   initialize(){
     let maxPlayer = game.maxPlayer
@@ -2432,7 +2454,7 @@ const display = {
   showMyButtonArea(socketID){
     let e
     io.to(socketID).emit('showbuttonarea', e)
-    display.toggleMyButtons(socketID)
+    display.hideMyMessageArea(socketID)
   },
   hideButtonArea(){
     let e
@@ -2440,6 +2462,7 @@ const display = {
   },
   showButtonArea(){
     io.emit('showbuttonarea', '')
+    display.hideMessageArea()
   },
   log(a){
     io.emit('log', a)
@@ -2481,8 +2504,8 @@ const display = {
   diceBlack(){
     io.emit('diceblack','')
   },
-  hidemessageArea(){
-    io.emit('hidemessagearea', );
+  hideendmessageArea(){
+    io.emit('hideendmessagearea', );
   },
   showMyButton(socketID,string){
     io.to(socketID).emit('showbutton',string)
@@ -2511,6 +2534,7 @@ const display = {
     io.emit('resetrate', '')
   },
   toggleMyButtons(socketID){
+    display.showMyButtonArea(socketID)
     let myself = game.IDToPlayer(socketID)
     display.hideMyButton(socketID,'dice')
     for(let card in progress){
@@ -2553,6 +2577,7 @@ const display = {
       display.hideMyTradeArea(socketID);
       display.hideMyNegotiateArea(socketID);
       display.hideMyProposeArea(socketID);
+      display.hideMyMessageArea(socketID);
       display.hideMyGameEndArea(socketID);
       display.hideDicePercentageTo(socketID)
       display.hideExhaustTo(socketID)
@@ -2569,6 +2594,7 @@ const display = {
       display.hideMyTradeArea(socketID);
       display.hideMyNegotiateArea(socketID);
       display.hideMyProposeArea(socketID);
+      display.hideMyMessageArea(socketID);
       display.hideMyGameEndArea(socketID);
       display.hideDicePercentageTo(socketID)
       display.hideExhaustTo(socketID)
@@ -2583,7 +2609,7 @@ const display = {
       display.allPlayerInformationTo(socketID);
       display.renounceTo(socketID);
       display.reloadRate(socketID);
-      display.showMyButtonArea(socketID);
+      display.toggleMyButtons(socketID);
       if(socketID === game.turnPlayer.socketID && game.phase === 'monopoly'){
         display.showMyMonopolyArea(socketID)
       }
@@ -2619,6 +2645,7 @@ const display = {
       display.hideTradeArea()
       display.hideNegotiateArea()
       display.hideProposeArea()
+      display.hideMessageArea()
       display.hideGameEndArea()
       display.hideDicePercentage()
       display.hideExhaust()
@@ -2637,6 +2664,7 @@ const display = {
       display.hideTradeArea()
       display.hideNegotiateArea()
       display.hideProposeArea()
+      display.hideMessageArea()
       display.hideGameEndArea()
       display.hideDicePercentage()
       display.hideExhaust()
@@ -2685,6 +2713,7 @@ const display = {
     this.hideTradeArea()
     this.hideNegotiateArea()
     this.hideProposeArea()
+    this.hideMessageArea()
     this.hideGameEndArea()
     this.cleanUpBoard()
     this.hideDicePercentage()
@@ -2769,6 +2798,9 @@ const display = {
   },
   deletePlayLog(){
     io.emit('deleteplaylog','')
+  },
+  message(logdata){
+    io.emit('message',logdata)
   },
   gameRecord(){
     let data = {gameRecord:gameRecord}
@@ -3150,7 +3182,7 @@ io.on("connection", (socket)=>{
         display.hideMyNegotiateArea(game.proposedata.proposer.socketID)
         display.showProposeArea()
         display.hideReceivingArea()
-        const logdata = {action:'propose', playername:game.turnPlayer.name, proposee:game.proposedata.proposee.name, giveresource:data.giveresource, takeresource:data.takeresource}
+        const logdata = {action:'propose', playername:game.turnPlayer.name, proposee:game.proposedata.proposee.name, giveresource:data.giveresource, takeresource:data.takeresource, turnPlayerID:game.turnPlayer.socketID}
         display.playLog(logdata)
       }else{
         display.hideReceivingArea()
@@ -3230,6 +3262,8 @@ io.on("connection", (socket)=>{
       }else if(socketID === game.lastActionPlayer.socketID){
         unDo()
         display.allMighty()
+        const logdata = {action:'undo', playername:game.lastActionPlayer.name, turnPlayerID:game.turnPlayer.socketID}
+        display.message(logdata)
       }else{
         display.hideReceivingArea()
         display.hideReceivingArea()
