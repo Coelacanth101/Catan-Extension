@@ -402,7 +402,7 @@ socket.on('playlog',(logdata)=>{
     }else if(logdata.action === 'robresource'){
         $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が<b>${logdata.robbed}</b>から強奪しました</p>`)
     }else if(logdata.action === 'monopoly'){
-        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が<span class="logresource ${logdata.resource}">${translate(logdata.resource)}</span>を独占しました</p>`)
+        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が<span class="logresource ${logdata.resource}">${translate(logdata.resource)}</span>${logdata.amount}枚を独占しました</p>`)
     }else if(logdata.action === 'harvest'){
         $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が<span class="logresource ${logdata.resource}">${translate(logdata.resource)}</span>を収穫しました</p>`)
     }else if(logdata.action === 'undo'){
@@ -482,6 +482,24 @@ socket.on('deleteplaylog',()=>{
     $(`#receiving_area`).hide();
 })
 socket.on('message',(logdata)=>{
+    if(logdata.action === 'trash'){
+        $(`#receiving_area`).show();
+        $(`#button_area`).hide()
+        $(`#message_area`).show()
+        if(!$(`#message_area div:first`).hasClass(`trash`)){
+            console.log('517')
+            $(`#message_area`).html(``)
+        }
+        let trashresource = ''
+        for(let resource in logdata.resource){
+            let i = 1
+            while(i <= logdata.resource[resource]){
+                trashresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
+                i += 1
+            }
+        }
+        $(`#message_area`).append(`<div class="message trash"><b>${logdata.playername}</b>が${trashresource}を捨てました</div>`)
+    }
     if(socket.id === logdata.turnPlayerID){
         return
     }
@@ -505,24 +523,13 @@ socket.on('message',(logdata)=>{
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<b>${logdata.robbed}</b>から強奪しました</div>`)
     }else if(logdata.action === 'monopoly'){
         $(`#message_area`).html(``)
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<span class="logresource ${logdata.resource}">${translate(logdata.resource)}</span>を独占しました</div>`)
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<span class="logresource ${logdata.resource}">${translate(logdata.resource)}</span>${logdata.amount}枚を独占しました</div>`)
     }else if(logdata.action === 'harvest'){
         $(`#message_area`).html(``)
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<span class="logresource ${logdata.resource}">${translate(logdata.resource)}</span>を収穫しました</div>`)
     }else if(logdata.action === 'undo'){
         $(`#message_area`).html(``)
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が取り消しました</div>`)
-    }else if(logdata.action === 'trash'){
-        $(`#message_area`).html(``)
-        let trashresource = ''
-        for(let resource in logdata.resource){
-            let i = 1
-            while(i <= logdata.resource[resource]){
-                trashresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
-                i += 1
-            }
-        }
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が${trashresource}を捨てました</div>`)
     }else if(logdata.action === 'propose'){
         $(`#message_area`).html(``)
         let giveresource = ''

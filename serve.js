@@ -594,9 +594,11 @@ class Player{
       this.progressUse += 1
       this.progress.monopoly -= 1
       this.used.monopoly += 1
+      let amount = 0
       for(let player of game.players){
         if(player !== this){
           this.resource[resource] += player.resource[resource]
+          amount += player.resource[resource]
           player.resource[resource] = 0
         }
       }
@@ -609,7 +611,7 @@ class Player{
       }
       display.progressOf(this)
       display.addUsed('monopoly')
-      const logdata = {action:'monopoly', playername:game.turnPlayer.name, resource:resource, turnPlayerID:game.turnPlayer.socketID}
+      const logdata = {action:'monopoly', playername:game.turnPlayer.name, resource:resource, turnPlayerID:game.turnPlayer.socketID, amount:amount}
       display.message(logdata)
       display.playLog(logdata)
       takeRecordUndeletable()
@@ -2245,7 +2247,6 @@ const display = {
   hideBurstArea(){
     let e
     io.emit('hideburst',e)
-    this.toggleMyButtons(game.turnPlayer.socketID)
   },
   showBurstArea(){
     let burstPlayer = game.burstPlayer
