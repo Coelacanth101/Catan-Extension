@@ -2395,6 +2395,7 @@ const display = {
   showGameEndArea(){
     io.emit('showgameendarea', '')
     this.hideButtonArea()
+    this.hideMessageArea()
   },
   hideGameEndArea(){
     io.emit('hidegameendarea', '')

@@ -1925,7 +1925,6 @@ const display = {
         $(`#receiving_area`).show();
         $(`#gameend_area`).show()
         $(`#newgame_area`).show()
-        $(`#message_area`).hide()
         $(`#turn`).html(`終局`)
         $(`#receiving_area`).hide();
     },
