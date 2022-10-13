@@ -221,6 +221,7 @@ socket.on('hideproposearea', (e)=>{
 socket.on('hidemessagearea', (e)=>{
     $(`#receiving_area`).show();
     $(`#message_area`).hide();
+    $(`#message_area`).html(``);
     $(`#receiving_area`).hide();
 });
 socket.on('hideplayers', (e)=>{
