@@ -2411,6 +2411,7 @@ const display = {
     let data = game.proposedata
     io.emit('showproposearea', data)
     display.hideButtonArea()
+    this.hideMessageArea()
   },
   hideProposeArea(){
     let e
@@ -2473,7 +2474,6 @@ const display = {
   },
   showMyNameInputArea(socketID, playersName){
     io.to(socketID).emit('shownameinputarea', (playersName));
-
   },
   hideYesOrNoButton(){
     io.emit('hideyesornobutton', '');
