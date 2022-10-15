@@ -488,7 +488,6 @@ socket.on('message',(logdata)=>{
         $(`#button_area`).hide()
         $(`#message_area`).show()
         if(!$(`#message_area div:first`).hasClass(`trash`)){
-            console.log('517')
             $(`#message_area`).html(``)
         }
         let trashresource = ''
@@ -1918,6 +1917,25 @@ const display = {
                 blocktotal += Number(data.diceData.thiefBlock[dicenumber][index])
             }
         }
+        let i = 1
+        for(let player of data.players){
+            $(`#name${i}`).html(`${player.name}`)
+            let tp = 0
+            let tr = 0
+            let tt = 0
+            for(let resource in player.produce){
+                $(`#produce${resource}${i}`).html(`${player.produce[resource]}`)
+                tp += player.produce[resource]
+                $(`#robbed${resource}${i}`).html(`${player.robbed[resource]}`)
+                tr += player.robbed[resource]
+                $(`#trash${resource}${i}`).html(`${player.totaltrash[resource]}`)
+                tt += player.totaltrash[resource]
+            }
+            $(`#producetotal${i}`).html(`${tp}`)
+            $(`#robbedtotal${i}`).html(`${tr}`)
+            $(`#trashtotal${i}`).html(`${tt}`)
+            i += 1
+        }
         $(`#counttotal`).html(`${total}`)
         $(`#thiefblocktotal`).html(`${blocktotal}`)
         $(`#receiving_area`).hide();
@@ -2220,11 +2238,11 @@ const display = {
 
 
 //コンソールに表示
-/*function game(){
+function game(){
     $(`#receiving_area`).show()
     let e = ''
     socket.emit('console',e)
-}*/
+}
 function translate(item){
     if(item === 'ore'){
         return '鉄'

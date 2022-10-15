@@ -60,6 +60,9 @@ class Player{
     this.renounce = false
     this.trashpool = {ore:0,grain:0,wool:0,lumber:0,brick:0}
     this.replay = false
+    this.produce = {ore:0,grain:0,wool:0,lumber:0,brick:0}
+    this.robbed = {ore:0,grain:0,wool:0,lumber:0,brick:0}
+    this.totaltrash = {ore:0,grain:0,wool:0,lumber:0,brick:0}
     this.log = {resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     token:{house:5, city:4, road:15},
     house:[],
@@ -98,6 +101,9 @@ class Player{
     this.renounce = false
     this.trashpool = {ore:0,grain:0,wool:0,lumber:0,brick:0}
     this.replay = false
+    this.produce = {ore:0,grain:0,wool:0,lumber:0,brick:0}
+    this.robbed = {ore:0,grain:0,wool:0,lumber:0,brick:0}
+    this.totaltrash = {ore:0,grain:0,wool:0,lumber:0,brick:0}
     this.log = {resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     token:{house:5, city:4, road:15},
     house:[],
@@ -565,6 +571,7 @@ class Player{
       let rob = arr[random]
       this.resource[rob] += 1
       target.resource[rob] -= 1
+      target.robbed[rob] += 1
       display.resourceOf(this)
       display.resourceOf(target)
       if(this.dice === 1){
@@ -709,6 +716,7 @@ class Player{
             }
             for(let resource in game.allResource){
               game.allResource[resource] += player.trashpool[resource]
+              player.totaltrash[resource] += player.trashpool[resource]
               player.trashpool[resource] = 0
             }
           }
@@ -1432,11 +1440,13 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
           if(produceAmount[tile.type].amount <= game.allResource[tile.type]){
             for(let owner of tile.houseOwner){
               owner.resource[tile.type] += 1
+              owner.produce[tile.type] += 1
               game.allResource[tile.type] -= 1
               produceAmount[tile.type].amount -= 1
             }
             for(let owner of tile.cityOwner){
               owner.resource[tile.type] += 2
+              owner.produce[tile.type] += 2
               game.allResource[tile.type] -= 2
               produceAmount[tile.type].amount -= 2
             }
@@ -1445,6 +1455,7 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
               exhaust.push(tile.type)
             }
             produceAmount[tile.type].owner[0].resource[tile.type] += game.allResource[tile.type]
+            produceAmount[tile.type].owner[0].produce[tile.type] += game.allResource[tile.type]
             game.allResource[tile.type] = 0
           }else{
             if(!exhaust.includes(tile.type)){
@@ -2894,7 +2905,9 @@ function recordLog(){
 }
 function unDo(){
   deleteLastAction()
-  game.lastActionPlayer.unDo()
+  for(let player of game.players){
+    player.unDo()
+  }
   board.unDo()
   game.unDo()
 }

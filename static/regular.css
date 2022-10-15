@@ -606,6 +606,8 @@
             }
             #dice_percentage{
                 width: 100%;
+                display: flex;
+                flex-wrap: wrap;
             }
 }
 @media screen and (orientation: landscape){
