@@ -1917,9 +1917,49 @@ const display = {
                 blocktotal += Number(data.diceData.thiefBlock[dicenumber][index])
             }
         }
+        $(`#resourcedata`).html(`
+          <tr>
+            <th>名</th>
+            <th></th>
+            <th class="ore">鉄</th>
+            <th class="grain">米</th>
+            <th class="wool">羊</th>
+            <th class="lumber">木</th>
+            <th class="brick">煉</th>
+            <th>計</th>
+          </tr>`)
         let i = 1
         for(let player of data.players){
-            $(`#name${i}`).html(`${player.name}`)
+            $(`#resourcedata`).append(`
+          <tr>
+            <td rowspan="3" id="name${i}" class="player${i}color"></td>
+            <td id="">生産</td>
+            <td id="produceore${i}"></td>
+            <td id="producegrain${i}"></td>
+            <td id="producewool${i}"></td>
+            <td id="producelumber${i}"></td>
+            <td id="producebrick${i}"></td>
+            <td id="producetotal${i}"></td>
+          </tr>
+          <tr>
+            <td id="">強奪</td>
+            <td id="robbedore${i}"></td>
+            <td id="robbedgrain${i}"></td>
+            <td id="robbedwool${i}"></td>
+            <td id="robbedlumber${i}"></td>
+            <td id="robbedbrick${i}"></td>
+            <td id="robbedtotal${i}"></td>
+          </tr>
+          <tr>
+            <td id="">廃棄</td>
+            <td id="trashore${i}"></td>
+            <td id="trashgrain${i}"></td>
+            <td id="trashwool${i}"></td>
+            <td id="trashlumber${i}"></td>
+            <td id="trashbrick${i}"></td>
+            <td id="trashtotal${i}"></td>
+          </tr>`)
+            $(`#name${i}`).html(`<b>${player.name}</b>`)
             let tp = 0
             let tr = 0
             let tt = 0
