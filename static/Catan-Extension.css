@@ -516,7 +516,9 @@
 #dice_percentage{
     display: flex;
     justify-content: center;
-    width: 100%;
+}
+table{
+    margin: auto 0 auto 0;
 }
 th{
     background-color: aqua;
@@ -746,6 +748,10 @@ td{
                     }@media screen and (max-width:850px) {
                         #dice_percentage{
                             width: calc(100% - 250px);
+                        }
+                    }@media screen and (max-width:800px) {
+                        #dice_percentage{
+                            flex-wrap: wrap;
                         }
                     }
                     @media screen and (max-width:944px) {

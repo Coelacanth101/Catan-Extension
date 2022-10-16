@@ -518,6 +518,9 @@
                     display: flex;
                     justify-content: center;
                 }
+                table{
+                    margin: auto 0 auto 0;
+                }
                 th{
                     background-color: aqua;
                     font-weight: bold;
@@ -746,6 +749,10 @@
                     }@media screen and (max-width:850px) {
                         #dice_percentage{
                             width: calc(100% - 250px);
+                        }
+                    }@media screen and (max-width:800px) {
+                        #dice_percentage{
+                            flex-wrap: wrap;
                         }
                     }
                     @media screen and (max-width:944px) {

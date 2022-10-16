@@ -1928,12 +1928,12 @@ const display = {
             <th class="brick">煉</th>
             <th>計</th>
           </tr>`)
-        let i = 1
+        let i = 0
         for(let player of data.players){
             $(`#resourcedata`).append(`
           <tr>
             <td rowspan="3" id="name${i}" class="player${i}color"></td>
-            <td id="">生産</td>
+            <td id="">産</td>
             <td id="produceore${i}"></td>
             <td id="producegrain${i}"></td>
             <td id="producewool${i}"></td>
@@ -1942,7 +1942,7 @@ const display = {
             <td id="producetotal${i}"></td>
           </tr>
           <tr>
-            <td id="">強奪</td>
+            <td id="">奪</td>
             <td id="robbedore${i}"></td>
             <td id="robbedgrain${i}"></td>
             <td id="robbedwool${i}"></td>
@@ -1951,7 +1951,7 @@ const display = {
             <td id="robbedtotal${i}"></td>
           </tr>
           <tr>
-            <td id="">廃棄</td>
+            <td id="">廃</td>
             <td id="trashore${i}"></td>
             <td id="trashgrain${i}"></td>
             <td id="trashwool${i}"></td>
