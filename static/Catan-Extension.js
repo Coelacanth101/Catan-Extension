@@ -602,6 +602,10 @@ socket.on('gamerecord',(data)=>{
     playerNumber = record[0][0].players.length
 })
 
+socket.on('rating', (data)=>{
+    $(`#player${data.number}name`).html(`<b>${data.name}</b>(${data.rating})`)
+})
+
 //firstturnをクリック
 $(`#firstturn`).on(`click`, function(){
     turn = 0
@@ -2010,6 +2014,7 @@ const display = {
         $(`#receiving_area`).hide();
     },
     playerSort(players){
+        console.log(players)
         $(`#receiving_area`).show();
         let myNumber
         $(`.propose_button`).show()
@@ -2023,7 +2028,7 @@ const display = {
                         <div id="player${myNumber}row1" class="row">
                             <div class="nameline">
                                 <div id="player${myNumber}mark" class="playermark player${myNumber}color"><b>${myNumber+1}</b></div>
-                                <div id="player${myNumber}name" class="name showlog"><b>${players[myNumber].name}</b></div>
+                                <div id="player${myNumber}name" class="name showlog"><b>${players[myNumber].name}</b>(${players[myNumber].rating})</div>
                             </div>
                             <div id="player${myNumber}token" class="token line" >家:${players[myNumber].token.house} 街:${players[myNumber].token.city} 道:${players[myNumber].token.road}</div>
                         </div>
@@ -2050,7 +2055,7 @@ const display = {
                             <div id="player${myNumber}row1" class="row">
                                 <div class="nameline">
                                     <div id="player${myNumber}mark" class="playermark player${myNumber}color"><b>${myNumber+1}</b></div>
-                                    <div id="player${myNumber}name" class="name"><b>${players[myNumber].name}</b>
+                                    <div id="player${myNumber}name" class="name"><b>${players[myNumber].name}</b>(${players[myNumber].rating})
                                     </div>
                                 </div>
                                 <div id="player${myNumber}token" class="token line" >家:${players[myNumber].token.house} 街:${players[myNumber].token.city} 道:${players[myNumber].token.road}</div>
@@ -2079,7 +2084,7 @@ const display = {
                     <div id="player${myNumber}row1" class="row">
                         <div class="nameline">
                         <div id="player${myNumber}mark" class="playermark player${myNumber}color"><b>${myNumber+1}</b></div>
-                        <div id="player${myNumber}name" class="name showlog"><b>${players[myNumber].name}</b></div>
+                        <div id="player${myNumber}name" class="name showlog"><b>${players[myNumber].name}</b>(${players[myNumber].rating})</div>
                         </div>
                         <div id="player${myNumber}token" class="token line" >家:${players[myNumber].token.house} 街:${players[myNumber].token.city} 道:${players[myNumber].token.road}</div>
                     </div>

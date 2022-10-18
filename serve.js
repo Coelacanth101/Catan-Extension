@@ -8,6 +8,8 @@ const { brotliCompress } = require("zlib");
 const app  = require("express")();
 const http = require("http").createServer(app);
 const io   = require("socket.io")(http);
+const sqlite3 = require("sqlite3");
+const db = new sqlite3.Database('mydb.sqlite3');
 const DOCUMENT_ROOT = __dirname + "/static";
 const SECRET_TOKEN = "abcdefghijklmn12345";
 app.get("/", (req, res)=>{
@@ -28,6 +30,7 @@ app.get("/:file", (req, res)=>{
 
 /*------------------------------------------
 ------------------------------------------*/
+
 const maxPlayer = 6
 const properPlayer = 6
 let playersName = []
@@ -80,6 +83,20 @@ class Player{
     tradeRate:{ore:4,grain:4,wool:4,lumber:4,brick:4},
     renounce:false,
     trashpool:{ore:0,grain:0,wool:0,lumber:0,brick:0}}
+    db.serialize(() => {
+      const q = "select * from player_information where name = ?";
+      db.get(q,[name],(err, row) => {
+        if(!err){
+          if(row){
+          this.rating = row.rating
+          }else{
+            this.rating = 1500
+          }
+          let data = {rating:this.rating, number:this.number, name:this.name}
+          io.emit('rating', data)
+        }
+      }) 
+    })
   };
   reset(){
     this.resource = {ore:0,grain:0,wool:0,lumber:0,brick:0}
@@ -121,6 +138,20 @@ class Player{
     tradeRate:{ore:4,grain:4,wool:4,lumber:4,brick:4},
     renounce:false,
     trashpool:{ore:0,grain:0,wool:0,lumber:0,brick:0}}
+    db.serialize(() => {
+      const q = "select * from player_information where name = ?";
+      db.get(q,[this.name],(err, row) => {
+        if(!err){
+          if(row){
+          this.rating = row.rating
+          }else{
+            this.rating = 1500
+          }
+          let data = {rating:this.rating, number:this.number, name:this.name}
+          io.emit('rating', data)
+        }
+      }) 
+    })
   };
   recordLog(){
     for(let resource in this.resource){
@@ -1945,7 +1976,9 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   },
   turnEnd(){
     if(this.phase === 'afterdice'){
-      if(this.turnPlayer.point >= 10){
+      ////////
+      if(this.turnPlayer.point >= 2){
+        updateDatabase(this.turnPlayer)
         makeNewTurnRecord()
         takeRecord()
         this.gameEnd()
@@ -3433,4 +3466,60 @@ function lastActionUndeletable(){
     lastAction = previousTurn[previousTurn.length-1]
   }
   lastAction.undo = false
+}
+
+function updateDatabase(winner){
+  let w = ''
+  let losers = []
+  for(let player of game.players){
+    if(player === winner){
+      w = {name:player.name, rating:player.rating}
+    }else{
+      losers.push({name:player.name, rating:player.rating})
+    }
+  }
+  for(let player of game.players){
+    db.serialize(() => {
+      let pl = game.players.length
+      const q = "select * from player_information where name = ?";
+      db.get(q,[player.name],(err, row) => {
+        if(!err && row){
+          if(player === winner){
+            let winx = 'win' + String(pl)
+            row[winx] += 1
+            row.activestreakwins += 1
+            if(row.activestreakwins > row.beststreakwins){
+              row.beststreakwins = row.activestreakwins
+            }
+            player.rating = winnersNewRating(player, losers)
+            const q = "update player_information set " + winx + " = ?, rating = ?, activestreakwins = ?, beststreakwins = ? where name = ?";
+            db.run(q, row[winx], Math.round(player.rating), row.activestreakwins, row.beststreakwins, player.name)
+          }else{
+            let losex = 'lose' + String(pl)
+            row[losex] += 1
+            player.rating = losersNewRating(player, w)
+            const q = "update player_information set " + losex + " = ?, rating = ?, activestreakwins = ? where name = ?";
+            db.run(q, row[losex], Math.round(player.rating), 0, player.name)
+          }
+        }
+      }) 
+    })
+  }
+}
+function Wab(Ra,Rb){
+  return 1/(10**((Rb - Ra)/400)+1)
+}
+function winnersNewRating(w, loserslist){
+  let currentRating = w.rating
+  console.log(currentRating)
+  for(let loser of loserslist){
+    console.log(loser.rating)
+    console.log(Wab(w.rating, loser.rating))
+    currentRating += 32*(1-Wab(w.rating, loser.rating))
+    console.log(currentRating)
+  }
+  return currentRating
+}
+function losersNewRating(loser, winner){
+  return loser.rating + 32*(0-Wab(loser.rating, winner.rating))
 }
