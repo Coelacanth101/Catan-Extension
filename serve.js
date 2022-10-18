@@ -1976,8 +1976,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   },
   turnEnd(){
     if(this.phase === 'afterdice'){
-      ////////
-      if(this.turnPlayer.point >= 2){
+      if(this.turnPlayer.point >= 10){
         updateDatabase(this.turnPlayer)
         makeNewTurnRecord()
         takeRecord()
@@ -3469,6 +3468,9 @@ function lastActionUndeletable(){
 }
 
 function updateDatabase(winner){
+  if(game.players.length <= 2){
+    return
+  }
   let w = ''
   let losers = []
   for(let player of game.players){
@@ -3493,13 +3495,13 @@ function updateDatabase(winner){
             }
             player.rating = winnersNewRating(player, losers)
             const q = "update player_information set " + winx + " = ?, rating = ?, activestreakwins = ?, beststreakwins = ? where name = ?";
-            db.run(q, row[winx], Math.round(player.rating), row.activestreakwins, row.beststreakwins, player.name)
+            db.run(q, row[winx], player.rating, row.activestreakwins, row.beststreakwins, player.name)
           }else{
             let losex = 'lose' + String(pl)
             row[losex] += 1
             player.rating = losersNewRating(player, w)
             const q = "update player_information set " + losex + " = ?, rating = ?, activestreakwins = ? where name = ?";
-            db.run(q, row[losex], Math.round(player.rating), 0, player.name)
+            db.run(q, row[losex], player.rating, 0, player.name)
           }
         }
       }) 
@@ -3510,13 +3512,12 @@ function Wab(Ra,Rb){
   return 1/(10**((Rb - Ra)/400)+1)
 }
 function winnersNewRating(w, loserslist){
+  if(loserslist.length === 0){
+    return w.rating
+  }
   let currentRating = w.rating
-  console.log(currentRating)
   for(let loser of loserslist){
-    console.log(loser.rating)
-    console.log(Wab(w.rating, loser.rating))
     currentRating += 32*(1-Wab(w.rating, loser.rating))
-    console.log(currentRating)
   }
   return currentRating
 }
