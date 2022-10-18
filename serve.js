@@ -90,6 +90,7 @@ class Player{
           if(row){
           this.rating = row.rating
           }else{
+            db.run('insert into player_information (name, win3, lose3, win4, lose4, win5, lose5, win6, lose6, rating, activestreakwins, beststreakwins) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', this.name, 0, 0, 0, 0, 0, 0, 0, 0, 1500, 0, 0)
             this.rating = 1500
           }
           let data = {rating:this.rating, number:this.number, name:this.name}
