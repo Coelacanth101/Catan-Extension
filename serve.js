@@ -1977,7 +1977,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   },
   turnEnd(){
     if(this.phase === 'afterdice'){
-      if(this.turnPlayer.point >= 10){
+      if(this.turnPlayer.point >= 2){
         updateDatabase(this.turnPlayer)
         makeNewTurnRecord()
         takeRecord()
@@ -3469,7 +3469,8 @@ function lastActionUndeletable(){
 }
 
 function updateDatabase(winner){
-  if(game.players.length <= 2){
+  let pl = game.players.length
+  if(pl <= 2){
     return
   }
   let w = ''
@@ -3481,10 +3482,9 @@ function updateDatabase(winner){
       losers.push({name:player.name, rating:player.rating})
     }
   }
-  for(let player of game.players){
-    db.serialize(() => {
-      let pl = game.players.length
-      const q = "select * from player_information where name = ?";
+  db.serialize(() => {
+    const q = "select * from player_information where name = ?";
+    for(let player of game.players){
       db.get(q,[player.name],(err, row) => {
         if(!err && row){
           if(player === winner){
@@ -3505,9 +3505,18 @@ function updateDatabase(winner){
             db.run(q, row[losex], player.rating, 0, player.name)
           }
         }
-      }) 
-    })
-  }
+      })
+    }
+  })
+  const q = "select * from gameresult where playersnumber = ?";
+  db.get(q,[pl],(err, row) => {
+    if(!err && row){
+      let pn = 'player' + String(winner.number+1)
+      row[pn] += 1
+      const q = "update gameresult set " + pn + " = ? where playersnumber = ?";
+      db.run(q, row[pn], pl)
+    }
+  })
 }
 function Wab(Ra,Rb){
   return 1/(10**((Rb - Ra)/400)+1)
