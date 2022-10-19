@@ -2,8 +2,8 @@
 const app  = require("express")();
 const http = require("http").createServer(app);
 const io   = require("socket.io")(http);
-const sqlite3 = require("sqlite3");
-const db = new sqlite3.Database('mydb.sqlite3');
+/*const sqlite3 = require("sqlite3");
+const db = new sqlite3.Database('mydb.sqlite3');*/
 const DOCUMENT_ROOT = __dirname + "/static";
 const SECRET_TOKEN = "abcdefghijklmn12345";
 app.get("/", (req, res)=>{
