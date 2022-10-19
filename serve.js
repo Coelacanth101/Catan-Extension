@@ -1,9 +1,3 @@
-const { Console } = require("console");
-const { createSocket } = require("dgram");
-const { emit, off } = require("process");
-const { isStringObject } = require("util/types");
-const { brotliCompress } = require("zlib");
-
 //サーバー用変数
 const app  = require("express")();
 const http = require("http").createServer(app);
@@ -28,6 +22,17 @@ app.get("/:file", (req, res)=>{
 });
 
 
+
+require('dotenv').config();
+const { Client } = require('pg');
+
+const client = new Client({
+  connectionString: process.env.DB_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+client.connect()
 /*------------------------------------------
 ------------------------------------------*/
 
