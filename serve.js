@@ -25,7 +25,6 @@ app.get("/:file", (req, res)=>{
 
 require('dotenv').config();
 const { Client } = require('pg');
-
 const client = new Client({
   connectionString: process.env.DB_URL,
   ssl: {
@@ -88,7 +87,23 @@ class Player{
     tradeRate:{ore:4,grain:4,wool:4,lumber:4,brick:4},
     renounce:false,
     trashpool:{ore:0,grain:0,wool:0,lumber:0,brick:0}}
-    db.serialize(() => {
+    const q = "select * from player_information where name= '" + this.name + "'";
+    client
+      .query(q)
+      .then((res) => {
+        if(res.rows[0]){
+          this.rating = res.rows[0].rating
+        }else{
+          const newPlayer = "insert into player_information (name, win3, lose3, win4, lose4, win5, lose5, win6, lose6, rating, activestreakwins, beststreakwins) values('" + this.name + "', 0, 0, 0, 0, 0, 0, 0, 0, 1500, 0, 0)";
+          client.query(newPlayer)
+          this.rating = 1500
+        }
+        let data = {rating:this.rating, number:this.number, name:this.name}
+        io.emit('rating', data)
+      })
+      .catch((e) => {
+      });
+    /*db.serialize(() => {
       const q = "select * from player_information where name = ?";
       db.get(q,[name],(err, row) => {
         if(!err){
@@ -102,7 +117,7 @@ class Player{
           io.emit('rating', data)
         }
       }) 
-    })
+    })*/
   };
   reset(){
     this.resource = {ore:0,grain:0,wool:0,lumber:0,brick:0}
@@ -144,20 +159,22 @@ class Player{
     tradeRate:{ore:4,grain:4,wool:4,lumber:4,brick:4},
     renounce:false,
     trashpool:{ore:0,grain:0,wool:0,lumber:0,brick:0}}
-    db.serialize(() => {
-      const q = "select * from player_information where name = ?";
-      db.get(q,[this.name],(err, row) => {
-        if(!err){
-          if(row){
-          this.rating = row.rating
-          }else{
-            this.rating = 1500
-          }
-          let data = {rating:this.rating, number:this.number, name:this.name}
-          io.emit('rating', data)
+    const q = "select * from player_information where name= '" + this.name + "'";
+    client
+      .query(q)
+      .then((res) => {
+        if(res.rows[0]){
+          this.rating = res.rows[0].rating
+        }else{
+          const newPlayer = "insert into player_information (name, win3, lose3, win4, lose4, win5, lose5, win6, lose6, rating, activestreakwins, beststreakwins) values('" + this.name + "', 0, 0, 0, 0, 0, 0, 0, 0, 1500, 0, 0)";
+          client.query(newPlayer)
+          this.rating = 1500
         }
-      }) 
-    })
+        let data = {rating:this.rating, number:this.number, name:this.name}
+        io.emit('rating', data)
+      })
+      .catch((e) => {
+      });
   };
   recordLog(){
     for(let resource in this.resource){
@@ -1982,7 +1999,8 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   },
   turnEnd(){
     if(this.phase === 'afterdice'){
-      if(this.turnPlayer.point >= 2){
+      ///////
+      if(this.turnPlayer.point >= 3){
         updateDatabase(this.turnPlayer)
         makeNewTurnRecord()
         takeRecord()
@@ -3487,7 +3505,46 @@ function updateDatabase(winner){
       losers.push({name:player.name, rating:player.rating})
     }
   }
-  db.serialize(() => {
+  for(let player of game.players){
+    const query = "select * from player_information where name= '" + player.name + "'";
+    client
+    .query(query)
+    .then((res) => {
+      if(player === winner){
+        let winx = 'win' + String(pl)
+        res.rows[0][winx] += 1
+        res.rows[0].activestreakwins += 1
+        if(res.rows[0].activestreakwins > res.rows[0].beststreakwins){
+          res.rows[0].beststreakwins = res.rows[0].activestreakwins
+        }
+        player.rating = winnersNewRating(player, losers)
+        const query = "update player_information set " + winx + " = " + res.rows[0][winx] + ", rating = " + player.rating + ", activestreakwins = " + res.rows[0].activestreakwins + ", beststreakwins = " + res.rows[0].beststreakwins + " where name = '" + player.name + "'";
+        client.query(query)
+      }else{
+        let losex = 'lose' + String(pl)
+        res.rows[0][losex] += 1
+        player.rating = losersNewRating(player, w)
+        const query = "update player_information set " + losex + " = " + res.rows[0][losex] + ", rating = " + player.rating + ", activestreakwins = 0 where name = '" + player.name + "'";
+        client.query(query)
+      }
+    })
+  }
+  const query = "select * from gameresult where playersnumber = '" + String(pl) + "'"
+  client
+  .query(query)
+  .then((res) => {
+    let pn = 'player' + String(winner.number+1)
+    res.rows[0][pn] += 1
+    const query = "update gameresult set " + pn + " = " + res.rows[0][pn] + " where playersnumber = " + pl;
+    client.query(query)
+  })
+
+
+
+
+
+
+  /*db.serialize(() => {
     const q = "select * from player_information where name = ?";
     for(let player of game.players){
       db.get(q,[player.name],(err, row) => {
@@ -3521,9 +3578,12 @@ function updateDatabase(winner){
       const q = "update gameresult set " + pn + " = ? where playersnumber = ?";
       db.run(q, row[pn], pl)
     }
-  })
+  })*/
 }
 function Wab(Ra,Rb){
+  console.log('#3583')
+  console.log(Ra)
+  console.log(Rb)
   return 1/(10**((Rb - Ra)/400)+1)
 }
 function winnersNewRating(w, loserslist){
@@ -3533,9 +3593,15 @@ function winnersNewRating(w, loserslist){
   let currentRating = w.rating
   for(let loser of loserslist){
     currentRating += 32*(1-Wab(w.rating, loser.rating))
+    console.log("#3595")
+    console.log(currentRating)
   }
+  console.log("#3598")
+  console.log(currentRating)
   return currentRating
 }
 function losersNewRating(loser, winner){
+  console.log("#3601")
+  console.log(loser.rating + 32*(0-Wab(loser.rating, winner.rating)))
   return loser.rating + 32*(0-Wab(loser.rating, winner.rating))
 }
