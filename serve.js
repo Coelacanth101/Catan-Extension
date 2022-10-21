@@ -23,7 +23,7 @@ app.get("/:file", (req, res)=>{
 
 
 
-require('dotenv').config();
+/*require('dotenv').config();
 const { Client } = require('pg');
 const client = new Client({
   connectionString: process.env.DB_URL,
@@ -31,7 +31,7 @@ const client = new Client({
     rejectUnauthorized: false
   }
 });
-client.connect()
+client.connect()*/
 /*------------------------------------------
 ------------------------------------------*/
 
@@ -87,7 +87,7 @@ class Player{
     tradeRate:{ore:4,grain:4,wool:4,lumber:4,brick:4},
     renounce:false,
     trashpool:{ore:0,grain:0,wool:0,lumber:0,brick:0}}
-    const q = "select * from player_information where name= '" + this.name + "'";
+    /*const q = "select * from player_information where name= '" + this.name + "'";
     client
       .query(q)
       .then((res) => {
@@ -102,22 +102,7 @@ class Player{
         io.emit('rating', data)
       })
       .catch((e) => {
-      });
-    /*db.serialize(() => {
-      const q = "select * from player_information where name = ?";
-      db.get(q,[name],(err, row) => {
-        if(!err){
-          if(row){
-          this.rating = row.rating
-          }else{
-            db.run('insert into player_information (name, win3, lose3, win4, lose4, win5, lose5, win6, lose6, rating, activestreakwins, beststreakwins) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', this.name, 0, 0, 0, 0, 0, 0, 0, 0, 1500, 0, 0)
-            this.rating = 1500
-          }
-          let data = {rating:this.rating, number:this.number, name:this.name}
-          io.emit('rating', data)
-        }
-      }) 
-    })*/
+      });*/
   };
   reset(){
     this.resource = {ore:0,grain:0,wool:0,lumber:0,brick:0}
@@ -159,7 +144,7 @@ class Player{
     tradeRate:{ore:4,grain:4,wool:4,lumber:4,brick:4},
     renounce:false,
     trashpool:{ore:0,grain:0,wool:0,lumber:0,brick:0}}
-    const q = "select * from player_information where name= '" + this.name + "'";
+    /*const q = "select * from player_information where name= '" + this.name + "'";
     client
       .query(q)
       .then((res) => {
@@ -174,7 +159,7 @@ class Player{
         io.emit('rating', data)
       })
       .catch((e) => {
-      });
+      });*/
   };
   recordLog(){
     for(let resource in this.resource){
@@ -2000,7 +1985,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   turnEnd(){
     if(this.phase === 'afterdice'){
       if(this.turnPlayer.point >= 10){
-        updateDatabase(this.turnPlayer)
+        /*updateDatabase(this.turnPlayer)*/
         makeNewTurnRecord()
         takeRecord()
         this.gameEnd()
@@ -3537,52 +3522,8 @@ function updateDatabase(winner){
     const query = "update gameresult set " + pn + " = " + res.rows[0][pn] + " where playersnumber = " + pl;
     client.query(query)
   })
-
-
-
-
-
-
-  /*db.serialize(() => {
-    const q = "select * from player_information where name = ?";
-    for(let player of game.players){
-      db.get(q,[player.name],(err, row) => {
-        if(!err && row){
-          if(player === winner){
-            let winx = 'win' + String(pl)
-            row[winx] += 1
-            row.activestreakwins += 1
-            if(row.activestreakwins > row.beststreakwins){
-              row.beststreakwins = row.activestreakwins
-            }
-            player.rating = winnersNewRating(player, losers)
-            const q = "update player_information set " + winx + " = ?, rating = ?, activestreakwins = ?, beststreakwins = ? where name = ?";
-            db.run(q, row[winx], player.rating, row.activestreakwins, row.beststreakwins, player.name)
-          }else{
-            let losex = 'lose' + String(pl)
-            row[losex] += 1
-            player.rating = losersNewRating(player, w)
-            const q = "update player_information set " + losex + " = ?, rating = ?, activestreakwins = ? where name = ?";
-            db.run(q, row[losex], player.rating, 0, player.name)
-          }
-        }
-      })
-    }
-  })
-  const q = "select * from gameresult where playersnumber = ?";
-  db.get(q,[pl],(err, row) => {
-    if(!err && row){
-      let pn = 'player' + String(winner.number+1)
-      row[pn] += 1
-      const q = "update gameresult set " + pn + " = ? where playersnumber = ?";
-      db.run(q, row[pn], pl)
-    }
-  })*/
 }
 function Wab(Ra,Rb){
-  console.log('#3583')
-  console.log(Ra)
-  console.log(Rb)
   return 1/(10**((Rb - Ra)/400)+1)
 }
 function winnersNewRating(w, loserslist){
@@ -3592,15 +3533,9 @@ function winnersNewRating(w, loserslist){
   let currentRating = w.rating
   for(let loser of loserslist){
     currentRating += 32*(1-Wab(w.rating, loser.rating))
-    console.log("#3595")
-    console.log(currentRating)
   }
-  console.log("#3598")
-  console.log(currentRating)
   return currentRating
 }
 function losersNewRating(loser, winner){
-  console.log("#3601")
-  console.log(loser.rating + 32*(0-Wab(loser.rating, winner.rating)))
   return loser.rating + 32*(0-Wab(loser.rating, winner.rating))
 }
