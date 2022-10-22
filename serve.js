@@ -96,6 +96,10 @@ class Player{
         }else{
           const newPlayer = "insert into player_information (name, win3, lose3, win4, lose4, win5, lose5, win6, lose6, rating, activestreakwins, beststreakwins) values('" + this.name + "', 0, 0, 0, 0, 0, 0, 0, 0, 1500, 0, 0)";
           client.query(newPlayer)
+          .then((res) => {
+          })
+          .catch((e) => {
+          });
           this.rating = 1500
         }
         let data = {rating:this.rating, number:this.number, name:this.name}
@@ -153,6 +157,10 @@ class Player{
         }else{
           const newPlayer = "insert into player_information (name, win3, lose3, win4, lose4, win5, lose5, win6, lose6, rating, activestreakwins, beststreakwins) values('" + this.name + "', 0, 0, 0, 0, 0, 0, 0, 0, 1500, 0, 0)";
           client.query(newPlayer)
+          .then((res) => {
+          })
+          .catch((e) => {
+          });
           this.rating = 1500
         }
         let data = {rating:this.rating, number:this.number, name:this.name}
@@ -1984,7 +1992,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   },
   turnEnd(){
     if(this.phase === 'afterdice'){
-      if(this.turnPlayer.point >= 2){
+      if(this.turnPlayer.point >= 10){
         updateDatabase(this.turnPlayer)
         makeNewTurnRecord()
         takeRecord()
@@ -3504,14 +3512,24 @@ function updateDatabase(winner){
         player.rating = winnersNewRating(player, losers)
         const query = "update player_information set " + winx + " = " + res.rows[0][winx] + ", rating = " + player.rating + ", activestreakwins = " + res.rows[0].activestreakwins + ", beststreakwins = " + res.rows[0].beststreakwins + " where name = '" + player.name + "'";
         client.query(query)
+        .then((res) => {
+        })
+        .catch((e) => {
+        });
       }else{
         let losex = 'lose' + String(pl)
         res.rows[0][losex] += 1
         player.rating = losersNewRating(player, w)
         const query = "update player_information set " + losex + " = " + res.rows[0][losex] + ", rating = " + player.rating + ", activestreakwins = 0 where name = '" + player.name + "'";
         client.query(query)
+        .then((res) => {
+        })
+        .catch((e) => {
+        });
       }
     })
+    .catch((e) => {
+    });
   }
   const query = "select * from gameresult where playersnumber = '" + String(pl) + "'"
   client
@@ -3520,8 +3538,15 @@ function updateDatabase(winner){
     let pn = 'player' + String(winner.number+1)
     res.rows[0][pn] += 1
     const query = "update gameresult set " + pn + " = " + res.rows[0][pn] + " where playersnumber = " + pl;
-    client.query(query)
+    client
+    .query(query)
+    .then((res) => {
+    })
+    .catch((e) => {
+    });
   })
+  .catch((e) => {
+  });
 }
 function Wab(Ra,Rb){
   return 1/(10**((Rb - Ra)/400)+1)
