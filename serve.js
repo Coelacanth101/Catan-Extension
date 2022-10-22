@@ -94,7 +94,7 @@ class Player{
         if(res.rows[0]){
           this.rating = res.rows[0].rating
         }else{
-          const newPlayer = "insert into player_information (name, win3, lose3, win4, lose4, win5, lose5, win6, lose6, rating, activestreakwins, beststreakwins) values('" + this.name + "', 0, 0, 0, 0, 0, 0, 0, 0, 1500, 0, 0)";
+          const newPlayer = "insert into player_information (name, win3, lose3, win4, lose4, win5, lose5, win6, lose6, rating, activestreakwins, beststreakwins, bestrating) values('" + this.name + "', 0, 0, 0, 0, 0, 0, 0, 0, 1500, 0, 0, 1500)";
           client.query(newPlayer)
           .then((res) => {
           })
@@ -3510,7 +3510,10 @@ function updateDatabase(winner){
           res.rows[0].beststreakwins = res.rows[0].activestreakwins
         }
         player.rating = winnersNewRating(player, losers)
-        const query = "update player_information set " + winx + " = " + res.rows[0][winx] + ", rating = " + player.rating + ", activestreakwins = " + res.rows[0].activestreakwins + ", beststreakwins = " + res.rows[0].beststreakwins + " where name = '" + player.name + "'";
+        if(player.rating > res.rows[0].bestrating){
+          res.rows[0].bestrating = player.rating
+        }
+        const query = "update player_information set " + winx + " = " + res.rows[0][winx] + ", rating = " + player.rating + ", activestreakwins = " + res.rows[0].activestreakwins + ", beststreakwins = " + res.rows[0].beststreakwins + ", bestrating = " + res.rows[0].bestrating + " where name = '" + player.name + "'";
         client.query(query)
         .then((res) => {
         })
