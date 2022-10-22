@@ -1992,7 +1992,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   },
   turnEnd(){
     if(this.phase === 'afterdice'){
-      if(this.turnPlayer.point >= 2){
+      if(this.turnPlayer.point >= 10){
         updateDatabase(this.turnPlayer)
         makeNewTurnRecord()
         takeRecord()
