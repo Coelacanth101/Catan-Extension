@@ -23,7 +23,7 @@ app.get("/:file", (req, res)=>{
 
 
 
-/*require('dotenv').config();
+require('dotenv').config();
 const { Client } = require('pg');
 const client = new Client({
   connectionString: process.env.DB_URL,
@@ -31,7 +31,7 @@ const client = new Client({
     rejectUnauthorized: false
   }
 });
-client.connect()*/
+client.connect()
 /*------------------------------------------
 ------------------------------------------*/
 
@@ -87,7 +87,7 @@ class Player{
     tradeRate:{ore:4,grain:4,wool:4,lumber:4,brick:4},
     renounce:false,
     trashpool:{ore:0,grain:0,wool:0,lumber:0,brick:0}}
-    /*const q = "select * from player_information where name= '" + this.name + "'";
+    const q = "select * from player_information where name= '" + this.name + "'";
     client
       .query(q)
       .then((res) => {
@@ -102,7 +102,7 @@ class Player{
         io.emit('rating', data)
       })
       .catch((e) => {
-      });*/
+      });
   };
   reset(){
     this.resource = {ore:0,grain:0,wool:0,lumber:0,brick:0}
@@ -144,7 +144,7 @@ class Player{
     tradeRate:{ore:4,grain:4,wool:4,lumber:4,brick:4},
     renounce:false,
     trashpool:{ore:0,grain:0,wool:0,lumber:0,brick:0}}
-    /*const q = "select * from player_information where name= '" + this.name + "'";
+    const q = "select * from player_information where name= '" + this.name + "'";
     client
       .query(q)
       .then((res) => {
@@ -159,7 +159,7 @@ class Player{
         io.emit('rating', data)
       })
       .catch((e) => {
-      });*/
+      });
   };
   recordLog(){
     for(let resource in this.resource){
@@ -1985,7 +1985,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   turnEnd(){
     if(this.phase === 'afterdice'){
       if(this.turnPlayer.point >= 10){
-        /*updateDatabase(this.turnPlayer)*/
+        updateDatabase(this.turnPlayer)
         makeNewTurnRecord()
         takeRecord()
         this.gameEnd()
