@@ -236,7 +236,8 @@ class Player{
     this.dice = this.log.dice
     this.toTrash = this.log.toTrash
     this.renounce = this.log.renounce
-    const logdata = {action:'undo', playername:game.lastActionPlayer.name, turnPlayerID:game.turnPlayer.socketID}
+    display.reloadRate(this.socketID)
+    const logdata = {action:'undo', playername:this.name, turnPlayerID:game.turnPlayer.socketID}
     display.playLog(logdata)
   }
   build(item, position){
@@ -741,7 +742,7 @@ class Player{
     this.thisTurnDraw = {knight:0, roadbuild:0, harvest:0, monopoly:0, point:0}
     game.turnEnd()
   }
-  trash(resource){
+  /*trash(resource){
     if(this.resource[resource] < 1){
       display.hideReceivingArea()
     }else if(this.toTrash >= 1){
@@ -780,6 +781,42 @@ class Player{
       display.resourceOf(this)
     }
     
+  }*/
+  keep(keepresource){
+    display.resetKeepResourceTo(this.socketID)
+    if(!game.burstPlayer.includes(this)){
+      display.hideReceivingArea()
+    }else if(total(keepresource) === total(this.resource) - this.toTrash){
+      let check = true
+      for(let resource in keepresource){
+        if(this.resource[resource] < keepresource[resource]){
+          check = false
+        }
+      }
+      if(check){
+        let trashresource = {ore:0,grain:0,wool:0,lumber:0,brick:0}
+        for(let resource in keepresource){
+          trashresource[resource] = this.resource[resource] - keepresource[resource]
+          game.allResource[resource] += trashresource[resource]
+          this.totaltrash[resource] += trashresource[resource]
+        }
+        this.resource = keepresource
+        this.toTrash = 0
+        discard(this, game.burstPlayer)
+        const logdata = {action:'trash', playername:this.name, resource:trashresource, turnPlayerID:game.turnPlayer.socketID}
+        display.message(logdata)
+        display.playLog(logdata)
+        if(game.burstPlayer.length === 0){
+          game.phase = 'thiefmove'
+          recordLog()
+          display.hideBurstArea()
+          display.thiefRed()
+        }else{
+          display.showBurstArea()
+        }
+      }
+    }
+    display.resourceOf(this)
   }
   myLongest(){
     //道に接した点を一つ選択
@@ -2866,7 +2903,10 @@ const display = {
   gameRecord(){
     let data = {gameRecord:gameRecord}
     io.emit('gamerecord', data)
-  }
+  },
+  resetKeepResourceTo(socketID){
+    io.to(socketID).emit('resetkeepresource','')
+  },
 }
 
 function discard(item,array){
@@ -3168,7 +3208,7 @@ io.on("connection", (socket)=>{
         display.hideReceivingArea()
       }
     });
-    //バースト資源ボタンをクリック
+    /*//バースト資源ボタンをクリック
     socket.on('burst',(data)=>{
       let resource = data.resource
       let player = game.IDToPlayer(data.socketID)
@@ -3179,7 +3219,13 @@ io.on("connection", (socket)=>{
       }else{
         display.hideReceivingArea()
       }
-    });
+    });*/
+    //バースト決定ボタンをクリック
+    socket.on('keepresource',(data)=>{
+      let keepresource = data.keepresource
+      let player = game.IDToPlayer(data.socketID)
+      player.keep(keepresource)
+    })
     //貿易ボタンをクリック
     socket.on('tradebuttonclick',(data)=>{
       if(data.socketID !== game.turnPlayer.socketID){
@@ -3566,4 +3612,12 @@ function winnersNewRating(w, loserslist){
 }
 function losersNewRating(loser, winner){
   return loser.rating + 32*(0-Wab(loser.rating, winner.rating))
+}
+
+function total(object){
+  let total = 0
+  for(let key in object){
+      total += object[key]
+  }
+  return total
 }

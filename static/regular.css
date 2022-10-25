@@ -251,11 +251,13 @@
                     .action_button{
                         background:skyblue;
                         width: 60px;
-                        height: 30px;
+                        height: 40px;
                         margin: 1px;
                         padding: 0px;
-                        font-size: 1em;
+                        font-size:large;
                         font-weight: bold;
+                        border-radius: 50%;
+                        line-height: 100%;
                     }
                 
                 #monopoly_area{
@@ -281,14 +283,8 @@
                         justify-content: center;
                         align-items: center;
                     }
-                    .quitprogressbutton{
+                    .quitbutton{
                         background-color: white;
-                        width: 60px;
-                        height: 30px;
-                        margin: 1px;
-                        padding: 0px;
-                        font-size: 1em;
-                        font-weight: bold;
                     }
                 #harvest_area{
                     width: 100%;
@@ -308,14 +304,20 @@
                     display: flex;
                     justify-content: center;
                     text-align: center;
-                    height: 60%;
+                    height: 50px;
                 }
                 #you_are_bursting{
                     margin-top: auto;
                     margin-bottom: auto;
                 }
                 #trash_area{
-                    height: 40%
+                    height: 50px;
+                }
+                #keepbuttonarea{
+                    height: 40px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                 }
                 .lumber{
                     background-color: rgb(62, 187, 62);
@@ -340,6 +342,28 @@
                     justify-content: center;
                     align-items: center;
                 }
+                .do{
+                    width: 15%;
+                    height:auto;
+                }
+                .resourcetaparea{
+                    width: 18%;
+                    height: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .resourcetap{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 95%;
+                    height: 90%;
+                    border-radius: 50%;
+                    font-size:larger;
+                    font-weight: bold;
+                    line-height: 100%;
+                }
                 #counterpart{
                     display: flex;
                     flex-wrap: wrap;
@@ -347,20 +371,15 @@
                     align-items: center;
                 }
                 .propose_button{
-                    width: 16%;
-                    height: 30px;
+                    width: 25%;
+                    height: 35px;
                     margin: 0.25%;
                     font-size: 14px;
                     color: black;
                     font-weight: bold;
                 }
                 #quitnegotiatebutton{
-                    background-color: white;
-                    width: 16%;
-                    height: 30px;
-                    margin: 0.25%;
-                    font-size: 1em;
-                    font-weight: bold;
+                    width:20%;
                 }
                 #propose_area{
                     width: 100%;
@@ -407,15 +426,6 @@
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                }
-                #quittradebutton{
-                    background-color: white;
-                    width: 60px;
-                    height: 30px;
-                    margin: 1px;
-                    padding: 0px;
-                    font-size: 1em;
-                    font-weight: bold;
                 }
                 #message_area{
                     width: 100%;

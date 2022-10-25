@@ -202,6 +202,11 @@ socket.on('showburst', (burstPlayer)=>{
     $(`#receiving_area`).show();
     display.showBurstArea(burstPlayer)
 });
+socket.on('resetkeepresource',()=>{
+    $(`#receiving_area`).show();
+    resetResourceTap();
+    $(`#receiving_area`).hide();
+})
 socket.on('showtrade', (data)=>{
     $(`#receiving_area`).show();
     display.showTradeArea(data)
@@ -250,20 +255,20 @@ socket.on('hidegameendarea', ()=>{
 })
 socket.on('reloadrate', (data)=>{
     $(`#receiving_area`).show();
-    $(`#exportore`).attr(`step`, data.ore)
-    $(`#exportgrain`).attr(`step`, data.grain)
-    $(`#exportwool`).attr(`step`, data.wool)
-    $(`#exportlumber`).attr(`step`, data.lumber)
-    $(`#exportbrick`).attr(`step`, data.brick)
+    $(`#expoore`).attr(`data-step`, data.ore)
+    $(`#expograin`).attr(`data-step`, data.grain)
+    $(`#expowool`).attr(`data-step`, data.wool)
+    $(`#expolumber`).attr(`data-step`, data.lumber)
+    $(`#expobrick`).attr(`data-step`, data.brick)
     $(`#receiving_area`).hide();
 }),
 socket.on('resetrate', ()=>{
     $(`#receiving_area`).show();
-    $(`#exportore`).attr(`step`, 4)
-    $(`#exportgrain`).attr(`step`, 4)
-    $(`#exportwool`).attr(`step`, 4)
-    $(`#exportlumber`).attr(`step`, 4)
-    $(`#exportbrick`).attr(`step`, 4)
+    $(`#expoore`).attr(`data-step`, 4)
+    $(`#expograin`).attr(`data-step`, 4)
+    $(`#expowool`).attr(`data-step`, 4)
+    $(`#expolumber`).attr(`data-step`, 4)
+    $(`#expobrick`).attr(`data-step`, 4)
     $(`#receiving_area`).hide();
 })
 socket.on('yesbuttonclick', (maxPlayer)=>{
@@ -753,12 +758,24 @@ $(`#button_area`).on('click','#end_button',function(){
     const data = {socketID:socket.id}
     socket.emit('endbuttonclick', data)
 });
-//バースト資源ボタンをクリック
+/*//バースト資源ボタンをクリック
 $(`#burst_area`).on(`click`, `.resource_button`, function(){
     $(`#receiving_area`).show()
-    let resource = $(this).attr('id').slice(6)
+    let resource = $(this).attr('id').slice(4)
     const data = {resource:resource, socketID:socket.id}
     socket.emit('burst', data)
+})*/
+//バースト決定ボタンをクリック
+$(`#keepbutton`).on('click',function(){
+    $(`#receiving_area`).show()
+    const keepore = Number($(`#keepore`).attr('data-amount'))
+    const keepgrain = Number($(`#keepgrain`).attr('data-amount'))
+    const keepwool = Number($(`#keepwool`).attr('data-amount'))
+    const keeplumber = Number($(`#keeplumber`).attr('data-amount'))
+    const keepbrick = Number($(`#keepbrick`).attr('data-amount'))
+    const keepresource = {ore:keepore,grain:keepgrain,wool:keepwool,lumber:keeplumber,brick:keepbrick}
+    const data = {socketID:socket.id, keepresource:keepresource}
+    socket.emit('keepresource', data)
 })
 //貿易ボタンをクリック
 $(`#button_area`).on('click','#trade_button',function(){
@@ -766,20 +783,27 @@ $(`#button_area`).on('click','#trade_button',function(){
     const data = {socketID:socket.id}
     socket.emit('tradebuttonclick', data)
 });
+//交渉、貿易、バースト資源ボタンをクリック
+$('.resourcetap').on('click',function(){
+    let amount = Number($(this).attr('data-amount')) + Number($(this).attr('data-step'))
+    $(this).attr('data-amount',`${amount}`)
+    let resource = translate($(this).attr('id').slice(4))
+    $(this).html(`${resource}×${amount}`)
+})
 //貿易決定ボタンをクリック
 $(`#trade_area`).on('click','#tradedecide',function(){
     $(`#receiving_area`).show()
-    const exportore = Number($(`#exportore`).val())
-    const exportgrain = Number($(`#exportgrain`).val())
-    const exportwool = Number($(`#exportwool`).val())
-    const exportlumber = Number($(`#exportlumber`).val())
-    const exportbrick = Number($(`#exportbrick`).val())
+    const exportore = Number($(`#expoore`).attr('data-amount'))
+    const exportgrain = Number($(`#expograin`).attr('data-amount'))
+    const exportwool = Number($(`#expowool`).attr('data-amount'))
+    const exportlumber = Number($(`#expolumber`).attr('data-amount'))
+    const exportbrick = Number($(`#expobrick`).attr('data-amount'))
     const exportresource = {ore:exportore,grain:exportgrain,wool:exportwool,lumber:exportlumber,brick:exportbrick}
-    const importore = Number($(`#importore`).val())
-    const importgrain = Number($(`#importgrain`).val())
-    const importwool = Number($(`#importwool`).val())
-    const importlumber = Number($(`#importlumber`).val())
-    const importbrick = Number($(`#importbrick`).val())
+    const importore = Number($(`#impoore`).attr('data-amount'))
+    const importgrain = Number($(`#impograin`).attr('data-amount'))
+    const importwool = Number($(`#impowool`).attr('data-amount'))
+    const importlumber = Number($(`#impolumber`).attr('data-amount'))
+    const importbrick = Number($(`#impobrick`).attr('data-amount'))
     const importresource = {ore:importore,grain:importgrain,wool:importwool,lumber:importlumber,brick:importbrick}
     const data = {socketID:socket.id, exportresource:exportresource, importresource:importresource}
     socket.emit('tradedecide', data)
@@ -796,21 +820,31 @@ $(`#button_area`).on('click','#negotiate_button',function(){
     const data = {socketID:socket.id}
     socket.emit('negotiatebuttonclick', data)
 });
+
+/*//交渉資源ボタンをクリック
+$(`.resourcetaparea`).on('click','.resourcetap',function(){
+    let amount = Number($(this).attr('data-amount'))+1
+    $(this).attr('data-amount',`${amount}`)
+    let resource = translate($(this).attr('id').slice(4))
+    $(this).html(`${resource}×${amount}`)
+})*/
+
 //交渉相手ボタンをクリック
 $(`#counterpart`).on('click','.propose_button',function(){
     $(`#receiving_area`).show()
     const counterpartnumber = Number($(this).attr(`id`).slice(2))
-    const giveore = Number($(`#giveore`).val())
-    const givegrain = Number($(`#givegrain`).val())
-    const givewool = Number($(`#givewool`).val())
-    const givelumber = Number($(`#givelumber`).val())
-    const givebrick = Number($(`#givebrick`).val())
+    const giveore = Number($(`#giveore`).attr('data-amount'))
+    const givegrain = Number($(`#givegrain`).attr('data-amount'))
+    const givewool = Number($(`#givewool`).attr('data-amount'))
+    const givelumber = Number($(`#givelumber`).attr('data-amount'))
+    const givebrick = Number($(`#givebrick`).attr('data-amount'))
     const giveresource = {ore:giveore,grain:givegrain,wool:givewool,lumber:givelumber,brick:givebrick}
-    const takeore = Number($(`#takeore`).val())
-    const takegrain = Number($(`#takegrain`).val())
-    const takewool = Number($(`#takewool`).val())
-    const takelumber = Number($(`#takelumber`).val())
-    const takebrick = Number($(`#takebrick`).val())
+    console.log(giveresource)
+    const takeore = Number($(`#takeore`).attr('data-amount'))
+    const takegrain = Number($(`#takegrain`).attr('data-amount'))
+    const takewool = Number($(`#takewool`).attr('data-amount'))
+    const takelumber = Number($(`#takelumber`).attr('data-amount'))
+    const takebrick = Number($(`#takebrick`).attr('data-amount'))
     const takeresource = {ore:takeore,grain:takegrain,wool:takewool,lumber:takelumber,brick:takebrick}
     const data = {socketID:socket.id, counterpartnumber:counterpartnumber, giveresource:giveresource, takeresource:takeresource}
     let give = false
@@ -1759,12 +1793,14 @@ const display = {
         for(let player of burstPlayer){
             if(player.socketID === socket.id){
                 $(`#trash_area`).show()
-                $(`#burst_message`).append(`<p id="you_are_bursting"><b>バーストしました<br>あと${player.toTrash}枚捨ててください</b></p>`)
+                $(`#keepbuttonarea`).show()
+                $(`#burst_message`).append(`<p id="you_are_bursting"><b>バーストしました<br>残す資源を選んで下さい(${total(player.resource) - player.toTrash}枚)</b></p>`)
                 $(`#receiving_area`).hide();
                 return
             }
         }
         $(`#trash_area`).hide()
+        $(`#keepbuttonarea`).hide()
         let burst = ``
         for(let player of burstPlayer){
             burst += `と${player.name}`
@@ -1775,8 +1811,8 @@ const display = {
     },
     hideTradeArea(){
         $(`#receiving_area`).show();
-        $(`#trade_area`).hide()
-        $(`.resourcenumber`).val(``)
+        $(`#trade_area`).hide();
+        resetResourceTap();
         $(`#receiving_area`).hide();
     },
     showTradeArea(data){
@@ -1790,7 +1826,7 @@ const display = {
     hideNegotiateArea(){
         $(`#receiving_area`).show();
         $(`#negotiate_area`).hide()
-        $(`.resourcenumber`).val(``)
+        resetResourceTap();
         $(`#receiving_area`).hide();
     },
     showNegotiateArea(data){
@@ -2315,6 +2351,21 @@ function translate(item){
     }else if(item === 'road'){
         return '道'
     }
+}
+function total(object){
+    let total = 0
+    for(let key in object){
+        total += object[key]
+    }
+    return total
+}
+function resetResourceTap(){
+    $(`.resourcetap`).attr('data-amount', 0)
+    $(`.oretap`).html(`鉄×0`)
+    $(`.graintap`).html(`米×0`)
+    $(`.wooltap`).html(`羊×0`)
+    $(`.lumbertap`).html(`木×0`)
+    $(`.bricktap`).html(`煉×0`)
 }
 /*
 socket.on('console',(game)=>{
