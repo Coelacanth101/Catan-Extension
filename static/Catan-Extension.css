@@ -367,15 +367,18 @@
                     align-items: center;
                 }
                 .propose_button{
-                    width: 16%;
-                    height: 30px;
+                    width: 14%;
+                    height: 35px;
                     margin: 0.25%;
                     font-size: 14px;
                     color: black;
                     font-weight: bold;
                 }
                 #quitnegotiatebutton{
-                    width:15%;
+                    width:12%;
+                }
+                #resetnegotiatebutton{
+                    width:12%;
                 }
                 #propose_area{
                     width: 100%;

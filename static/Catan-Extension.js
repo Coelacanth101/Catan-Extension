@@ -823,6 +823,10 @@ $(`#trade_area`).on('click','#quittradebutton',function(){
     const data = {socketID:socket.id}
     socket.emit('quittrade', data)
 });
+//貿易リセットボタンクリック
+$(`#trade_area`).on('click','#resettradebutton',function(){
+    resetResourceTap()
+});
 //交渉ボタンをクリック
 $(`#button_area`).on('click','#negotiate_button',function(){
     $(`#receiving_area`).show()
@@ -876,6 +880,10 @@ $(`#negotiate_area`).on('click','#quitnegotiatebutton',function(){
     $(`#receiving_area`).show()
     const data = {socketID:socket.id}
     socket.emit('quitnegotiate', data)
+});
+//交渉リセットボタンクリック
+$(`#negotiate_area`).on('click','#resetnegotiatebutton',function(){
+    resetResourceTap()
 });
 //同意ボタンをクリック
 $(`#acceptordeny`).on('click','#accept',function(){
