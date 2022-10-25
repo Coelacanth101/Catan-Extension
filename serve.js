@@ -814,7 +814,13 @@ class Player{
         }else{
           display.showBurstArea()
         }
+      }else{
+        let keepremained = total(this.resource) - this.toTrash
+        io.to(this.socketID).emit('keepremained',(keepremained))
       }
+    }else{
+      let keepremained = total(this.resource) - this.toTrash
+      io.to(this.socketID).emit('keepremained',(keepremained))
     }
     display.resourceOf(this)
   }

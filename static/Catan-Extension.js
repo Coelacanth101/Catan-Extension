@@ -207,6 +207,9 @@ socket.on('resetkeepresource',()=>{
     resetResourceTap();
     $(`#receiving_area`).hide();
 })
+socket.on('keepremained',(keepremained)=>{
+    $(`#keepremained`).html(`${keepremained}`)
+})
 socket.on('showtrade', (data)=>{
     $(`#receiving_area`).show();
     display.showTradeArea(data)
@@ -776,6 +779,12 @@ $(`#keepbutton`).on('click',function(){
     const keepresource = {ore:keepore,grain:keepgrain,wool:keepwool,lumber:keeplumber,brick:keepbrick}
     const data = {socketID:socket.id, keepresource:keepresource}
     socket.emit('keepresource', data)
+})
+//バーストあとn枚
+$(`.keepbutton`).on('click',function(){
+    let n = Number($('#keepremained').html())
+    n -= 1
+    $('#keepremained').html(`${n}`)
 })
 //貿易ボタンをクリック
 $(`#button_area`).on('click','#trade_button',function(){
@@ -1792,9 +1801,10 @@ const display = {
         $(`#burst_message`).html(``)
         for(let player of burstPlayer){
             if(player.socketID === socket.id){
+                let keepremained = total(player.resource) - player.toTrash
                 $(`#trash_area`).show()
                 $(`#keepbuttonarea`).show()
-                $(`#burst_message`).append(`<p id="you_are_bursting"><b>バーストしました<br>残す資源を選んで下さい(${total(player.resource) - player.toTrash}枚)</b></p>`)
+                $(`#burst_message`).append(`<p id="you_are_bursting"><b>バーストしました<br>残す資源を選んで下さい(あと<span id="keepremained">${keepremained}</span>枚)</b></p>`)
                 $(`#receiving_area`).hide();
                 return
             }
