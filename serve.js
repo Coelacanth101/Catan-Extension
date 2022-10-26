@@ -69,7 +69,8 @@ class Player{
     this.replay = false
     this.produce = {ore:0,grain:0,wool:0,lumber:0,brick:0}
     this.robbed = {ore:0,grain:0,wool:0,lumber:0,brick:0}
-    this.totaltrash = {ore:0,grain:0,wool:0,lumber:0,brick:0}
+    this.totalTrash = {ore:0,grain:0,wool:0,lumber:0,brick:0}
+    this.totalUse = {ore:0,grain:0,wool:0,lumber:0,brick:0}
     this.log = {resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     token:{house:5, city:4, road:15},
     house:[],
@@ -86,7 +87,9 @@ class Player{
     toTrash:0,
     tradeRate:{ore:4,grain:4,wool:4,lumber:4,brick:4},
     renounce:false,
-    trashpool:{ore:0,grain:0,wool:0,lumber:0,brick:0}}
+    trashpool:{ore:0,grain:0,wool:0,lumber:0,brick:0},
+    totalTrash:{ore:0,grain:0,wool:0,lumber:0,brick:0},
+    totalUse:{ore:0,grain:0,wool:0,lumber:0,brick:0}}
     const q = "select * from player_information where name= '" + this.name + "'";
     client
       .query(q)
@@ -130,7 +133,8 @@ class Player{
     this.replay = false
     this.produce = {ore:0,grain:0,wool:0,lumber:0,brick:0}
     this.robbed = {ore:0,grain:0,wool:0,lumber:0,brick:0}
-    this.totaltrash = {ore:0,grain:0,wool:0,lumber:0,brick:0}
+    this.totalTrash = {ore:0,grain:0,wool:0,lumber:0,brick:0}
+    this.totalUse = {ore:0,grain:0,wool:0,lumber:0,brick:0}
     this.log = {resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     token:{house:5, city:4, road:15},
     house:[],
@@ -147,7 +151,9 @@ class Player{
     toTrash:0,
     tradeRate:{ore:4,grain:4,wool:4,lumber:4,brick:4},
     renounce:false,
-    trashpool:{ore:0,grain:0,wool:0,lumber:0,brick:0}}
+    trashpool:{ore:0,grain:0,wool:0,lumber:0,brick:0},
+    totalTrash:{ore:0,grain:0,wool:0,lumber:0,brick:0},
+    totalUse:{ore:0,grain:0,wool:0,lumber:0,brick:0}}
     const q = "select * from player_information where name= '" + this.name + "'";
     client
       .query(q)
@@ -174,6 +180,8 @@ class Player{
       this.log.resource[resource] = this.resource[resource]
       this.log.tradeRate[resource] = this.tradeRate[resource]
       this.log.trashpool[resource] = this.trashpool[resource]
+      this.log.totalTrash[resource] = this.totalTrash[resource]
+      this.log.totalUse[resource] = this.totalUse[resource]
     }
     for(let token in this.token){
       this.log.token[token] = this.token[token]
@@ -208,6 +216,8 @@ class Player{
       this.resource[resource] = this.log.resource[resource]
       this.tradeRate[resource] = this.log.tradeRate[resource]
       this.trashpool[resource] = this.log.trashpool[resource]
+      this.totalTrash[resource] = this.log.totalTrash[resource]
+      this.totalUse[resource] = this.log.totalUse[resource]
     }
     for(let token in this.log.token){
       this.token[token] = this.log.token[token]
@@ -798,7 +808,7 @@ class Player{
         for(let resource in keepresource){
           trashresource[resource] = this.resource[resource] - keepresource[resource]
           game.allResource[resource] += trashresource[resource]
-          this.totaltrash[resource] += trashresource[resource]
+          this.totalTrash[resource] += trashresource[resource]
         }
         this.resource = keepresource
         this.toTrash = 0
@@ -958,6 +968,7 @@ class Player{
   useResource(item){
     for(let resource in buildResource[item]){
       this.resource[resource] -= buildResource[item][resource]
+      this.totalUse[resource] += buildResource[item][resource]
       game.allResource[resource] += buildResource[item][resource]
     }
     display.resourceOf(this)
@@ -1776,6 +1787,7 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
       }
     }
   },
+  //タイルの絶対生産力
   productivity(tileobj){
     if(tileobj.number <= 6 && tileobj.number >= 2){
       return tileobj.number - 1
@@ -1785,30 +1797,46 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
       return 0
     }
   },
-  relativeProductivity(tileobj){
-    if(tileobj.produce !== true){
-      return 0
-    }
+  //指定した資源の合計絶対生産力
+  totalProductivityOf(resource){
     let totalProductivity = 0
     for(let line of this.island){
       for(let tile of line){
-        if(tile.type === tileobj.type ){
+        if(tile.type === resource){
           totalProductivity += this.productivity(tile)
         }
       }
     }
-    return this.productivity(tileobj)**2 / totalProductivity
-  },
-  nodeRelativeProductivity(nodeNumber){
-    const nodePosition = this.nodeNumberToPosition(nodeNumber)
-    const tilepositions = this.tilesAroundNode(nodePosition)
-    let totalProductivity = 0
-    for(let tileposition of tilepositions){
-      let tile = this.island[tileposition[0]][tileposition[1]]
-      totalProductivity += this.relativeProductivity(tile)
-    }
     return totalProductivity
   },
+  //タイルの相対生産力
+  relativeProductivity(tileobj){
+    if(tileobj.produce !== true){
+      return 0
+    }
+    return this.productivity(tileobj)**2 / this.totalProductivityOf(tileobj.type)
+  },
+  //ノードの周りのタイルの合計相対生産力
+  nodeRelativeProductivity(nodeNumber){
+    let productivity = {ore:0,grain:0,wool:0,lumber:0,brick:0}
+    const nodePosition = this.nodeNumberToPosition(nodeNumber)
+    const tilepositions = this.tilesAroundNode(nodePosition)
+    for(let tileposition of tilepositions){
+      let tile = this.island[tileposition[0]][tileposition[1]]
+      if(tile.produce !== true){
+        continue
+      }
+      productivity[tile.type] += this.productivity(tile)
+    }
+    let totalRelativeProductivity = 0
+    let totalAbsoluteProductivity = 0
+    for(let resource in productivity){
+      totalRelativeProductivity += productivity[resource] / this.totalProductivityOf(resource)
+      totalAbsoluteProductivity += productivity[resource]
+    }
+    return totalRelativeProductivity * totalAbsoluteProductivity
+  },
+  //全ノードの合計相対生産力
   allNodesRelativeProductivity(){
     let i = 1
     let productivity =[]
@@ -3368,9 +3396,11 @@ io.on("connection", (socket)=>{
     socket.on('undo', (socketID)=>{
       if(game.phase === 'burst'){
         let myself = game.IDToPlayer(socketID)
-        myself.unDo()
-        if(myself.toTrash > 0 && !game.burstPlayer.includes(myself)){
-          game.burstPlayer.push(myself)
+        if(myself){
+          myself.unDo()
+          if(myself.toTrash > 0 && !game.burstPlayer.includes(myself)){
+            game.burstPlayer.push(myself)
+          }
         }
         display.showBurstArea()
         display.allResource()
@@ -3602,6 +3632,13 @@ function updateDatabase(winner){
   })
   .catch((e) => {
   });
+  /*const query = "select * from gameresult where playersnumber = '" + String(pl) + "'"
+  client
+  .query(query)
+  .then((res) => {
+  })
+  .catch((e) => {
+  });*/
 }
 function Wab(Ra,Rb){
   return 1/(10**((Rb - Ra)/400)+1)

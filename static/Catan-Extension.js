@@ -4,6 +4,8 @@ let record
 let endturn
 let turn
 let playerNumber
+let defaultkeep
+let keepremained
 //画面初期化
 $('#initializebutton').on('click', function(){
     $('#yesorno').show()
@@ -205,6 +207,7 @@ socket.on('showburst', (burstPlayer)=>{
 socket.on('resetkeepresource',()=>{
     $(`#receiving_area`).show();
     resetResourceTap();
+    keepremained = defaultkeep
     $(`#receiving_area`).hide();
 })
 socket.on('keepremained',(keepremained)=>{
@@ -782,10 +785,14 @@ $(`#keepbutton`).on('click',function(){
 })
 //バーストあとn枚
 $(`.keepbutton`).on('click',function(){
-    let n = Number($('#keepremained').html())
-    n -= 1
-    $('#keepremained').html(`${n}`)
+    keepremained -= 1
+    $('#keepremained').html(`${keepremained}`)
 })
+//バーストリセットボタンクリック
+$(`#resetkeepbutton`).on('click',function(){
+    $('#keepremained').html(`${defaultkeep}`)
+    keepremained = defaultkeep
+});
 //貿易ボタンをクリック
 $(`#button_area`).on('click','#trade_button',function(){
     $(`#receiving_area`).show()
@@ -823,8 +830,8 @@ $(`#trade_area`).on('click','#quittradebutton',function(){
     const data = {socketID:socket.id}
     socket.emit('quittrade', data)
 });
-//貿易リセットボタンクリック
-$(`#trade_area`).on('click','#resettradebutton',function(){
+//貿易,交渉,バーストリセットボタンクリック
+$(`.resetbutton`).on('click',function(){
     resetResourceTap()
 });
 //交渉ボタンをクリック
@@ -880,10 +887,6 @@ $(`#negotiate_area`).on('click','#quitnegotiatebutton',function(){
     $(`#receiving_area`).show()
     const data = {socketID:socket.id}
     socket.emit('quitnegotiate', data)
-});
-//交渉リセットボタンクリック
-$(`#negotiate_area`).on('click','#resetnegotiatebutton',function(){
-    resetResourceTap()
 });
 //同意ボタンをクリック
 $(`#acceptordeny`).on('click','#accept',function(){
@@ -1809,10 +1812,15 @@ const display = {
         $(`#burst_message`).html(``)
         for(let player of burstPlayer){
             if(player.socketID === socket.id){
-                let keepremained = total(player.resource) - player.toTrash
                 $(`#trash_area`).show()
                 $(`#keepbuttonarea`).show()
-                $(`#burst_message`).append(`<p id="you_are_bursting"><b>バーストしました<br>残す資源を選んで下さい(あと<span id="keepremained">${keepremained}</span>枚)</b></p>`)
+                if($(`#keepore`).attr(`data-amount`) === '0' && $(`#keepgrain`).attr(`data-amount`) === '0' && $(`#keepwool`).attr(`data-amount`) === '0' && $(`#keeplumber`).attr(`data-amount`) === '0' && $(`#keepbrick`).attr(`data-amount`) === '0'){
+                    defaultkeep = total(player.resource) - player.toTrash
+                    keepremained = total(player.resource) - player.toTrash
+                    $(`#burst_message`).append(`<p id="you_are_bursting"><b>バーストしました<br>残す資源を選んで下さい(あと<span id="keepremained">${defaultkeep}</span>枚)</b></p>`)
+                }else{
+                    $(`#burst_message`).append(`<p id="you_are_bursting"><b>バーストしました<br>残す資源を選んで下さい(あと<span id="keepremained">${keepremained}</span>枚)</b></p>`)
+                }
                 $(`#receiving_area`).hide();
                 return
             }
@@ -1990,7 +1998,7 @@ const display = {
         for(let player of data.players){
             $(`#resourcedata`).append(`
           <tr>
-            <td rowspan="3" id="name${i}" class="player${i}color"></td>
+            <td rowspan="4" id="name${i}" class="player${i}color"></td>
             <td id="">産</td>
             <td id="produceore${i}"></td>
             <td id="producegrain${i}"></td>
@@ -2016,22 +2024,35 @@ const display = {
             <td id="trashlumber${i}"></td>
             <td id="trashbrick${i}"></td>
             <td id="trashtotal${i}"></td>
+          </tr>
+          <tr>
+            <td id="">使</td>
+            <td id="useore${i}"></td>
+            <td id="usegrain${i}"></td>
+            <td id="usewool${i}"></td>
+            <td id="uselumber${i}"></td>
+            <td id="usebrick${i}"></td>
+            <td id="usetotal${i}"></td>
           </tr>`)
             $(`#name${i}`).html(`<b>${player.name}</b>`)
             let tp = 0
             let tr = 0
             let tt = 0
+            let tu = 0
             for(let resource in player.produce){
                 $(`#produce${resource}${i}`).html(`${player.produce[resource]}`)
                 tp += player.produce[resource]
                 $(`#robbed${resource}${i}`).html(`${player.robbed[resource]}`)
                 tr += player.robbed[resource]
-                $(`#trash${resource}${i}`).html(`${player.totaltrash[resource]}`)
-                tt += player.totaltrash[resource]
+                $(`#trash${resource}${i}`).html(`${player.totalTrash[resource]}`)
+                tt += player.totalTrash[resource]
+                $(`#use${resource}${i}`).html(`${player.totalUse[resource]}`)
+                tu += player.totalUse[resource]
             }
             $(`#producetotal${i}`).html(`${tp}`)
             $(`#robbedtotal${i}`).html(`${tr}`)
             $(`#trashtotal${i}`).html(`${tt}`)
+            $(`#usetotal${i}`).html(`${tu}`)
             i += 1
         }
         $(`#counttotal`).html(`${total}`)
