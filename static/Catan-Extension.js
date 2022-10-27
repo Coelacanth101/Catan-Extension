@@ -613,9 +613,9 @@ socket.on('gamerecord',(data)=>{
     playerNumber = record[0][0].players.length
 })
 
-socket.on('rating', (data)=>{
-    $(`#player${data.number}name`).html(`<b>${data.name}</b>(${Math.round(data.rating)})`)
-})
+/*socket.on('rating', (data)=>{
+    $(`#player${data.number}name`).html(`<b>${data.name}</b>`)
+})*/
 
 //firstturnをクリック
 $(`#firstturn`).on(`click`, function(){
@@ -803,8 +803,8 @@ $(`#button_area`).on('click','#trade_button',function(){
 $('.resourcetap').on('click',function(){
     let amount = Number($(this).attr('data-amount')) + Number($(this).attr('data-step'))
     $(this).attr('data-amount',`${amount}`)
-    let resource = translate($(this).attr('id').slice(4))
-    $(this).html(`${resource}×${amount}`)
+    let resource = $(this).attr('id').slice(4)
+    $(this).html(`<img src="./${resource}pict.png" alt="${resource}pict" class="img_for_tap ${resource}_img_for_tap">${amount}`)
 })
 //貿易決定ボタンをクリック
 $(`#trade_area`).on('click','#tradedecide',function(){
@@ -2102,7 +2102,7 @@ const display = {
                         <div id="player${myNumber}row1" class="row">
                             <div class="nameline">
                                 <div id="player${myNumber}mark" class="playermark player${myNumber}color"><b>${myNumber+1}</b></div>
-                                <div id="player${myNumber}name" class="name showlog"><b>${players[myNumber].name}</b>(${Math.round(players[myNumber].rating)})</div>
+                                <div id="player${myNumber}name" class="name showlog"><b>${players[myNumber].name}</b></div>
                             </div>
                             <div id="player${myNumber}token" class="token line" >家:${players[myNumber].token.house} 街:${players[myNumber].token.city} 道:${players[myNumber].token.road}</div>
                         </div>
@@ -2129,7 +2129,7 @@ const display = {
                             <div id="player${myNumber}row1" class="row">
                                 <div class="nameline">
                                     <div id="player${myNumber}mark" class="playermark player${myNumber}color"><b>${myNumber+1}</b></div>
-                                    <div id="player${myNumber}name" class="name"><b>${players[myNumber].name}</b>(${Math.round(players[myNumber].rating)})
+                                    <div id="player${myNumber}name" class="name"><b>${players[myNumber].name}</b>
                                     </div>
                                 </div>
                                 <div id="player${myNumber}token" class="token line" >家:${players[myNumber].token.house} 街:${players[myNumber].token.city} 道:${players[myNumber].token.road}</div>
@@ -2158,7 +2158,7 @@ const display = {
                     <div id="player${myNumber}row1" class="row">
                         <div class="nameline">
                         <div id="player${myNumber}mark" class="playermark player${myNumber}color"><b>${myNumber+1}</b></div>
-                        <div id="player${myNumber}name" class="name showlog"><b>${players[myNumber].name}</b>(${Math.round(players[myNumber].rating)})</div>
+                        <div id="player${myNumber}name" class="name showlog"><b>${players[myNumber].name}</b></div>
                         </div>
                         <div id="player${myNumber}token" class="token line" >家:${players[myNumber].token.house} 街:${players[myNumber].token.city} 道:${players[myNumber].token.road}</div>
                     </div>
@@ -2382,7 +2382,7 @@ function translate(item){
     }else if(item === 'monopoly'){
         return '独'
     }else if(item === 'point'){
-        return '点'
+        return '➀'
     }else if(item === 'house'){
         return '家'
     }else if(item === 'city'){
@@ -2400,13 +2400,13 @@ function total(object){
 }
 function resetResourceTap(){
     $(`.resourcetap`).attr('data-amount', 0)
-    $(`.oretap`).html(`鉄×0`)
-    $(`.graintap`).html(`米×0`)
-    $(`.wooltap`).html(`羊×0`)
-    $(`.lumbertap`).html(`木×0`)
-    $(`.bricktap`).html(`煉×0`)
+    $(`.oretap`).html(`<img src="./orepict.png" alt="orepict" class="img_for_tap">0`)
+    $(`.graintap`).html(`<img src="./grainpict.png" alt="grainpict" class="img_for_tap">0`)
+    $(`.wooltap`).html(`<img src="./woolpict.png" alt="woolpict" class="img_for_tap">0`)
+    $(`.lumbertap`).html(`<img src="./lumberpict.png" alt="lumberpict" class="img_for_tap lumber_img_for_tap">0`)
+    $(`.bricktap`).html(`<img src="./brickpict.png" alt="brickpict" class="img_for_tap">0`)
 }
-/*
+
 socket.on('console',(game)=>{
     $(`#receiving_area`).show()
     console.log(game)
@@ -2416,4 +2416,4 @@ socket.on('checkrecord',(gameRecord)=>{
     $(`#receiving_area`).show()
     console.log(gameRecord)
     $(`#receiving_area`).hide()
-})*/
+})

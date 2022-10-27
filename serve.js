@@ -71,6 +71,7 @@ class Player{
     this.robbed = {ore:0,grain:0,wool:0,lumber:0,brick:0}
     this.totalTrash = {ore:0,grain:0,wool:0,lumber:0,brick:0}
     this.totalUse = {ore:0,grain:0,wool:0,lumber:0,brick:0}
+    this.lastPoint = ''
     this.log = {resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     token:{house:5, city:4, road:15},
     house:[],
@@ -89,7 +90,8 @@ class Player{
     renounce:false,
     trashpool:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     totalTrash:{ore:0,grain:0,wool:0,lumber:0,brick:0},
-    totalUse:{ore:0,grain:0,wool:0,lumber:0,brick:0}}
+    totalUse:{ore:0,grain:0,wool:0,lumber:0,brick:0},
+    lastPoint:''}
     const q = "select * from player_information where name= '" + this.name + "'";
     client
       .query(q)
@@ -105,8 +107,8 @@ class Player{
           });
           this.rating = 1500
         }
-        let data = {rating:this.rating, number:this.number, name:this.name}
-        io.emit('rating', data)
+        /*let data = {rating:this.rating, number:this.number, name:this.name}
+        io.emit('rating', data)*/
       })
       .catch((e) => {
       });
@@ -135,6 +137,7 @@ class Player{
     this.robbed = {ore:0,grain:0,wool:0,lumber:0,brick:0}
     this.totalTrash = {ore:0,grain:0,wool:0,lumber:0,brick:0}
     this.totalUse = {ore:0,grain:0,wool:0,lumber:0,brick:0}
+    this.lastPoint = ''
     this.log = {resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     token:{house:5, city:4, road:15},
     house:[],
@@ -153,7 +156,8 @@ class Player{
     renounce:false,
     trashpool:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     totalTrash:{ore:0,grain:0,wool:0,lumber:0,brick:0},
-    totalUse:{ore:0,grain:0,wool:0,lumber:0,brick:0}}
+    totalUse:{ore:0,grain:0,wool:0,lumber:0,brick:0},
+    lastPoint:''}
     const q = "select * from player_information where name= '" + this.name + "'";
     client
       .query(q)
@@ -169,8 +173,8 @@ class Player{
           });
           this.rating = 1500
         }
-        let data = {rating:this.rating, number:this.number, name:this.name}
-        io.emit('rating', data)
+        /*let data = {rating:this.rating, number:this.number, name:this.name}
+        io.emit('rating', data)*/
       })
       .catch((e) => {
       });
@@ -210,6 +214,7 @@ class Player{
     this.log.dice = this.dice
     this.log.toTrash = this.toTrash
     this.log.renounce = this.renounce
+    this.log.lastPoint = this.lastPoint
   };
   unDo(){
     for(let resource in this.log.resource){
@@ -246,6 +251,7 @@ class Player{
     this.dice = this.log.dice
     this.toTrash = this.log.toTrash
     this.renounce = this.log.renounce
+    this.lastPoint = this.log.lastPoint
     display.reloadRate(this.socketID)
     const logdata = {action:'undo', playername:this.name, turnPlayerID:game.turnPlayer.socketID}
     display.playLog(logdata)
@@ -264,6 +270,7 @@ class Player{
           game.lastActionPlayer = this
           this.token.house -= 1
           this.house.push({position:position, nodeNumber: board.nodePositionToNumber(position)})
+          this.lastPoint = 'house'
           board.house.push({type:'house', position:position, nodeNumber: board.nodePositionToNumber(position), owner:this})
           let tiles = board.tilesAroundNode(position)
           for(let tileposition of tiles){
@@ -319,6 +326,7 @@ class Player{
           game.lastActionPlayer = this
           this.token.house -= 1
           this.house.push({position:position, nodeNumber: board.nodePositionToNumber(position)})
+          this.lastPoint = 'house'
           board.house.push({type:'house', position:position, nodeNumber: board.nodePositionToNumber(position), owner:this})
           let tiles = board.tilesAroundNode(position)
           this.useResource(item)
@@ -360,6 +368,7 @@ class Player{
           this.token.city -= 1
           this.token.house += 1
           this.city.push({position:position, nodeNumber: board.nodePositionToNumber(position)})
+          this.lastPoint = 'city'
           board.city.push({type:'city', position:position, nodeNumber: board.nodePositionToNumber(position), owner:this})
           let tiles = board.tilesAroundNode(position)
           this.useResource(item)
@@ -525,6 +534,9 @@ class Player{
       }else{
         this.useResource('progress')
         this.progress[game.progressDeck[0]] += 1
+        if(game.progressDeck[0] = 'point'){
+          this.lastPoint = 'point'
+        }
         this.thisTurnDraw[game.progressDeck[0]] += 1
         game.progressDeck.splice(0, 1)
         display.deck()
@@ -979,8 +991,12 @@ class Player{
       if(game.largestArmyPlayer === ''){
         game.largestArmyPlayer = this
         this.largestArmy = 2
+        this.lastPoint = 'knight'
         display.titleOf(this)
       }else if(this.used.knight > game.largestArmyPlayer.used.knight){
+        if(this.largestArmy === 0){
+          this.lastPoint = 'knight'
+        }
         game.largestArmyPlayer.largestArmy = 0
         display.titleOf(game.largestArmyPlayer)
         this.largestArmy = 2
@@ -1697,6 +1713,9 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
     }else{
       game.longestRoadPlayer = ''
     }
+    if(game.longestRoadPlayer.longestRoad === 0){
+      game.longestRoadPlayer.lastPoint = 'road'
+    }
     for(let player of game.players){
       player.longestRoad = 0
     }
@@ -1814,7 +1833,7 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
     if(tileobj.produce !== true){
       return 0
     }
-    return this.productivity(tileobj)**2 / this.totalProductivityOf(tileobj.type)
+    return this.productivity(tileobj) / this.totalProductivityOf(tileobj.type) **(1/2)
   },
   //ノードの周りのタイルの合計相対生産力
   nodeRelativeProductivity(nodeNumber){
@@ -1831,10 +1850,11 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
     let totalRelativeProductivity = 0
     let totalAbsoluteProductivity = 0
     for(let resource in productivity){
-      totalRelativeProductivity += productivity[resource] / this.totalProductivityOf(resource)
-      totalAbsoluteProductivity += productivity[resource]
+      if(this.totalProductivityOf(resource)){
+        totalRelativeProductivity += productivity[resource] / this.totalProductivityOf(resource) ** (1/2)
+      }
     }
-    return totalRelativeProductivity * totalAbsoluteProductivity
+    return totalRelativeProductivity
   },
   //全ノードの合計相対生産力
   allNodesRelativeProductivity(){
@@ -3632,13 +3652,13 @@ function updateDatabase(winner){
   })
   .catch((e) => {
   });
-  /*const query = "select * from gameresult where playersnumber = '" + String(pl) + "'"
-  client
-  .query(query)
+  const newWinner = "insert into winner (player, ore, grain, wool, lumber, brick, road, house, city, largestarmy, longestroad, point, knight, roadbuild, monopoly, harvest, lastpoint) values(" + String(pl) + ", " + String(winner.totalUse.ore) + ", " + String(winner.totalUse.grain) + ", " + String(winner.totalUse.wool) + ", " + String(winner.totalUse.lumber) + ", " + String(winner.totalUse.brick) + ", " + String(15-winner.token.road) + ", " + String(5-winner.token.house) + ", " + String(4-winner.token.city) + ", " + String(winner.largestArmy) + ", " + String(winner.longestRoad) + ", " + String(winner.progress.point) + ", " + String(winner.progress.knight+winner.used.knight) + ", " + String(winner.progress.roadbuild+winner.used.roadbuild) + ", " + String(winner.progress.monopoly+winner.used.monopoly) + ", " + String(winner.progress.harvest+winner.used.harvest) + ", '" + String(winner.lastPoint) + "')";
+  client.query(newWinner)
   .then((res) => {
+    console.log('done')
   })
   .catch((e) => {
-  });*/
+  });
 }
 function Wab(Ra,Rb){
   return 1/(10**((Rb - Ra)/400)+1)

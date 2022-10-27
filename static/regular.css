@@ -174,7 +174,7 @@
                     display: flex;
                     margin:0 1px;
                     border: 1px solid black; 
-                    border-radius: 1px;
+                    border-radius: 15%;
                     width: 20px;
                     height: 20px;
                     justify-content: center;
@@ -196,7 +196,7 @@
                     display: flex;
                     margin:0 1px;
                     border: 1px solid black; 
-                    border-radius: 1px;
+                    border-radius: 15%;
                     width: 20px;
                     height: 20px;
                     justify-content: center;
@@ -208,14 +208,6 @@
                     color: red;
                 }
                 .back{
-                    display: flex;
-                    margin:0 1px;
-                    border: 1px solid black; 
-                    border-radius: 1px;
-                    width: 20px;
-                    height: 20px;
-                    justify-content: center;
-                    align-items: center;
                     background-color: black;
                 }
                 #buttons{
@@ -229,7 +221,6 @@
                     flex-wrap: wrap;
                     justify-content: center;
                     align-items: center;
-    
                 }
                 #push{
                     width: 100%;
@@ -253,10 +244,52 @@
                 .img_button{
                     background: #F0F0F0;
                 }
+                #knight_button{
+                    background-color:rgb(218, 195, 255);
+                }
+                #roadbuild_button{
+                    background-color: rgb(231, 182, 145);
+                }
+                #harvest_button{
+                    background-color: rgb(121, 194, 176);
+                }
+                #monopoly_button{
+                    background-color: rgb(160, 53, 182);
+                }
+                #negotiate_button{
+                    background-color: rgb(250, 229, 204);
+                }
+                #trade_button{
+                    background-color: rgb(189, 223, 255);
+                }
+                .OKbutton{
+                    background-color: rgb(255, 191, 95);
+                }
+                .orebutton{
+                    border-color: darkgrey;
+                    background-color: rgba(169, 169, 169, 0.30);
+                }
+                .grainbutton{
+                    border-color: gold;
+                    background-color: rgba(255, 215, 0, 0.55);
+                }
+                .woolbutton{
+                    background-color: lightgreen;
+                }
+                .lumberbutton{
+                    background-color: rgba(62, 187, 62);
+                }
+                .brickbutton{
+                    border-color: rgb(179, 8, 8);
+                    background: rgba(179, 8, 8, 0.30);
+                }
                 .img_for_button{
-                    height:95%;
+                    height:75%;
                     display: block;
                     margin: auto;
+                }
+                .dice_for_button{
+                    height: 90%;
                 }
                 #exhaustmessage{
                     width: 100%;
@@ -267,7 +300,6 @@
                     justify-content: center;
                     align-items: center;
                 }
-                
                 #monopoly_area{
                     width: 100%;
                     height: 100%;
@@ -282,6 +314,9 @@
                         margin: auto;
                         justify-content: center;
                         align-items: center;
+                    }
+                    .resource_button{
+                        height: 50px;
                     }
                     .quitprogress{
                         display: flex;
@@ -354,6 +389,11 @@
                     width: 15%;
                     height:auto;
                 }
+                .export_import_img{
+                    width: 100%;
+                    display: block;
+                    margin: auto;
+                }
                 .resourcetaparea{
                     width: 18%;
                     height: 100%;
@@ -371,6 +411,12 @@
                     font-size:larger;
                     font-weight: bold;
                     line-height: 100%;
+                }
+                .img_for_tap{
+                    width: 30px;
+                }
+                .lumber_img_for_tap{
+                    width: 35px;
                 }
                 #counterpart{
                     display: flex;
@@ -586,14 +632,12 @@
         #players{
             width: 100%;
         }
-        
         #buttons{
             width: 100%;
             height: 140px;
             position: absolute;
             top: -140px;
         }
-            
             .numberinput{
                 display:flex;
                 justify-content: center;
@@ -739,6 +783,14 @@
                         }
                     .take{
                         display: flex;
+                    }
+                    @media screen and (max-width:944px) {
+                        .img_for_tap{
+                            width: 25px;
+                        }
+                        .lumber_img_for_tap{
+                            width: 30px;
+                        }
                     }
                     #log_area{
                         position: absolute;
