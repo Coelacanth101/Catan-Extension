@@ -24,15 +24,19 @@
                 <option value="regular">能古島</option>
                 <option value="large">九州</option>
             </select>
+            <select name="" id="maxproductivity">
+                <option value="15">15</option>
+                <option value="14">14</option>
+                <option value="13" selected>13</option>
+                <option value="12">12</option>
+                <option value="11">11</option>
+                <option value="10">10</option>
+            </select>
         </div>
         <div id="tileamounts" class="numberinput">
             <div class="resourcecircleandform">
                 <div class="resourcecircle ore">鉄</div>
-                <div class="number_form">
-                    <button class="minusbutton">-</button>
-                    <input id="oretileamount" class="tilenumberinputa" value="" min="0" max="100" step="1">
-                    <button class="plusbutton">+</button>
-                </div>
+                <input id="oretileamount" class="tilenumberinput" type="number" value="" min="0" max="100" step="1">
             </div>
             <div class="resourcecircleandform">
                 <div class="resourcecircle grain">米</div>
@@ -50,6 +54,9 @@
                 <div class="resourcecircle brick">煉</div>
                 <input id="bricktileamount" class="tilenumberinput" type="number" value="" min="0" max="100" step="1">
             </div>
+        </div>
+        <div id="maxproductivity_area">
+            
         </div>
         <div id="gamestart"><button id="gamestartbutton" class="action_button">開始</button></div>
         <div id="field">

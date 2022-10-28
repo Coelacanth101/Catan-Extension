@@ -41,6 +41,7 @@ socket.on("nameInput", (playersName)=>{
 $('#gamestartbutton').on('click', function(){
     $(`#receiving_area`).show()
     let size = $(`#size`).val()
+    let maxproductivity = Number($(`#maxproductivity`).val())
     let ore = Number($(`#oretileamount`).val())
     let grain = Number($(`#ricetileamount`).val())
     let wool = Number($(`#wooltileamount`).val())
@@ -65,7 +66,7 @@ $('#gamestartbutton').on('click', function(){
     }else if(size === 'regular' && total > 18){
         return
     }
-    const data = {tileamounts:tileamounts,size:size}
+    const data = {tileamounts:tileamounts,size:size,maxproductivity:maxproductivity}
     socket.emit('start', data)
 })
 

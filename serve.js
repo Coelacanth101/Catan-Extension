@@ -1309,7 +1309,7 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
       let productivityCheck = true
       let i = 1
       while(i <= this.nodeLine[this.nodeLine.length - 1]){
-        if(this.nodeAbsouluteProductivity(i) > 13){
+        if(this.nodeAbsouluteProductivity(i) > data.maxproductivity){
           productivityCheck = false
           break
         }
@@ -1845,13 +1845,13 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
       if(tile.produce !== true){
         continue
       }
-      productivity[tile.type] += this.productivity(tile)
+      productivity[tile.type] += Math.log(this.productivity(tile) * 2)
     }
     let totalRelativeProductivity = 0
     let totalAbsoluteProductivity = 0
     for(let resource in productivity){
       if(this.totalProductivityOf(resource)){
-        totalRelativeProductivity += productivity[resource] / this.totalProductivityOf(resource) ** (1/2)
+        totalRelativeProductivity += productivity[resource] / Math.log(this.totalProductivityOf(resource))
       }
     }
     return totalRelativeProductivity
@@ -2930,6 +2930,7 @@ const display = {
     io.to(socketID).emit('hideexhaust','')
   },
   relativeNodes(){
+    display.log(board.allNodesRelativeProductivity())
     let nodes = highestIndex(board.allNodesRelativeProductivity())
     let data = {nodes:nodes}
     if(game.phase === 'setup'){
