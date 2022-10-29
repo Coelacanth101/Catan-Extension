@@ -15,6 +15,14 @@
     .resourcecircleandform{
         width: auto;
     }
+    .resourcecircle{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 20px;
+        border-radius: 50%;
+        font-weight: bold;
+    }
     .number_form{
         display: flex;
         height: 21px;
@@ -184,6 +192,9 @@
                     justify-content: center;
                     align-items: center;
                 }
+                .img_for_card{
+                    width: 100%
+                }
                 .titlesquare{
                     display: flex;
                     margin:0 1px;
@@ -269,24 +280,6 @@
                 .OKbutton{
                     background-color: rgb(255, 191, 95);
                 }
-                .orebutton{
-                    border-color: darkgrey;
-                    background-color: rgba(169, 169, 169, 0.30);
-                }
-                .grainbutton{
-                    border-color: gold;
-                    background-color: rgba(255, 215, 0, 0.55);
-                }
-                .woolbutton{
-                    background-color: lightgreen;
-                }
-                .lumberbutton{
-                    background-color: rgba(62, 187, 62);
-                }
-                .brickbutton{
-                    border-color: rgb(179, 8, 8);
-                    background: rgba(179, 8, 8, 0.30);
-                }
                 .img_for_button{
                     height:75%;
                     display: block;
@@ -344,6 +337,8 @@
                     width: 100%;
                     height: 100%;
                     margin: auto;
+                    display: flex;
+                    flex-wrap: wrap;
                     justify-content: center;
                     align-items: center;
                 }
@@ -367,20 +362,24 @@
                     align-items: center;
                 }
                 .lumber{
-                    background-color: rgb(62, 187, 62);
+                    border-color: rgb(62, 187, 62);
+                    background-color: rgb(62, 187, 62, 0.90);
                 }
                 .brick{
-                    background-color: rgb(179, 8, 8);
-                    color: white;
+                    border-color: rgb(179, 8, 8);
+                    background: rgba(179, 8, 8, 0.30);
                 }
                 .ore{
-                    background-color: darkgray;
+                    border-color: darkgrey;
+                    background-color: rgba(169, 169, 169, 0.30);
                 }
                 .grain{
-                    background-color: gold;
+                    border-color: gold;
+                    background-color: rgba(255, 215, 0, 0.55);
                 }
                 .wool{
-                    background-color: lightgreen;
+                    border-color: rgba(144, 238, 144);
+                    background-color: rgba(144, 238, 144, 0.70);
                 }
                 #negotiate_area{
                     width: 100%;
@@ -388,6 +387,12 @@
                     margin: auto;
                     justify-content: center;
                     align-items: center;
+                }
+                .give{
+                    display:flex;
+                }
+                .take{
+                    display: flex;
                 }
                 .do{
                     width: 15%;
@@ -563,15 +568,6 @@
                     height: calc(100% - 30px);
                     margin-top: 30px;
                 }
-                .logresource{
-                    display: inline-block;
-                    margin:0 0.5%;
-                    border: 1px solid black; 
-                    border-radius: 1px;
-                    width: 20px;
-                    height: 20px;
-                    text-align: center;
-                }
                 .logprogress{
                     display: inline-block;
                     margin:0 0.5%;
@@ -583,6 +579,9 @@
                     text-align: center;
                 }
                 .log{
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
                     margin: 2px 2%;
                 }
                 #dice_percentage{
@@ -648,23 +647,6 @@
                 align-items: center;
                 height: 50px;
                 position:relative
-            }
-            .give{
-                display:flex;
-            }
-                .resourcecircle{
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    height: 20px;
-                    border-radius: 50%;
-                    font-weight: bold;
-                }
-                .resourcenumber{
-                    width: 50px;
-                }
-            .take{
-                display: flex;
             }
             #log_area{
                 position: absolute;
@@ -762,31 +744,6 @@
                         height: 50px;
                         position:relative;
                         width: 100%;
-                    }
-                    .give{
-                        display:flex;
-                    }
-                        .resourcecircle{
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            height: 20px;
-                            border-radius: 50%;
-                            font-weight: bold;
-                        }@media screen and (max-width:1000px) {
-                            .resourcecircle{
-                                width: 100%;
-                            }
-                        }
-                        .resourcenumber{
-                            width: 50px;
-                        }@media screen and (max-width:1000px) {
-                            .resourcenumber{
-                                width: 81%;
-                            }
-                        }
-                    .take{
-                        display: flex;
                     }
                     @media screen and (max-width:944px) {
                         .img_for_tap{

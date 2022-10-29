@@ -233,7 +233,6 @@ socket.on('hideproposearea', (e)=>{
 socket.on('hidemessagearea', (e)=>{
     $(`#receiving_area`).show();
     $(`#message_area`).hide();
-    $(`#message_area`).html(``);
     $(`#receiving_area`).hide();
 });
 socket.on('hideplayers', (e)=>{
@@ -379,7 +378,7 @@ socket.on('showexhaust',(data)=>{
     $(`#receiving_area`).show();
     $(`#button_area`).append(`<div id="exhaustmessage"></div>`)
     for(let resource of data.exhaust){
-        $(`#exhaustmessage`).append(`<div class="resourcecard ${String(resource)}">${translate(String(resource))}</div>`)
+        $(`#exhaustmessage`).append(`<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`)
     }
     $(`#exhaustmessage`).append(`が枯渇しました`)
     $(`#receiving_area`).hide();
@@ -405,37 +404,39 @@ socket.on('deleterelativenodes',()=>{
 socket.on('playlog',(logdata)=>{
     $(`#receiving_area`).show();
     if(logdata.action === 'build'){
-        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が${translate(logdata.builditem)}を建設しました</p>`)
+        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が${translate(logdata.builditem)}を建設しました</div>`)
     }else if(logdata.action === 'draw'){
-        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>がカードを引きました</p>`)
+        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>がカードを引きました</div>`)
     }else if(logdata.action === 'progress'){
-        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が<span class="logprogress ${logdata.progress}card">${translate(logdata.progress)}</span>を使いました</p>`)
+        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<span class="logprogress ${logdata.progress}card">${translate(logdata.progress)}</span>を使いました</div>`)
     }else if(logdata.action === 'thiefmove'){
-        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が盗賊を移動しました</p>`)
+        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が盗賊を移動しました</div>`)
     }else if(logdata.action === 'robresource'){
-        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が<b>${logdata.robbed}</b>から強奪しました</p>`)
+        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<b>${logdata.robbed}</b>から強奪しました</div>`)
     }else if(logdata.action === 'monopoly'){
-        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が<span class="logresource ${logdata.resource}">${translate(logdata.resource)}</span>${logdata.amount}枚を独占しました</p>`)
+        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<div class="resourcecard ${String(logdata.resource)}"><img src="./${logdata.resource}pict.png" alt="${logdata.resource}" class="img_for_card"></div>${logdata.amount}枚を独占しました</div>`)
     }else if(logdata.action === 'harvest'){
-        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が<span class="logresource ${logdata.resource}">${translate(logdata.resource)}</span>を収穫しました</p>`)
+        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<div class="resourcecard ${String(logdata.resource)}"><img src="./${logdata.resource}pict.png" alt="${logdata.resource}" class="img_for_card"></div>を収穫しました</div>`)
     }else if(logdata.action === 'undo'){
-        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が取り消しました</p>`)
+        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が取り消しました</div>`)
     }else if(logdata.action === 'trash'){
-        let trashresource = ''
-        for(let resource in logdata.resource){
-            let i = 1
-            while(i <= logdata.resource[resource]){
-                trashresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
-                i += 1
+        for(let data of logdata.trashRecord){
+            let trash = ''
+            for(let resource in data.trashresource){
+                let i = 1
+                while(i <= data.trashresource[resource]){
+                    trash += `<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                    i += 1
+                }
             }
+            $(`#logmessage`).append(`<div class="log"><b>${data.name}</b>が${trash}を捨てました</div>`)
         }
-        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が${trashresource}を捨てました</p>`)
     }else if(logdata.action === 'propose'){
         let giveresource = ''
         for(let resource in logdata.giveresource){
             let i = 1
             while(i <= logdata.giveresource[resource]){
-                giveresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
+                giveresource += `<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                 i += 1
             }
         }
@@ -443,21 +444,21 @@ socket.on('playlog',(logdata)=>{
         for(let resource in logdata.takeresource){
             let i = 1
             while(i <= logdata.takeresource[resource]){
-                takeresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
+                takeresource += `<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                 i += 1
             }
         }
-        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が<b>${logdata.proposee}</b>に${giveresource}と${takeresource}の交換を提案しました</p>`)
+        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<b>${logdata.proposee}</b>に${giveresource}と${takeresource}の交換を提案しました</div>`)
     }else if(logdata.action === 'accept'){
-        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が同意しました</p>`)
+        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が同意しました</div>`)
     }else if(logdata.action === 'deny'){
-        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が拒否しました</p>`)
+        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が拒否しました</div>`)
     }else if(logdata.action === 'trade'){
         let exportresource = ''
         for(let resource in logdata.exportresource){
             let i = 1
             while(i <= logdata.exportresource[resource]){
-                exportresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
+                exportresource += `<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                 i += 1
             }
         }
@@ -465,26 +466,26 @@ socket.on('playlog',(logdata)=>{
         for(let resource in logdata.importresource){
             let i = 1
             while(i <= logdata.importresource[resource]){
-                importresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
+                importresource += `<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                 i += 1
             }
         }
-        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>が${exportresource}を${importresource}と交換しました</p>`)
+        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が${exportresource}を${importresource}と交換しました</div>`)
     }else if(logdata.action === 'burst'){
         let burstPlayers = ``
         for(let player of logdata.players){
             burstPlayers += `と<b>${player.name}</b>`
         }
         burstPlayers = burstPlayers.slice(1)
-        $(`#logmessage`).append(`<p class="log">${burstPlayers}がバーストしました</p>`)
+        $(`#logmessage`).append(`<div class="log">${burstPlayers}がバーストしました</div>`)
     }else if(logdata.action === 'dice'){
-        $(`#logmessage`).append(`<p class="log"><b>${logdata.playername}</b>がダイスを振りました</p>`)
+        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>がダイスを振りました</div>`)
     }else if(logdata.action === 'exhaust'){
         let exhaustresource = ''
         for(let resource of logdata.exhaust){
-            exhaustresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
+            exhaustresource += `<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
         }
-        $(`#logmessage`).append(`<p class="log">${exhaustresource}が枯渇しました</p>`)
+        $(`#logmessage`).append(`<div class="log">${exhaustresource}が枯渇しました</div>`)
     }
     $(`#receiving_area`).hide();
 })
@@ -495,22 +496,27 @@ socket.on('deleteplaylog',()=>{
     $(`#receiving_area`).hide();
 })
 socket.on('message',(logdata)=>{
+    $(`#message_area`).html(``)
     if(logdata.action === 'trash'){
         $(`#receiving_area`).show();
         $(`#button_area`).hide()
         $(`#message_area`).show()
-        if(!$(`#message_area div:first`).hasClass(`trash`)){
-            $(`#message_area`).html(``)
-        }
-        let trashresource = ''
-        for(let resource in logdata.resource){
-            let i = 1
-            while(i <= logdata.resource[resource]){
-                trashresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
-                i += 1
+        let trashMessage = ''
+        for(let data of logdata.trashRecord){
+            console.log(data)
+            let trash = ''
+            for(let resource in data.trashresource){
+                console.log(record)
+                console.log(data.trashresource[resource])
+                let i = 1
+                while(i <= data.trashresource[resource]){
+                    trash += `<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                    i += 1
+                }
             }
+            trashMessage += `<div class="message trash"><b>${data.name}</b>が${trash}を捨てました</div>`
         }
-        $(`#message_area`).append(`<div class="message trash"><b>${logdata.playername}</b>が${trashresource}を捨てました</div>`)
+        $(`#message_area`).append(`${trashMessage}`)
     }
     if(socket.id === logdata.turnPlayerID){
         return
@@ -519,36 +525,27 @@ socket.on('message',(logdata)=>{
     $(`#button_area`).hide()
     $(`#message_area`).show()
     if(logdata.action === 'build'){
-        $(`#message_area`).html(``)
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が${translate(logdata.builditem)}を建設しました</div>`)
     }else if(logdata.action === 'draw'){
-        $(`#message_area`).html(``)
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>がカードを引きました</div>`)
     }else if(logdata.action === 'progress'){
-        $(`#message_area`).html(``)
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<span class="logprogress ${logdata.progress}card">${translate(logdata.progress)}</span>を使いました</div>`)
     }else if(logdata.action === 'thiefmove'){
-        $(`#message_area`).html(``)
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が盗賊を移動しました</div>`)
     }else if(logdata.action === 'robresource'){
-        $(`#message_area`).html(``)
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<b>${logdata.robbed}</b>から強奪しました</div>`)
     }else if(logdata.action === 'monopoly'){
-        $(`#message_area`).html(``)
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<span class="logresource ${logdata.resource}">${translate(logdata.resource)}</span>${logdata.amount}枚を独占しました</div>`)
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<div class="resourcecard ${String(logdata.resource)}"><img src="./${logdata.resource}pict.png" alt="${logdata.yresource}" class="img_for_card"></div>${logdata.amount}枚を独占しました</div>`)
     }else if(logdata.action === 'harvest'){
-        $(`#message_area`).html(``)
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<span class="logresource ${logdata.resource}">${translate(logdata.resource)}</span>を収穫しました</div>`)
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<div class="resourcecard ${String(logdata.resource)}"><img src="./${logdata.resource}pict.png" alt="${logdata.yresource}" class="img_for_card"></div>を収穫しました</div>`)
     }else if(logdata.action === 'undo'){
-        $(`#message_area`).html(``)
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が取り消しました</div>`)
     }else if(logdata.action === 'propose'){
-        $(`#message_area`).html(``)
         let giveresource = ''
         for(let resource in logdata.giveresource){
             let i = 1
             while(i <= logdata.giveresource[resource]){
-                giveresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
+                giveresource += `<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                 i += 1
             }
         }
@@ -556,24 +553,21 @@ socket.on('message',(logdata)=>{
         for(let resource in logdata.takeresource){
             let i = 1
             while(i <= logdata.takeresource[resource]){
-                takeresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
+                takeresource += `<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                 i += 1
             }
         }
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<b>${logdata.proposee}</b>に${giveresource}と${takeresource}の交換を提案しました</div>`)
     }else if(logdata.action === 'accept'){
-        $(`#message_area`).html(``)
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が同意しました</div>`)
     }else if(logdata.action === 'deny'){
-        $(`#message_area`).html(``)
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が拒否しました</div>`)
     }else if(logdata.action === 'trade'){
-        $(`#message_area`).html(``)
         let exportresource = ''
         for(let resource in logdata.exportresource){
             let i = 1
             while(i <= logdata.exportresource[resource]){
-                exportresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
+                exportresource += `<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                 i += 1
             }
         }
@@ -581,13 +575,12 @@ socket.on('message',(logdata)=>{
         for(let resource in logdata.importresource){
             let i = 1
             while(i <= logdata.importresource[resource]){
-                importresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
+                importresource += `<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                 i += 1
             }
         }
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が${exportresource}を${importresource}と交換しました</div>`)
     }else if(logdata.action === 'burst'){
-        $(`#message_area`).html(``)
         let burstPlayers = ``
         for(let player of logdata.players){
             burstPlayers += `と<b>${player.name}</b>`
@@ -595,12 +588,11 @@ socket.on('message',(logdata)=>{
         burstPlayers = burstPlayers.slice(1)
         $(`#message_area`).append(`<div class="message">${burstPlayers}がバーストしました</div>`)
     }else if(logdata.action === 'dice'){
-        $(`#message_area`).html(``)
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>がダイスを振りました</div>`)
     }else if(logdata.action === 'exhaust'){
         let exhaustresource = ''
         for(let resource of logdata.exhaust){
-            exhaustresource += `<span class="logresource ${resource}">${translate(resource)}</span>`
+            exhaustresource += `<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
         }
         $(`#message_area`).append(`<div class="message">${exhaustresource}が枯渇しました</div>`)
     }
@@ -842,13 +834,6 @@ $(`#button_area`).on('click','#negotiate_button',function(){
     socket.emit('negotiatebuttonclick', data)
 });
 
-/*//交渉資源ボタンをクリック
-$(`.resourcetaparea`).on('click','.resourcetap',function(){
-    let amount = Number($(this).attr('data-amount'))+1
-    $(this).attr('data-amount',`${amount}`)
-    let resource = translate($(this).attr('id').slice(4))
-    $(this).html(`${resource}×${amount}`)
-})*/
 
 //交渉相手ボタンをクリック
 $(`#counterpart`).on('click','.propose_button',function(){
@@ -1595,7 +1580,7 @@ const display = {
                             $(`#player${p.number}resource`).append(`<br>`);
                             t = 0
                         }
-                        $(`#player${p.number}resource`).append(`<div class="resourcecard ${String(r)}">${translate(String(r))}</div>`);
+                        $(`#player${p.number}resource`).append(`<div class="resourcecard ${String(r)}"><img src="./${r}pict.png" alt="${r}" class="img_for_card"></div>`);
                         i += 1
                         t += 1
                     };
@@ -1613,7 +1598,7 @@ const display = {
             for(r in data.resource){
                 let i = 1
                 while(i <= data.resource[r]){
-                    $(`#player${data.number}resource`).append(`<div class="resourcecard ${String(r)}">${translate(String(r))}</div>`);
+                    $(`#player${data.number}resource`).append(`<div class="resourcecard ${String(r)}"><img src="./${r}pict.png" alt="${r}" class="img_for_card"></div>`);
                     i += 1
                 };
             };
@@ -1876,11 +1861,11 @@ const display = {
                 let i = 1
                 let j = 1
                 while(i <= data.giveresource[resource]){
-                    $(`#proposeterm .giveresource`).append(`<div class="resourcecard ${String(resource)}">${translate(String(resource))}</div>`);
+                    $(`#proposeterm .giveresource`).append(`<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
                     i += 1
                 };
                 while(j <= data.takeresource[resource]){
-                    $(`#proposeterm .takeresource`).append(`<div class="resourcecard ${String(resource)}">${translate(String(resource))}</div>`);
+                    $(`#proposeterm .takeresource`).append(`<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
                     j += 1
                 };
             };
@@ -1895,11 +1880,11 @@ const display = {
                 let i = 1
                 let j = 1
                 while(i <= data.takeresource[resource]){
-                    $(`#proposeterm .giveresource`).append(`<div class="resourcecard ${String(resource)}">${translate(String(resource))}</div>`);
+                    $(`#proposeterm .giveresource`).append(`<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
                     i += 1
                 };
                 while(j <= data.giveresource[resource]){
-                    $(`#proposeterm .takeresource`).append(`<div class="resourcecard ${String(resource)}">${translate(String(resource))}</div>`);
+                    $(`#proposeterm .takeresource`).append(`<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
                     j += 1
                 };
             };
@@ -1913,11 +1898,11 @@ const display = {
                 let i = 1
                 let j = 1
                 while(i <= data.giveresource[resource]){
-                    $(`#proposeterm .giveresource`).append(`<div class="resourcecard ${String(resource)}">${translate(String(resource))}</div>`);
+                    $(`#proposeterm .giveresource`).append(`<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
                     i += 1
                 };
                 while(j <= data.takeresource[resource]){
-                    $(`#proposeterm .takeresource`).append(`<div class="resourcecard ${String(resource)}">${translate(String(resource))}</div>`);
+                    $(`#proposeterm .takeresource`).append(`<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
                     j += 1
                 };
             };
@@ -1955,7 +1940,7 @@ const display = {
             for(r in p.resource){
                 let i = 1
                 while(i <= p.resource[r]){
-                    $(`#player${p.number}resource`).append(`<div class="resourcecard ${String(r)}">${translate(String(r))}</div>`);
+                    $(`#player${p.number}resource`).append(`<div class="resourcecard ${String(r)}"><img src="./${r}pict.png" alt="${r}" class="img_for_card"></div>`);
                     i += 1
                 };
             }
@@ -2270,7 +2255,7 @@ const display = {
             for(let r in player.resource){
                 let i = 1
                 while(i <= player.resource[r]){
-                    $(`#player${pn}resource`).append(`<div class="resourcecard ${String(r)}">${translate(String(r))}</div>`);
+                    $(`#player${pn}resource`).append(`<div class="resourcecard ${String(r)}"><img src="./${r}pict.png" alt="${r}" class="img_for_card"></div>`);
                     i += 1
                 };
             };
@@ -2396,11 +2381,11 @@ function total(object){
 }
 function resetResourceTap(){
     $(`.resourcetap`).attr('data-amount', 0)
-    $(`.oretap`).html(`<img src="./orepict.png" alt="orepict" class="img_for_tap">0`)
-    $(`.graintap`).html(`<img src="./grainpict.png" alt="grainpict" class="img_for_tap">0`)
-    $(`.wooltap`).html(`<img src="./woolpict.png" alt="woolpict" class="img_for_tap">0`)
-    $(`.lumbertap`).html(`<img src="./lumberpict.png" alt="lumberpict" class="img_for_tap lumber_img_for_tap">0`)
-    $(`.bricktap`).html(`<img src="./brickpict.png" alt="brickpict" class="img_for_tap">0`)
+    $(`.ore`+`.resourcetap`).html(`<img src="./orepict.png" alt="orepict" class="img_for_tap">0`)
+    $(`.grain`+`.resourcetap`).html(`<img src="./grainpict.png" alt="grainpict" class="img_for_tap">0`)
+    $(`.wool`+`.resourcetap`).html(`<img src="./woolpict.png" alt="woolpict" class="img_for_tap">0`)
+    $(`.lumber`+`.resourcetap`).html(`<img src="./lumberpict.png" alt="lumberpict" class="img_for_tap lumber_img_for_tap">0`)
+    $(`.brick`+`.resourcetap`).html(`<img src="./brickpict.png" alt="brickpict" class="img_for_tap">0`)
 }
 
 socket.on('console',(game)=>{

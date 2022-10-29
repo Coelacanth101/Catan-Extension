@@ -41,6 +41,7 @@ let playersName = []
 const buildResource = {house:{ore:0,grain:1,wool:1,lumber:1,brick:1}, city:{ore:3,grain:2,wool:0,lumber:0,brick:0}, progress:{ore:1,grain:1,wool:1,lumber:0,brick:0}, road:{ore:0,grain:0,wool:0,lumber:1,brick:1}}
 let progress = {knight:20, roadbuild:3, harvest:3, monopoly:3, point:5}
 let gameRecord = []
+let trashRecord = []
 
 
 class Player{
@@ -255,8 +256,6 @@ class Player{
     this.renounce = this.log.renounce
     this.lastPoint = this.log.lastPoint
     display.reloadRate(this.socketID)
-    const logdata = {action:'undo', playername:this.name, turnPlayerID:game.turnPlayer.socketID}
-    display.playLog(logdata)
   }
   build(item, position){
     if(item === 'house'){
@@ -766,46 +765,6 @@ class Player{
     this.thisTurnDraw = {knight:0, roadbuild:0, harvest:0, monopoly:0, point:0}
     game.turnEnd()
   }
-  /*trash(resource){
-    if(this.resource[resource] < 1){
-      display.hideReceivingArea()
-    }else if(this.toTrash >= 1){
-      this.resource[resource] -= 1
-      this.toTrash -= 1
-      this.trashpool[resource] += 1
-      if(this.toTrash === 0){
-        discard(this, game.burstPlayer)
-        if(game.burstPlayer.length === 0){
-          for(let player of game.players){
-            let totaltrash = 0
-            for(let r in player.trashpool){
-              totaltrash += player.trashpool[r]
-            }
-            if(totaltrash !== 0){
-            const logdata = {action:'trash', playername:player.name, resource:player.trashpool, turnPlayerID:game.turnPlayer.socketID}
-            display.message(logdata)
-            display.playLog(logdata)
-            }
-            for(let resource in game.allResource){
-              game.allResource[resource] += player.trashpool[resource]
-              player.totaltrash[resource] += player.trashpool[resource]
-              player.trashpool[resource] = 0
-            }
-          }
-          game.phase = 'thiefmove'
-          recordLog()
-          display.hideBurstArea()
-          display.thiefRed()
-        }else{
-          display.showBurstArea()
-        }
-      }else{
-        display.showBurstArea()
-      }
-      display.resourceOf(this)
-    }
-    
-  }*/
   keep(keepresource){
     display.resetKeepResourceTo(this.socketID)
     if(!game.burstPlayer.includes(this)){
@@ -827,11 +786,19 @@ class Player{
         this.resource = keepresource
         this.toTrash = 0
         discard(this, game.burstPlayer)
-        const logdata = {action:'trash', playername:this.name, resource:trashresource, turnPlayerID:game.turnPlayer.socketID}
-        display.message(logdata)
-        display.playLog(logdata)
+        let trashData = {name:this.name, socketID:this.socketID, trashresource:trashresource}
+        for(let data of trashRecord){
+          if(data.socketID === this.socketID){
+            discard(data, trashRecord)
+          }
+        }
+        trashRecord.push(trashData)
         if(game.burstPlayer.length === 0){
           game.phase = 'thiefmove'
+          const logdata = {action:'trash', trashRecord:trashRecord}
+          display.message(logdata)
+          display.playLog(logdata)
+          trashRecord = []
           recordLog()
           display.hideBurstArea()
           display.thiefRed()
@@ -3453,6 +3420,7 @@ io.on("connection", (socket)=>{
         display.allMighty()
         const logdata = {action:'undo', playername:game.lastActionPlayer.name, turnPlayerID:game.turnPlayer.socketID}
         display.message(logdata)
+        display.playLog(logdata)
       }else{
         display.hideReceivingArea()
         display.hideReceivingArea()
@@ -3635,7 +3603,7 @@ function updateDatabase(winner){
         if(res.rows[0].activestreakwins > res.rows[0].beststreakwins){
           res.rows[0].beststreakwins = res.rows[0].activestreakwins
         }
-        player.rating = winnersNewRating(player, losers)
+        player.rating = rating.winnersNewRating(player, losers)
         if(player.rating > res.rows[0].bestrating){
           res.rows[0].bestrating = player.rating
         }
@@ -3648,7 +3616,7 @@ function updateDatabase(winner){
       }else{
         let losex = 'lose' + String(pl)
         res.rows[0][losex] += 1
-        player.rating = losersNewRating(player, w)
+        player.rating = rating.losersNewRating(player, w)
         const query = "update player_information set " + losex + " = " + res.rows[0][losex] + ", rating = " + player.rating + ", activestreakwins = 0 where name = '" + player.name + "'";
         client.query(query)
         .then((res) => {
@@ -3683,23 +3651,24 @@ function updateDatabase(winner){
   .catch((e) => {
   });
 }
-function Wab(Ra,Rb){
-  return 1/(10**((Rb - Ra)/400)+1)
+const rating ={K:32,
+  Wab(Ra,Rb){
+    return 1/(10**((Rb - Ra)/400)+1)
+  },
+  winnersNewRating(w, loserslist){
+    if(loserslist.length === 0){
+      return w.rating
+    }
+    let currentRating = w.rating
+    for(let loser of loserslist){
+      currentRating += this.K*(1-this.Wab(w.rating, loser.rating))
+    }
+    return currentRating
+  },
+  losersNewRating(loser, winner){
+    return loser.rating + this.K*(0-this.Wab(loser.rating, winner.rating))
+  },
 }
-function winnersNewRating(w, loserslist){
-  if(loserslist.length === 0){
-    return w.rating
-  }
-  let currentRating = w.rating
-  for(let loser of loserslist){
-    currentRating += 32*(1-Wab(w.rating, loser.rating))
-  }
-  return currentRating
-}
-function losersNewRating(loser, winner){
-  return loser.rating + 32*(0-Wab(loser.rating, winner.rating))
-}
-
 function total(object){
   let total = 0
   for(let key in object){
