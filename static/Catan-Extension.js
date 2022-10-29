@@ -365,7 +365,7 @@ socket.on('thisturnblack', ()=>{
 })
 socket.on('addused', (data)=>{
     $(`#receiving_area`).show();
-    $(`#player${data.number}used`).append(`<div id="thisturn" class="progresscard ${String(data.progresscard)}card">${translate(String(data.progresscard))}</div>`);
+    $(`#player${data.number}used`).append(`<div id="thisturn" class="card ${data.progress}"><img src="./${data.progress}.png" alt="${data.progress}" class="img_for_card ${data.progress}"></div>`);
     $(`#receiving_area`).hide();
 })
 socket.on('deck',(data)=>{
@@ -378,7 +378,7 @@ socket.on('showexhaust',(data)=>{
     $(`#receiving_area`).show();
     $(`#button_area`).append(`<div id="exhaustmessage"></div>`)
     for(let resource of data.exhaust){
-        $(`#exhaustmessage`).append(`<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`)
+        $(`#exhaustmessage`).append(`<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`)
     }
     $(`#exhaustmessage`).append(`が枯渇しました`)
     $(`#receiving_area`).hide();
@@ -408,15 +408,15 @@ socket.on('playlog',(logdata)=>{
     }else if(logdata.action === 'draw'){
         $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>がカードを引きました</div>`)
     }else if(logdata.action === 'progress'){
-        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<span class="logprogress ${logdata.progress}card">${translate(logdata.progress)}</span>を使いました</div>`)
+        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<div class="card ${logdata.progress}"><img src="./${logdata.progress}.png" alt="${logdata.progress}" class="img_for_card ${logdata.progress}"></div>を使いました</div>`)
     }else if(logdata.action === 'thiefmove'){
         $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が盗賊を移動しました</div>`)
     }else if(logdata.action === 'robresource'){
         $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<b>${logdata.robbed}</b>から強奪しました</div>`)
     }else if(logdata.action === 'monopoly'){
-        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<div class="resourcecard ${String(logdata.resource)}"><img src="./${logdata.resource}pict.png" alt="${logdata.resource}" class="img_for_card"></div>${logdata.amount}枚を独占しました</div>`)
+        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<div class="card ${String(logdata.resource)}"><img src="./${logdata.resource}pict.png" alt="${logdata.resource}" class="img_for_card"></div>${logdata.amount}枚を独占しました</div>`)
     }else if(logdata.action === 'harvest'){
-        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<div class="resourcecard ${String(logdata.resource)}"><img src="./${logdata.resource}pict.png" alt="${logdata.resource}" class="img_for_card"></div>を収穫しました</div>`)
+        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<div class="card ${String(logdata.resource)}"><img src="./${logdata.resource}pict.png" alt="${logdata.resource}" class="img_for_card"></div>を収穫しました</div>`)
     }else if(logdata.action === 'undo'){
         $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が取り消しました</div>`)
     }else if(logdata.action === 'trash'){
@@ -425,7 +425,7 @@ socket.on('playlog',(logdata)=>{
             for(let resource in data.trashresource){
                 let i = 1
                 while(i <= data.trashresource[resource]){
-                    trash += `<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                    trash += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                     i += 1
                 }
             }
@@ -436,7 +436,7 @@ socket.on('playlog',(logdata)=>{
         for(let resource in logdata.giveresource){
             let i = 1
             while(i <= logdata.giveresource[resource]){
-                giveresource += `<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                giveresource += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                 i += 1
             }
         }
@@ -444,7 +444,7 @@ socket.on('playlog',(logdata)=>{
         for(let resource in logdata.takeresource){
             let i = 1
             while(i <= logdata.takeresource[resource]){
-                takeresource += `<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                takeresource += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                 i += 1
             }
         }
@@ -458,7 +458,7 @@ socket.on('playlog',(logdata)=>{
         for(let resource in logdata.exportresource){
             let i = 1
             while(i <= logdata.exportresource[resource]){
-                exportresource += `<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                exportresource += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                 i += 1
             }
         }
@@ -466,7 +466,7 @@ socket.on('playlog',(logdata)=>{
         for(let resource in logdata.importresource){
             let i = 1
             while(i <= logdata.importresource[resource]){
-                importresource += `<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                importresource += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                 i += 1
             }
         }
@@ -483,7 +483,7 @@ socket.on('playlog',(logdata)=>{
     }else if(logdata.action === 'exhaust'){
         let exhaustresource = ''
         for(let resource of logdata.exhaust){
-            exhaustresource += `<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+            exhaustresource += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
         }
         $(`#logmessage`).append(`<div class="log">${exhaustresource}が枯渇しました</div>`)
     }
@@ -510,7 +510,7 @@ socket.on('message',(logdata)=>{
                 console.log(data.trashresource[resource])
                 let i = 1
                 while(i <= data.trashresource[resource]){
-                    trash += `<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                    trash += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                     i += 1
                 }
             }
@@ -529,15 +529,15 @@ socket.on('message',(logdata)=>{
     }else if(logdata.action === 'draw'){
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>がカードを引きました</div>`)
     }else if(logdata.action === 'progress'){
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<span class="logprogress ${logdata.progress}card">${translate(logdata.progress)}</span>を使いました</div>`)
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<div class="card ${logdata.progress}"><img src="./${logdata.progress}.png" alt="${logdata.progress}" class="img_for_card ${logdata.progress}"></div>を使いました</div>`)
     }else if(logdata.action === 'thiefmove'){
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が盗賊を移動しました</div>`)
     }else if(logdata.action === 'robresource'){
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<b>${logdata.robbed}</b>から強奪しました</div>`)
     }else if(logdata.action === 'monopoly'){
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<div class="resourcecard ${String(logdata.resource)}"><img src="./${logdata.resource}pict.png" alt="${logdata.yresource}" class="img_for_card"></div>${logdata.amount}枚を独占しました</div>`)
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<div class="card ${String(logdata.resource)}"><img src="./${logdata.resource}pict.png" alt="${logdata.resource}" class="img_for_card"></div>${logdata.amount}枚を独占しました</div>`)
     }else if(logdata.action === 'harvest'){
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<div class="resourcecard ${String(logdata.resource)}"><img src="./${logdata.resource}pict.png" alt="${logdata.yresource}" class="img_for_card"></div>を収穫しました</div>`)
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<div class="card ${String(logdata.resource)}"><img src="./${logdata.resource}pict.png" alt="${logdata.yresource}" class="img_for_card"></div>を収穫しました</div>`)
     }else if(logdata.action === 'undo'){
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が取り消しました</div>`)
     }else if(logdata.action === 'propose'){
@@ -545,7 +545,7 @@ socket.on('message',(logdata)=>{
         for(let resource in logdata.giveresource){
             let i = 1
             while(i <= logdata.giveresource[resource]){
-                giveresource += `<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                giveresource += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                 i += 1
             }
         }
@@ -553,7 +553,7 @@ socket.on('message',(logdata)=>{
         for(let resource in logdata.takeresource){
             let i = 1
             while(i <= logdata.takeresource[resource]){
-                takeresource += `<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                takeresource += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                 i += 1
             }
         }
@@ -567,7 +567,7 @@ socket.on('message',(logdata)=>{
         for(let resource in logdata.exportresource){
             let i = 1
             while(i <= logdata.exportresource[resource]){
-                exportresource += `<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                exportresource += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                 i += 1
             }
         }
@@ -575,7 +575,7 @@ socket.on('message',(logdata)=>{
         for(let resource in logdata.importresource){
             let i = 1
             while(i <= logdata.importresource[resource]){
-                importresource += `<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                importresource += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                 i += 1
             }
         }
@@ -592,7 +592,7 @@ socket.on('message',(logdata)=>{
     }else if(logdata.action === 'exhaust'){
         let exhaustresource = ''
         for(let resource of logdata.exhaust){
-            exhaustresource += `<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+            exhaustresource += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
         }
         $(`#message_area`).append(`<div class="message">${exhaustresource}が枯渇しました</div>`)
     }
@@ -1580,7 +1580,7 @@ const display = {
                             $(`#player${p.number}resource`).append(`<br>`);
                             t = 0
                         }
-                        $(`#player${p.number}resource`).append(`<div class="resourcecard ${String(r)}"><img src="./${r}pict.png" alt="${r}" class="img_for_card"></div>`);
+                        $(`#player${p.number}resource`).append(`<div class="card ${String(r)}"><img src="./${r}pict.png" alt="${r}" class="img_for_card"></div>`);
                         i += 1
                         t += 1
                     };
@@ -1598,7 +1598,7 @@ const display = {
             for(r in data.resource){
                 let i = 1
                 while(i <= data.resource[r]){
-                    $(`#player${data.number}resource`).append(`<div class="resourcecard ${String(r)}"><img src="./${r}pict.png" alt="${r}" class="img_for_card"></div>`);
+                    $(`#player${data.number}resource`).append(`<div class="card ${String(r)}"><img src="./${r}pict.png" alt="${r}" class="img_for_card"></div>`);
                     i += 1
                 };
             };
@@ -1652,7 +1652,7 @@ const display = {
                 for(pr in p.progress){
                     let i = 1
                     while(i <= p.progress[pr]){
-                        $(`#player${p.number}progress`).append(`<div class="progresscard ${String(pr)}card">${translate(String(pr))}</div>`);
+                        $(`#player${p.number}progress`).append(`<div class="card ${pr}"><img src="./${pr}.png" alt="${pr}" class="img_for_card ${pr}"></div>`);
                         i += 1
                     };
                 };
@@ -1660,7 +1660,7 @@ const display = {
                 for(pr in p.progress){
                     let i = 1
                     while(i <= p.progress[pr]){
-                        $(`#player${p.number}progress`).append(`<div class="progresscard back">背</div>`);
+                        $(`#player${p.number}progress`).append(`<div class="card back">背</div>`);
                         i += 1
                     };
                 };
@@ -1675,7 +1675,7 @@ const display = {
             for(pr in data.progress){
                 let i = 1
                 while(i <= data.progress[pr]){
-                    $(`#player${data.number}progress`).append(`<div class="progresscard ${String(pr)}card">${translate(String(pr))}</div>`);
+                    $(`#player${data.number}progress`).append(`<div class="card ${pr}"><img src="./${pr}.png" alt="${pr}" class="img_for_card ${pr}"></div>`);
                     i += 1
                 };
             };
@@ -1683,7 +1683,7 @@ const display = {
             for(pr in data.progress){
                 let i = 1
                 while(i <= data.progress[pr]){
-                    $(`#player${data.number}progress`).append(`<div class="progresscard back">背</div>`);
+                    $(`#player${data.number}progress`).append(`<div class="card back">背</div>`);
                     i += 1
                 };
             };
@@ -1697,7 +1697,7 @@ const display = {
             for(u in p.used){
                 let i = 1
                 while(i <= p.used[u]){
-                    $(`#player${p.number}used`).append(`<div class="progresscard ${String(u)}card">${translate(String(u))}</div>`);
+                    $(`#player${p.number}used`).append(`<div class="card ${u}"><img src="./${u}.png" alt="${u}" class="img_for_card ${u}"></div>`);
                     i += 1
                 };
             };
@@ -1710,7 +1710,7 @@ const display = {
         for(u in data.used){
             let i = 1
             while(i <= data.used[u]){
-                $(`#player${data.number}used`).append(`<div class="progresscard ${String(u)}card">${translate(String(u))}</div>`);
+                $(`#player${data.number}used`).append(`<div class="card ${u}"><img src="./${u}.png" alt="${u}" class="img_for_card ${u}"></div>`);
                 i += 1
             };
         };
@@ -1861,11 +1861,11 @@ const display = {
                 let i = 1
                 let j = 1
                 while(i <= data.giveresource[resource]){
-                    $(`#proposeterm .giveresource`).append(`<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
+                    $(`#proposeterm .giveresource`).append(`<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
                     i += 1
                 };
                 while(j <= data.takeresource[resource]){
-                    $(`#proposeterm .takeresource`).append(`<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
+                    $(`#proposeterm .takeresource`).append(`<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
                     j += 1
                 };
             };
@@ -1880,11 +1880,11 @@ const display = {
                 let i = 1
                 let j = 1
                 while(i <= data.takeresource[resource]){
-                    $(`#proposeterm .giveresource`).append(`<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
+                    $(`#proposeterm .giveresource`).append(`<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
                     i += 1
                 };
                 while(j <= data.giveresource[resource]){
-                    $(`#proposeterm .takeresource`).append(`<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
+                    $(`#proposeterm .takeresource`).append(`<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
                     j += 1
                 };
             };
@@ -1898,11 +1898,11 @@ const display = {
                 let i = 1
                 let j = 1
                 while(i <= data.giveresource[resource]){
-                    $(`#proposeterm .giveresource`).append(`<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
+                    $(`#proposeterm .giveresource`).append(`<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
                     i += 1
                 };
                 while(j <= data.takeresource[resource]){
-                    $(`#proposeterm .takeresource`).append(`<div class="resourcecard ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
+                    $(`#proposeterm .takeresource`).append(`<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
                     j += 1
                 };
             };
@@ -1940,14 +1940,14 @@ const display = {
             for(r in p.resource){
                 let i = 1
                 while(i <= p.resource[r]){
-                    $(`#player${p.number}resource`).append(`<div class="resourcecard ${String(r)}"><img src="./${r}pict.png" alt="${r}" class="img_for_card"></div>`);
+                    $(`#player${p.number}resource`).append(`<div class="card ${String(r)}"><img src="./${r}pict.png" alt="${r}" class="img_for_card"></div>`);
                     i += 1
                 };
             }
             for(pr in p.progress){
                 let i = 1
                 while(i <= p.progress[pr]){
-                    $(`#player${p.number}progress`).append(`<div class="progresscard ${String(pr)}card">${translate(String(pr))}</div>`);
+                    $(`#player${p.number}progress`).append(`<div class="card ${pr}"><img src="./${pr}.png" alt="${pr}" class="img_for_card ${pr}"></div>`);
                     i += 1
                 };
             };
@@ -1968,11 +1968,11 @@ const display = {
           <tr>
             <th>名</th>
             <th></th>
-            <th class="ore">鉄</th>
-            <th class="grain">米</th>
-            <th class="wool">羊</th>
-            <th class="lumber">木</th>
-            <th class="brick">煉</th>
+            <th class="ore"><img src="./orepict.png" alt="orepict" class="img_for_table"></th>
+            <th class="grain"><img src="./grainpict.png" alt="grainpict" class="img_for_table"></th>
+            <th class="wool"><img src="./woolpict.png" alt="woolpict" class="img_for_table"></th>
+            <th class="lumber"><img src="./lumberpict.png" alt="lumberpict" class="img_for_table"></th>
+            <th class="brick"><img src="./brickpict.png" alt="brickpict" class="img_for_table"></th>
             <th>計</th>
           </tr>`)
         let i = 0
@@ -2255,7 +2255,7 @@ const display = {
             for(let r in player.resource){
                 let i = 1
                 while(i <= player.resource[r]){
-                    $(`#player${pn}resource`).append(`<div class="resourcecard ${String(r)}"><img src="./${r}pict.png" alt="${r}" class="img_for_card"></div>`);
+                    $(`#player${pn}resource`).append(`<div class="card ${String(r)}"><img src="./${r}pict.png" alt="${r}" class="img_for_card"></div>`);
                     i += 1
                 };
             };
@@ -2272,7 +2272,7 @@ const display = {
             for(let pr in player.progress){
                 let i = 1
                 while(i <= player.progress[pr]){
-                    $(`#player${pn}progress`).append(`<div class="progresscard ${String(pr)}card">${translate(String(pr))}</div>`);
+                    $(`#player${pn}progress`).append(`<div class="card ${pr}"><img src="./${pr}.png" alt="${pr}" class="img_for_card ${pr}"></div>`);
                     i += 1
                 };
             };
@@ -2281,7 +2281,7 @@ const display = {
             for(let u in player.used){
                 let i = 1
                 while(i <= player.used[u]){
-                    $(`#player${pn}used`).append(`<div class="progresscard ${String(u)}card">${translate(String(u))}</div>`);
+                    $(`#player${pn}used`).append(`<div class="card ${u}"><img src="./${u}.png" alt="${u}" class="img_for_card ${u}"></div>`);
                     i += 1
                 };
             };

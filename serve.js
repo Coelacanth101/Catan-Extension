@@ -2312,7 +2312,7 @@ const display = {
     io.emit('usedof', data)
   },
   addUsed(progresscard){
-    let data = {number:game.turnPlayer.number, progresscard:progresscard}
+    let data = {number:game.turnPlayer.number, progress:progresscard}
     io.emit('addused', data)
   },
   allPlayerInformation(){
