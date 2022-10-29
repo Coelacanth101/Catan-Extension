@@ -503,11 +503,8 @@ socket.on('message',(logdata)=>{
         $(`#message_area`).show()
         let trashMessage = ''
         for(let data of logdata.trashRecord){
-            console.log(data)
             let trash = ''
             for(let resource in data.trashresource){
-                console.log(record)
-                console.log(data.trashresource[resource])
                 let i = 1
                 while(i <= data.trashresource[resource]){
                     trash += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
