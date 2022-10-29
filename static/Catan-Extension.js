@@ -860,7 +860,6 @@ $(`#counterpart`).on('click','.propose_button',function(){
     const givelumber = Number($(`#givelumber`).attr('data-amount'))
     const givebrick = Number($(`#givebrick`).attr('data-amount'))
     const giveresource = {ore:giveore,grain:givegrain,wool:givewool,lumber:givelumber,brick:givebrick}
-    console.log(giveresource)
     const takeore = Number($(`#takeore`).attr('data-amount'))
     const takegrain = Number($(`#takegrain`).attr('data-amount'))
     const takewool = Number($(`#takewool`).attr('data-amount'))
@@ -1969,13 +1968,9 @@ const display = {
             };
         };
         $(`#dice_percentage`).show()
-        let total = 0
         let blocktotal = 0
-        for(let number in data.diceData.diceCount){
-            total += data.diceData.diceCount[number]
-        }
         for(let dicenumber in data.diceData.diceCount){
-            $(`#percentage${dicenumber}`).html(`${Math.round(data.diceData.diceCount[dicenumber]/total*100)}%`)
+            $(`#percentage${dicenumber}`).html(`${Math.round(data.diceData.diceCount[dicenumber]/data.diceData.diceCount.total*100)}%`)
             $(`#count${dicenumber}`).html(`${data.diceData.diceCount[dicenumber]}`)
             for(let index in data.diceData.thiefBlock[dicenumber]){
                 $(`#thiefblock${dicenumber}-${index}`).html(`${data.diceData.thiefBlock[dicenumber][index]}/${data.diceData.thiefStay[dicenumber][index]}`)
@@ -2056,7 +2051,7 @@ const display = {
             $(`#usetotal${i}`).html(`${tu}`)
             i += 1
         }
-        $(`#counttotal`).html(`${total}`)
+        $(`#counttotal`).html(`${data.diceData.diceCount.total}`)
         $(`#thiefblocktotal`).html(`${blocktotal}`)
         $(`#receiving_area`).hide();
     },
@@ -2358,11 +2353,11 @@ const display = {
 
 
 //コンソールに表示
-/*function game(){
+function game(){
     $(`#receiving_area`).show()
     let e = ''
     socket.emit('console',e)
-}*/
+}
 function translate(item){
     if(item === 'ore'){
         return '鉄'

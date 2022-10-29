@@ -72,6 +72,7 @@ class Player{
     this.totalTrash = {ore:0,grain:0,wool:0,lumber:0,brick:0}
     this.totalUse = {ore:0,grain:0,wool:0,lumber:0,brick:0}
     this.lastPoint = ''
+    this.initial_productivity = {ore:0,grain:0,wool:0,lumber:0,brick:0}
     this.log = {resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     token:{house:5, city:4, road:15},
     house:[],
@@ -138,6 +139,7 @@ class Player{
     this.totalTrash = {ore:0,grain:0,wool:0,lumber:0,brick:0}
     this.totalUse = {ore:0,grain:0,wool:0,lumber:0,brick:0}
     this.lastPoint = ''
+    this.initial_productivity = {ore:0,grain:0,wool:0,lumber:0,brick:0}
     this.log = {resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     token:{house:5, city:4, road:15},
     house:[],
@@ -1125,6 +1127,13 @@ class Player{
       game.renounce.push(this)
     }
     display.renounce()
+  };
+  calculateMyProductivity(){
+    for(let house of this.house){
+      for(let resource in this.initial_productivity){
+        this.initial_productivity[resource] += board.nodeAbsouluteProductivityEachResource(house.nodeNumber)[resource]
+      }
+    }
   }
 }
 
@@ -1132,7 +1141,7 @@ class Player{
 
 
 
-const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[], nodeLine:[],roadLine:[], dice:[],landLine:[],ports:{oreport:[], grainport:[], woolport:[], lumberport:[], brickport:[],genericport:[]},log:{island:[],thief:'',house:[], city:[], road:[]},islandData:'', diceCount:{2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0},
+const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[], nodeLine:[],roadLine:[], dice:[],landLine:[],ports:{oreport:[], grainport:[], woolport:[], lumberport:[], brickport:[],genericport:[]},log:{island:[],thief:'',house:[], city:[], road:[]},islandData:'', diceCount:{2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0,total:0},
   resizeBoard(size){
     if(size === 'large'){
       this.size = size
@@ -1170,7 +1179,7 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
     this.road = []
     this.dice = []
     this.ports = {oreport:[], grainport:[], woolport:[], lumberport:[], brickport:[],genericport:[]}
-    this.diceCount = {2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0}
+    this.diceCount = {2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0,total:0}
   },
   recordLog(){
     for(let line of this.island){
@@ -1523,6 +1532,7 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
       takeRecord()
     }
     this.diceCount[dice1+dice2] += 1
+    this.diceCount.total += 1
     recordLog()
     game.lastActionPlayer = game.turnPlayer
   },
@@ -1848,7 +1858,6 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
       productivity[tile.type] += Math.log(this.productivity(tile) * 2)
     }
     let totalRelativeProductivity = 0
-    let totalAbsoluteProductivity = 0
     for(let resource in productivity){
       if(this.totalProductivityOf(resource)){
         totalRelativeProductivity += productivity[resource] / Math.log(this.totalProductivityOf(resource))
@@ -1870,6 +1879,7 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
     }
     return productivity
   },
+  //ノードの合計生産力
   nodeAbsouluteProductivity(nodeNumber){
     const nodePosition = this.nodeNumberToPosition(nodeNumber)
     const tilepositions = this.tilesAroundNode(nodePosition)
@@ -1879,6 +1889,17 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
       totalProductivity += this.productivity(tile)
     }
     return totalProductivity
+  },
+  //ノードの資源別生産力
+  nodeAbsouluteProductivityEachResource(nodeNumber){
+    const nodePosition = this.nodeNumberToPosition(nodeNumber)
+    const tilepositions = this.tilesAroundNode(nodePosition)
+    let productivity = {ore:0,grain:0,wool:0,lumber:0,brick:0}
+    for(let tileposition of tilepositions){
+      let tile = this.island[tileposition[0]][tileposition[1]]
+      productivity[tile.type] += this.productivity(tile)
+    }
+    return productivity
   },
   initialize(){
     if(this.size === 'large'){
@@ -1899,7 +1920,7 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
     this.islandData = ''
     this.log = {island:[[],[],[],[],[],[],[],[],[]],thief:'',house:[], city:[], road:[]}
     this.size = ''
-    this.diceCount = {2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0}
+    this.diceCount = {2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0,total:0}
   }
 }
 
@@ -2135,6 +2156,9 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
       if(this.turnPlayer === this.players[0]){
         makeNewTurnRecord()
         this.phase = 'beforedice'
+        for(let player of this.players){
+          player.calculateMyProductivity()
+        }
       }else{
         this.turnPlayer = this.players[this.players.indexOf(this.turnPlayer)-1];
       }
@@ -2930,7 +2954,6 @@ const display = {
     io.to(socketID).emit('hideexhaust','')
   },
   relativeNodes(){
-    display.log(board.allNodesRelativeProductivity())
     let nodes = highestIndex(board.allNodesRelativeProductivity())
     let data = {nodes:nodes}
     if(game.phase === 'setup'){
@@ -3653,10 +3676,9 @@ function updateDatabase(winner){
   })
   .catch((e) => {
   });
-  const newWinner = "insert into winner (player, ore, grain, wool, lumber, brick, road, house, city, largestarmy, longestroad, point, knight, roadbuild, monopoly, harvest, lastpoint) values(" + String(pl) + ", " + String(winner.totalUse.ore) + ", " + String(winner.totalUse.grain) + ", " + String(winner.totalUse.wool) + ", " + String(winner.totalUse.lumber) + ", " + String(winner.totalUse.brick) + ", " + String(15-winner.token.road) + ", " + String(5-winner.token.house) + ", " + String(4-winner.token.city) + ", " + String(winner.largestArmy) + ", " + String(winner.longestRoad) + ", " + String(winner.progress.point) + ", " + String(winner.progress.knight+winner.used.knight) + ", " + String(winner.progress.roadbuild+winner.used.roadbuild) + ", " + String(winner.progress.monopoly+winner.used.monopoly) + ", " + String(winner.progress.harvest+winner.used.harvest) + ", '" + String(winner.lastPoint) + "')";
+  const newWinner = "insert into winner (name, number_of_players, my_number, turn, used_ore, used_grain, used_wool, used_lumber, used_brick, road_on_board, house_on_board, city_on_board, largestarmy, longestroad, owned_point, owned_knight, owned_roadbuild, owned_monopoly, owned_harvest, lastpoint, ore_initial_productivity, grain_initial_productivity, wool_initial_productivity, lumber_initial_productivity, brick_initial_productivity) values('" + winner.name + "', " + String(pl) + ", " + String(winner.number+1) + ", " + board.diceCount.total + ", " + String(winner.totalUse.ore) + ", " + String(winner.totalUse.grain) + ", " + String(winner.totalUse.wool) + ", " + String(winner.totalUse.lumber) + ", " + String(winner.totalUse.brick) + ", " + String(15-winner.token.road) + ", " + String(5-winner.token.house) + ", " + String(4-winner.token.city) + ", " + String(winner.largestArmy) + ", " + String(winner.longestRoad) + ", " + String(winner.progress.point) + ", " + String(winner.progress.knight+winner.used.knight) + ", " + String(winner.progress.roadbuild+winner.used.roadbuild) + ", " + String(winner.progress.monopoly+winner.used.monopoly) + ", " + String(winner.progress.harvest+winner.used.harvest) + ", '" + String(winner.lastPoint) + "', " + winner.initial_productivity.ore + ", " + winner.initial_productivity.grain + ", " + winner.initial_productivity.wool + ", " + winner.initial_productivity.lumber + ", " + winner.initial_productivity.brick + ")";
   client.query(newWinner)
   .then((res) => {
-    console.log('done')
   })
   .catch((e) => {
   });
