@@ -353,7 +353,7 @@
                     align-items: center;
                 }
                 .lumber{
-                    border-color: rgb(62, 187, 62);
+                    border-color: rgb(116, 61, 25);
                     background-color: rgb(62, 187, 62, 0.90);
                 }
                 .brick{
@@ -736,7 +736,7 @@ td{
                             width: 25px;
                         }
                         .lumber_img_for_tap{
-                            width: 30px;
+                            width: 27px;
                         }
                     }
                     #log_area{

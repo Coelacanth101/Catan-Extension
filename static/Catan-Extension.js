@@ -2027,9 +2027,9 @@ const display = {
             for(let resource in player.produce){
                 $(`#produce${resource}${i}`).html(`${player.produce[resource]}`)
                 tp += player.produce[resource]
-                $(`#robbed${resource}${i}`).html(`${player.robbed[resource]}`)
-                tr += player.robbed[resource]
-                $(`#trash${resource}${i}`).html(`${player.totalTrash[resource]}`)
+                $(`#robbed${resource}${i}`).html(`${player.robbed[resource]*(-1)}`)
+                tr -= player.robbed[resource]
+                $(`#trash${resource}${i}`).html(`${player.totalTrash[resource]*(-1)}`)
                 tt += player.totalTrash[resource]
                 $(`#use${resource}${i}`).html(`${player.totalUse[resource]}`)
                 tu += player.totalUse[resource]
@@ -2342,11 +2342,11 @@ const display = {
 
 
 //コンソールに表示
-function game(){
+/*function game(){
     $(`#receiving_area`).show()
     let e = ''
     socket.emit('console',e)
-}
+}*/
 function translate(item){
     if(item === 'ore'){
         return '鉄'
