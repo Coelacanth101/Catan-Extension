@@ -773,11 +773,11 @@ $(`#keepbutton`).on('click',function(){
     const data = {socketID:socket.id, keepresource:keepresource}
     socket.emit('keepresource', data)
 })
-//バーストあとn枚
-$(`.keepbutton`).on('click',function(){
+/*//バーストあとn枚
+$(`.keeptap`).on('click',function(){
     keepremained -= 1
     $('#keepremained').html(`${keepremained}`)
-})
+})*/
 //バーストリセットボタンクリック
 $(`#resetkeepbutton`).on('click',function(){
     $('#keepremained').html(`${defaultkeep}`)
@@ -791,6 +791,13 @@ $(`#button_area`).on('click','#trade_button',function(){
 });
 //交渉、貿易、バースト資源ボタンをクリック
 $('.resourcetap').on('click',function(){
+    let total = Number($(`#keepore`).attr(`data-amount`)) + Number($(`#keepgrain`).attr(`data-amount`)) + Number($(`#keepwool`).attr(`data-amount`)) + Number($(`#keeplumber`).attr(`data-amount`)) + Number($(`#keepbrick`).attr(`data-amount`)) + Number($(this).attr('data-step'))
+    if($(this).hasClass('keeptap') && total > defaultkeep){
+        return
+    }else if($(this).hasClass('keeptap') && total <= defaultkeep){
+        keepremained -= 1
+        $('#keepremained').html(`${keepremained}`)
+    }
     let amount = Number($(this).attr('data-amount')) + Number($(this).attr('data-step'))
     $(this).attr('data-amount',`${amount}`)
     let resource = $(this).attr('id').slice(4)
