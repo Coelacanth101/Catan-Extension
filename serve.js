@@ -2195,6 +2195,10 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     this.players[player.number].socketID = player.socketID
     display.allMightyTo(player.socketID)
     display.allMightyTo(oldID)
+    const logdata = {action:'takeover', playername:this.players[player.number].name, socketID:player.socketID}
+    setTimeout(()=>{
+      display.message(logdata)
+    },100)
   },
   initialize(){
     this.players.length = 0;
@@ -3055,11 +3059,254 @@ function highestIndex(array){
   }
   return highestIndex
 }
-
+function takeRecord(){
+  let record = {players:[],thief:'',dice:[], undo:true}
+  for(let player of game.players){
+    let playerRecord = {
+      resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
+      token:{house:5, city:4, road:15},
+      house:[],
+      city:[],
+      road:[],
+      progress:{knight:0, roadbuild:0, harvest:0, monopoly:0, point:0},
+      used:{knight:0, roadbuild:0, harvest:0, monopoly:0, point:0},
+      largestArmy:0,
+      longestRoad:0
+    }
+    for(let r in player.resource){
+      playerRecord.resource[r] = player.resource[r]
+    }
+    for(let t in player.token){
+      playerRecord.token[t] = player.token[t]
+    }
+    for(let h of player.house){
+      playerRecord.house.push(h.nodeNumber)
+    }
+    for(let c of player.city){
+      playerRecord.city.push(c.nodeNumber)
+    }
+    for(let r of player.road){
+      let road = {roadNumber:r.roadNumber, roadDegree:r.roadDegree}
+      playerRecord.road.push(road)
+    }
+    for(let p in player.progress){
+      playerRecord.progress[p] = player.progress[p]
+    }
+    for(let u in player.used){
+      playerRecord.used[u] = player.used[u]
+    }
+    playerRecord.largestArmy = player.largestArmy
+    playerRecord.longestRoad = player.longestRoad
+    record.players.push(playerRecord)
+  }
+  record.thief = board.tileButtonPositionToNumber(board.thief.position)
+  record.dice[0] = board.dice[0]
+  record.dice[1] = board.dice[1]
+  let lastTurn = gameRecord[gameRecord.length-1]
+  if(lastTurn.length > 0){
+    let lastAction = lastTurn[lastTurn.length-1]
+    lastAction.undo = false
+  }else if(gameRecord.length >= 2){
+    let previousTurn = gameRecord[gameRecord.length-2]
+    let lastAction = previousTurn[previousTurn.length-1]
+    lastAction.undo = false
+  }
+  gameRecord[gameRecord.length-1].push(record)
+}
+function takeRecordUndeletable(){
+  let record = {players:[],thief:'',dice:[], undo:false}
+  for(let player of game.players){
+    let playerRecord = {
+      resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
+      token:{house:5, city:4, road:15},
+      house:[],
+      city:[],
+      road:[],
+      progress:{knight:0, roadbuild:0, harvest:0, monopoly:0, point:0},
+      used:{knight:0, roadbuild:0, harvest:0, monopoly:0, point:0},
+      largestArmy:0,
+      longestRoad:0
+    }
+    for(let r in player.resource){
+      playerRecord.resource[r] = player.resource[r]
+    }
+    for(let t in player.token){
+      playerRecord.token[t] = player.token[t]
+    }
+    for(let h of player.house){
+      playerRecord.house.push(h.nodeNumber)
+    }
+    for(let c of player.city){
+      playerRecord.city.push(c.nodeNumber)
+    }
+    for(let r of player.road){
+      let road = {roadNumber:r.roadNumber, roadDegree:r.roadDegree}
+      playerRecord.road.push(road)
+    }
+    for(let p in player.progress){
+      playerRecord.progress[p] = player.progress[p]
+    }
+    for(let u in player.used){
+      playerRecord.used[u] = player.used[u]
+    }
+    playerRecord.largestArmy = player.largestArmy
+    playerRecord.longestRoad = player.longestRoad
+    record.players.push(playerRecord)
+  }
+  record.thief = board.tileButtonPositionToNumber(board.thief.position)
+  record.dice[0] = board.dice[0]
+  record.dice[1] = board.dice[1]
+  let lastTurn = gameRecord[gameRecord.length-1]
+  if(lastTurn.length > 0){
+    let lastAction = lastTurn[lastTurn.length-1]
+    lastAction.undo = false
+  }else if(gameRecord.length >= 2){
+    let previousTurn = gameRecord[gameRecord.length-2]
+    let lastAction = previousTurn[previousTurn.length-1]
+    lastAction.undo = false
+  }
+  gameRecord[gameRecord.length-1].push(record)
+}
+function makeNewTurnRecord(){
+  gameRecord.push([])
+}
+function deleteLastAction(){
+  let lastTurn = gameRecord[gameRecord.length-1]
+  if(lastTurn.length > 0){
+    let lastAction = lastTurn[lastTurn.length-1]
+    if(lastAction.undo === true){
+      lastTurn.pop()
+    }
+  }else{
+    let previousTurn = gameRecord[gameRecord.length-2]
+    let lastAction = previousTurn[previousTurn.length-1]
+    if(lastAction.undo === true || game.phase === 'beforedice'){
+      gameRecord.pop()
+    }
+    if(gameRecord.length === 1){
+      gameRecord[0].pop()
+    }
+  }
+}
+function lastActionUndeletable(){
+  let lastTurn = gameRecord[gameRecord.length-1]
+  let lastAction
+  if(lastTurn.length > 0){
+    lastAction = lastTurn[lastTurn.length-1]
+  }else{
+    let previousTurn = gameRecord[gameRecord.length-2]
+    lastAction = previousTurn[previousTurn.length-1]
+  }
+  lastAction.undo = false
+}
+function updateDatabase(winner){
+  let pl = game.players.length
+  if(pl <= 2){
+    return
+  }
+  let w = ''
+  let losers = []
+  for(let player of game.players){
+    if(player === winner){
+      w = {name:player.name, rating:player.rating}
+    }else{
+      losers.push({name:player.name, rating:player.rating})
+    }
+  }
+  for(let player of game.players){
+    const query = "select * from player_information where name= '" + player.name + "'";
+    client
+    .query(query)
+    .then((res) => {
+      if(player === winner){
+        let winx = 'win' + String(pl)
+        res.rows[0][winx] += 1
+        res.rows[0].activestreakwins += 1
+        if(res.rows[0].activestreakwins > res.rows[0].beststreakwins){
+          res.rows[0].beststreakwins = res.rows[0].activestreakwins
+        }
+        player.rating = rating.winnersNewRating(player, losers)
+        if(player.rating > res.rows[0].bestrating){
+          res.rows[0].bestrating = player.rating
+        }
+        const query = "update player_information set " + winx + " = " + res.rows[0][winx] + ", rating = " + player.rating + ", activestreakwins = " + res.rows[0].activestreakwins + ", beststreakwins = " + res.rows[0].beststreakwins + ", bestrating = " + res.rows[0].bestrating + " where name = '" + player.name + "'";
+        client.query(query)
+        .then((res) => {
+        })
+        .catch((e) => {
+        });
+      }else{
+        let losex = 'lose' + String(pl)
+        res.rows[0][losex] += 1
+        player.rating = rating.losersNewRating(player, w)
+        const query = "update player_information set " + losex + " = " + res.rows[0][losex] + ", rating = " + player.rating + ", activestreakwins = 0 where name = '" + player.name + "'";
+        client.query(query)
+        .then((res) => {
+        })
+        .catch((e) => {
+        });
+      }
+    })
+    .catch((e) => {
+    });
+  }
+  const query = "select * from gameresult where playersnumber = '" + String(pl) + "'"
+  client
+  .query(query)
+  .then((res) => {
+    let pn = 'player' + String(winner.number+1)
+    res.rows[0][pn] += 1
+    const query = "update gameresult set " + pn + " = " + res.rows[0][pn] + " where playersnumber = " + pl;
+    client
+    .query(query)
+    .then((res) => {
+    })
+    .catch((e) => {
+    });
+  })
+  .catch((e) => {
+  });
+  const newWinner = "insert into winner (name, number_of_players, my_number, turn, used_ore, used_grain, used_wool, used_lumber, used_brick, road_on_board, house_on_board, city_on_board, largestarmy, longestroad, owned_point, owned_knight, owned_roadbuild, owned_monopoly, owned_harvest, lastpoint, ore_initial_productivity, grain_initial_productivity, wool_initial_productivity, lumber_initial_productivity, brick_initial_productivity) values('" + winner.name + "', " + String(pl) + ", " + String(winner.number+1) + ", " + board.diceCount.total + ", " + String(winner.totalUse.ore) + ", " + String(winner.totalUse.grain) + ", " + String(winner.totalUse.wool) + ", " + String(winner.totalUse.lumber) + ", " + String(winner.totalUse.brick) + ", " + String(15-winner.token.road) + ", " + String(5-winner.token.house) + ", " + String(4-winner.token.city) + ", " + String(winner.largestArmy) + ", " + String(winner.longestRoad) + ", " + String(winner.progress.point) + ", " + String(winner.progress.knight+winner.used.knight) + ", " + String(winner.progress.roadbuild+winner.used.roadbuild) + ", " + String(winner.progress.monopoly+winner.used.monopoly) + ", " + String(winner.progress.harvest+winner.used.harvest) + ", '" + String(winner.lastPoint) + "', " + winner.initial_productivity.ore + ", " + winner.initial_productivity.grain + ", " + winner.initial_productivity.wool + ", " + winner.initial_productivity.lumber + ", " + winner.initial_productivity.brick + ")";
+  client.query(newWinner)
+  .then((res) => {
+  })
+  .catch((e) => {
+  });
+}
+const rating ={K:32,
+  Wab(Ra,Rb){
+    return 1/(10**((Rb - Ra)/400)+1)
+  },
+  winnersNewRating(w, loserslist){
+    if(loserslist.length === 0){
+      return w.rating
+    }
+    let currentRating = w.rating
+    for(let loser of loserslist){
+      currentRating += this.K*(1-this.Wab(w.rating, loser.rating))
+    }
+    return currentRating
+  },
+  losersNewRating(loser, winner){
+    return loser.rating + this.K*(0-this.Wab(loser.rating, winner.rating))
+  },
+}
+function total(object){
+  let total = 0
+  for(let key in object){
+      total += object[key]
+  }
+  return total
+}
 io.on("connection", (socket)=>{
 
   //画面の表示
   display.allMightyTo(socket.id)
+  if(game.phase !== 'nameinputting'){
+    setTimeout(()=>{
+      io.to(socket.id).emit("pleasetakeover",'')
+    },100)
+  }
   
   //名前の入力
   socket.on("nameInput", (namedata)=>{
@@ -3435,244 +3682,3 @@ io.on("connection", (socket)=>{
       socket.emit('checkrecord', gameRecord)
     })
 })
-
-function takeRecord(){
-  let record = {players:[],thief:'',dice:[], undo:true}
-  for(let player of game.players){
-    let playerRecord = {
-      resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
-      token:{house:5, city:4, road:15},
-      house:[],
-      city:[],
-      road:[],
-      progress:{knight:0, roadbuild:0, harvest:0, monopoly:0, point:0},
-      used:{knight:0, roadbuild:0, harvest:0, monopoly:0, point:0},
-      largestArmy:0,
-      longestRoad:0
-    }
-    for(let r in player.resource){
-      playerRecord.resource[r] = player.resource[r]
-    }
-    for(let t in player.token){
-      playerRecord.token[t] = player.token[t]
-    }
-    for(let h of player.house){
-      playerRecord.house.push(h.nodeNumber)
-    }
-    for(let c of player.city){
-      playerRecord.city.push(c.nodeNumber)
-    }
-    for(let r of player.road){
-      let road = {roadNumber:r.roadNumber, roadDegree:r.roadDegree}
-      playerRecord.road.push(road)
-    }
-    for(let p in player.progress){
-      playerRecord.progress[p] = player.progress[p]
-    }
-    for(let u in player.used){
-      playerRecord.used[u] = player.used[u]
-    }
-    playerRecord.largestArmy = player.largestArmy
-    playerRecord.longestRoad = player.longestRoad
-    record.players.push(playerRecord)
-  }
-  record.thief = board.tileButtonPositionToNumber(board.thief.position)
-  record.dice[0] = board.dice[0]
-  record.dice[1] = board.dice[1]
-  let lastTurn = gameRecord[gameRecord.length-1]
-  if(lastTurn.length > 0){
-    let lastAction = lastTurn[lastTurn.length-1]
-    lastAction.undo = false
-  }else if(gameRecord.length >= 2){
-    let previousTurn = gameRecord[gameRecord.length-2]
-    let lastAction = previousTurn[previousTurn.length-1]
-    lastAction.undo = false
-  }
-  gameRecord[gameRecord.length-1].push(record)
-}
-function takeRecordUndeletable(){
-  let record = {players:[],thief:'',dice:[], undo:false}
-  for(let player of game.players){
-    let playerRecord = {
-      resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
-      token:{house:5, city:4, road:15},
-      house:[],
-      city:[],
-      road:[],
-      progress:{knight:0, roadbuild:0, harvest:0, monopoly:0, point:0},
-      used:{knight:0, roadbuild:0, harvest:0, monopoly:0, point:0},
-      largestArmy:0,
-      longestRoad:0
-    }
-    for(let r in player.resource){
-      playerRecord.resource[r] = player.resource[r]
-    }
-    for(let t in player.token){
-      playerRecord.token[t] = player.token[t]
-    }
-    for(let h of player.house){
-      playerRecord.house.push(h.nodeNumber)
-    }
-    for(let c of player.city){
-      playerRecord.city.push(c.nodeNumber)
-    }
-    for(let r of player.road){
-      let road = {roadNumber:r.roadNumber, roadDegree:r.roadDegree}
-      playerRecord.road.push(road)
-    }
-    for(let p in player.progress){
-      playerRecord.progress[p] = player.progress[p]
-    }
-    for(let u in player.used){
-      playerRecord.used[u] = player.used[u]
-    }
-    playerRecord.largestArmy = player.largestArmy
-    playerRecord.longestRoad = player.longestRoad
-    record.players.push(playerRecord)
-  }
-  record.thief = board.tileButtonPositionToNumber(board.thief.position)
-  record.dice[0] = board.dice[0]
-  record.dice[1] = board.dice[1]
-  let lastTurn = gameRecord[gameRecord.length-1]
-  if(lastTurn.length > 0){
-    let lastAction = lastTurn[lastTurn.length-1]
-    lastAction.undo = false
-  }else if(gameRecord.length >= 2){
-    let previousTurn = gameRecord[gameRecord.length-2]
-    let lastAction = previousTurn[previousTurn.length-1]
-    lastAction.undo = false
-  }
-  gameRecord[gameRecord.length-1].push(record)
-}
-function makeNewTurnRecord(){
-  gameRecord.push([])
-}
-function deleteLastAction(){
-  let lastTurn = gameRecord[gameRecord.length-1]
-  if(lastTurn.length > 0){
-    let lastAction = lastTurn[lastTurn.length-1]
-    if(lastAction.undo === true){
-      lastTurn.pop()
-    }
-  }else{
-    let previousTurn = gameRecord[gameRecord.length-2]
-    let lastAction = previousTurn[previousTurn.length-1]
-    if(lastAction.undo === true || game.phase === 'beforedice'){
-      gameRecord.pop()
-    }
-    if(gameRecord.length === 1){
-      gameRecord[0].pop()
-    }
-  }
-}
-function lastActionUndeletable(){
-  let lastTurn = gameRecord[gameRecord.length-1]
-  let lastAction
-  if(lastTurn.length > 0){
-    lastAction = lastTurn[lastTurn.length-1]
-  }else{
-    let previousTurn = gameRecord[gameRecord.length-2]
-    lastAction = previousTurn[previousTurn.length-1]
-  }
-  lastAction.undo = false
-}
-
-function updateDatabase(winner){
-  let pl = game.players.length
-  if(pl <= 2){
-    return
-  }
-  let w = ''
-  let losers = []
-  for(let player of game.players){
-    if(player === winner){
-      w = {name:player.name, rating:player.rating}
-    }else{
-      losers.push({name:player.name, rating:player.rating})
-    }
-  }
-  for(let player of game.players){
-    const query = "select * from player_information where name= '" + player.name + "'";
-    client
-    .query(query)
-    .then((res) => {
-      if(player === winner){
-        let winx = 'win' + String(pl)
-        res.rows[0][winx] += 1
-        res.rows[0].activestreakwins += 1
-        if(res.rows[0].activestreakwins > res.rows[0].beststreakwins){
-          res.rows[0].beststreakwins = res.rows[0].activestreakwins
-        }
-        player.rating = rating.winnersNewRating(player, losers)
-        if(player.rating > res.rows[0].bestrating){
-          res.rows[0].bestrating = player.rating
-        }
-        const query = "update player_information set " + winx + " = " + res.rows[0][winx] + ", rating = " + player.rating + ", activestreakwins = " + res.rows[0].activestreakwins + ", beststreakwins = " + res.rows[0].beststreakwins + ", bestrating = " + res.rows[0].bestrating + " where name = '" + player.name + "'";
-        client.query(query)
-        .then((res) => {
-        })
-        .catch((e) => {
-        });
-      }else{
-        let losex = 'lose' + String(pl)
-        res.rows[0][losex] += 1
-        player.rating = rating.losersNewRating(player, w)
-        const query = "update player_information set " + losex + " = " + res.rows[0][losex] + ", rating = " + player.rating + ", activestreakwins = 0 where name = '" + player.name + "'";
-        client.query(query)
-        .then((res) => {
-        })
-        .catch((e) => {
-        });
-      }
-    })
-    .catch((e) => {
-    });
-  }
-  const query = "select * from gameresult where playersnumber = '" + String(pl) + "'"
-  client
-  .query(query)
-  .then((res) => {
-    let pn = 'player' + String(winner.number+1)
-    res.rows[0][pn] += 1
-    const query = "update gameresult set " + pn + " = " + res.rows[0][pn] + " where playersnumber = " + pl;
-    client
-    .query(query)
-    .then((res) => {
-    })
-    .catch((e) => {
-    });
-  })
-  .catch((e) => {
-  });
-  const newWinner = "insert into winner (name, number_of_players, my_number, turn, used_ore, used_grain, used_wool, used_lumber, used_brick, road_on_board, house_on_board, city_on_board, largestarmy, longestroad, owned_point, owned_knight, owned_roadbuild, owned_monopoly, owned_harvest, lastpoint, ore_initial_productivity, grain_initial_productivity, wool_initial_productivity, lumber_initial_productivity, brick_initial_productivity) values('" + winner.name + "', " + String(pl) + ", " + String(winner.number+1) + ", " + board.diceCount.total + ", " + String(winner.totalUse.ore) + ", " + String(winner.totalUse.grain) + ", " + String(winner.totalUse.wool) + ", " + String(winner.totalUse.lumber) + ", " + String(winner.totalUse.brick) + ", " + String(15-winner.token.road) + ", " + String(5-winner.token.house) + ", " + String(4-winner.token.city) + ", " + String(winner.largestArmy) + ", " + String(winner.longestRoad) + ", " + String(winner.progress.point) + ", " + String(winner.progress.knight+winner.used.knight) + ", " + String(winner.progress.roadbuild+winner.used.roadbuild) + ", " + String(winner.progress.monopoly+winner.used.monopoly) + ", " + String(winner.progress.harvest+winner.used.harvest) + ", '" + String(winner.lastPoint) + "', " + winner.initial_productivity.ore + ", " + winner.initial_productivity.grain + ", " + winner.initial_productivity.wool + ", " + winner.initial_productivity.lumber + ", " + winner.initial_productivity.brick + ")";
-  client.query(newWinner)
-  .then((res) => {
-  })
-  .catch((e) => {
-  });
-}
-const rating ={K:32,
-  Wab(Ra,Rb){
-    return 1/(10**((Rb - Ra)/400)+1)
-  },
-  winnersNewRating(w, loserslist){
-    if(loserslist.length === 0){
-      return w.rating
-    }
-    let currentRating = w.rating
-    for(let loser of loserslist){
-      currentRating += this.K*(1-this.Wab(w.rating, loser.rating))
-    }
-    return currentRating
-  },
-  losersNewRating(loser, winner){
-    return loser.rating + this.K*(0-this.Wab(loser.rating, winner.rating))
-  },
-}
-function total(object){
-  let total = 0
-  for(let key in object){
-      total += object[key]
-  }
-  return total
-}

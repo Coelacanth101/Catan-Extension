@@ -496,6 +496,13 @@ socket.on('deleteplaylog',()=>{
     $(`#receiving_area`).hide();
 })
 socket.on('message',(logdata)=>{
+    if(logdata.action === 'takeover'){
+        if(logdata.socketID === socket.id){
+            window.alert(`${logdata.playername}を引き継ぎました。`)
+        }else{
+            window.alert(`${logdata.playername}が引き継がれました。`)
+        }
+    }
     $(`#message_area`).html(``)
     if(logdata.action === 'trash'){
         $(`#receiving_area`).show();
@@ -602,9 +609,12 @@ socket.on('gamerecord',(data)=>{
     actionInTurn = 0
     playerNumber = record[0][0].players.length
 })
+socket.on('pleasetakeover',()=>{
+    alert('画面が更新されました。\nプレイする場合は継承してください。')
+})
 
 /*socket.on('rating', (data)=>{
-    $(`#player${data.number}name`).html(`<b>${data.name}</b>`)
+    $(`#player${data.number}name`).html(`<b>${data.name}</b>(${data.rating})`)
 })*/
 
 //firstturnをクリック
@@ -1629,10 +1639,10 @@ const display = {
         for(let p of game.players){
             $(`#player${p.number}title`).html(``)
             if(p.largestArmy === 2){
-                $(`#player${p.number}title`).append(`<div class="titlesquare">大</div>`)
+                $(`#player${p.number}title`).append(`<div class="titlesquare"><img src="./largestarmy.png" alt="largestarmy" class="img_for_title"></div>`)
             }
             if(p.longestRoad === 2){
-                $(`#player${p.number}title`).append(`<div class="titlesquare">長</div>`)
+                $(`#player${p.number}title`).append(`<div class="titlesquare"><img src="./longestroad.png" alt="longestroad" class="img_for_title"></div>`)
             }
         };
         $(`#receiving_area`).hide();
@@ -1641,10 +1651,10 @@ const display = {
         $(`#receiving_area`).show();
         $(`#player${data.number}title`).html(``)
         if(data.largestArmy === 2){
-            $(`#player${data.number}title`).append(`<div class="titlesquare">大</div>`)
+            $(`#player${data.number}title`).append(`<div class="titlesquare"><img src="./largestarmy.png" alt="largestarmy" class="img_for_title"></div>`)
         }
         if(data.longestRoad === 2){
-            $(`#player${data.number}title`).append(`<div class="titlesquare">長</div>`)
+            $(`#player${data.number}title`).append(`<div class="titlesquare"><img src="./longestroad.png" alt="longestroad" class="img_for_title"></div>`)
         }
         $(`#receiving_area`).hide();
     },
@@ -2266,10 +2276,10 @@ const display = {
             //title
             $(`#player${pn}title`).html(``)
             if(player.largestArmy === 2){
-                $(`#player${pn}title`).append(`<div class="titlesquare">大</div>`)
+                $(`#player${pn}title`).append(`<div class="titlesquare"><img src="./largestarmy.png" alt="largestarmy" class="img_for_title"></div>`)
             }
             if(player.longestRoad === 2){
-                $(`#player${pn}title`).append(`<div class="titlesquare">長</div>`)
+                $(`#player${pn}title`).append(`<div class="titlesquare"><img src="./longestroad.png" alt="longestroad" class="img_for_title"></div>`)
             }
             //progress
             $(`#player${pn}progress`).html(``)

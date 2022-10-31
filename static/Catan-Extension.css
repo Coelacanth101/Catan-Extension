@@ -201,13 +201,16 @@
                     display: flex;
                     margin:0 1px;
                     border: 1px solid rgb(255, 0, 221); 
-                    border-radius: 1px;
+                    border-radius: 15%;
                     width: 20px;
                     height: 20px;
                     justify-content: center;
                     align-items: center;
-                    font-weight: bold;
-                    color: rgb(255, 0, 221);
+                }
+                .img_for_title{
+                    width: auto;
+                    max-width: 100%;
+                    max-height: 100%;
                 }
                 #thisturn{
                     border: 1px solid red; 
