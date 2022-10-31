@@ -496,13 +496,6 @@ socket.on('deleteplaylog',()=>{
     $(`#receiving_area`).hide();
 })
 socket.on('message',(logdata)=>{
-    if(logdata.action === 'takeover'){
-        if(logdata.socketID === socket.id){
-            /*window.alert(`${logdata.playername}を引き継ぎました。`)*/
-        }else{
-            window.alert(`${logdata.playername}が引き継がれました。`)
-        }
-    }
     $(`#message_area`).html(``)
     if(logdata.action === 'trash'){
         $(`#receiving_area`).show();

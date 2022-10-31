@@ -2195,10 +2195,6 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     this.players[player.number].socketID = player.socketID
     display.allMightyTo(player.socketID)
     display.allMightyTo(oldID)
-    const logdata = {action:'takeover', playername:this.players[player.number].name, socketID:player.socketID}
-    setTimeout(()=>{
-      display.message(logdata)
-    },500)
   },
   initialize(){
     this.players.length = 0;
