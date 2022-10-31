@@ -2198,7 +2198,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     const logdata = {action:'takeover', playername:this.players[player.number].name, socketID:player.socketID}
     setTimeout(()=>{
       display.message(logdata)
-    },1000)
+    },2000)
   },
   initialize(){
     this.players.length = 0;
@@ -3305,7 +3305,7 @@ io.on("connection", (socket)=>{
   if(game.phase !== 'nameinputting'){
     setTimeout(()=>{
       io.to(socket.id).emit("pleasetakeover",'')
-    },1000)
+    },2000)
   }
   
   //名前の入力
