@@ -498,7 +498,7 @@ socket.on('deleteplaylog',()=>{
 socket.on('message',(logdata)=>{
     if(logdata.action === 'takeover'){
         if(logdata.socketID === socket.id){
-            window.alert(`${logdata.playername}を引き継ぎました。`)
+            /*window.alert(`${logdata.playername}を引き継ぎました。`)*/
         }else{
             window.alert(`${logdata.playername}が引き継がれました。`)
         }
