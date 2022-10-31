@@ -2198,7 +2198,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     const logdata = {action:'takeover', playername:this.players[player.number].name, socketID:player.socketID}
     setTimeout(()=>{
       display.message(logdata)
-    },2000)
+    },1000)
   },
   initialize(){
     this.players.length = 0;

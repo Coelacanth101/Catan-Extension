@@ -610,7 +610,7 @@ socket.on('gamerecord',(data)=>{
     playerNumber = record[0][0].players.length
 })
 socket.on('pleasetakeover',()=>{
-    alert('画面が更新されました。\nプレイする場合は継承してください。')
+    alert('画面が更新されました。')
 })
 
 /*socket.on('rating', (data)=>{
