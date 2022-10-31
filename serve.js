@@ -3305,7 +3305,7 @@ io.on("connection", (socket)=>{
   if(game.phase !== 'nameinputting'){
     setTimeout(()=>{
       io.to(socket.id).emit("pleasetakeover",'')
-    },2500)
+    },3000)
   }
   
   //名前の入力
