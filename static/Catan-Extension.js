@@ -2033,7 +2033,7 @@ const display = {
                 $(`#robbed${resource}${i}`).html(`${player.robbed[resource]*(-1)}`)
                 tr -= player.robbed[resource]
                 $(`#trash${resource}${i}`).html(`${player.totalTrash[resource]*(-1)}`)
-                tt += player.totalTrash[resource]
+                tt -= player.totalTrash[resource]
                 $(`#use${resource}${i}`).html(`${player.totalUse[resource]}`)
                 tu += player.totalUse[resource]
             }
