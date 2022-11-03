@@ -535,7 +535,7 @@ class Player{
       }else{
         this.useResource('progress')
         this.progress[game.progressDeck[0]] += 1
-        if(game.progressDeck[0] = 'point'){
+        if(game.progressDeck[0] === 'point'){
           this.lastPoint = 'point'
         }
         this.thisTurnDraw[game.progressDeck[0]] += 1
@@ -763,11 +763,7 @@ class Player{
     this.progressUse = 0
     this.dice = 1
     this.thisTurnDraw = {knight:0, roadbuild:0, harvest:0, monopoly:0, point:0}
-    const playername = game.turnPlayer.name
     game.turnEnd()
-    const logdata = {action:'turnend', playername:playername,turnPlayerID:game.turnPlayer.socketID}
-    display.message(logdata)
-    display.playLog(logdata)
   }
   keep(keepresource){
     display.resetKeepResourceTo(this.socketID)
@@ -2075,7 +2071,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   },
   turnEnd(){
     if(this.phase === 'afterdice'){
-      if(this.turnPlayer.point >= 10){
+      if(this.turnPlayer.point >= 3){
         updateDatabase(this.turnPlayer)
         makeNewTurnRecord()
         takeRecord()
@@ -2088,11 +2084,15 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
       }else if(board.size === 'regular'){
         makeNewTurnRecord()
         this.basePlayer = this.turnPlayer
+        const playername = this.turnPlayer.name
         if(this.turnPlayer.number === this.players.length-1){
           this.turnPlayer = this.players[0];
         } else {
             this.turnPlayer = this.players[this.turnPlayer.number+1];
         }
+        const logdata = {action:'turnend', playername:playername, turnPlayerID:this.turnPlayer.socketID}
+        display.message(logdata)
+        display.playLog(logdata)
         this.phase = 'beforedice'
         display.thisTurnBlack()
         display.turnPlayer()
