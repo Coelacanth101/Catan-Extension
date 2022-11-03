@@ -486,6 +486,8 @@ socket.on('playlog',(logdata)=>{
             exhaustresource += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
         }
         $(`#logmessage`).append(`<div class="log">${exhaustresource}が枯渇しました</div>`)
+    }else if(logdata.action === 'turnend'){
+        $(`#logmessage`).append(`<div class="log">${logdata.playername}がターンを終了しました</div>`)
     }
     $(`#receiving_area`).hide();
 })
@@ -592,6 +594,8 @@ socket.on('message',(logdata)=>{
             exhaustresource += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
         }
         $(`#message_area`).append(`<div class="message">${exhaustresource}が枯渇しました</div>`)
+    }else if(logdata.action === 'turnend'){
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>がターンを終了しました</div>`)
     }
     $(`#receiving_area`).hide();
 })

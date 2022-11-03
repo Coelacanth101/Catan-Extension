@@ -763,7 +763,11 @@ class Player{
     this.progressUse = 0
     this.dice = 1
     this.thisTurnDraw = {knight:0, roadbuild:0, harvest:0, monopoly:0, point:0}
+    const playername = game.turnPlayer.name
     game.turnEnd()
+    const logdata = {action:'turnend', playername:playername,turnPlayerID:game.turnPlayer.socketID}
+    display.message(logdata)
+    display.playLog(logdata)
   }
   keep(keepresource){
     display.resetKeepResourceTo(this.socketID)
