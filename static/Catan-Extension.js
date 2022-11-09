@@ -233,6 +233,7 @@ socket.on('hideproposearea', (e)=>{
 socket.on('hidemessagearea', (e)=>{
     $(`#receiving_area`).show();
     $(`#message_area`).hide();
+    $(`#message_area`).html(``);
     $(`#receiving_area`).hide();
 });
 socket.on('hideplayers', (e)=>{
@@ -416,7 +417,11 @@ socket.on('playlog',(logdata)=>{
     }else if(logdata.action === 'monopoly'){
         $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<div class="card ${String(logdata.resource)}"><img src="./${logdata.resource}pict.png" alt="${logdata.resource}" class="img_for_card"></div>${logdata.amount}枚を独占しました</div>`)
     }else if(logdata.action === 'harvest'){
-        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<div class="card ${String(logdata.resource)}"><img src="./${logdata.resource}pict.png" alt="${logdata.resource}" class="img_for_card"></div>を収穫しました</div>`)
+        let harvestResources = ''
+        for(let resource of logdata.resource){
+            harvestResources += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+        }
+        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が${harvestResources}を収穫しました</div>`)
     }else if(logdata.action === 'undo'){
         $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が取り消しました</div>`)
     }else if(logdata.action === 'trash'){
@@ -498,7 +503,7 @@ socket.on('deleteplaylog',()=>{
     $(`#receiving_area`).hide();
 })
 socket.on('message',(logdata)=>{
-    $(`#message_area`).html(``)
+    $(`#message_area`).html(``);
     if(logdata.action === 'trash'){
         $(`#receiving_area`).show();
         $(`#button_area`).hide()
@@ -536,7 +541,11 @@ socket.on('message',(logdata)=>{
     }else if(logdata.action === 'monopoly'){
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<div class="card ${String(logdata.resource)}"><img src="./${logdata.resource}pict.png" alt="${logdata.resource}" class="img_for_card"></div>${logdata.amount}枚を独占しました</div>`)
     }else if(logdata.action === 'harvest'){
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<div class="card ${String(logdata.resource)}"><img src="./${logdata.resource}pict.png" alt="${logdata.yresource}" class="img_for_card"></div>を収穫しました</div>`)
+        let harvestResources = ''
+        for(let resource of logdata.resource){
+            harvestResources += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+        }
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が${harvestResources}を収穫しました</div>`)
     }else if(logdata.action === 'undo'){
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が取り消しました</div>`)
     }else if(logdata.action === 'propose'){
@@ -2175,6 +2184,7 @@ const display = {
     hideButtonArea(){
         $(`#receiving_area`).show();
         $('#button_area').hide()
+        $(`#exhaustmessage`).remove()
         $(`#receiving_area`).hide();
     },
     showButtonArea(){
