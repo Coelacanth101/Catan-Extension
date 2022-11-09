@@ -74,6 +74,8 @@ class Player{
     this.totalUse = {ore:0,grain:0,wool:0,lumber:0,brick:0}
     this.lastPoint = ''
     this.initial_productivity = {ore:0,grain:0,wool:0,lumber:0,brick:0}
+    this.negotiate = 0
+    this.seven = 0
     this.log = {resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     token:{house:5, city:4, road:15},
     house:[],
@@ -141,6 +143,8 @@ class Player{
     this.totalUse = {ore:0,grain:0,wool:0,lumber:0,brick:0}
     this.lastPoint = ''
     this.initial_productivity = {ore:0,grain:0,wool:0,lumber:0,brick:0}
+    this.negotiate = 0
+    this.seven = 0
     this.log = {resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     token:{house:5, city:4, road:15},
     house:[],
@@ -1035,6 +1039,8 @@ class Player{
     const logdata = {action:'accept', playername:game.proposedata.proposee.name, turnPlayerID:game.turnPlayer.socketID}
     display.message(logdata)
     display.playLog(logdata)
+    data.proposer.negotiate += 1
+    data.proposee.negotiate += 1
     game.proposedata = {proposer:'', proposee:'', giveresource:'', takeresource:''}
     display.hideProposeArea()
     display.toggleMyButtons(game.turnPlayer.socketID)
@@ -1103,10 +1109,6 @@ class Player{
     }
   }
 }
-
-
-
-
 
 const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[], nodeLine:[],roadLine:[], dice:[],landLine:[],ports:{oreport:[], grainport:[], woolport:[], lumberport:[], brickport:[],genericport:[]},log:{island:[],thief:'',house:[], city:[], road:[]},islandData:'', diceCount:{2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0,total:0},
   resizeBoard(size){
@@ -1491,6 +1493,7 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
     if(dice1 + dice2 === 7){
       game.burstPlayerCheck()
       display.dice()
+      game.turnPlayer.seven += 1
     }else{
       display.dice()
       this.produce(dice1+dice2)
@@ -1891,15 +1894,11 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
   }
 }
 
-
-
-
-
-
-const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', basePlayer:'', phase:'nameinputting', progressDeck:[],board:board,largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:'', takeresource:''},renounce:[],
+const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', basePlayer:'', phase:'nameinputting', progressDeck:[],board:board,largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:'', takeresource:''},renounce:[],startTime:'',
 log:{turnPlayer:'', phase:'nameinputting', progressDeck:[],largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}, takeresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}},renounce:[],allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0}},
 lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   newGame(){
+    this.startTime = currentTime()
     for(let player of this.players){
       player.reset()
     }
@@ -2215,24 +2214,6 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     gameRecord = []
   },
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const display = {
   hideItems(){
@@ -2958,6 +2939,25 @@ const display = {
   },
 }
 
+const rating ={K:32,
+  Wab(Ra,Rb){
+    return 1/(10**((Rb - Ra)/400)+1)
+  },
+  winnersNewRating(w, loserslist){
+    if(loserslist.length === 0){
+      return w.rating
+    }
+    let currentRating = w.rating
+    for(let loser of loserslist){
+      currentRating += this.K*(1-this.Wab(w.rating, loser.rating))
+    }
+    return currentRating
+  },
+  losersNewRating(loser, winner){
+    return loser.rating + this.K*(0-this.Wab(loser.rating, winner.rating))
+  },
+}
+
 function discard(item,array){
   if(array.includes(item)){
       let i = array.indexOf(item);
@@ -3204,6 +3204,7 @@ function updateDatabase(winner){
   if(pl <= 2){
     return
   }
+  const gameID = randomString(8)
   let w = ''
   let losers = []
   for(let player of game.players){
@@ -3213,6 +3214,7 @@ function updateDatabase(winner){
       losers.push({name:player.name, rating:player.rating})
     }
   }
+  //player_information更新
   for(let player of game.players){
     const query = "select * from player_information where name= '" + player.name + "'";
     client
@@ -3250,6 +3252,7 @@ function updateDatabase(winner){
     .catch((e) => {
     });
   }
+  //gameresult更新
   const query = "select * from gameresult where playersnumber = '" + String(pl) + "'"
   client
   .query(query)
@@ -3266,31 +3269,34 @@ function updateDatabase(winner){
   })
   .catch((e) => {
   });
-  const newWinner = "insert into winner (name, number_of_players, my_number, turn, used_ore, used_grain, used_wool, used_lumber, used_brick, road_on_board, house_on_board, city_on_board, largestarmy, longestroad, owned_point, owned_knight, owned_roadbuild, owned_monopoly, owned_harvest, lastpoint, ore_initial_productivity, grain_initial_productivity, wool_initial_productivity, lumber_initial_productivity, brick_initial_productivity) values('" + winner.name + "', " + String(pl) + ", " + String(winner.number+1) + ", " + board.diceCount.total + ", " + String(winner.totalUse.ore) + ", " + String(winner.totalUse.grain) + ", " + String(winner.totalUse.wool) + ", " + String(winner.totalUse.lumber) + ", " + String(winner.totalUse.brick) + ", " + String(15-winner.token.road) + ", " + String(5-winner.token.house) + ", " + String(4-winner.token.city) + ", " + String(winner.largestArmy) + ", " + String(winner.longestRoad) + ", " + String(winner.progress.point) + ", " + String(winner.progress.knight+winner.used.knight) + ", " + String(winner.progress.roadbuild+winner.used.roadbuild) + ", " + String(winner.progress.monopoly+winner.used.monopoly) + ", " + String(winner.progress.harvest+winner.used.harvest) + ", '" + String(winner.lastPoint) + "', " + winner.initial_productivity.ore + ", " + winner.initial_productivity.grain + ", " + winner.initial_productivity.wool + ", " + winner.initial_productivity.lumber + ", " + winner.initial_productivity.brick + ")";
+  //winner更新
+  const losersInitialProductivity = {ore:0,grain:0,wool:0,lumber:0,brick:0}
+  for(let player of game.players){
+    if(player !== winner){
+      for(let resource in losersInitialProductivity){
+        losersInitialProductivity[resource] += player.initial_productivity[resource]
+      }
+    }
+  }
+  const newWinner = "insert into winner (start_time, name, number_of_players, my_number, turn, used_ore, used_grain, used_wool, used_lumber, used_brick, road_on_board, house_on_board, city_on_board, largestarmy, longestroad, owned_point, owned_knight, owned_roadbuild, owned_monopoly, owned_harvest, lastpoint, ore_initial_productivity, grain_initial_productivity, wool_initial_productivity, lumber_initial_productivity, brick_initial_productivity, ore_initial_productivity_of_losers, grain_initial_productivity_of_losers, wool_initial_productivity_of_losers, lumber_initial_productivity_of_losers, brick_initial_productivity_of_losers, negotiate, seven) values('" + game.startTime + "', '" + winner.name + "', " + String(pl) + ", " + String(winner.number+1) + ", " + board.diceCount.total + ", " + String(winner.totalUse.ore) + ", " + String(winner.totalUse.grain) + ", " + String(winner.totalUse.wool) + ", " + String(winner.totalUse.lumber) + ", " + String(winner.totalUse.brick) + ", " + String(15-winner.token.road) + ", " + String(5-winner.token.house) + ", " + String(4-winner.token.city) + ", " + String(winner.largestArmy) + ", " + String(winner.longestRoad) + ", " + String(winner.progress.point) + ", " + String(winner.progress.knight+winner.used.knight) + ", " + String(winner.progress.roadbuild+winner.used.roadbuild) + ", " + String(winner.progress.monopoly+winner.used.monopoly) + ", " + String(winner.progress.harvest+winner.used.harvest) + ", '" + String(winner.lastPoint) + "', " + winner.initial_productivity.ore + ", " + winner.initial_productivity.grain + ", " + winner.initial_productivity.wool + ", " + winner.initial_productivity.lumber + ", " + winner.initial_productivity.brick + ", " + losersInitialProductivity.ore + ", " + losersInitialProductivity.grain + ", " + losersInitialProductivity.wool + ", " + losersInitialProductivity.lumber + ", " + losersInitialProductivity.brick + ", " + winner.negotiate + ", " + winner.seven + ")";
   client.query(newWinner)
   .then((res) => {
   })
   .catch((e) => {
   });
-}
-const rating ={K:32,
-  Wab(Ra,Rb){
-    return 1/(10**((Rb - Ra)/400)+1)
-  },
-  winnersNewRating(w, loserslist){
-    if(loserslist.length === 0){
-      return w.rating
+  //loser更新
+  for(let player of game.players){
+    if(player !== winner){
+      const newLoser = "insert into loser (start_time, name, number_of_players, my_number, turn, used_ore, used_grain, used_wool, used_lumber, used_brick, road_on_board, house_on_board, city_on_board, largestarmy, longestroad, owned_point, owned_knight, owned_roadbuild, owned_monopoly, owned_harvest, lastpoint, ore_initial_productivity, grain_initial_productivity, wool_initial_productivity, lumber_initial_productivity, brick_initial_productivity, ore_initial_productivity_of_losers, grain_initial_productivity_of_losers, wool_initial_productivity_of_losers, lumber_initial_productivity_of_losers, brick_initial_productivity_of_losers, negotiate, seven) values('" + game.startTime + "', '" + player.name + "', " + String(pl) + ", " + String(player.number+1) + ", " + board.diceCount.total + ", " + String(player.totalUse.ore) + ", " + String(player.totalUse.grain) + ", " + String(player.totalUse.wool) + ", " + String(player.totalUse.lumber) + ", " + String(player.totalUse.brick) + ", " + String(15-player.token.road) + ", " + String(5-player.token.house) + ", " + String(4-player.token.city) + ", " + String(player.largestArmy) + ", " + String(player.longestRoad) + ", " + String(player.progress.point) + ", " + String(player.progress.knight+player.used.knight) + ", " + String(player.progress.roadbuild+player.used.roadbuild) + ", " + String(player.progress.monopoly+player.used.monopoly) + ", " + String(player.progress.harvest+player.used.harvest) + ", '" + String(player.lastPoint) + "', " + player.initial_productivity.ore + ", " + player.initial_productivity.grain + ", " + player.initial_productivity.wool + ", " + player.initial_productivity.lumber + ", " + player.initial_productivity.brick + ", " + losersInitialProductivity.ore + ", " + losersInitialProductivity.grain + ", " + losersInitialProductivity.wool + ", " + losersInitialProductivity.lumber + ", " + losersInitialProductivity.brick + ", " + player.negotiate + ", " + player.seven + ")";
+      client.query(newLoser)
+      .then((res) => {
+      })
+      .catch((e) => {
+      });
     }
-    let currentRating = w.rating
-    for(let loser of loserslist){
-      currentRating += this.K*(1-this.Wab(w.rating, loser.rating))
-    }
-    return currentRating
-  },
-  losersNewRating(loser, winner){
-    return loser.rating + this.K*(0-this.Wab(loser.rating, winner.rating))
-  },
+  }
 }
+
 function total(object){
   let total = 0
   for(let key in object){
@@ -3298,6 +3304,28 @@ function total(object){
   }
   return total
 }
+
+function randomString(number){
+  const letters ='abcdefghijklmnopqrstuvwxyz0123456789'
+  let string = ''
+  let i = 1
+  for(i=1; i<=number; i++){
+    string += letters[Math.floor(Math.random()*letters.length)]
+  }
+  return string
+}
+function currentTime(){
+  const now = new Date()
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+  const day = now.getDate();
+  const hour = now.getHours();
+  const minute = now.getMinutes();
+  const second = now.getSeconds();
+  const time = year + '/' + month + '/' + day + ' ' + hour + ':' + minute + ':' + second
+  return time
+}
+
 io.on("connection", (socket)=>{
 
   //画面の表示
@@ -3320,6 +3348,7 @@ io.on("connection", (socket)=>{
   socket.on('start', (data)=>{
     playersName = shuffle(playersName)
     if(playersName.length >= 1){
+      game.startTime = currentTime()
       game.gameStart()
       board.islandData = data
       board.resizeBoard(data.size)
