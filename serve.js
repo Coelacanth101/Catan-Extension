@@ -2,13 +2,12 @@
 const app  = require("express")();
 const http = require("http").createServer(app);
 const io   = require("socket.io")(http);
-/*const sqlite3 = require("sqlite3");
-const db = new sqlite3.Database('mydb.sqlite3');*/
 const DOCUMENT_ROOT = __dirname + "/static";
 const SECRET_TOKEN = "abcdefghijklmn12345";
 app.get("/", (req, res)=>{
   res.sendFile(DOCUMENT_ROOT + "/Catan.html");
 });
+
 app.get("/game", (req, res)=>{
   res.sendFile(DOCUMENT_ROOT + "/Past-Games.html");
 });
@@ -26,7 +25,7 @@ app.get("/sound/:file", (req, res)=>{
 /**
  * 3000番でサーバを起動する
  */
- http.listen(process.env.PORT || 3000, ()=>{
+http.listen(process.env.PORT || 3000, ()=>{
   console.log("listening on *:3000");
 });
 
@@ -107,7 +106,7 @@ class Player{
     totalUse:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     lastPoint:'',
     harvestArray:[]}
-    const q = "select * from player_information where name= '" + this.name + "'";
+    const q = "select * from player_information where name = '" + this.name + "'";
     client
       .query(q)
       .then((res) => {
@@ -178,7 +177,7 @@ class Player{
     totalUse:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     lastPoint:'',
     harvestArray:[]}
-    const q = "select * from player_information where name= '" + this.name + "'";
+    const q = "select * from player_information where name = '" + this.name + "'";
     client
       .query(q)
       .then((res) => {
@@ -2096,11 +2095,11 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   },
   turnEnd(){
     if(this.phase === 'afterdice'){
-      if(this.turnPlayer.point >= 3){
+      if(this.turnPlayer.point >= 10){
         io.emit('fanfare','')
-        updateDatabase(this.turnPlayer)
         makeNewTurnRecord()
         takeRecord()
+        updateDatabase(this.turnPlayer)
         this.gameEnd()
         return
       }else if(board.size === 'large'){
@@ -2116,6 +2115,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
         } else {
             this.turnPlayer = this.players[this.turnPlayer.number+1];
         }
+        io.to(this.turnPlayer.socketID).emit('turnsound','')
         const logdata = {action:'turnend', playername:playername, turnPlayerID:this.turnPlayer.socketID}
         display.message(logdata)
         display.playLog(logdata)
@@ -2140,6 +2140,9 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
       this.turnPlayer = this.players[0];
     } else {
         this.turnPlayer = this.players[this.turnPlayer.number+1];
+    }
+    if(this.phase !== 'building' || this.turnPlayer.renounce !== true){
+      io.to(this.turnPlayer.socketID).emit('turnsound','')
     }
     display.turnPlayer()
     display.toggleMyButtons(previousPlayer.socketID)
@@ -3091,7 +3094,7 @@ function highestIndex(array){
   return highestIndex
 }
 function takeRecord(){
-  let record = {players:[],thief:'',dice:[], undo:true}
+  let record = {players:[],thief:'',dice:[], progress:0, undo:true}
   for(let player of game.players){
     let playerRecord = {
       resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
@@ -3133,6 +3136,7 @@ function takeRecord(){
   record.thief = board.tileButtonPositionToNumber(board.thief.position)
   record.dice[0] = board.dice[0]
   record.dice[1] = board.dice[1]
+  record.progress = game.progressDeck.length
   let lastTurn = gameRecord[gameRecord.length-1]
   if(lastTurn.length > 0){
     let lastAction = lastTurn[lastTurn.length-1]
@@ -3145,7 +3149,7 @@ function takeRecord(){
   gameRecord[gameRecord.length-1].push(record)
 }
 function takeRecordUndeletable(){
-  let record = {players:[],thief:'',dice:[], undo:false}
+  let record = {players:[],thief:'',dice:[], progress:0, undo:false}
   for(let player of game.players){
     let playerRecord = {
       resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
@@ -3187,6 +3191,7 @@ function takeRecordUndeletable(){
   record.thief = board.tileButtonPositionToNumber(board.thief.position)
   record.dice[0] = board.dice[0]
   record.dice[1] = board.dice[1]
+  record.progress = game.progressDeck.length
   let lastTurn = gameRecord[gameRecord.length-1]
   if(lastTurn.length > 0){
     let lastAction = lastTurn[lastTurn.length-1]
@@ -3258,7 +3263,11 @@ function updateDatabase(winner){
       });
     }
   }
-  const Record = "insert into game (start_time, board, record) values('" + game.startTime + "', '" + JSON.stringify(board.island) + "', '" + JSON.stringify(gameRecord) + "')"
+  let playersName = []
+  for(let player of game.players){
+    playersName.push(player.name)
+  }
+  const Record = "insert into game (start_time, players, board, record) values('" + game.startTime + "', '" + JSON.stringify(playersName) + "', '" + JSON.stringify(board.island) + "', '" + JSON.stringify(gameRecord) + "')"
   client.query(Record)
   .then((res) => {
   })
@@ -3278,7 +3287,7 @@ function updateDatabase(winner){
   }
   //player_information更新
   for(let player of game.players){
-    const query = "select * from player_information where name= '" + player.name + "'";
+    const query = "select * from player_information where name = '" + player.name + "'";
     client
     .query(query)
     .then((res) => {
@@ -3332,23 +3341,12 @@ function updateDatabase(winner){
   .catch((e) => {
   });
 }
-
 function total(object){
   let total = 0
   for(let key in object){
       total += object[key]
   }
   return total
-}
-
-function randomString(number){
-  const letters ='abcdefghijklmnopqrstuvwxyz0123456789'
-  let string = ''
-  let i = 1
-  for(i=1; i<=number; i++){
-    string += letters[Math.floor(Math.random()*letters.length)]
-  }
-  return string
 }
 function currentTime(){
   const now = new Date()
@@ -3739,7 +3737,36 @@ io.on("connection", (socket)=>{
       }
     })
     //コンソールに表示
-    socket.on('console',(e)=>{
-      socket.emit('console', game)
+    socket.on('console',()=>{
+      io.emit('console', game)
+    })
+
+    //過去ゲームデータ送信
+    socket.on(`viewgame`, (data)=>{
+      const query = "select * from game where start_time = '" + data.gameName + "'";
+      client
+      .query(query)
+      .then((res) => {
+        if(res.rows[0]){
+          const {players, board, record} = res.rows[0]
+          const game = {players:JSON.parse(players), board:JSON.parse(board), gameRecord:JSON.parse(record)}
+          io.to(data.socketID).emit('viewgame',game)
+        }
+      })
+      .catch((e) => {
+      });
     })
 })
+
+function getColumn(columnName){
+  const query = "select " + columnName + " from game"
+  client
+  .query(query)
+  .then((res) => {
+    if(res.rows){
+      return res.rows
+    }
+  })
+  .catch((e) => {
+  });
+}

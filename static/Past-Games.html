@@ -1,1 +1,48 @@
-game
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>九州の開拓者たち</title>
+    <link rel="stylesheet" href="./Catan-Extension.css" id="cs">
+    <link rel="icon" href="./img/favicon.ico">
+</head>
+<body>
+    <div id="container">
+        <div id="field">
+            <div id="board_area">
+                <div id="board">
+                </div>
+            </div>
+            <div id="player_and_button_area">
+                <div id="players">
+                    <div id="playerinformation">
+                    </div>
+                    <div id="buttons">
+                        <div id="gameend_area">
+                            <div id="controlrecord">
+                                <button id="firstturn" class="recordbutton">|◀◀</button>
+                                <button id="previousturn" class="recordbutton">◀◀</button>
+                                <button id="previousaction" class="recordbutton">◀</button>
+                                <div id="turn">終局</div>
+                                <button id="nextaction" class="recordbutton">▶</button>
+                                <button id="nextturn" class="recordbutton">▶▶</button>
+                                <button id="finalturn" class="recordbutton">▶▶|</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <select name="" id="games">
+            <option value="2022/11/10 13:07:18">2022/11/10 13:07:18</option>
+            <option value="2022/11/10 11:44:46">2022/11/10 11:44:46</option>
+        </select>
+        <input type="button" value="決定" id="decide" class="action_button">
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./jquery-3.4.1.min.js"></script>
+    <script src="./Past-Games.js"></script>
+</body>
+</html>

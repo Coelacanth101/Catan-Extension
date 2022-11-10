@@ -3,6 +3,7 @@ let board_size
 let record
 let endturn
 let turn
+let actionInTurn
 let playerNumber
 let defaultkeep
 let keepremained
@@ -25,7 +26,7 @@ $('#nobutton').on('click', function(){
 })
 
 //名前の入力発信
-$('#nameinputarea').on('click', '.namebutton', function(){
+$('#nameinputarea').on('click', '#namebutton', function(){
     if($(this).prev().val()){
         $(`#playername`).hide()
         myName = $(this).prev().val()
@@ -619,6 +620,7 @@ socket.on('message',(logdata)=>{
 })
 socket.on('gamerecord',(data)=>{
     record = data.gameRecord
+    console.log(record)
     endturn = record.length-1
     turn = endturn
     actionInTurn = 0
@@ -1964,10 +1966,10 @@ const display = {
             let numberOfResources = p.resource.ore + p.resource.grain + p.resource.wool + p.resource.lumber + p.resource.brick
             let numberOfProgress = p.progress.knight + p.progress.road + p.progress.harvest + p.progress.monopoly + p.progress.point
             if(numberOfResources === 0){
-                $(`#player${p.number}resource`).html('<p> </p>')
+                $(`#player${p.number}resource`).html('<p></p>')
             }
             if(numberOfProgress === 0){
-                $(`#player${p.number}progress`).html('<p> </p>')
+                $(`#player${p.number}progress`).html('<p></p>')
             }
             for(r in p.resource){
                 let i = 1
@@ -2089,7 +2091,6 @@ const display = {
     turnPlayer(data){
         $(`#receiving_area`).show();
         if(data.ID === socket.id){
-            turnSound.play()
         }
         $(`.name`).css('background-color', '');
         if(data.phase !== 'building'){
@@ -2124,12 +2125,12 @@ const display = {
                             <div id="player${myNumber}token" class="token line" >家:${players[myNumber].token.house} 街:${players[myNumber].token.city} 道:${players[myNumber].token.road}</div>
                         </div>
                         <div id="player${myNumber}row2" class="row">
-                            <div id="player${myNumber}resource" class="resource line"> </div>
-                            <div id="player${myNumber}title" class="title line"> </div>
+                            <div id="player${myNumber}resource" class="resource line"></div>
+                            <div id="player${myNumber}title" class="title line"></div>
                         </div>
                         <div id="player${myNumber}row3" class="row">
-                            <div id="player${myNumber}progress" class="progress line"> </div>
-                            <div id="player${myNumber}used" class="used line"> </div>
+                            <div id="player${myNumber}progress" class="progress line"></div>
+                            <div id="player${myNumber}used" class="used line"></div>
                         </div>
                     </div>`
                 )
@@ -2152,12 +2153,12 @@ const display = {
                                 <div id="player${myNumber}token" class="token line" >家:${players[myNumber].token.house} 街:${players[myNumber].token.city} 道:${players[myNumber].token.road}</div>
                             </div>
                             <div id="player${myNumber}row2" class="row">
-                                <div id="player${myNumber}resource" class="resource line"> </div>
-                                <div id="player${myNumber}title" class="title line"> </div>
+                                <div id="player${myNumber}resource" class="resource line"></div>
+                                <div id="player${myNumber}title" class="title line"></div>
                             </div>
                             <div id="player${myNumber}row3" class="row">
-                                <div id="player${myNumber}progress" class="progress line"> </div>
-                                <div id="player${myNumber}used" class="used line"> </div>
+                                <div id="player${myNumber}progress" class="progress line"></div>
+                                <div id="player${myNumber}used" class="used line"></div>
                             </div>
                         </div>`
                     )
@@ -2180,12 +2181,12 @@ const display = {
                         <div id="player${myNumber}token" class="token line" >家:${players[myNumber].token.house} 街:${players[myNumber].token.city} 道:${players[myNumber].token.road}</div>
                     </div>
                     <div id="player${myNumber}row2" class="row">
-                        <div id="player${myNumber}resource" class="resource line"> </div>
-                        <div id="player${myNumber}title" class="title line"> </div>
+                        <div id="player${myNumber}resource" class="resource line"></div>
+                        <div id="player${myNumber}title" class="title line"></div>
                     </div>
                     <div id="player${myNumber}row3" class="row">
-                        <div id="player${myNumber}progress" class="progress line"> </div>
-                        <div id="player${myNumber}used" class="used line"> </div>
+                        <div id="player${myNumber}progress" class="progress line"></div>
+                        <div id="player${myNumber}used" class="used line"></div>
                     </div>
                 </div>`
             )
@@ -2351,6 +2352,17 @@ const display = {
         }else{
             $(`#dice_area`).html(``)
         }
+        //deck
+        if(record[turn][actionInTurn].progress || record[turn][actionInTurn].progress === 0){
+            if(board_size === 'large'){
+                $(`#deck_area`).html(`<div id="deckcase"><div id="deck"></div></div>&nbsp;×${record[turn][actionInTurn].progress}`)
+                $(`#deck`).css(`height`, `${record[turn][actionInTurn].progress/34 * 100}%`)
+            }else if(board_size = 'regular'){
+                $(`#deck_area`).html(`<div id="deckcase"><div id="deck"></div></div>&nbsp;×${record[turn][actionInTurn].progress}`)
+                $(`#deck`).css(`height`, `${record[turn][actionInTurn].progress/25 * 100}%`)
+            }
+            
+        }
         if(turn === endturn){
             $(`#turn`).html(`終局`)
         }else[
@@ -2377,8 +2389,7 @@ const display = {
 //コンソールに表示
 function game(){
     $(`#receiving_area`).show()
-    let e = ''
-    socket.emit('console',e)
+    socket.emit('console','')
 }
 function translate(item){
     if(item === 'ore'){
@@ -2429,6 +2440,9 @@ socket.on('console',(game)=>{
     $(`#receiving_area`).show()
     console.log(game)
     $(`#receiving_area`).hide()
+})
+socket.on('turnsound',()=>{
+    turnSound.play()
 })
 socket.on('burstsound',()=>{
     burstSound.play()
