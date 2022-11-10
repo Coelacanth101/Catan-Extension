@@ -6,6 +6,12 @@ let turn
 let playerNumber
 let defaultkeep
 let keepremained
+const turnSound = new Audio("./sound/turn.mp3")
+turnSound.volume = 0.3
+const burstSound = new Audio("./sound/burst.mp3")
+burstSound.volume = 0.4
+const fanfareSound = new Audio("./sound/fanfare.mp3")
+fanfareSound.volume = 0.25
 //画面初期化
 $('#initializebutton').on('click', function(){
     $('#yesorno').show()
@@ -366,7 +372,7 @@ socket.on('thisturnblack', ()=>{
 })
 socket.on('addused', (data)=>{
     $(`#receiving_area`).show();
-    $(`#player${data.number}used`).append(`<div id="thisturn" class="card ${data.progress}"><img src="./${data.progress}.png" alt="${data.progress}" class="img_for_card ${data.progress}"></div>`);
+    $(`#player${data.number}used`).append(`<div id="thisturn" class="card ${data.progress}"><img src="./img/${data.progress}.png" alt="${data.progress}" class="img_for_card ${data.progress}"></div>`);
     $(`#receiving_area`).hide();
 })
 socket.on('deck',(data)=>{
@@ -379,7 +385,7 @@ socket.on('showexhaust',(data)=>{
     $(`#receiving_area`).show();
     $(`#button_area`).append(`<div id="exhaustmessage"></div>`)
     for(let resource of data.exhaust){
-        $(`#exhaustmessage`).append(`<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`)
+        $(`#exhaustmessage`).append(`<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`)
     }
     $(`#exhaustmessage`).append(`が枯渇しました`)
     $(`#receiving_area`).hide();
@@ -409,17 +415,17 @@ socket.on('playlog',(logdata)=>{
     }else if(logdata.action === 'draw'){
         $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>がカードを引きました</div>`)
     }else if(logdata.action === 'progress'){
-        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<div class="card ${logdata.progress}"><img src="./${logdata.progress}.png" alt="${logdata.progress}" class="img_for_card ${logdata.progress}"></div>を使いました</div>`)
+        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<div class="card ${logdata.progress}"><img src="./img/${logdata.progress}.png" alt="${logdata.progress}" class="img_for_card ${logdata.progress}"></div>を使いました</div>`)
     }else if(logdata.action === 'thiefmove'){
         $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が盗賊を移動しました</div>`)
     }else if(logdata.action === 'robresource'){
         $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<b>${logdata.robbed}</b>から強奪しました</div>`)
     }else if(logdata.action === 'monopoly'){
-        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<div class="card ${String(logdata.resource)}"><img src="./${logdata.resource}pict.png" alt="${logdata.resource}" class="img_for_card"></div>${logdata.amount}枚を独占しました</div>`)
+        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<div class="card ${String(logdata.resource)}"><img src="./img/${logdata.resource}pict.png" alt="${logdata.resource}" class="img_for_card"></div>${logdata.amount}枚を独占しました</div>`)
     }else if(logdata.action === 'harvest'){
         let harvestResources = ''
         for(let resource of logdata.resource){
-            harvestResources += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+            harvestResources += `<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
         }
         $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が${harvestResources}を収穫しました</div>`)
     }else if(logdata.action === 'undo'){
@@ -430,7 +436,7 @@ socket.on('playlog',(logdata)=>{
             for(let resource in data.trashresource){
                 let i = 1
                 while(i <= data.trashresource[resource]){
-                    trash += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                    trash += `<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                     i += 1
                 }
             }
@@ -441,7 +447,7 @@ socket.on('playlog',(logdata)=>{
         for(let resource in logdata.giveresource){
             let i = 1
             while(i <= logdata.giveresource[resource]){
-                giveresource += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                giveresource += `<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                 i += 1
             }
         }
@@ -449,7 +455,7 @@ socket.on('playlog',(logdata)=>{
         for(let resource in logdata.takeresource){
             let i = 1
             while(i <= logdata.takeresource[resource]){
-                takeresource += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                takeresource += `<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                 i += 1
             }
         }
@@ -463,7 +469,7 @@ socket.on('playlog',(logdata)=>{
         for(let resource in logdata.exportresource){
             let i = 1
             while(i <= logdata.exportresource[resource]){
-                exportresource += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                exportresource += `<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                 i += 1
             }
         }
@@ -471,7 +477,7 @@ socket.on('playlog',(logdata)=>{
         for(let resource in logdata.importresource){
             let i = 1
             while(i <= logdata.importresource[resource]){
-                importresource += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                importresource += `<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                 i += 1
             }
         }
@@ -488,7 +494,7 @@ socket.on('playlog',(logdata)=>{
     }else if(logdata.action === 'exhaust'){
         let exhaustresource = ''
         for(let resource of logdata.exhaust){
-            exhaustresource += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+            exhaustresource += `<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
         }
         $(`#logmessage`).append(`<div class="log">${exhaustresource}が枯渇しました</div>`)
     }else if(logdata.action === 'turnend'){
@@ -514,7 +520,7 @@ socket.on('message',(logdata)=>{
             for(let resource in data.trashresource){
                 let i = 1
                 while(i <= data.trashresource[resource]){
-                    trash += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                    trash += `<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                     i += 1
                 }
             }
@@ -533,17 +539,17 @@ socket.on('message',(logdata)=>{
     }else if(logdata.action === 'draw'){
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>がカードを引きました</div>`)
     }else if(logdata.action === 'progress'){
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<div class="card ${logdata.progress}"><img src="./${logdata.progress}.png" alt="${logdata.progress}" class="img_for_card ${logdata.progress}"></div>を使いました</div>`)
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<div class="card ${logdata.progress}"><img src="./img/${logdata.progress}.png" alt="${logdata.progress}" class="img_for_card ${logdata.progress}"></div>を使いました</div>`)
     }else if(logdata.action === 'thiefmove'){
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が盗賊を移動しました</div>`)
     }else if(logdata.action === 'robresource'){
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<b>${logdata.robbed}</b>から強奪しました</div>`)
     }else if(logdata.action === 'monopoly'){
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<div class="card ${String(logdata.resource)}"><img src="./${logdata.resource}pict.png" alt="${logdata.resource}" class="img_for_card"></div>${logdata.amount}枚を独占しました</div>`)
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<div class="card ${String(logdata.resource)}"><img src="./img/${logdata.resource}pict.png" alt="${logdata.resource}" class="img_for_card"></div>${logdata.amount}枚を独占しました</div>`)
     }else if(logdata.action === 'harvest'){
         let harvestResources = ''
         for(let resource of logdata.resource){
-            harvestResources += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+            harvestResources += `<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
         }
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が${harvestResources}を収穫しました</div>`)
     }else if(logdata.action === 'undo'){
@@ -553,7 +559,7 @@ socket.on('message',(logdata)=>{
         for(let resource in logdata.giveresource){
             let i = 1
             while(i <= logdata.giveresource[resource]){
-                giveresource += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                giveresource += `<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                 i += 1
             }
         }
@@ -561,7 +567,7 @@ socket.on('message',(logdata)=>{
         for(let resource in logdata.takeresource){
             let i = 1
             while(i <= logdata.takeresource[resource]){
-                takeresource += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                takeresource += `<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                 i += 1
             }
         }
@@ -575,7 +581,7 @@ socket.on('message',(logdata)=>{
         for(let resource in logdata.exportresource){
             let i = 1
             while(i <= logdata.exportresource[resource]){
-                exportresource += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                exportresource += `<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                 i += 1
             }
         }
@@ -583,7 +589,7 @@ socket.on('message',(logdata)=>{
         for(let resource in logdata.importresource){
             let i = 1
             while(i <= logdata.importresource[resource]){
-                importresource += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                importresource += `<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
                 i += 1
             }
         }
@@ -600,7 +606,7 @@ socket.on('message',(logdata)=>{
     }else if(logdata.action === 'exhaust'){
         let exhaustresource = ''
         for(let resource of logdata.exhaust){
-            exhaustresource += `<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+            exhaustresource += `<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
         }
         $(`#message_area`).append(`<div class="message">${exhaustresource}が枯渇しました</div>`)
     }else if(logdata.action === 'turnend'){
@@ -817,7 +823,7 @@ $('.resourcetap').on('click',function(){
     let amount = Number($(this).attr('data-amount')) + Number($(this).attr('data-step'))
     $(this).attr('data-amount',`${amount}`)
     let resource = $(this).attr('id').slice(4)
-    $(this).html(`<img src="./${resource}pict.png" alt="${resource}pict" class="img_for_tap ${resource}_img_for_tap">${amount}`)
+    $(this).html(`<img src="./img/${resource}pict.png" alt="${resource}pict" class="img_for_tap ${resource}_img_for_tap">${amount}`)
 })
 //貿易決定ボタンをクリック
 $(`#trade_area`).on('click','#tradedecide',function(){
@@ -1027,60 +1033,60 @@ const display = {
                 <div id="dice_area"></div>
                 <div id="receiving_area"><p id="receiving"><b>通信中…</b></p></div>
                 <div id="deck_area"><div id="deckcase"><div id="deck"></div></div>&nbsp;×34</div>
-                <img id="cost_card" src='./cost_card.jpg'>
-                <img id="board_frame" src='./large_board.png'>
-                <img id="tile1" class="tilex1 tiley5 tile" data-direction="" src="./ocean.png">
-                <img id="tile2" class="tilex1 tiley7 tile" data-direction="" src="./ocean.png">
-                <img id="tile3" class="tilex1 tiley9 tile" data-direction="" src="./ocean.png">
-                <img id="tile4" class="tilex1 tiley11 tile" data-direction="" src="./ocean.png">
-                <img id="tile5" class="tilex2 tiley4 tile" data-direction="" src="./ocean.png">
-                <img id="tile6" class="tilex2 tiley6 tile" data-direction="" src="./desert.png">
-                <img id="tile7" class="tilex2 tiley8 tile" data-direction="" src="./desert.png">
-                <img id="tile8" class="tilex2 tiley10 tile" data-direction="" src="./desert.png">
-                <img id="tile9" class="tilex2 tiley12 tile" data-direction="" src="./ocean.png">
-                <img id="tile10" class="tilex3 tiley3 tile" data-direction="" src="./ocean.png">
-                <img id="tile11" class="tilex3 tiley5 tile" data-direction="" src="./desert.png">
-                <img id="tile12" class="tilex3 tiley7 tile" data-direction="" src="./desert.png">
-                <img id="tile13" class="tilex3 tiley9 tile" data-direction="" src="./desert.png">
-                <img id="tile14" class="tilex3 tiley11 tile" data-direction="" src="./desert.png">
-                <img id="tile15" class="tilex3 tiley13 tile" data-direction="" src="./ocean.png">
-                <img id="tile16" class="tilex4 tiley2 tile" data-direction="" src="./ocean.png">
-                <img id="tile17" class="tilex4 tiley4 tile" data-direction="" src="./desert.png">
-                <img id="tile18" class="tilex4 tiley6 tile" data-direction="" src="./desert.png">
-                <img id="tile19" class="tilex4 tiley8 tile" data-direction="" src="./desert.png">
-                <img id="tile20" class="tilex4 tiley10 tile" data-direction="" src="./desert.png">
-                <img id="tile21" class="tilex4 tiley12 tile" data-direction="" src="./desert.png">
-                <img id="tile22" class="tilex4 tiley14 tile" data-direction="" src="./ocean.png">
-                <img id="tile23" class="tilex5 tiley1 tile" data-direction="" src="./ocean.png">
-                <img id="tile24" class="tilex5 tiley3 tile" data-direction="" src="./desert.png">
-                <img id="tile25" class="tilex5 tiley5 tile" data-direction="" src="./desert.png">
-                <img id="tile26" class="tilex5 tiley7 tile" data-direction="" src="./desert.png">
-                <img id="tile27" class="tilex5 tiley9 tile" data-direction="" src="./desert.png">
-                <img id="tile28" class="tilex5 tiley11 tile" data-direction="" src="./desert.png">
-                <img id="tile29" class="tilex5 tiley13 tile" data-direction="" src="./desert.png">
-                <img id="tile30" class="tilex5 tiley15 tile" data-direction="" src="./ocean.png">
-                <img id="tile31" class="tilex6 tiley2 tile" data-direction="" src="./ocean.png">
-                <img id="tile32" class="tilex6 tiley4 tile" data-direction="" src="./desert.png">
-                <img id="tile33" class="tilex6 tiley6 tile" data-direction="" src="./desert.png">
-                <img id="tile34" class="tilex6 tiley8 tile" data-direction="" src="./desert.png">
-                <img id="tile35" class="tilex6 tiley10 tile" data-direction="" src="./desert.png">
-                <img id="tile36" class="tilex6 tiley12 tile" data-direction="" src="./desert.png">
-                <img id="tile37" class="tilex6 tiley14 tile" data-direction="" src="./ocean.png">
-                <img id="tile38" class="tilex7 tiley3 tile" data-direction="" src="./ocean.png">
-                <img id="tile39" class="tilex7 tiley5 tile" data-direction="" src="./desert.png">
-                <img id="tile40" class="tilex7 tiley7 tile" data-direction="" src="./desert.png">
-                <img id="tile41" class="tilex7 tiley9 tile" data-direction="" src="./desert.png">
-                <img id="tile42" class="tilex7 tiley11 tile" data-direction="" src="./desert.png">
-                <img id="tile43" class="tilex7 tiley13 tile" data-direction="" src="./ocean.png">
-                <img id="tile44" class="tilex8 tiley4 tile" data-direction="" src="./ocean.png">
-                <img id="tile45" class="tilex8 tiley6 tile" data-direction="" src="./desert.png">
-                <img id="tile46" class="tilex8 tiley8 tile" data-direction="" src="./desert.png">
-                <img id="tile47" class="tilex8 tiley10 tile" data-direction="" src="./desert.png">
-                <img id="tile48" class="tilex8 tiley12 tile" data-direction="" src="./ocean.png">
-                <img id="tile49" class="tilex9 tiley5 tile" data-direction="" src="./ocean.png">
-                <img id="tile50" class="tilex9 tiley7 tile" data-direction="" src="./ocean.png">
-                <img id="tile51" class="tilex9 tiley9 tile" data-direction="" src="./ocean.png">
-                <img id="tile52" class="tilex9 tiley11 tile" data-direction="" src="./ocean.png">
+                <img id="cost_card" src='./img/cost_card.jpg'>
+                <img id="board_frame" src='./img/large_board.png'>
+                <img id="tile1" class="tilex1 tiley5 tile" data-direction="" src="./img/ocean.png">
+                <img id="tile2" class="tilex1 tiley7 tile" data-direction="" src="./img/ocean.png">
+                <img id="tile3" class="tilex1 tiley9 tile" data-direction="" src="./img/ocean.png">
+                <img id="tile4" class="tilex1 tiley11 tile" data-direction="" src="./img/ocean.png">
+                <img id="tile5" class="tilex2 tiley4 tile" data-direction="" src="./img/ocean.png">
+                <img id="tile6" class="tilex2 tiley6 tile" data-direction="" src="./img/desert.png">
+                <img id="tile7" class="tilex2 tiley8 tile" data-direction="" src="./img/desert.png">
+                <img id="tile8" class="tilex2 tiley10 tile" data-direction="" src="./img/desert.png">
+                <img id="tile9" class="tilex2 tiley12 tile" data-direction="" src="./img/ocean.png">
+                <img id="tile10" class="tilex3 tiley3 tile" data-direction="" src="./img/ocean.png">
+                <img id="tile11" class="tilex3 tiley5 tile" data-direction="" src="./img/desert.png">
+                <img id="tile12" class="tilex3 tiley7 tile" data-direction="" src="./img/desert.png">
+                <img id="tile13" class="tilex3 tiley9 tile" data-direction="" src="./img/desert.png">
+                <img id="tile14" class="tilex3 tiley11 tile" data-direction="" src="./img/desert.png">
+                <img id="tile15" class="tilex3 tiley13 tile" data-direction="" src="./img/ocean.png">
+                <img id="tile16" class="tilex4 tiley2 tile" data-direction="" src="./img/ocean.png">
+                <img id="tile17" class="tilex4 tiley4 tile" data-direction="" src="./img/desert.png">
+                <img id="tile18" class="tilex4 tiley6 tile" data-direction="" src="./img/desert.png">
+                <img id="tile19" class="tilex4 tiley8 tile" data-direction="" src="./img/desert.png">
+                <img id="tile20" class="tilex4 tiley10 tile" data-direction="" src="./img/desert.png">
+                <img id="tile21" class="tilex4 tiley12 tile" data-direction="" src="./img/desert.png">
+                <img id="tile22" class="tilex4 tiley14 tile" data-direction="" src="./img/ocean.png">
+                <img id="tile23" class="tilex5 tiley1 tile" data-direction="" src="./img/ocean.png">
+                <img id="tile24" class="tilex5 tiley3 tile" data-direction="" src="./img/desert.png">
+                <img id="tile25" class="tilex5 tiley5 tile" data-direction="" src="./img/desert.png">
+                <img id="tile26" class="tilex5 tiley7 tile" data-direction="" src="./img/desert.png">
+                <img id="tile27" class="tilex5 tiley9 tile" data-direction="" src="./img/desert.png">
+                <img id="tile28" class="tilex5 tiley11 tile" data-direction="" src="./img/desert.png">
+                <img id="tile29" class="tilex5 tiley13 tile" data-direction="" src="./img/desert.png">
+                <img id="tile30" class="tilex5 tiley15 tile" data-direction="" src="./img/ocean.png">
+                <img id="tile31" class="tilex6 tiley2 tile" data-direction="" src="./img/ocean.png">
+                <img id="tile32" class="tilex6 tiley4 tile" data-direction="" src="./img/desert.png">
+                <img id="tile33" class="tilex6 tiley6 tile" data-direction="" src="./img/desert.png">
+                <img id="tile34" class="tilex6 tiley8 tile" data-direction="" src="./img/desert.png">
+                <img id="tile35" class="tilex6 tiley10 tile" data-direction="" src="./img/desert.png">
+                <img id="tile36" class="tilex6 tiley12 tile" data-direction="" src="./img/desert.png">
+                <img id="tile37" class="tilex6 tiley14 tile" data-direction="" src="./img/ocean.png">
+                <img id="tile38" class="tilex7 tiley3 tile" data-direction="" src="./img/ocean.png">
+                <img id="tile39" class="tilex7 tiley5 tile" data-direction="" src="./img/desert.png">
+                <img id="tile40" class="tilex7 tiley7 tile" data-direction="" src="./img/desert.png">
+                <img id="tile41" class="tilex7 tiley9 tile" data-direction="" src="./img/desert.png">
+                <img id="tile42" class="tilex7 tiley11 tile" data-direction="" src="./img/desert.png">
+                <img id="tile43" class="tilex7 tiley13 tile" data-direction="" src="./img/ocean.png">
+                <img id="tile44" class="tilex8 tiley4 tile" data-direction="" src="./img/ocean.png">
+                <img id="tile45" class="tilex8 tiley6 tile" data-direction="" src="./img/desert.png">
+                <img id="tile46" class="tilex8 tiley8 tile" data-direction="" src="./img/desert.png">
+                <img id="tile47" class="tilex8 tiley10 tile" data-direction="" src="./img/desert.png">
+                <img id="tile48" class="tilex8 tiley12 tile" data-direction="" src="./img/ocean.png">
+                <img id="tile49" class="tilex9 tiley5 tile" data-direction="" src="./img/ocean.png">
+                <img id="tile50" class="tilex9 tiley7 tile" data-direction="" src="./img/ocean.png">
+                <img id="tile51" class="tilex9 tiley9 tile" data-direction="" src="./img/ocean.png">
+                <img id="tile52" class="tilex9 tiley11 tile" data-direction="" src="./img/ocean.png">
                 <div id="node1"  class="node nodex2 nodey4"><div id="nodetouch1" class="nodetouch"></div></div>
                 <div id="node2"  class="node nodex1 nodey5"><div id="nodetouch2" class="nodetouch"></div></div>
                 <div id="node3"  class="node nodex2 nodey6"><div id="nodetouch3" class="nodetouch"></div></div>
@@ -1310,30 +1316,30 @@ const display = {
                 <img id="chip8" class="chip tile_buttonx3 tile_buttony2" src="">
                 <img id="chip9" class="chip tile_buttonx3 tile_buttony4" src="">
                 <img id="chip10" class="chip tile_buttonx3 tile_buttony6" src="">
-                <img id="chip11" class="chip tile_buttonx3 tile_buttony8" src ="">
-                <img id="chip12" class="chip tile_buttonx3 tile_buttony10" src ="">
-                <img id="chip13" class="chip tile_buttonx4 tile_buttony1" src ="">
-                <img id="chip14" class="chip tile_buttonx4 tile_buttony3" src ="">
-                <img id="chip15" class="chip tile_buttonx4 tile_buttony5" src ="">
-                <img id="chip16" class="chip tile_buttonx4 tile_buttony7" src ="">
-                <img id="chip17" class="chip tile_buttonx4 tile_buttony9" src ="">
-                <img id="chip18" class="chip tile_buttonx4 tile_buttony11" src ="">
-                <img id="chip19" class="chip tile_buttonx5 tile_buttony2" src ="">
-                <img id="chip20" class="chip tile_buttonx5 tile_buttony4" src ="">
-                <img id="chip21" class="chip tile_buttonx5 tile_buttony6" src ="">
-                <img id="chip22" class="chip tile_buttonx5 tile_buttony8" src ="">
-                <img id="chip23" class="chip tile_buttonx5 tile_buttony10" src ="">
-                <img id="chip24" class="chip tile_buttonx6 tile_buttony3" src ="">
-                <img id="chip25" class="chip tile_buttonx6 tile_buttony5" src ="">
-                <img id="chip26" class="chip tile_buttonx6 tile_buttony7" src ="">
-                <img id="chip27" class="chip tile_buttonx6 tile_buttony9" src ="">
-                <img id="chip28" class="chip tile_buttonx7 tile_buttony4" src ="">
-                <img id="chip29" class="chip tile_buttonx7 tile_buttony6" src ="">
-                <img id="chip30" class="chip tile_buttonx7 tile_buttony8" src ="">
+                <img id="chip11" class="chip tile_buttonx3 tile_buttony8" src="">
+                <img id="chip12" class="chip tile_buttonx3 tile_buttony10" src="">
+                <img id="chip13" class="chip tile_buttonx4 tile_buttony1" src="">
+                <img id="chip14" class="chip tile_buttonx4 tile_buttony3" src="">
+                <img id="chip15" class="chip tile_buttonx4 tile_buttony5" src="">
+                <img id="chip16" class="chip tile_buttonx4 tile_buttony7" src="">
+                <img id="chip17" class="chip tile_buttonx4 tile_buttony9" src="">
+                <img id="chip18" class="chip tile_buttonx4 tile_buttony11" src="">
+                <img id="chip19" class="chip tile_buttonx5 tile_buttony2" src="">
+                <img id="chip20" class="chip tile_buttonx5 tile_buttony4" src="">
+                <img id="chip21" class="chip tile_buttonx5 tile_buttony6" src="">
+                <img id="chip22" class="chip tile_buttonx5 tile_buttony8" src="">
+                <img id="chip23" class="chip tile_buttonx5 tile_buttony10" src="">
+                <img id="chip24" class="chip tile_buttonx6 tile_buttony3" src="">
+                <img id="chip25" class="chip tile_buttonx6 tile_buttony5" src="">
+                <img id="chip26" class="chip tile_buttonx6 tile_buttony7" src="">
+                <img id="chip27" class="chip tile_buttonx6 tile_buttony9" src="">
+                <img id="chip28" class="chip tile_buttonx7 tile_buttony4" src="">
+                <img id="chip29" class="chip tile_buttonx7 tile_buttony6" src="">
+                <img id="chip30" class="chip tile_buttonx7 tile_buttony8" src="">
             `)
             for(line of island){
                 for(tile of line){
-                    $(`#tile${tileNumber}`).attr(`src`, `./${tile.type}.png`)
+                    $(`#tile${tileNumber}`).attr(`src`, `./img/${tile.type}.png`)
                     $(`#tile${tileNumber}`).attr(`data-direction`,`${tile.direction}`)
                     tileNumber += 1
                 }
@@ -1343,7 +1349,7 @@ const display = {
                 for(tile of line){
                     if(tile.type === 'ore'|| tile.type === 'grain'|| tile.type === 'brick'|| tile.type === 'lumber'|| tile.type === 'wool'|| tile.type === 'desert'){
                         if(tile.type !== 'desert' /*&& tile.number !== 0*/){
-                            $(`#chip${tileNumber}`).attr(`src`, `./${tile.number}.png`)
+                            $(`#chip${tileNumber}`).attr(`src`, `./img/${tile.number}.png`)
                         }else{
                             $(`#chip${tileNumber}`).remove()
                         }
@@ -1353,50 +1359,50 @@ const display = {
             }
         }else if(island.length === 7){
             board_size = 'regular'
-            $('#cs').attr('href',"./regular.css")
+            $('#cs').attr('href',"./Catan-Regular.css")
             $(`#board`).html(`
                 <div id="dice_area"></div>
                 <div id="receiving_area"><p id="receiving"><b>通信中…</b></p></div>
                 <div id="deck_area"><div id="deckcase"><div id="deck"></div></div>&nbsp;×25</div>
-                <img id="cost_card" src='./cost_card.jpg'>
-                <img id="board_frame" src='./regular_board.png'>
-                <img id="tile1" class="tile" data-direction="" src="./regular_ocean.png">
-                <img id="tile2" class="tile" data-direction="" src="./regular_ocean.png">
-                <img id="tile3" class="tile" data-direction="" src="./regular_ocean.png">
-                <img id="tile4" class="tile" data-direction="" src="./regular_ocean.png">
-                <img id="tile5" class="tile" data-direction="" src="./regular_ocean.png">
-                <img id="tile6" class="tile" data-direction="" src="./regular_desert.png">
-                <img id="tile7" class="tile" data-direction="" src="./regular_desert.png">
-                <img id="tile8" class="tile" data-direction="" src="./regular_desert.png">
-                <img id="tile9" class="tile" data-direction="" src="./regular_ocean.png">
-                <img id="tile10" class="tile" data-direction="" src="./regular_ocean.png">
-                <img id="tile11" class="tile" data-direction="" src="./regular_desert.png">
-                <img id="tile12" class="tile" data-direction="" src="./regular_desert.png">
-                <img id="tile13" class="tile" data-direction="" src="./regular_desert.png">
-                <img id="tile14" class="tile" data-direction="" src="./regular_desert.png">
-                <img id="tile15" class="tile" data-direction="" src="./regular_ocean.png">
-                <img id="tile16" class="tile" data-direction="" src="./regular_ocean.png">
-                <img id="tile17" class="tile" data-direction="" src="./regular_desert.png">
-                <img id="tile18" class="tile" data-direction="" src="./regular_desert.png">
-                <img id="tile19" class="tile" data-direction="" src="./regular_desert.png">
-                <img id="tile20" class="tile" data-direction="" src="./regular_desert.png">
-                <img id="tile21" class="tile" data-direction="" src="./regular_desert.png">
-                <img id="tile22" class="tile" data-direction="" src="./regular_ocean.png">
-                <img id="tile23" class="tile" data-direction="" src="./regular_ocean.png">
-                <img id="tile24" class="tile" data-direction="" src="./regular_desert.png">
-                <img id="tile25" class="tile" data-direction="" src="./regular_desert.png">
-                <img id="tile26" class="tile" data-direction="" src="./regular_desert.png">
-                <img id="tile27" class="tile" data-direction="" src="./regular_desert.png">
-                <img id="tile28" class="tile" data-direction="" src="./regular_ocean.png">
-                <img id="tile29" class="tile" data-direction="" src="./regular_ocean.png">
-                <img id="tile30" class="tile" data-direction="" src="./regular_desert.png">
-                <img id="tile31" class="tile" data-direction="" src="./regular_desert.png">
-                <img id="tile32" class="tile" data-direction="" src="./regular_desert.png">
-                <img id="tile33" class="tile" data-direction="" src="./regular_ocean.png">
-                <img id="tile34" class="tile" data-direction="" src="./regular_ocean.png">
-                <img id="tile35" class="tile" data-direction="" src="./regular_ocean.png">
-                <img id="tile36" class="tile" data-direction="" src="./regular_ocean.png">
-                <img id="tile37" class="tile" data-direction="" src="./regular_ocean.png">
+                <img id="cost_card" src='./img/cost_card.jpg'>
+                <img id="board_frame" src='./img/regular_board.png'>
+                <img id="tile1" class="tile" data-direction="" src="./img/regular_ocean.png">
+                <img id="tile2" class="tile" data-direction="" src="./img/regular_ocean.png">
+                <img id="tile3" class="tile" data-direction="" src="./img/regular_ocean.png">
+                <img id="tile4" class="tile" data-direction="" src="./img/regular_ocean.png">
+                <img id="tile5" class="tile" data-direction="" src="./img/regular_ocean.png">
+                <img id="tile6" class="tile" data-direction="" src="./img/regular_desert.png">
+                <img id="tile7" class="tile" data-direction="" src="./img/regular_desert.png">
+                <img id="tile8" class="tile" data-direction="" src="./img/regular_desert.png">
+                <img id="tile9" class="tile" data-direction="" src="./img/regular_ocean.png">
+                <img id="tile10" class="tile" data-direction="" src="./img/regular_ocean.png">
+                <img id="tile11" class="tile" data-direction="" src="./img/regular_desert.png">
+                <img id="tile12" class="tile" data-direction="" src="./img/regular_desert.png">
+                <img id="tile13" class="tile" data-direction="" src="./img/regular_desert.png">
+                <img id="tile14" class="tile" data-direction="" src="./img/regular_desert.png">
+                <img id="tile15" class="tile" data-direction="" src="./img/regular_ocean.png">
+                <img id="tile16" class="tile" data-direction="" src="./img/regular_ocean.png">
+                <img id="tile17" class="tile" data-direction="" src="./img/regular_desert.png">
+                <img id="tile18" class="tile" data-direction="" src="./img/regular_desert.png">
+                <img id="tile19" class="tile" data-direction="" src="./img/regular_desert.png">
+                <img id="tile20" class="tile" data-direction="" src="./img/regular_desert.png">
+                <img id="tile21" class="tile" data-direction="" src="./img/regular_desert.png">
+                <img id="tile22" class="tile" data-direction="" src="./img/regular_ocean.png">
+                <img id="tile23" class="tile" data-direction="" src="./img/regular_ocean.png">
+                <img id="tile24" class="tile" data-direction="" src="./img/regular_desert.png">
+                <img id="tile25" class="tile" data-direction="" src="./img/regular_desert.png">
+                <img id="tile26" class="tile" data-direction="" src="./img/regular_desert.png">
+                <img id="tile27" class="tile" data-direction="" src="./img/regular_desert.png">
+                <img id="tile28" class="tile" data-direction="" src="./img/regular_ocean.png">
+                <img id="tile29" class="tile" data-direction="" src="./img/regular_ocean.png">
+                <img id="tile30" class="tile" data-direction="" src="./img/regular_desert.png">
+                <img id="tile31" class="tile" data-direction="" src="./img/regular_desert.png">
+                <img id="tile32" class="tile" data-direction="" src="./img/regular_desert.png">
+                <img id="tile33" class="tile" data-direction="" src="./img/regular_ocean.png">
+                <img id="tile34" class="tile" data-direction="" src="./img/regular_ocean.png">
+                <img id="tile35" class="tile" data-direction="" src="./img/regular_ocean.png">
+                <img id="tile36" class="tile" data-direction="" src="./img/regular_ocean.png">
+                <img id="tile37" class="tile" data-direction="" src="./img/regular_ocean.png">
                 <div id="node1" class="node"><div id="nodetouch1" class="nodetouch"></div></div>
                 <div id="node2" class="node"><div id="nodetouch2" class="nodetouch"></div></div>
                 <div id="node3" class="node"><div id="nodetouch3" class="nodetouch"></div></div>
@@ -1564,7 +1570,7 @@ const display = {
             `)
             for(line of island){
                 for(tile of line){
-                    $(`#tile${tileNumber}`).attr(`src`, `./regular_${tile.type}.png`)
+                    $(`#tile${tileNumber}`).attr(`src`, `./img/regular_${tile.type}.png`)
                     $(`#tile${tileNumber}`).attr(`data-direction`,`${tile.direction}`)
                     tileNumber += 1
                 }
@@ -1574,7 +1580,7 @@ const display = {
                 for(tile of line){
                     if(tile.type === 'ore'|| tile.type === 'grain'|| tile.type === 'brick'|| tile.type === 'lumber'|| tile.type === 'wool'|| tile.type === 'desert'){
                         if(tile.type !== 'desert'){
-                            $(`#chip${tileNumber}`).attr(`src`, `./${tile.number}.png`)
+                            $(`#chip${tileNumber}`).attr(`src`, `./img/${tile.number}.png`)
                         }else{
                             $(`#chip${tileNumber}`).remove()
                         }
@@ -1600,7 +1606,7 @@ const display = {
                             $(`#player${p.number}resource`).append(`<br>`);
                             t = 0
                         }
-                        $(`#player${p.number}resource`).append(`<div class="card ${String(r)}"><img src="./${r}pict.png" alt="${r}" class="img_for_card"></div>`);
+                        $(`#player${p.number}resource`).append(`<div class="card ${String(r)}"><img src="./img/${r}pict.png" alt="${r}" class="img_for_card"></div>`);
                         i += 1
                         t += 1
                     };
@@ -1618,7 +1624,7 @@ const display = {
             for(r in data.resource){
                 let i = 1
                 while(i <= data.resource[r]){
-                    $(`#player${data.number}resource`).append(`<div class="card ${String(r)}"><img src="./${r}pict.png" alt="${r}" class="img_for_card"></div>`);
+                    $(`#player${data.number}resource`).append(`<div class="card ${String(r)}"><img src="./img/${r}pict.png" alt="${r}" class="img_for_card"></div>`);
                     i += 1
                 };
             };
@@ -1645,10 +1651,10 @@ const display = {
         for(let p of game.players){
             $(`#player${p.number}title`).html(``)
             if(p.largestArmy === 2){
-                $(`#player${p.number}title`).append(`<div class="titlesquare"><img src="./largestarmy.png" alt="largestarmy" class="img_for_title"></div>`)
+                $(`#player${p.number}title`).append(`<div class="titlesquare"><img src="./img/largestarmy.png" alt="largestarmy" class="img_for_title"></div>`)
             }
             if(p.longestRoad === 2){
-                $(`#player${p.number}title`).append(`<div class="titlesquare"><img src="./longestroad.png" alt="longestroad" class="img_for_title"></div>`)
+                $(`#player${p.number}title`).append(`<div class="titlesquare"><img src="./img/longestroad.png" alt="longestroad" class="img_for_title"></div>`)
             }
         };
         $(`#receiving_area`).hide();
@@ -1657,10 +1663,10 @@ const display = {
         $(`#receiving_area`).show();
         $(`#player${data.number}title`).html(``)
         if(data.largestArmy === 2){
-            $(`#player${data.number}title`).append(`<div class="titlesquare"><img src="./largestarmy.png" alt="largestarmy" class="img_for_title"></div>`)
+            $(`#player${data.number}title`).append(`<div class="titlesquare"><img src="./img/largestarmy.png" alt="largestarmy" class="img_for_title"></div>`)
         }
         if(data.longestRoad === 2){
-            $(`#player${data.number}title`).append(`<div class="titlesquare"><img src="./longestroad.png" alt="longestroad" class="img_for_title"></div>`)
+            $(`#player${data.number}title`).append(`<div class="titlesquare"><img src="./img/longestroad.png" alt="longestroad" class="img_for_title"></div>`)
         }
         $(`#receiving_area`).hide();
     },
@@ -1672,7 +1678,7 @@ const display = {
                 for(pr in p.progress){
                     let i = 1
                     while(i <= p.progress[pr]){
-                        $(`#player${p.number}progress`).append(`<div class="card ${pr}"><img src="./${pr}.png" alt="${pr}" class="img_for_card ${pr}"></div>`);
+                        $(`#player${p.number}progress`).append(`<div class="card ${pr}"><img src="./img/${pr}.png" alt="${pr}" class="img_for_card ${pr}"></div>`);
                         i += 1
                     };
                 };
@@ -1695,7 +1701,7 @@ const display = {
             for(pr in data.progress){
                 let i = 1
                 while(i <= data.progress[pr]){
-                    $(`#player${data.number}progress`).append(`<div class="card ${pr}"><img src="./${pr}.png" alt="${pr}" class="img_for_card ${pr}"></div>`);
+                    $(`#player${data.number}progress`).append(`<div class="card ${pr}"><img src="./img/${pr}.png" alt="${pr}" class="img_for_card ${pr}"></div>`);
                     i += 1
                 };
             };
@@ -1717,7 +1723,7 @@ const display = {
             for(u in p.used){
                 let i = 1
                 while(i <= p.used[u]){
-                    $(`#player${p.number}used`).append(`<div class="card ${u}"><img src="./${u}.png" alt="${u}" class="img_for_card ${u}"></div>`);
+                    $(`#player${p.number}used`).append(`<div class="card ${u}"><img src="./img/${u}.png" alt="${u}" class="img_for_card ${u}"></div>`);
                     i += 1
                 };
             };
@@ -1730,7 +1736,7 @@ const display = {
         for(u in data.used){
             let i = 1
             while(i <= data.used[u]){
-                $(`#player${data.number}used`).append(`<div class="card ${u}"><img src="./${u}.png" alt="${u}" class="img_for_card ${u}"></div>`);
+                $(`#player${data.number}used`).append(`<div class="card ${u}"><img src="./img/${u}.png" alt="${u}" class="img_for_card ${u}"></div>`);
                 i += 1
             };
         };
@@ -1739,38 +1745,38 @@ const display = {
     buildings(buildings){
         $(`#receiving_area`).show()
         for(let house of buildings.house){
-            $(`#nodetouch${house.nodeNumber}`).html(`<img id="house${house.nodeNumber}" class="house" src="./house${house.owner.number+1}.png">`)
+            $(`#nodetouch${house.nodeNumber}`).html(`<img id="house${house.nodeNumber}" class="house" src="./img/house${house.owner.number+1}.png">`)
         }
         if(board_size === 'large'){
             for(let road of buildings.road){
-                $(`#road${road.roadNumber}`).html(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./road_${road.roadDegree}${road.owner.number+1}.png">`)
+                $(`#road${road.roadNumber}`).html(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./img/road_${road.roadDegree}${road.owner.number+1}.png">`)
             }
         }else if(board_size === 'regular'){
             for(let road of buildings.road){
-                $(`#road${road.roadNumber}`).html(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./regular_road_${road.roadDegree}${road.owner.number+1}.png">`)
+                $(`#road${road.roadNumber}`).html(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./img/regular_road_${road.roadDegree}${road.owner.number+1}.png">`)
             }
         }
         for(let city of buildings.city){
-            $(`#nodetouch${city.nodeNumber}`).html(`<img id="city${city.nodeNumber}" class="city" src="./city${city.owner.number+1}.png">`)
+            $(`#nodetouch${city.nodeNumber}`).html(`<img id="city${city.nodeNumber}" class="city" src="./img/city${city.owner.number+1}.png">`)
         }
         $(`#receiving_area`).hide()
     },
     addHouse(houseobj){
         $(`#receiving_area`).show()
-        $(`#nodetouch${houseobj.nodeNumber}`).html(`<img id="house${houseobj.nodeNumber}" class="house" src="./house${houseobj.ownerNumber+1}.png">`)
+        $(`#nodetouch${houseobj.nodeNumber}`).html(`<img id="house${houseobj.nodeNumber}" class="house" src="./img/house${houseobj.ownerNumber+1}.png">`)
         $(`#receiving_area`).hide()
     },
     addCity(cityobj){
         $(`#receiving_area`).show()
-        $(`#nodetouch${cityobj.nodeNumber}`).html(`<img id="city${cityobj.nodeNumber}" class="city" src="./city${cityobj.ownerNumber+1}.png">`)
+        $(`#nodetouch${cityobj.nodeNumber}`).html(`<img id="city${cityobj.nodeNumber}" class="city" src="./img/city${cityobj.ownerNumber+1}.png">`)
         $(`#receiving_area`).hide()
     },
     addRoad(roadobj){
         $(`#receiving_area`).show()
         if(board_size === 'large'){
-            $(`#road${roadobj.roadNumber}`).html(`<img id="roadtoken${roadobj.roadNumber}" class="roadtoken" src="./road_${roadobj.roadDegree}${roadobj.ownerNumber+1}.png">`)
+            $(`#road${roadobj.roadNumber}`).html(`<img id="roadtoken${roadobj.roadNumber}" class="roadtoken" src="./img/road_${roadobj.roadDegree}${roadobj.ownerNumber+1}.png">`)
         }else if(board_size === 'regular'){
-            $(`#road${roadobj.roadNumber}`).html(`<img id="roadtoken${roadobj.roadNumber}" class="roadtoken" src="./regular_road_${roadobj.roadDegree}${roadobj.ownerNumber+1}.png">`)
+            $(`#road${roadobj.roadNumber}`).html(`<img id="roadtoken${roadobj.roadNumber}" class="roadtoken" src="./img/regular_road_${roadobj.roadDegree}${roadobj.ownerNumber+1}.png">`)
         }
         $(`#receiving_area`).hide()
     },
@@ -1881,11 +1887,11 @@ const display = {
                 let i = 1
                 let j = 1
                 while(i <= data.giveresource[resource]){
-                    $(`#proposeterm .giveresource`).append(`<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
+                    $(`#proposeterm .giveresource`).append(`<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
                     i += 1
                 };
                 while(j <= data.takeresource[resource]){
-                    $(`#proposeterm .takeresource`).append(`<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
+                    $(`#proposeterm .takeresource`).append(`<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
                     j += 1
                 };
             };
@@ -1900,11 +1906,11 @@ const display = {
                 let i = 1
                 let j = 1
                 while(i <= data.takeresource[resource]){
-                    $(`#proposeterm .giveresource`).append(`<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
+                    $(`#proposeterm .giveresource`).append(`<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
                     i += 1
                 };
                 while(j <= data.giveresource[resource]){
-                    $(`#proposeterm .takeresource`).append(`<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
+                    $(`#proposeterm .takeresource`).append(`<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
                     j += 1
                 };
             };
@@ -1918,11 +1924,11 @@ const display = {
                 let i = 1
                 let j = 1
                 while(i <= data.giveresource[resource]){
-                    $(`#proposeterm .giveresource`).append(`<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
+                    $(`#proposeterm .giveresource`).append(`<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
                     i += 1
                 };
                 while(j <= data.takeresource[resource]){
-                    $(`#proposeterm .takeresource`).append(`<div class="card ${String(resource)}"><img src="./${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
+                    $(`#proposeterm .takeresource`).append(`<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`);
                     j += 1
                 };
             };
@@ -1960,14 +1966,14 @@ const display = {
             for(r in p.resource){
                 let i = 1
                 while(i <= p.resource[r]){
-                    $(`#player${p.number}resource`).append(`<div class="card ${String(r)}"><img src="./${r}pict.png" alt="${r}" class="img_for_card"></div>`);
+                    $(`#player${p.number}resource`).append(`<div class="card ${String(r)}"><img src="./img/${r}pict.png" alt="${r}" class="img_for_card"></div>`);
                     i += 1
                 };
             }
             for(pr in p.progress){
                 let i = 1
                 while(i <= p.progress[pr]){
-                    $(`#player${p.number}progress`).append(`<div class="card ${pr}"><img src="./${pr}.png" alt="${pr}" class="img_for_card ${pr}"></div>`);
+                    $(`#player${p.number}progress`).append(`<div class="card ${pr}"><img src="./img/${pr}.png" alt="${pr}" class="img_for_card ${pr}"></div>`);
                     i += 1
                 };
             };
@@ -1988,11 +1994,11 @@ const display = {
           <tr>
             <th>名</th>
             <th></th>
-            <th class="ore"><img src="./orepict.png" alt="orepict" class="img_for_table"></th>
-            <th class="grain"><img src="./grainpict.png" alt="grainpict" class="img_for_table"></th>
-            <th class="wool"><img src="./woolpict.png" alt="woolpict" class="img_for_table"></th>
-            <th class="lumber"><img src="./lumberpict.png" alt="lumberpict" class="img_for_table"></th>
-            <th class="brick"><img src="./brickpict.png" alt="brickpict" class="img_for_table"></th>
+            <th class="ore"><img src="./img/orepict.png" alt="orepict" class="img_for_table"></th>
+            <th class="grain"><img src="./img/grainpict.png" alt="grainpict" class="img_for_table"></th>
+            <th class="wool"><img src="./img/woolpict.png" alt="woolpict" class="img_for_table"></th>
+            <th class="lumber"><img src="./img/lumberpict.png" alt="lumberpict" class="img_for_table"></th>
+            <th class="brick"><img src="./img/brickpict.png" alt="brickpict" class="img_for_table"></th>
             <th>計</th>
           </tr>`)
         let i = 0
@@ -2061,6 +2067,7 @@ const display = {
         $(`#receiving_area`).hide();
     },
     showGameEndArea(){
+        fanfareSound.play()
         $(`#receiving_area`).show();
         $(`#gameend_area`).show()
         $(`#newgame_area`).show()
@@ -2075,6 +2082,9 @@ const display = {
     },
     turnPlayer(data){
         $(`#receiving_area`).show();
+        if(data.ID === socket.id){
+            turnSound.play()
+        }
         $(`.name`).css('background-color', '');
         if(data.phase !== 'building'){
             $(`#player${data.tn}name`).css('background-color', 'rgb(255, 123, 0)');
@@ -2223,7 +2233,7 @@ const display = {
         $(`#receiving_area`).show();
         $(`#dice_area`).show()
         $(`#dice_area`).css(`background-color`, `rgb(131, 221, 131)`)
-        $(`#dice_area`).html(`<img class="dice" src="./dice${dice[0]}.png" alt="dice${dice[0]}"><img class="dice" src="./dice${dice[1]}.png" alt="dice${dice[1]}">`)
+        $(`#dice_area`).html(`<img class="dice" src="./img/dice${dice[0]}.png" alt="dice${dice[0]}"><img class="dice" src="./img/dice${dice[1]}.png" alt="dice${dice[1]}">`)
         if(dice[0]+dice[1] === 7){
             $(`#dice_area`).css(`background-color`, `red`)
         }
@@ -2276,24 +2286,24 @@ const display = {
             for(let r in player.resource){
                 let i = 1
                 while(i <= player.resource[r]){
-                    $(`#player${pn}resource`).append(`<div class="card ${String(r)}"><img src="./${r}pict.png" alt="${r}" class="img_for_card"></div>`);
+                    $(`#player${pn}resource`).append(`<div class="card ${String(r)}"><img src="./img/${r}pict.png" alt="${r}" class="img_for_card"></div>`);
                     i += 1
                 };
             };
             //title
             $(`#player${pn}title`).html(``)
             if(player.largestArmy === 2){
-                $(`#player${pn}title`).append(`<div class="titlesquare"><img src="./largestarmy.png" alt="largestarmy" class="img_for_title"></div>`)
+                $(`#player${pn}title`).append(`<div class="titlesquare"><img src="./img/largestarmy.png" alt="largestarmy" class="img_for_title"></div>`)
             }
             if(player.longestRoad === 2){
-                $(`#player${pn}title`).append(`<div class="titlesquare"><img src="./longestroad.png" alt="longestroad" class="img_for_title"></div>`)
+                $(`#player${pn}title`).append(`<div class="titlesquare"><img src="./img/longestroad.png" alt="longestroad" class="img_for_title"></div>`)
             }
             //progress
             $(`#player${pn}progress`).html(``)
             for(let pr in player.progress){
                 let i = 1
                 while(i <= player.progress[pr]){
-                    $(`#player${pn}progress`).append(`<div class="card ${pr}"><img src="./${pr}.png" alt="${pr}" class="img_for_card ${pr}"></div>`);
+                    $(`#player${pn}progress`).append(`<div class="card ${pr}"><img src="./img/${pr}.png" alt="${pr}" class="img_for_card ${pr}"></div>`);
                     i += 1
                 };
             };
@@ -2302,27 +2312,27 @@ const display = {
             for(let u in player.used){
                 let i = 1
                 while(i <= player.used[u]){
-                    $(`#player${pn}used`).append(`<div class="card ${u}"><img src="./${u}.png" alt="${u}" class="img_for_card ${u}"></div>`);
+                    $(`#player${pn}used`).append(`<div class="card ${u}"><img src="./img/${u}.png" alt="${u}" class="img_for_card ${u}"></div>`);
                     i += 1
                 };
             };
             //house
             for(let houseNumber of player.house){
-                $(`#nodetouch${houseNumber}`).html(`<img id="house${houseNumber}" class="house" src="./house${pn+1}.png">`)
+                $(`#nodetouch${houseNumber}`).html(`<img id="house${houseNumber}" class="house" src="./img/house${pn+1}.png">`)
             }
             //road
             if(board_size === 'large'){
                 for(let road of player.road){
-                    $(`#road${road.roadNumber}`).html(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./road_${road.roadDegree}${pn+1}.png">`)
+                    $(`#road${road.roadNumber}`).html(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./img/road_${road.roadDegree}${pn+1}.png">`)
                 }
             }else if(board_size === 'regular'){
                 for(let road of player.road){
-                    $(`#road${road.roadNumber}`).html(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./regular_road_${road.roadDegree}${pn+1}.png">`)
+                    $(`#road${road.roadNumber}`).html(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./img/regular_road_${road.roadDegree}${pn+1}.png">`)
                 }
             }
             //city
             for(let cityNumber of player.city){
-                $(`#nodetouch${cityNumber}`).html(`<img id="city${cityNumber}" class="city" src="./city${pn+1}.png">`)
+                $(`#nodetouch${cityNumber}`).html(`<img id="city${cityNumber}" class="city" src="./img/city${pn+1}.png">`)
             }
             pn += 1
         }
@@ -2331,7 +2341,7 @@ const display = {
         $(`#tile_button${record[turn][actionInTurn].thief}`).html(`<div id="thief"></div>`)
         //dice
         if(record[turn][actionInTurn].dice[0]){
-            $(`#dice_area`).html(`<img class="dice" src="./dice${record[turn][actionInTurn].dice[0]}.png" alt="dice${record[turn][actionInTurn].dice[0]}"><img class="dice" src="./dice${record[turn][actionInTurn].dice[1]}.png" alt="dice${record[turn][actionInTurn].dice[1]}">`)
+            $(`#dice_area`).html(`<img class="dice" src="./img/dice${record[turn][actionInTurn].dice[0]}.png" alt="dice${record[turn][actionInTurn].dice[0]}"><img class="dice" src="./img/dice${record[turn][actionInTurn].dice[1]}.png" alt="dice${record[turn][actionInTurn].dice[1]}">`)
         }else{
             $(`#dice_area`).html(``)
         }
@@ -2402,11 +2412,11 @@ function total(object){
 }
 function resetResourceTap(){
     $(`.resourcetap`).attr('data-amount', 0)
-    $(`.ore`+`.resourcetap`).html(`<img src="./orepict.png" alt="orepict" class="img_for_tap">0`)
-    $(`.grain`+`.resourcetap`).html(`<img src="./grainpict.png" alt="grainpict" class="img_for_tap">0`)
-    $(`.wool`+`.resourcetap`).html(`<img src="./woolpict.png" alt="woolpict" class="img_for_tap">0`)
-    $(`.lumber`+`.resourcetap`).html(`<img src="./lumberpict.png" alt="lumberpict" class="img_for_tap lumber_img_for_tap">0`)
-    $(`.brick`+`.resourcetap`).html(`<img src="./brickpict.png" alt="brickpict" class="img_for_tap">0`)
+    $(`.ore`+`.resourcetap`).html(`<img src="./img/orepict.png" alt="orepict" class="img_for_tap">0`)
+    $(`.grain`+`.resourcetap`).html(`<img src="./img/grainpict.png" alt="grainpict" class="img_for_tap">0`)
+    $(`.wool`+`.resourcetap`).html(`<img src="./img/woolpict.png" alt="woolpict" class="img_for_tap">0`)
+    $(`.lumber`+`.resourcetap`).html(`<img src="./img/lumberpict.png" alt="lumberpict" class="img_for_tap lumber_img_for_tap">0`)
+    $(`.brick`+`.resourcetap`).html(`<img src="./img/brickpict.png" alt="brickpict" class="img_for_tap">0`)
 }
 
 socket.on('console',(game)=>{
@@ -2414,8 +2424,9 @@ socket.on('console',(game)=>{
     console.log(game)
     $(`#receiving_area`).hide()
 })
-socket.on('checkrecord',(gameRecord)=>{
-    $(`#receiving_area`).show()
-    console.log(gameRecord)
-    $(`#receiving_area`).hide()
+socket.on('burstsound',()=>{
+    burstSound.play()
+})
+socket.on('fanfare',()=>{
+    fanfareSound.play()
 })

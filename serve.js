@@ -7,11 +7,20 @@ const db = new sqlite3.Database('mydb.sqlite3');*/
 const DOCUMENT_ROOT = __dirname + "/static";
 const SECRET_TOKEN = "abcdefghijklmn12345";
 app.get("/", (req, res)=>{
-  res.sendFile(DOCUMENT_ROOT + "/Catan-Extension.html");
+  res.sendFile(DOCUMENT_ROOT + "/Catan.html");
+});
+app.get("/game", (req, res)=>{
+  res.sendFile(DOCUMENT_ROOT + "/Past-Games.html");
 });
 
 app.get("/:file", (req, res)=>{
   res.sendFile(DOCUMENT_ROOT + "/" + req.params.file);
+});
+app.get("/img/:file", (req, res)=>{
+  res.sendFile(DOCUMENT_ROOT + "/img/" + req.params.file);
+});
+app.get("/sound/:file", (req, res)=>{
+  res.sendFile(DOCUMENT_ROOT + "/sound/" + req.params.file);
 });
 
 /**
@@ -2088,6 +2097,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   turnEnd(){
     if(this.phase === 'afterdice'){
       if(this.turnPlayer.point >= 10){
+        io.emit('fanfare','')
         updateDatabase(this.turnPlayer)
         makeNewTurnRecord()
         takeRecord()
@@ -2185,6 +2195,9 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
         player.recordLog()
       }
       display.showBurstArea()
+      for(let player of this.burstPlayer){
+        io.to(player.socketID).emit('burstsound','')
+      }
       const logdata = {action:'burst', players:this.burstPlayer, turnPlayerID:game.turnPlayer.socketID}
       display.playLog(logdata)
     }else{
@@ -2574,8 +2587,9 @@ const display = {
   turnPlayer(){
     let tn = game.turnPlayer.number
     let bn = game.basePlayer.number
+    let ID = game.turnPlayer.socketID
     let phase = game.phase
-    let data = {tn:tn, bn:bn, phase:phase}
+    let data = {tn:tn, bn:bn, ID:ID, phase:phase}
     io.emit('turnplayer', data)
   },
   turnPlayerTo(socketID){
@@ -3244,6 +3258,12 @@ function updateDatabase(winner){
       });
     }
   }
+  const Record = "insert into game (start_time, board, record) values('" + game.startTime + "', '" + JSON.stringify(board.island) + "', '" + JSON.stringify(gameRecord) + "')"
+  client.query(Record)
+  .then((res) => {
+  })
+  .catch((e) => {
+  });
   if(pl <= 2){
     return
   }
@@ -3721,9 +3741,5 @@ io.on("connection", (socket)=>{
     //コンソールに表示
     socket.on('console',(e)=>{
       socket.emit('console', game)
-    })
-    //記録確認
-    socket.on('checkrecord',()=>{
-      socket.emit('checkrecord', gameRecord)
     })
 })
