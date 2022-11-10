@@ -8,10 +8,13 @@ let defaultkeep
 let keepremained
 const turnSound = new Audio("./sound/turn.mp3")
 turnSound.volume = 0.3
+turnSound.load()
 const burstSound = new Audio("./sound/burst.mp3")
 burstSound.volume = 0.4
+burstSound.load()
 const fanfareSound = new Audio("./sound/fanfare.mp3")
-fanfareSound.volume = 0.25
+fanfareSound.volume = 0.45
+fanfareSound.load()
 //画面初期化
 $('#initializebutton').on('click', function(){
     $('#yesorno').show()
