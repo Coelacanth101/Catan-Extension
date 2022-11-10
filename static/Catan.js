@@ -8,7 +8,6 @@ let defaultkeep
 let keepremained
 const turnSound = new Audio("./sound/turn.mp3")
 turnSound.volume = 0.3
-turnSound.load()
 const burstSound = new Audio("./sound/burst.mp3")
 burstSound.volume = 0.4
 burstSound.load()
