@@ -10,10 +10,8 @@ const turnSound = new Audio("./sound/turn.mp3")
 turnSound.volume = 0.3
 const burstSound = new Audio("./sound/burst.mp3")
 burstSound.volume = 0.4
-burstSound.load()
 const fanfareSound = new Audio("./sound/fanfare.mp3")
 fanfareSound.volume = 0.45
-fanfareSound.load()
 //画面初期化
 $('#initializebutton').on('click', function(){
     $('#yesorno').show()
@@ -34,6 +32,9 @@ $('#nameinputarea').on('click', '.namebutton', function(){
         namedata = {name:myName, socketID:socket.id}
         socket.emit("nameInput", namedata)
         $(`#nameinput`).val('')
+        turnSound.load()
+        burstSound.load()
+        fanfareSound.load()
     }
 })
 
@@ -936,6 +937,9 @@ $('#players').on('click', '.playermark', function(){
     let n = Number($(this).parent().parent().parent().data('number'))
     let player ={number:n, socketID:socket.id}
     socket.emit('takeover', player)
+    turnSound.load()
+    burstSound.load()
+    fanfareSound.load()
 });
 //戻す
 $(`#board_area`).on('click','#dice_area',function(){
