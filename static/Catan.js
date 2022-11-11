@@ -8,11 +8,11 @@ let playerNumber
 let defaultkeep
 let keepremained
 const turnSound = new Audio("./sound/turn.mp3")
-turnSound.volume = 0.3
+turnSound.volume = 0.0
 const burstSound = new Audio("./sound/burst.mp3")
-burstSound.volume = 0.4
+burstSound.volume = 0.0
 const fanfareSound = new Audio("./sound/fanfare.mp3")
-fanfareSound.volume = 0.45
+fanfareSound.volume = 0.0
 //画面初期化
 $('#initializebutton').on('click', function(){
     $('#yesorno').show()
@@ -485,7 +485,7 @@ socket.on('playlog',(logdata)=>{
                 i += 1
             }
         }
-        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が${exportresource}を${importresource}と交換しました</div>`)
+        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が${exportresource}を${importresource}に換えました</div>`)
     }else if(logdata.action === 'burst'){
         let burstPlayers = ``
         for(let player of logdata.players){
@@ -620,7 +620,6 @@ socket.on('message',(logdata)=>{
 })
 socket.on('gamerecord',(data)=>{
     record = data.gameRecord
-    console.log(record)
     endturn = record.length-1
     turn = endturn
     actionInTurn = 0

@@ -8,7 +8,7 @@ app.get("/", (req, res)=>{
   res.sendFile(DOCUMENT_ROOT + "/Catan.html");
 });
 
-app.get("/game", (req, res)=>{
+app.get("/search_games", (req, res)=>{
   res.sendFile(DOCUMENT_ROOT + "/Past-Games.html");
 });
 
@@ -321,7 +321,7 @@ class Player{
           const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'house', turnPlayerID:game.turnPlayer.socketID}
           display.message(logdata)
           display.playLog(logdata)
-          takeRecord()
+          takeRecord(logdata)
         }
       }else if(game.phase === 'afterdice'|| game.phase === 'building'){
         //既に家がないか確認
@@ -366,7 +366,7 @@ class Player{
           const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'house', turnPlayerID:game.turnPlayer.socketID}
           display.message(logdata)
           display.playLog(logdata)
-          takeRecord()
+          takeRecord(logdata)
         }
       }else{
         display.hideReceivingArea()
@@ -412,7 +412,7 @@ class Player{
           const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'city', turnPlayerID:game.turnPlayer.socketID}
           display.message(logdata)
           display.playLog(logdata)
-          takeRecord()
+          takeRecord(logdata)
         }
       }else{
         display.hideReceivingArea()
@@ -440,7 +440,7 @@ class Player{
           const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'road', turnPlayerID:game.turnPlayer.socketID}
           display.message(logdata)
           display.playLog(logdata)
-          takeRecord()
+          takeRecord(logdata)
           game.turnEndSetup()
           display.relativeNodes()
         }
@@ -475,7 +475,7 @@ class Player{
           const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'road', turnPlayerID:game.turnPlayer.socketID}
           display.message(logdata)
           display.playLog(logdata)
-          takeRecord()
+          takeRecord(logdata)
         }
       }else if(game.phase === 'roadbuild1'){
         //既に道がないか確認
@@ -504,13 +504,13 @@ class Player{
           const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'road', turnPlayerID:game.turnPlayer.socketID}
           display.message(logdata)
           display.playLog(logdata)
+          takeRecord(logdata)
           if(this.token.road >= 1){
             game.phase = 'roadbuild2'
           }else{
             game.phase = 'afterdice'
           }
           display.toggleMyButtons(game.turnPlayer.socketID)
-          takeRecord()
         }
       }else if(game.phase === 'roadbuild2'){
         //既に道がないか確認
@@ -541,7 +541,7 @@ class Player{
           const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'road', turnPlayerID:game.turnPlayer.socketID}
           display.message(logdata)
           display.playLog(logdata)
-          takeRecord()
+          takeRecord(logdata)
         }
       }else{
         display.hideReceivingArea()
@@ -559,6 +559,7 @@ class Player{
       }else{
         this.useResource('progress')
         this.progress[game.progressDeck[0]] += 1
+        let card = game.progressDeck[0]
         if(game.progressDeck[0] === 'point'){
           this.lastPoint = 'point'
         }
@@ -569,10 +570,11 @@ class Player{
         display.progressOf(this)
         recordLog()
         game.lastActionPlayer = this
-        const logdata = {action:'draw', playername:game.turnPlayer.name, turnPlayerID:game.turnPlayer.socketID}
+        const logdata = {action:'draw', playername:game.turnPlayer.name, turnPlayerID:game.turnPlayer.socketID, progress:''}
         display.message(logdata)
         display.playLog(logdata)
-        takeRecordUndeletable()
+        logdata.progress = card
+        takeRecordUndeletable(logdata)
       }
     }else{
       display.hideReceivingArea()
@@ -633,10 +635,8 @@ class Player{
         game.phase = 'beforedice'
         display.diceBlack()
         display.toggleMyButtons(this.socketID)
-        takeRecord()
       }else{
         game.phase = 'afterdice'
-        takeRecord()
         display.diceBlack()
         display.toggleMyButtons(this.socketID)
       }
@@ -645,6 +645,7 @@ class Player{
       const logdata = {action:'thiefmove', playername:game.turnPlayer.name, turnPlayerID:game.turnPlayer.socketID}
       display.message(logdata)
       display.playLog(logdata)
+      takeRecord(logdata)
     }
   };
   robResource(position){
@@ -678,10 +679,11 @@ class Player{
       display.toggleMyButtons(game.turnPlayer.socketID)
       recordLog()
       game.lastActionPlayer = this
-      const logdata = {action:'robresource', playername:game.turnPlayer.name, robbed:target.name, turnPlayerID:game.turnPlayer.socketID}
+      const logdata = {action:'robresource', playername:game.turnPlayer.name, robbed:target.name, turnPlayerID:game.turnPlayer.socketID, resource:''}
       display.message(logdata)
       display.playLog(logdata)
-      takeRecordUndeletable()
+      logdata.resource = rob
+      takeRecordUndeletable(logdata)
     }
     
   };
@@ -716,7 +718,7 @@ class Player{
       const logdata = {action:'monopoly', playername:game.turnPlayer.name, resource:resource, turnPlayerID:game.turnPlayer.socketID, amount:amount}
       display.message(logdata)
       display.playLog(logdata)
-      takeRecordUndeletable()
+      takeRecordUndeletable(logdata)
     }
   };
   harvest(resource){
@@ -756,7 +758,7 @@ class Player{
         const logdata = {action:'harvest', playername:game.turnPlayer.name, resource:this.harvestArray, turnPlayerID:game.turnPlayer.socketID}
         display.message(logdata)
         display.playLog(logdata)
-        takeRecord()
+        takeRecord(logdata)
       }
     }else{
       display.hideReceivingArea()
@@ -827,6 +829,7 @@ class Player{
           const logdata = {action:'trash', trashRecord:trashRecord}
           display.message(logdata)
           display.playLog(logdata)
+          takeRecordUndeletable(logdata)
           trashRecord = []
           recordLog()
           display.hideBurstArea()
@@ -1038,7 +1041,7 @@ class Player{
       const logdata = {action:'trade', playername:game.turnPlayer.name, exportresource:data.exportresource, importresource:data.importresource, turnPlayerID:game.turnPlayer.socketID}
       display.message(logdata)
       display.playLog(logdata)
-      takeRecord()
+      takeRecord(logdata)
     }
   }
   accepted(){
@@ -1053,6 +1056,10 @@ class Player{
       }
     }
     game.phase = 'afterdice'
+    const logdata = {action:'accept', playername:data.proposee.name, turnPlayerID:game.turnPlayer.socketID, proposername:data.proposer.name, giveresource:data.giveresource, takeresource:data.takeresource}
+    display.message(logdata)
+    display.playLog(logdata)
+    takeRecordUndeletable(logdata)
     for(let resource in data.giveresource){
       data.proposer.resource[resource] -= data.giveresource[resource]
       data.proposee.resource[resource] += data.giveresource[resource]
@@ -1061,9 +1068,6 @@ class Player{
     }
     display.resourceOf(this)
     display.resourceOf(game.proposedata.proposee)
-    const logdata = {action:'accept', playername:game.proposedata.proposee.name, turnPlayerID:game.turnPlayer.socketID}
-    display.message(logdata)
-    display.playLog(logdata)
     data.proposer.negotiate += 1
     data.proposee.negotiate += 1
     game.proposedata = {proposer:'', proposee:'', giveresource:'', takeresource:''}
@@ -1071,7 +1075,6 @@ class Player{
     display.toggleMyButtons(game.turnPlayer.socketID)
     recordLog()
     game.lastActionPlayer = this
-    takeRecordUndeletable()
   };
   denied(){
     game.phase = 'afterdice'
@@ -1338,7 +1341,8 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
       }
     }
     makeNewTurnRecord()
-    takeRecordUndeletable()
+    const logdata = {action:''}
+    takeRecordUndeletable(logdata)
   },
   //node番号を座標に変換
   nodeNumberToPosition(number){
@@ -1524,7 +1528,7 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
       this.produce(dice1+dice2)
       game.phase = 'afterdice'
       display.toggleMyButtons(game.turnPlayer.socketID)
-      takeRecord()
+      takeRecord(logdata)
     }
     this.diceCount[dice1+dice2] += 1
     this.diceCount.total += 1
@@ -1919,11 +1923,13 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
   }
 }
 
-const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', basePlayer:'', phase:'nameinputting', progressDeck:[],board:board,largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:'', takeresource:''},renounce:[],startTime:'',
+const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', basePlayer:'', phase:'nameinputting', progressDeck:[],board:board,largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:'', takeresource:''},renounce:[],startTime:'', gameID:'',
 log:{turnPlayer:'', phase:'nameinputting', progressDeck:[],largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}, takeresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}},renounce:[],allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0}},
 lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   newGame(){
-    this.startTime = currentTime()
+    const now = new Date()
+    this.startTime = now
+    this.gameID = randomString()
     for(let player of this.players){
       player.reset()
     }
@@ -1952,7 +1958,9 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     this.longestRoadPlayer = '';
     this.burstPlayer = [];
     this.proposedata = {proposer:'', proposee:'', giveresource:'', takeresource:''};
-    this.renounce = []
+    this.renounce = [];
+    this.startTime = '';
+    this.gameID = '';
     this.log = {turnPlayer:'', phase:'setup', progressDeck:[],largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}, takeresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}},renounce:[],allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0}}
     this.lastActionPlayer = ''
     if(board.size === 'large'){
@@ -2098,7 +2106,8 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
       if(this.turnPlayer.point >= 10){
         io.emit('fanfare','')
         makeNewTurnRecord()
-        takeRecord()
+        const logdata = {action:'win', playername:this.turnPlayer.name}
+        takeRecord(logdata)
         updateDatabase(this.turnPlayer)
         this.gameEnd()
         return
@@ -3093,8 +3102,8 @@ function highestIndex(array){
   }
   return highestIndex
 }
-function takeRecord(){
-  let record = {players:[],thief:'',dice:[], progress:0, undo:true}
+function takeRecord(action){
+  let record = {players:[],thief:'',dice:[], progress:0, action:action, undo:true}
   for(let player of game.players){
     let playerRecord = {
       resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
@@ -3148,8 +3157,8 @@ function takeRecord(){
   }
   gameRecord[gameRecord.length-1].push(record)
 }
-function takeRecordUndeletable(){
-  let record = {players:[],thief:'',dice:[], progress:0, undo:false}
+function takeRecordUndeletable(action){
+  let record = {players:[],thief:'',dice:[], progress:0, action:action, undo:false}
   for(let player of game.players){
     let playerRecord = {
       resource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
@@ -3246,7 +3255,8 @@ function updateDatabase(winner){
       }
     }
   }
-  const newWinner = "insert into winner (start_time, name, number_of_players, my_number, turn, used_ore, used_grain, used_wool, used_lumber, used_brick, road_on_board, house_on_board, city_on_board, largestarmy, longestroad, owned_point, owned_knight, owned_roadbuild, owned_monopoly, owned_harvest, lastpoint, ore_initial_productivity, grain_initial_productivity, wool_initial_productivity, lumber_initial_productivity, brick_initial_productivity, ore_initial_productivity_of_losers, grain_initial_productivity_of_losers, wool_initial_productivity_of_losers, lumber_initial_productivity_of_losers, brick_initial_productivity_of_losers, negotiate, seven) values('" + game.startTime + "', '" + winner.name + "', " + String(pl) + ", " + String(winner.number+1) + ", " + board.diceCount.total + ", " + String(winner.totalUse.ore) + ", " + String(winner.totalUse.grain) + ", " + String(winner.totalUse.wool) + ", " + String(winner.totalUse.lumber) + ", " + String(winner.totalUse.brick) + ", " + String(15-winner.token.road) + ", " + String(5-winner.token.house) + ", " + String(4-winner.token.city) + ", " + String(winner.largestArmy) + ", " + String(winner.longestRoad) + ", " + String(winner.progress.point) + ", " + String(winner.progress.knight+winner.used.knight) + ", " + String(winner.progress.roadbuild+winner.used.roadbuild) + ", " + String(winner.progress.monopoly+winner.used.monopoly) + ", " + String(winner.progress.harvest+winner.used.harvest) + ", '" + String(winner.lastPoint) + "', " + winner.initial_productivity.ore + ", " + winner.initial_productivity.grain + ", " + winner.initial_productivity.wool + ", " + winner.initial_productivity.lumber + ", " + winner.initial_productivity.brick + ", " + losersInitialProductivity.ore + ", " + losersInitialProductivity.grain + ", " + losersInitialProductivity.wool + ", " + losersInitialProductivity.lumber + ", " + losersInitialProductivity.brick + ", " + winner.negotiate + ", " + winner.seven + ")";
+  const newWinner = "insert into winner (start_time, name, number_of_players, my_number, turn, used_ore, used_grain, used_wool, used_lumber, used_brick, road_on_board, house_on_board, city_on_board, largestarmy, longestroad, owned_point, owned_knight, owned_roadbuild, owned_monopoly, owned_harvest, lastpoint, ore_initial_productivity, grain_initial_productivity, wool_initial_productivity, lumber_initial_productivity, brick_initial_productivity, ore_initial_productivity_of_losers, grain_initial_productivity_of_losers, wool_initial_productivity_of_losers, lumber_initial_productivity_of_losers, brick_initial_productivity_of_losers, negotiate, seven, gameid) values('" + JSON.stringify(game.startTime) + "', '" + winner.name + "', " + String(pl) + ", " + String(winner.number+1) + ", " + board.diceCount.total + ", " + String(winner.totalUse.ore) + ", " + String(winner.totalUse.grain) + ", " + String(winner.totalUse.wool) + ", " + String(winner.totalUse.lumber) + ", " + String(winner.totalUse.brick) + ", " + String(15-winner.token.road) + ", " + String(5-winner.token.house) + ", " + String(4-winner.token.city) + ", " + String(winner.largestArmy) + ", " + String(winner.longestRoad) + ", " + String(winner.progress.point) + ", " + String(winner.progress.knight+winner.used.knight) + ", " + String(winner.progress.roadbuild+winner.used.roadbuild) + ", " + String(winner.progress.monopoly+winner.used.monopoly) + ", " + String(winner.progress.harvest+winner.used.harvest) + ", '" + String(winner.lastPoint) + "', " + winner.initial_productivity.ore + ", " + winner.initial_productivity.grain + ", " + winner.initial_productivity.wool + ", " + winner.initial_productivity.lumber + ", " + winner.initial_productivity.brick + ", " + losersInitialProductivity.ore + ", " + losersInitialProductivity.grain + ", " + losersInitialProductivity.wool + ", " + losersInitialProductivity.lumber + ", " + losersInitialProductivity.brick + ", " + winner.negotiate + ", " + winner.seven + ", '" + game.gameID + "')";
+  console.log(newWinner)
   client.query(newWinner)
   .then((res) => {
   })
@@ -3255,7 +3265,7 @@ function updateDatabase(winner){
   //loser更新
   for(let player of game.players){
     if(player !== winner){
-      const newLoser = "insert into loser (start_time, name, number_of_players, my_number, turn, used_ore, used_grain, used_wool, used_lumber, used_brick, road_on_board, house_on_board, city_on_board, largestarmy, longestroad, owned_point, owned_knight, owned_roadbuild, owned_monopoly, owned_harvest, lastpoint, ore_initial_productivity, grain_initial_productivity, wool_initial_productivity, lumber_initial_productivity, brick_initial_productivity, ore_initial_productivity_of_losers, grain_initial_productivity_of_losers, wool_initial_productivity_of_losers, lumber_initial_productivity_of_losers, brick_initial_productivity_of_losers, negotiate, seven) values('" + game.startTime + "', '" + player.name + "', " + String(pl) + ", " + String(player.number+1) + ", " + board.diceCount.total + ", " + String(player.totalUse.ore) + ", " + String(player.totalUse.grain) + ", " + String(player.totalUse.wool) + ", " + String(player.totalUse.lumber) + ", " + String(player.totalUse.brick) + ", " + String(15-player.token.road) + ", " + String(5-player.token.house) + ", " + String(4-player.token.city) + ", " + String(player.largestArmy) + ", " + String(player.longestRoad) + ", " + String(player.progress.point) + ", " + String(player.progress.knight+player.used.knight) + ", " + String(player.progress.roadbuild+player.used.roadbuild) + ", " + String(player.progress.monopoly+player.used.monopoly) + ", " + String(player.progress.harvest+player.used.harvest) + ", '" + String(player.lastPoint) + "', " + player.initial_productivity.ore + ", " + player.initial_productivity.grain + ", " + player.initial_productivity.wool + ", " + player.initial_productivity.lumber + ", " + player.initial_productivity.brick + ", " + losersInitialProductivity.ore + ", " + losersInitialProductivity.grain + ", " + losersInitialProductivity.wool + ", " + losersInitialProductivity.lumber + ", " + losersInitialProductivity.brick + ", " + player.negotiate + ", " + player.seven + ")";
+      const newLoser = "insert into loser (start_time, name, number_of_players, my_number, turn, used_ore, used_grain, used_wool, used_lumber, used_brick, road_on_board, house_on_board, city_on_board, largestarmy, longestroad, owned_point, owned_knight, owned_roadbuild, owned_monopoly, owned_harvest, lastpoint, ore_initial_productivity, grain_initial_productivity, wool_initial_productivity, lumber_initial_productivity, brick_initial_productivity, ore_initial_productivity_of_losers, grain_initial_productivity_of_losers, wool_initial_productivity_of_losers, lumber_initial_productivity_of_losers, brick_initial_productivity_of_losers, negotiate, seven, gameid) values('" + JSON.stringify(game.startTime) + "', '" + player.name + "', " + String(pl) + ", " + String(player.number+1) + ", " + board.diceCount.total + ", " + String(player.totalUse.ore) + ", " + String(player.totalUse.grain) + ", " + String(player.totalUse.wool) + ", " + String(player.totalUse.lumber) + ", " + String(player.totalUse.brick) + ", " + String(15-player.token.road) + ", " + String(5-player.token.house) + ", " + String(4-player.token.city) + ", " + String(player.largestArmy) + ", " + String(player.longestRoad) + ", " + String(player.progress.point) + ", " + String(player.progress.knight+player.used.knight) + ", " + String(player.progress.roadbuild+player.used.roadbuild) + ", " + String(player.progress.monopoly+player.used.monopoly) + ", " + String(player.progress.harvest+player.used.harvest) + ", '" + String(player.lastPoint) + "', " + player.initial_productivity.ore + ", " + player.initial_productivity.grain + ", " + player.initial_productivity.wool + ", " + player.initial_productivity.lumber + ", " + player.initial_productivity.brick + ", " + losersInitialProductivity.ore + ", " + losersInitialProductivity.grain + ", " + losersInitialProductivity.wool + ", " + losersInitialProductivity.lumber + ", " + losersInitialProductivity.brick + ", " + player.negotiate + ", " + player.seven + ", '" + game.gameID + "')";
       client.query(newLoser)
       .then((res) => {
       })
@@ -3267,7 +3277,8 @@ function updateDatabase(winner){
   for(let player of game.players){
     playersName.push(player.name)
   }
-  const Record = "insert into game (start_time, players, board, record) values('" + game.startTime + "', '" + JSON.stringify(playersName) + "', '" + JSON.stringify(board.island) + "', '" + JSON.stringify(gameRecord) + "')"
+  //game更新
+  const Record = "insert into game (start_time, players, board, record, gameid) values('" + JSON.stringify(game.startTime) + "', '" + JSON.stringify(playersName) + "', '" + JSON.stringify(board.island) + "', '" + JSON.stringify(gameRecord) + "', '" + game.gameID + "')"
   client.query(Record)
   .then((res) => {
   })
@@ -3348,16 +3359,20 @@ function total(object){
   }
   return total
 }
-function currentTime(){
-  const now = new Date()
-  const year = now.getFullYear();
-  const month = now.getMonth() + 1;
-  const day = now.getDate();
-  const hour = now.getHours();
-  const minute = now.getMinutes();
-  const second = now.getSeconds();
-  const time = year + '/' + month + '/' + day + ' ' + hour + ':' + minute + ':' + second
-  return time
+function makeSelectQuery(columnName, tableName){
+  const query = "select " + columnName + " from " + tableName
+  return query
+}
+function randomString(){
+  const letter ='abcdefghijklmnopqrstuvwxyz0123456789'
+  let string = ''
+  let i = 1
+  while(i <= 8){
+    const number = Math.floor(Math.random() * letter.length)
+    string += letter[number]
+    i += 1
+  }
+  return string
 }
 
 io.on("connection", (socket)=>{
@@ -3382,12 +3397,14 @@ io.on("connection", (socket)=>{
   socket.on('start', (data)=>{
     playersName = shuffle(playersName)
     if(playersName.length >= 1){
-      game.startTime = currentTime()
+      const now = new Date()
+      game.startTime = now
+      game.gameID = randomString()
       game.gameStart()
       board.islandData = data
       board.resizeBoard(data.size)
-      board.makeIsland(data)
       game.progressDeckMake()
+      board.makeIsland(data)
       display.buildings()
       display.island()
       display.relativeNodes()
@@ -3742,31 +3759,18 @@ io.on("connection", (socket)=>{
     })
 
     //過去ゲームデータ送信
-    socket.on(`viewgame`, (data)=>{
-      const query = "select * from game where start_time = '" + data.gameName + "'";
+    socket.on('replaygame', (data)=>{
+      const query = "select * from game where gameid = '" + data.gameID + "'";
       client
       .query(query)
       .then((res) => {
         if(res.rows[0]){
           const {players, board, record} = res.rows[0]
           const game = {players:JSON.parse(players), board:JSON.parse(board), gameRecord:JSON.parse(record)}
-          io.to(data.socketID).emit('viewgame',game)
+          io.to(data.socketID).emit('replaygame',game)
         }
       })
       .catch((e) => {
       });
     })
 })
-
-function getColumn(columnName){
-  const query = "select " + columnName + " from game"
-  client
-  .query(query)
-  .then((res) => {
-    if(res.rows){
-      return res.rows
-    }
-  })
-  .catch((e) => {
-  });
-}
