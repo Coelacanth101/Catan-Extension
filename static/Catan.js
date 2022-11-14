@@ -1001,6 +1001,7 @@ $(`#board_area`).on('click', '#volume', function(){
             fanfareSound.volume = 0.3;
             sound = 'on';
             $(this).attr('src', "./img/volume_on.png")
+            $('body').attr('background', "./img/wood_pattern.jpg")
             break;
         case 'on':
             turnSound.volume = 0;
@@ -1008,6 +1009,7 @@ $(`#board_area`).on('click', '#volume', function(){
             fanfareSound.volume = 0;
             sound = 'off';
             $(this).attr('src', "./img/volume_off.png")
+            $('body').attr('background', "./img/wood_pattern2.jpg")
             break;
     }
 })
