@@ -824,7 +824,7 @@ function renderRecord(){
                     i += 1
                 }
             }
-            $(`#message_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が${exportresource}を${importresource}と交換しました</div>`)
+            $(`#message_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が${exportresource}を${importresource}に換えました</div>`)
         }else if(record[turn][actionInTurn].action.action === 'burst'){
             let burstPlayers = ``
             for(let player of record[turn][actionInTurn].action.players){

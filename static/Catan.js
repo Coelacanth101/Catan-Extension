@@ -8,11 +8,12 @@ let playerNumber
 let defaultkeep
 let keepremained
 const turnSound = new Audio("./sound/turn.mp3")
-turnSound.volume = 0.0
 const burstSound = new Audio("./sound/burst.mp3")
-burstSound.volume = 0.0
 const fanfareSound = new Audio("./sound/fanfare.mp3")
-fanfareSound.volume = 0.0
+turnSound.volume = 0
+burstSound.volume = 0
+fanfareSound.volume = 0
+let sound = 'unloaded'
 //画面初期化
 $('#initializebutton').on('click', function(){
     $('#yesorno').show()
@@ -33,9 +34,6 @@ $('#nameinputarea').on('click', '#namebutton', function(){
         namedata = {name:myName, socketID:socket.id}
         socket.emit("nameInput", namedata)
         $(`#nameinput`).val('')
-        turnSound.load()
-        burstSound.load()
-        fanfareSound.load()
     }
 })
 
@@ -597,7 +595,7 @@ socket.on('message',(logdata)=>{
                 i += 1
             }
         }
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が${exportresource}を${importresource}と交換しました</div>`)
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が${exportresource}を${importresource}に換えました</div>`)
     }else if(logdata.action === 'burst'){
         let burstPlayers = ``
         for(let player of logdata.players){
@@ -938,9 +936,6 @@ $('#players').on('click', '.playermark', function(){
     let n = Number($(this).parent().parent().parent().data('number'))
     let player ={number:n, socketID:socket.id}
     socket.emit('takeover', player)
-    turnSound.load()
-    burstSound.load()
-    fanfareSound.load()
 });
 //戻す
 $(`#board_area`).on('click','#dice_area',function(){
@@ -974,7 +969,7 @@ $(`#board_area`).on('click','#cost_card',function(){
             $('#cost_card').css(`top`, `0px`)
         }
     }else{
-        $('#cost_card').css(`width`, `10%`)
+        $('#cost_card').css(`width`, `100%`)
         $('#cost_card').css(`top`, ``)
     }
 })
@@ -991,7 +986,31 @@ $(`#tileamounts`).on(`click`, `.minusbutton`, function(){
     }
     $(this).next().attr(`value`, minus)
 })
-
+//ボリュームをクリック
+$(`#board_area`).on('click', '#volume', function(){
+    console.log('click')
+    switch(sound){
+        case 'unloaded':
+            turnSound.load();
+            burstSound.load();
+            fanfareSound.load();
+            sound = 'off';
+        case 'off':
+            turnSound.volume = 0.3;
+            burstSound.volume = 0.4;
+            fanfareSound.volume = 0.3;
+            sound = 'on';
+            $(this).attr('src', "./img/volume_on.png")
+            break;
+        case 'on':
+            turnSound.volume = 0;
+            burstSound.volume = 0;
+            fanfareSound.volume = 0;
+            sound = 'off';
+            $(this).attr('src', "./img/volume_off.png")
+            break;
+    }
+})
 
 
 
@@ -1040,7 +1059,10 @@ const display = {
                 <div id="dice_area"></div>
                 <div id="receiving_area"><p id="receiving"><b>通信中…</b></p></div>
                 <div id="deck_area"><div id="deckcase"><div id="deck"></div></div>&nbsp;×34</div>
+                <div id="left_down">
+                <img id="volume" src='./img/volume_${sound}.png'>
                 <img id="cost_card" src='./img/cost_card.jpg'>
+                </div>
                 <img id="board_frame" src='./img/large_board.png'>
                 <img id="tile1" class="tilex1 tiley5 tile" data-direction="" src="./img/ocean.png">
                 <img id="tile2" class="tilex1 tiley7 tile" data-direction="" src="./img/ocean.png">
@@ -1371,7 +1393,10 @@ const display = {
                 <div id="dice_area"></div>
                 <div id="receiving_area"><p id="receiving"><b>通信中…</b></p></div>
                 <div id="deck_area"><div id="deckcase"><div id="deck"></div></div>&nbsp;×25</div>
+                <div id="left_down">
+                <img id="volume" src='./img/volume_${sound}.png'>
                 <img id="cost_card" src='./img/cost_card.jpg'>
+                </div>
                 <img id="board_frame" src='./img/regular_board.png'>
                 <img id="tile1" class="tile" data-direction="" src="./img/regular_ocean.png">
                 <img id="tile2" class="tile" data-direction="" src="./img/regular_ocean.png">
@@ -2361,6 +2386,98 @@ const display = {
                 $(`#deck`).css(`height`, `${record[turn][actionInTurn].progress/25 * 100}%`)
             }
             
+        }
+        //message
+        $(`#endmessage_area`).html(``);
+        if(record[turn][actionInTurn].action){
+            if(record[turn][actionInTurn].action.action === 'build'){
+                $(`#endmessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が${translate(record[turn][actionInTurn].action.builditem)}を建設しました</div>`)
+            }else if(record[turn][actionInTurn].action.action === 'draw'){
+                $(`#endmessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<div class="card ${record[turn][actionInTurn].action.progress}"><img src="./img/${record[turn][actionInTurn].action.progress}.png" alt="${record[turn][actionInTurn].action.progress}" class="img_for_card ${record[turn][actionInTurn].action.progress}"></div>を引きました</div>`)
+            }else if(record[turn][actionInTurn].action.action === 'progress'){
+                $(`#endmessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<div class="card ${record[turn][actionInTurn].action.progress}"><img src="./img/${record[turn][actionInTurn].action.progress}.png" alt="${record[turn][actionInTurn].action.progress}" class="img_for_card ${record[turn][actionInTurn].action.progress}"></div>を使いました</div>`)
+            }else if(record[turn][actionInTurn].action.action === 'thiefmove'){
+                $(`#endmessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が盗賊を移動しました</div>`)
+            }else if(record[turn][actionInTurn].action.action === 'robresource'){
+                $(`#endmessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<b>${record[turn][actionInTurn].action.robbed}</b>から<div class="card ${record[turn][actionInTurn].action.resource}"><img src="./img/${record[turn][actionInTurn].action.resource}pict.png" alt="${record[turn][actionInTurn].action.resource}" class="img_for_card"></div>を強奪しました</div>`)
+            }else if(record[turn][actionInTurn].action.action === 'monopoly'){
+                $(`#endmessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<div class="card ${String(record[turn][actionInTurn].action.resource)}"><img src="./img/${record[turn][actionInTurn].action.resource}pict.png" alt="${record[turn][actionInTurn].action.resource}" class="img_for_card"></div>${record[turn][actionInTurn].action.amount}枚を独占しました</div>`)
+            }else if(record[turn][actionInTurn].action.action === 'harvest'){
+                let harvestResources = ''
+                for(let resource of record[turn][actionInTurn].action.resource){
+                    harvestResources += `<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                }
+                $(`#endmessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が${harvestResources}を収穫しました</div>`)
+            }else if(record[turn][actionInTurn].action.action === 'undo'){
+                $(`#endmessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が取り消しました</div>`)
+            }else if(record[turn][actionInTurn].action.action === 'trash'){
+                for(let data of record[turn][actionInTurn].action.trashRecord){
+                    let trash = ''
+                    for(let resource in data.trashresource){
+                        let i = 1
+                        while(i <= data.trashresource[resource]){
+                            trash += `<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                            i += 1
+                        }
+                    }
+                    $(`#endmessage_area`).append(`<div class="message"><b>${data.name}</b>が${trash}を捨てました</div>`)
+                }
+            }else if(record[turn][actionInTurn].action.action === 'accept'){
+                let giveresource = ''
+                for(let resource in record[turn][actionInTurn].action.giveresource){
+                    let i = 1
+                    while(i <= record[turn][actionInTurn].action.giveresource[resource]){
+                        giveresource += `<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                        i += 1
+                    }
+                }
+                let takeresource = ''
+                for(let resource in record[turn][actionInTurn].action.takeresource){
+                    let i = 1
+                    while(i <= record[turn][actionInTurn].action.takeresource[resource]){
+                        takeresource += `<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                        i += 1
+                    }
+                }
+                $(`#endmessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.proposername}</b>の${giveresource}と<b>${record[turn][actionInTurn].action.playername}</b>の${takeresource}を交換しました</div>`)
+            }else if(record[turn][actionInTurn].action.action === 'trade'){
+                let exportresource = ''
+                for(let resource in record[turn][actionInTurn].action.exportresource){
+                    let i = 1
+                    while(i <= record[turn][actionInTurn].action.exportresource[resource]){
+                        exportresource += `<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                        i += 1
+                    }
+                }
+                let importresource = ''
+                for(let resource in record[turn][actionInTurn].action.importresource){
+                    let i = 1
+                    while(i <= record[turn][actionInTurn].action.importresource[resource]){
+                        importresource += `<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                        i += 1
+                    }
+                }
+                $(`#endmessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が${exportresource}を${importresource}に換えました</div>`)
+            }else if(record[turn][actionInTurn].action.action === 'burst'){
+                let burstPlayers = ``
+                for(let player of record[turn][actionInTurn].action.players){
+                    burstPlayers += `と<b>${player.name}</b>`
+                }
+                burstPlayers = burstPlayers.slice(1)
+                $(`#endmessage_area`).append(`<div class="message">${burstPlayers}がバーストしました</div>`)
+            }else if(record[turn][actionInTurn].action.action === 'dice'){
+                $(`#endmessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>がダイスを振りました</div>`)
+            }else if(record[turn][actionInTurn].action.action === 'exhaust'){
+                let exhaustresource = ''
+                for(let resource of record[turn][actionInTurn].action.exhaust){
+                    exhaustresource += `<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
+                }
+                $(`#endmessage_area`).append(`<div class="message">${exhaustresource}が枯渇しました</div>`)
+            }else if(record[turn][actionInTurn].action.action === 'turnend'){
+                $(`#endmessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>がターンを終了しました</div>`)
+            }else if(record[turn][actionInTurn].action.action === 'win'){
+                $(`#endmessage_area`).append(`<h1>${record[turn][actionInTurn].action.playername}の勝ちです!</h1>`)
+            }
         }
         if(turn === endturn){
             $(`#turn`).html(`終局`)

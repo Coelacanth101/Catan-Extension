@@ -104,13 +104,20 @@
             height: 100%;
             background-color: black;
         }
-        #cost_card{
+        #left_down{
             width: 10%;
             height: auto;
             position: absolute;
             left: 0px;
             bottom: 0px;
             z-index: 3;
+        }
+        #cost_card{
+            width: 100%;
+            height: auto;
+        }
+        #volume{
+            width: 100%;
         }
         .player0color{
             background-color: rgb(236, 28, 36);
@@ -146,6 +153,7 @@
                 border-radius: 5px;
                 height: auto;
                 min-height: 60px;
+                background-color: rgb(255, 255, 255, 0.45);
             }
             .row{
                 display: flex;
@@ -206,6 +214,7 @@
                     height: 20px;
                     justify-content: center;
                     align-items: center;
+                    background-color: white;
                 }
                 .img_for_title{
                     width: auto;
@@ -365,7 +374,7 @@
                 }
                 .ore{
                     border-color: darkgrey;
-                    background-color: rgba(169, 169, 169, 0.30);
+                    background-color: rgba(169, 169, 169, 0.50);
                 }
                 .grain{
                     border-color: gold;
@@ -583,6 +592,7 @@
                 }
                 td{
                     text-align: center;
+                    background-color: white;
                 }
                 .img_for_table{
                     display: block;
