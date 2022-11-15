@@ -116,6 +116,9 @@
             width: 100%;
             height: auto;
         }
+        #volume{
+            width: 100%;
+        }
         .player0color{
             background-color: rgb(236, 28, 36);
         }
