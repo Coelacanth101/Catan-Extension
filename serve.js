@@ -1056,16 +1056,16 @@ class Player{
       }
     }
     game.phase = 'afterdice'
-    const logdata = {action:'accept', playername:data.proposee.name, turnPlayerID:game.turnPlayer.socketID, proposername:data.proposer.name, giveresource:data.giveresource, takeresource:data.takeresource}
-    display.message(logdata)
-    display.playLog(logdata)
-    takeRecordUndeletable(logdata)
     for(let resource in data.giveresource){
       data.proposer.resource[resource] -= data.giveresource[resource]
       data.proposee.resource[resource] += data.giveresource[resource]
       data.proposee.resource[resource] -= data.takeresource[resource]
       data.proposer.resource[resource] += data.takeresource[resource]
     }
+    const logdata = {action:'accept', playername:data.proposee.name, turnPlayerID:game.turnPlayer.socketID, proposername:data.proposer.name, giveresource:data.giveresource, takeresource:data.takeresource}
+    display.message(logdata)
+    display.playLog(logdata)
+    takeRecordUndeletable(logdata)
     display.resourceOf(this)
     display.resourceOf(game.proposedata.proposee)
     data.proposer.negotiate += 1
@@ -1511,6 +1511,11 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
   },
   //ダイス
   rollDice(){
+    if(this.diceCount.total === 0){
+      for(let player of game.players){
+        player.calculateMyProductivity()
+      }
+    }
     const logdata = {action:'dice', playername:game.turnPlayer.name, turnPlayerID:game.turnPlayer.socketID}
     display.message(logdata)
     display.playLog(logdata)
@@ -2165,9 +2170,6 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
       if(this.turnPlayer === this.players[0]){
         makeNewTurnRecord()
         this.phase = 'beforedice'
-        for(let player of this.players){
-          player.calculateMyProductivity()
-        }
       }else{
         this.turnPlayer = this.players[this.players.indexOf(this.turnPlayer)-1];
       }

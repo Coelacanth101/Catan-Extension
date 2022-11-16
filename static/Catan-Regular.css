@@ -1,4 +1,7 @@
 @charset "UTF-8";
+body{
+    background-size: 100%;
+}
 #container{
     width: 100%;
     max-width: 1500px;
@@ -112,6 +115,16 @@
             bottom: 0px;
             z-index: 3;
         }
+        #setting_button{
+            width: 100%;
+            background-color: white;
+            border: solid 3px black;
+            border-radius: 50%;
+            padding: 10%;
+        }
+        #settingpict{
+            width: 100%;
+        }
         #cost_card{
             width: 100%;
             height: auto;
@@ -153,7 +166,7 @@
                 border-radius: 5px;
                 height: auto;
                 min-height: 60px;
-                background-color: rgb(255, 255, 255, 0.45);
+                background-color: rgb(255, 255, 255, 0.8);
             }
             .row{
                 display: flex;
@@ -230,6 +243,7 @@
                 }
                 #buttons{
                     display: none;
+                    background-color: rgba(255, 255, 255, 0.8);
                 }
                 #button_area{
                     width: 100%;
@@ -577,6 +591,9 @@
                     flex-wrap: wrap;
                     align-items: center;
                     margin: 2px 2%;
+                }
+                #setting_area{
+                    display: none;
                 }
                 #dice_percentage{
                     display: flex;

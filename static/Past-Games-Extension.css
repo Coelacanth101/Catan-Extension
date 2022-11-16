@@ -1,4 +1,7 @@
 @charset "UTF-8";
+body{
+    background-size: 100%;
+}
 #container{
     width: 100%;
     max-width: 1500px;

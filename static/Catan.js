@@ -988,7 +988,32 @@ $(`#tileamounts`).on(`click`, `.minusbutton`, function(){
 })
 //ボリュームをクリック
 $(`#board_area`).on('click', '#volume', function(){
-    console.log('click')
+    switch($('body').attr('background')[18]){
+        case '.':
+            $('body').attr('background', "./img/wood_pattern2.jpg")
+            $('#wallpaper').html('2')
+            break
+        case '2':
+            $('body').attr('background', "./img/wood_pattern3.jpg")
+            $('#wallpaper').html('3')
+            break
+        case '3':
+            $('body').attr('background', "./img/wood_pattern4.jpg")
+            $('#wallpaper').html('4')
+            break
+        case '4':
+            $('body').attr('background', "./img/wood_pattern5.jpg")
+            $('#wallpaper').html('5')
+            break
+        case '5':
+            $('body').attr('background', "./img/wood_pattern6.jpg")
+            $('#wallpaper').html('6')
+            break
+        case '6':
+            $('body').attr('background', "./img/wood_pattern.jpg")
+            $('#wallpaper').html('1')
+            break
+    }
     switch(sound){
         case 'unloaded':
             turnSound.load();
@@ -1001,7 +1026,6 @@ $(`#board_area`).on('click', '#volume', function(){
             fanfareSound.volume = 0.3;
             sound = 'on';
             $(this).attr('src', "./img/volume_on.png")
-            $('body').attr('background', "./img/wood_pattern.jpg")
             break;
         case 'on':
             turnSound.volume = 0;
@@ -1009,7 +1033,6 @@ $(`#board_area`).on('click', '#volume', function(){
             fanfareSound.volume = 0;
             sound = 'off';
             $(this).attr('src', "./img/volume_off.png")
-            $('body').attr('background', "./img/wood_pattern2.jpg")
             break;
     }
 })
@@ -1062,8 +1085,9 @@ const display = {
                 <div id="receiving_area"><p id="receiving"><b>通信中…</b></p></div>
                 <div id="deck_area"><div id="deckcase"><div id="deck"></div></div>&nbsp;×34</div>
                 <div id="left_down">
+                <div id="wallpaper">1</div>
+                <div id="setting_button"><img id="settingpict" class="img_for_button" src="./img/setting.png"></div>
                 <img id="volume" src='./img/volume_${sound}.png'>
-                <img id="cost_card" src='./img/cost_card.jpg'>
                 </div>
                 <img id="board_frame" src='./img/large_board.png'>
                 <img id="tile1" class="tilex1 tiley5 tile" data-direction="" src="./img/ocean.png">
@@ -1396,8 +1420,9 @@ const display = {
                 <div id="receiving_area"><p id="receiving"><b>通信中…</b></p></div>
                 <div id="deck_area"><div id="deckcase"><div id="deck"></div></div>&nbsp;×25</div>
                 <div id="left_down">
+                <div id="wallpaper">1</div>
+                <div id="setting_button"><img id="settingpict" class="img_for_button" src="./img/setting.png"></div>
                 <img id="volume" src='./img/volume_${sound}.png'>
-                <img id="cost_card" src='./img/cost_card.jpg'>
                 </div>
                 <img id="board_frame" src='./img/regular_board.png'>
                 <img id="tile1" class="tile" data-direction="" src="./img/regular_ocean.png">
