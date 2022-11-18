@@ -1,6 +1,7 @@
 @charset "UTF-8";
 body{
-    background-size: 100%;
+    background-size: auto 100vh;
+    background-position: center top;
 }
 #container{
     width: 100%;
@@ -287,6 +288,9 @@ body{
                     }
                     .monopoly{
                         background-color: rgb(255, 62, 62);
+                    }
+                    .point{
+                        background-color: white;
                     }
                     #negotiate_button{
                         background-color: rgb(250, 229, 204);

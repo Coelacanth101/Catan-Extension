@@ -197,6 +197,9 @@ body{
                 .monopoly{
                     background-color: rgb(255, 62, 62);
                 }
+                .point{
+                    background-color: white;
+                }
                 .lumber{
                     border-color: rgb(116, 61, 25);
                     background-color: rgb(62, 187, 62, 0.90);

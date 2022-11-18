@@ -1045,11 +1045,13 @@ const display = {
     hideField(){
         $(`#receiving_area`).show();
         $('#field').hide()
+        $('body').attr('background', "./img/kyushu.jpg")
         $(`#receiving_area`).hide()
     },
     showField(){
         $(`#receiving_area`).show();
         $('#field').show()
+        $('body').attr('background', "./img/wood_pattern.jpg")
         $(`#receiving_area`).hide()
       },
     hideItems(game){
@@ -1076,6 +1078,7 @@ const display = {
         $(`#receiving_area`).show()
         $(`.tilenumberinput`).val(``)
         $('#field').show()
+        $('body').attr('background', "./img/wood_pattern.jpg")
         let tileNumber = 1
         if(island.length === 9){
             board_size = 'large'
