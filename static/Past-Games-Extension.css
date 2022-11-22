@@ -46,8 +46,14 @@ body{
             margin-left: 0.5px;
         }
         #receiving_area{
-            width: 25%;
-            height: 10%;
+            width: 10%;
+            position: absolute;
+            right: 0px;
+            bottom: 0px;
+            z-index: 3;
+        }
+        #receiving{
+            width: 100%;
             position: absolute;
             right: 0px;
             bottom: 0px;
@@ -309,12 +315,6 @@ td{
         width:100%;
         aspect-ratio: 7 / 6.9282;
     }
-            #receiving{
-                text-align: right;
-                vertical-align: bottom;
-                font-size: 5vw;
-                margin: 0%;
-            }
     #player_and_button_area{
         width: 100%;
         max-width: 400px;
@@ -371,12 +371,6 @@ td{
                 height:100%;
                 aspect-ratio: 7 / 6.9282;
             }
-                    #receiving{
-                        text-align: right;
-                        vertical-align: bottom;
-                        font-size: 3vw;
-                        margin: 0%;
-                    }
             #player_and_button_area{
                 position: relative;
                 width: 400px;

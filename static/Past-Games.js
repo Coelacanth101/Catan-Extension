@@ -80,7 +80,7 @@ function renderGame(data){
         $('#cs').attr('href',"./Past-Games-Extension.css")
         $(`#board`).html(`
             <div id="dice_area"></div>
-            <div id="receiving_area"><p id="receiving"><b>通信中…</b></p></div>
+            <div id="receiving_area"><img id="receiving" src="./img/loading.gif"></div>
             <div id="deck_area"><div id="deckcase"><div id="deck"></div></div>&nbsp;×34</div>
             <img id="board_frame" src='./img/large_board.png'>
             <img id="tile1" class="tilex1 tiley5 tile" data-direction="" src="./img/ocean.png">
@@ -410,7 +410,7 @@ function renderGame(data){
         $('#cs').attr('href',"./Past-Games-Regular.css")
         $(`#board`).html(`
             <div id="dice_area"></div>
-            <div id="receiving_area"><p id="receiving"><b>通信中…</b></p></div>
+            <div id="receiving_area"><img id="receiving" src="./img/loading.gif"></div>
             <div id="deck_area"><div id="deckcase"><div id="deck"></div></div>&nbsp;×25</div>
             <img id="board_frame" src='./img/regular_board.png'>
             <img id="tile1" class="tile" data-direction="" src="./img/regular_ocean.png">

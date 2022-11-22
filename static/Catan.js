@@ -1068,7 +1068,7 @@ const display = {
             $('#cs').attr('href',"./Catan-Extension.css")
             $(`#board`).html(`
                 <div id="dice_area"></div>
-                <div id="receiving_area"><p id="receiving"><b>通信中…</b></p></div>
+                <div id="receiving_area"><img id="receiving" src="./img/loading.gif"></div>
                 <div id="deck_area"><div id="deckcase"><div id="deck"></div></div>&nbsp;×34</div>
                 <div id="left_down">
                 <img id="setting_button" src="./img/setting.png">
@@ -1408,7 +1408,7 @@ const display = {
             $('#cs').attr('href',"./Catan-Regular.css")
             $(`#board`).html(`
                 <div id="dice_area"></div>
-                <div id="receiving_area"><p id="receiving"><b>通信中…</b></p></div>
+                <div id="receiving_area"><img id="receiving" src="./img/loading.gif"></div>
                 <div id="deck_area"><div id="deckcase"><div id="deck"></div></div>&nbsp;×25</div>
                 <div id="left_down">
                 <img id="setting_button" src="./img/setting.png">
