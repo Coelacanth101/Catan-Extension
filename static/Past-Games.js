@@ -65,6 +65,7 @@ $(`#finalturn`).on(`click`, function(){
 
 function renderGame(data){
     $('#field').show()
+    $('body').attr('background', "./img/wood_pattern1.jpg")
     $(`#receiving_area`).show()
     record = data.gameRecord
     endturn = record.length-1
@@ -81,7 +82,6 @@ function renderGame(data){
             <div id="dice_area"></div>
             <div id="receiving_area"><p id="receiving"><b>通信中…</b></p></div>
             <div id="deck_area"><div id="deckcase"><div id="deck"></div></div>&nbsp;×34</div>
-            <img id="cost_card" src='./img/cost_card.jpg'>
             <img id="board_frame" src='./img/large_board.png'>
             <img id="tile1" class="tilex1 tiley5 tile" data-direction="" src="./img/ocean.png">
             <img id="tile2" class="tilex1 tiley7 tile" data-direction="" src="./img/ocean.png">
@@ -412,7 +412,6 @@ function renderGame(data){
             <div id="dice_area"></div>
             <div id="receiving_area"><p id="receiving"><b>通信中…</b></p></div>
             <div id="deck_area"><div id="deckcase"><div id="deck"></div></div>&nbsp;×25</div>
-            <img id="cost_card" src='./img/cost_card.jpg'>
             <img id="board_frame" src='./img/regular_board.png'>
             <img id="tile1" class="tile" data-direction="" src="./img/regular_ocean.png">
             <img id="tile2" class="tile" data-direction="" src="./img/regular_ocean.png">
@@ -649,7 +648,7 @@ function renderGame(data){
                     <div id="player${myNumber}mark" class="playermark player${myNumber}color"><b>${myNumber+1}</b></div>
                     <div id="player${myNumber}name" class="name showlog"><b>${playerName}</b></div>
                     </div>
-                    <div id="player${myNumber}token" class="token line" >家:5 街:4 道:15</div>
+                    <div id="player${myNumber}token" class="token line" ><img class="remainedtoken" src="./img/house${myNumber}.png">:5 <img class="remainedtoken" src="./img/city${myNumber}.png">:4 <img class="remainedtoken" src="./img/regular_road_right_up${myNumber}.png">:15</div>
                 </div>
                 <div id="player${myNumber}row2" class="row">
                     <div id="player${myNumber}resource" class="resource line"></div>
@@ -677,7 +676,7 @@ function renderRecord(){
     $(`.road`).html(``)
     for(let player of situation){
         //token
-        $(`#player${pn}token`).html(`家:${player.token.house} 街:${player.token.city} 道:${player.token.road}`)
+        $(`#player${pn}token`).html(`<img class="remainedtoken" src="./img/house${pn}.png">:${player.token.house} <img class="remainedtoken" src="./img/city${pn}.png">:${player.token.city} <img class="remainedtoken" src="./img/regular_road_right_up${pn}.png">:${player.token.road}`)
         //resource
         $(`#player${pn}resource`).html('')
         for(let r in player.resource){
@@ -715,21 +714,21 @@ function renderRecord(){
         };
         //house
         for(let houseNumber of player.house){
-            $(`#nodetouch${houseNumber}`).html(`<img id="house${houseNumber}" class="house" src="./img/house${pn+1}.png">`)
+            $(`#nodetouch${houseNumber}`).html(`<img id="house${houseNumber}" class="house" src="./img/house${pn}.png">`)
         }
         //road
         if(board_size === 'large'){
             for(let road of player.road){
-                $(`#road${road.roadNumber}`).html(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./img/road_${road.roadDegree}${pn+1}.png">`)
+                $(`#road${road.roadNumber}`).html(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./img/road_${road.roadDegree}${pn}.png">`)
             }
         }else if(board_size === 'regular'){
             for(let road of player.road){
-                $(`#road${road.roadNumber}`).html(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./img/regular_road_${road.roadDegree}${pn+1}.png">`)
+                $(`#road${road.roadNumber}`).html(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./img/regular_road_${road.roadDegree}${pn}.png">`)
             }
         }
         //city
         for(let cityNumber of player.city){
-            $(`#nodetouch${cityNumber}`).html(`<img id="city${cityNumber}" class="city" src="./img/city${pn+1}.png">`)
+            $(`#nodetouch${cityNumber}`).html(`<img id="city${cityNumber}" class="city" src="./img/city${pn}.png">`)
         }
         pn += 1
     }
@@ -877,27 +876,7 @@ function game(){
     socket.emit('console',e)
 }
 function translate(item){
-    if(item === 'ore'){
-        return '鉄'
-    }else if(item === 'grain'){
-        return '米'
-    }else if(item === 'wool'){
-        return '羊'
-    }else if(item === 'lumber'){
-        return '木'
-    }else if(item === 'brick'){
-        return '煉'
-    }else if(item === 'knight'){
-        return '騎'
-    }else if(item === 'roadbuild'){
-        return '道'
-    }else if(item === 'harvest'){
-        return '収'
-    }else if(item === 'monopoly'){
-        return '独'
-    }else if(item === 'point'){
-        return '➀'
-    }else if(item === 'house'){
+    if(item === 'house'){
         return '家'
     }else if(item === 'city'){
         return '都市'

@@ -1,11 +1,18 @@
 @charset "UTF-8";
 body{
-    background-size: 100%;
+    background-size: auto 100vh;
+    background-position: center top;
 }
 #container{
     width: 100%;
     max-width: 1500px;
     margin: auto;
+}
+#select_area{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
 }
 #decide{
     background: skyblue;
@@ -150,6 +157,9 @@ body{
                 align-items: center;
                 text-align: center;
             }
+            .remainedtoken{
+                height:20px
+            }
                 .card{
                     display: flex;
                     margin:0 1px;
@@ -202,23 +212,23 @@ body{
                 }
                 .lumber{
                     border-color: rgb(116, 61, 25);
-                    background-color: rgb(62, 187, 62, 0.90);
+                    background-color: #51c251;
                 }
                 .brick{
                     border-color: rgb(179, 8, 8);
-                    background: rgba(179, 8, 8, 0.30);
+                    background: #e8b4b4;
                 }
                 .ore{
                     border-color: darkgrey;
-                    background-color: rgba(169, 169, 169, 0.50);
+                    background-color: #d4d4d4;
                 }
                 .grain{
                     border-color: gold;
-                    background-color: rgba(255, 215, 0, 0.55);
+                    background-color: #ffe973;
                 }
                 .wool{
                     border-color: rgba(144, 238, 144);
-                    background-color: rgba(144, 238, 144, 0.70);
+                    background-color: #b1f3b1;
                 }
                 #button_and_message_area{
                     width: 100%;

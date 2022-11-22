@@ -965,12 +965,13 @@ $(`#playerinformation`).on(`click`,`.showlog`, function(){
 $(`#board_area`).on('click','#cost_card',function(){
     if($('#cost_card').css(`width`) !== '300px'){
         $('#cost_card').css(`width`, `300px`)
-        if(Number($('#board_area').css(`height`).slice(0,-2)) < 339.609){
+        $('#cost_card').css(`position`, `absolute`)
+        /*if(Number($('#board_area').css(`height`).slice(0,-2)) < 339.609){
             $('#cost_card').css(`top`, `0px`)
-        }
+        }*/
     }else{
-        $('#cost_card').css(`width`, `100%`)
-        $('#cost_card').css(`top`, ``)
+        $('#cost_card').css(`width`, `20%`)
+        $('#cost_card').css(`position`, `initial`)
     }
 })
 //プラスボタンをクリック
@@ -988,32 +989,6 @@ $(`#tileamounts`).on(`click`, `.minusbutton`, function(){
 })
 //ボリュームをクリック
 $(`#board_area`).on('click', '#volume', function(){
-    switch($('body').attr('background')[18]){
-        case '.':
-            $('body').attr('background', "./img/wood_pattern2.jpg")
-            $('#wallpaper').html('2')
-            break
-        case '2':
-            $('body').attr('background', "./img/wood_pattern3.jpg")
-            $('#wallpaper').html('3')
-            break
-        case '3':
-            $('body').attr('background', "./img/wood_pattern4.jpg")
-            $('#wallpaper').html('4')
-            break
-        case '4':
-            $('body').attr('background', "./img/wood_pattern5.jpg")
-            $('#wallpaper').html('5')
-            break
-        case '5':
-            $('body').attr('background', "./img/wood_pattern6.jpg")
-            $('#wallpaper').html('6')
-            break
-        case '6':
-            $('body').attr('background', "./img/wood_pattern.jpg")
-            $('#wallpaper').html('1')
-            break
-    }
     switch(sound){
         case 'unloaded':
             turnSound.load();
@@ -1036,8 +1011,16 @@ $(`#board_area`).on('click', '#volume', function(){
             break;
     }
 })
-
-
+//設定ボタンクリック
+$(`#board_area`).on('click', '#setting_button', function(){
+    $(`#setting_area`).toggleClass('show')
+})
+//設定閉じるボタンクリック
+$(`#board_area`).on('click', '#setting_close', function(){
+    $(`#setting_area`).toggleClass('show')
+    $('#cost_card').css(`width`, `20%`)
+    $('#cost_card').css(`position`, `initial`)
+})
 
 
 //画面表示
@@ -1051,7 +1034,7 @@ const display = {
     showField(){
         $(`#receiving_area`).show();
         $('#field').show()
-        $('body').attr('background', "./img/wood_pattern.jpg")
+        $('body').attr('background', "./img/wood_pattern1.jpg")
         $(`#receiving_area`).hide()
       },
     hideItems(game){
@@ -1078,7 +1061,7 @@ const display = {
         $(`#receiving_area`).show()
         $(`.tilenumberinput`).val(``)
         $('#field').show()
-        $('body').attr('background', "./img/wood_pattern.jpg")
+        $('body').attr('background', "./img/wood_pattern1.jpg")
         let tileNumber = 1
         if(island.length === 9){
             board_size = 'large'
@@ -1088,9 +1071,14 @@ const display = {
                 <div id="receiving_area"><p id="receiving"><b>通信中…</b></p></div>
                 <div id="deck_area"><div id="deckcase"><div id="deck"></div></div>&nbsp;×34</div>
                 <div id="left_down">
-                <div id="wallpaper">1</div>
-                <div id="setting_button"><img id="settingpict" class="img_for_button" src="./img/setting.png"></div>
-                <img id="volume" src='./img/volume_${sound}.png'>
+                <img id="setting_button" src="./img/setting.png">
+                </div>
+                <div id="setting_area">
+                <div id="setting_close">×</div>
+                <div id="setting_icons">
+                <img id="volume" class="setting_icon" src='./img/volume_${sound}.png'>
+                <img id="cost_card"  class="setting_icon"src='./img/cost_card.jpg'>
+                </div>
                 </div>
                 <img id="board_frame" src='./img/large_board.png'>
                 <img id="tile1" class="tilex1 tiley5 tile" data-direction="" src="./img/ocean.png">
@@ -1423,9 +1411,14 @@ const display = {
                 <div id="receiving_area"><p id="receiving"><b>通信中…</b></p></div>
                 <div id="deck_area"><div id="deckcase"><div id="deck"></div></div>&nbsp;×25</div>
                 <div id="left_down">
-                <div id="wallpaper">1</div>
-                <div id="setting_button"><img id="settingpict" class="img_for_button" src="./img/setting.png"></div>
-                <img id="volume" src='./img/volume_${sound}.png'>
+                <img id="setting_button" src="./img/setting.png">
+                </div>
+                <div id="setting_area">
+                <div id="setting_close">×</div>
+                <div id="setting_icons">
+                <img id="volume" class="setting_icon" src='./img/volume_${sound}.png'>
+                <img id="cost_card"  class="setting_icon"src='./img/cost_card.jpg'>
+                </div>
                 </div>
                 <img id="board_frame" src='./img/regular_board.png'>
                 <img id="tile1" class="tile" data-direction="" src="./img/regular_ocean.png">
@@ -1699,13 +1692,13 @@ const display = {
     allToken(game){
         $(`#receiving_area`).show();
         for(let p of game.players){
-            $(`#player${p.number}token`).html(`家:${p.token.house} 街:${p.token.city} 道:${p.token.road}`)
+            $(`#player${p.number}token`).html(`<img class="remainedtoken" src="./img/house${p.number}.png">:${p.token.house} <img class="remainedtoken" src="./img/city${p.number}.png">:${p.token.city} <img class="remainedtoken" src="./img/regular_road_right_up${p.number}.png">:${p.token.road}`)
         };
         $(`#receiving_area`).hide();
     },
     tokenOf(data){
         $(`#receiving_area`).show();
-        $(`#player${data.number}token`).html(`家:${data.token.house} 街:${data.token.city} 道:${data.token.road}`)
+        $(`#player${data.number}token`).html(`<img class="remainedtoken" src="./img/house${data.number}.png">:${data.token.house} <img class="remainedtoken" src="./img/city${data.number}.png">:${data.token.city} <img class="remainedtoken" src="./img/regular_road_right_up${data.number}.png">:${data.token.road}`)
         $(`#receiving_area`).hide();
     },
     allTitle(game){
@@ -1807,38 +1800,38 @@ const display = {
     buildings(buildings){
         $(`#receiving_area`).show()
         for(let house of buildings.house){
-            $(`#nodetouch${house.nodeNumber}`).html(`<img id="house${house.nodeNumber}" class="house" src="./img/house${house.owner.number+1}.png">`)
+            $(`#nodetouch${house.nodeNumber}`).html(`<img id="house${house.nodeNumber}" class="house" src="./img/house${house.owner.number}.png">`)
         }
         if(board_size === 'large'){
             for(let road of buildings.road){
-                $(`#road${road.roadNumber}`).html(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./img/road_${road.roadDegree}${road.owner.number+1}.png">`)
+                $(`#road${road.roadNumber}`).html(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./img/road_${road.roadDegree}${road.owner.number}.png">`)
             }
         }else if(board_size === 'regular'){
             for(let road of buildings.road){
-                $(`#road${road.roadNumber}`).html(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./img/regular_road_${road.roadDegree}${road.owner.number+1}.png">`)
+                $(`#road${road.roadNumber}`).html(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./img/regular_road_${road.roadDegree}${road.owner.number}.png">`)
             }
         }
         for(let city of buildings.city){
-            $(`#nodetouch${city.nodeNumber}`).html(`<img id="city${city.nodeNumber}" class="city" src="./img/city${city.owner.number+1}.png">`)
+            $(`#nodetouch${city.nodeNumber}`).html(`<img id="city${city.nodeNumber}" class="city" src="./img/city${city.owner.number}.png">`)
         }
         $(`#receiving_area`).hide()
     },
     addHouse(houseobj){
         $(`#receiving_area`).show()
-        $(`#nodetouch${houseobj.nodeNumber}`).html(`<img id="house${houseobj.nodeNumber}" class="house" src="./img/house${houseobj.ownerNumber+1}.png">`)
+        $(`#nodetouch${houseobj.nodeNumber}`).html(`<img id="house${houseobj.nodeNumber}" class="house" src="./img/house${houseobj.ownerNumber}.png">`)
         $(`#receiving_area`).hide()
     },
     addCity(cityobj){
         $(`#receiving_area`).show()
-        $(`#nodetouch${cityobj.nodeNumber}`).html(`<img id="city${cityobj.nodeNumber}" class="city" src="./img/city${cityobj.ownerNumber+1}.png">`)
+        $(`#nodetouch${cityobj.nodeNumber}`).html(`<img id="city${cityobj.nodeNumber}" class="city" src="./img/city${cityobj.ownerNumber}.png">`)
         $(`#receiving_area`).hide()
     },
     addRoad(roadobj){
         $(`#receiving_area`).show()
         if(board_size === 'large'){
-            $(`#road${roadobj.roadNumber}`).html(`<img id="roadtoken${roadobj.roadNumber}" class="roadtoken" src="./img/road_${roadobj.roadDegree}${roadobj.ownerNumber+1}.png">`)
+            $(`#road${roadobj.roadNumber}`).html(`<img id="roadtoken${roadobj.roadNumber}" class="roadtoken" src="./img/road_${roadobj.roadDegree}${roadobj.ownerNumber}.png">`)
         }else if(board_size === 'regular'){
-            $(`#road${roadobj.roadNumber}`).html(`<img id="roadtoken${roadobj.roadNumber}" class="roadtoken" src="./img/regular_road_${roadobj.roadDegree}${roadobj.ownerNumber+1}.png">`)
+            $(`#road${roadobj.roadNumber}`).html(`<img id="roadtoken${roadobj.roadNumber}" class="roadtoken" src="./img/regular_road_${roadobj.roadDegree}${roadobj.ownerNumber}.png">`)
         }
         $(`#receiving_area`).hide()
     },
@@ -2176,7 +2169,7 @@ const display = {
                                 <div id="player${myNumber}mark" class="playermark player${myNumber}color"><b>${myNumber+1}</b></div>
                                 <div id="player${myNumber}name" class="name showlog"><b>${players[myNumber].name}</b></div>
                             </div>
-                            <div id="player${myNumber}token" class="token line" >家:${players[myNumber].token.house} 街:${players[myNumber].token.city} 道:${players[myNumber].token.road}</div>
+                            <div id="player${myNumber}token" class="token line" ><img class="remainedtoken" src="./img/house${myNumber}.png">:${players[myNumber].token.house} <img class="remainedtoken" src="./img/city${myNumber}.png">:${players[myNumber].token.city} <img class="remainedtoken" src="./img/regular_road_right_up${myNumber}.png">:${players[myNumber].token.road}</div>
                         </div>
                         <div id="player${myNumber}row2" class="row">
                             <div id="player${myNumber}resource" class="resource line"></div>
@@ -2204,7 +2197,7 @@ const display = {
                                     <div id="player${myNumber}name" class="name"><b>${players[myNumber].name}</b>
                                     </div>
                                 </div>
-                                <div id="player${myNumber}token" class="token line" >家:${players[myNumber].token.house} 街:${players[myNumber].token.city} 道:${players[myNumber].token.road}</div>
+                                <div id="player${myNumber}token" class="token line" ><img class="remainedtoken" src="./img/house${myNumber}.png">:${players[myNumber].token.house} <img class="remainedtoken" src="./img/city${myNumber}.png">:${players[myNumber].token.city} <img class="remainedtoken" src="./img/regular_road_right_up${myNumber}.png">:${players[myNumber].token.road}</div>
                             </div>
                             <div id="player${myNumber}row2" class="row">
                                 <div id="player${myNumber}resource" class="resource line"></div>
@@ -2232,7 +2225,7 @@ const display = {
                         <div id="player${myNumber}mark" class="playermark player${myNumber}color"><b>${myNumber+1}</b></div>
                         <div id="player${myNumber}name" class="name showlog"><b>${players[myNumber].name}</b></div>
                         </div>
-                        <div id="player${myNumber}token" class="token line" >家:${players[myNumber].token.house} 街:${players[myNumber].token.city} 道:${players[myNumber].token.road}</div>
+                        <div id="player${myNumber}token" class="token line" ><img class="remainedtoken" src="./img/house${myNumber}.png">:${players[myNumber].token.house} <img class="remainedtoken" src="./img/city${myNumber}.png">:${players[myNumber].token.city} <img class="remainedtoken" src="./img/regular_road_right_up${myNumber}.png">:${players[myNumber].token.road}</div>
                     </div>
                     <div id="player${myNumber}row2" class="row">
                         <div id="player${myNumber}resource" class="resource line"></div>
@@ -2341,7 +2334,7 @@ const display = {
         $(`.road`).html(``)
         for(let player of situation){
             //token
-            $(`#player${pn}token`).html(`家:${player.token.house} 街:${player.token.city} 道:${player.token.road}`)
+            $(`#player${pn}token`).html(`<img class="remainedtoken" src="./img/house${pn}.png">:${player.token.house} <img class="remainedtoken" src="./img/city${pn}.png">:${player.token.city} <img class="remainedtoken" src="./img/regular_road_right_up${pn}.png">:${player.token.road}`)
             //resource
             $(`#player${pn}resource`).html('')
             for(let r in player.resource){
@@ -2379,21 +2372,21 @@ const display = {
             };
             //house
             for(let houseNumber of player.house){
-                $(`#nodetouch${houseNumber}`).html(`<img id="house${houseNumber}" class="house" src="./img/house${pn+1}.png">`)
+                $(`#nodetouch${houseNumber}`).html(`<img id="house${houseNumber}" class="house" src="./img/house${pn}.png">`)
             }
             //road
             if(board_size === 'large'){
                 for(let road of player.road){
-                    $(`#road${road.roadNumber}`).html(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./img/road_${road.roadDegree}${pn+1}.png">`)
+                    $(`#road${road.roadNumber}`).html(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./img/road_${road.roadDegree}${pn}.png">`)
                 }
             }else if(board_size === 'regular'){
                 for(let road of player.road){
-                    $(`#road${road.roadNumber}`).html(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./img/regular_road_${road.roadDegree}${pn+1}.png">`)
+                    $(`#road${road.roadNumber}`).html(`<img id="roadtoken${road.roadNumber}" class="roadtoken" src="./img/regular_road_${road.roadDegree}${pn}.png">`)
                 }
             }
             //city
             for(let cityNumber of player.city){
-                $(`#nodetouch${cityNumber}`).html(`<img id="city${cityNumber}" class="city" src="./img/city${pn+1}.png">`)
+                $(`#nodetouch${cityNumber}`).html(`<img id="city${cityNumber}" class="city" src="./img/city${pn}.png">`)
             }
             pn += 1
         }
@@ -2538,27 +2531,7 @@ function game(){
     socket.emit('console','')
 }
 function translate(item){
-    if(item === 'ore'){
-        return '鉄'
-    }else if(item === 'grain'){
-        return '米'
-    }else if(item === 'wool'){
-        return '羊'
-    }else if(item === 'lumber'){
-        return '木'
-    }else if(item === 'brick'){
-        return '煉'
-    }else if(item === 'knight'){
-        return '騎'
-    }else if(item === 'roadbuild'){
-        return '道'
-    }else if(item === 'harvest'){
-        return '収'
-    }else if(item === 'monopoly'){
-        return '独'
-    }else if(item === 'point'){
-        return '➀'
-    }else if(item === 'house'){
+    if(item === 'house'){
         return '家'
     }else if(item === 'city'){
         return '都市'
