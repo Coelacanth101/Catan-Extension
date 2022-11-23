@@ -318,7 +318,7 @@ class Player{
           game.pointReload()
           display.tokenOf(this)
           display.resourceOf(this)
-          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'house', turnPlayerID:game.turnPlayer.socketID}
+          const logdata = {action:'build', playername:game.turnPlayer.name, playernumber:game.turnPlayer.number, builditem:'house', turnPlayerID:game.turnPlayer.socketID}
           display.message(logdata)
           display.playLog(logdata)
           takeRecord(logdata)
@@ -363,7 +363,7 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.tokenOf(this)
-          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'house', turnPlayerID:game.turnPlayer.socketID}
+          const logdata = {action:'build', playername:game.turnPlayer.name, playernumber:game.turnPlayer.number, builditem:'house', turnPlayerID:game.turnPlayer.socketID}
           display.message(logdata)
           display.playLog(logdata)
           takeRecord(logdata)
@@ -409,7 +409,7 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.tokenOf(this)
-          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'city', turnPlayerID:game.turnPlayer.socketID}
+          const logdata = {action:'build', playername:game.turnPlayer.name, playernumber:game.turnPlayer.number, builditem:'city', turnPlayerID:game.turnPlayer.socketID}
           display.message(logdata)
           display.playLog(logdata)
           takeRecord(logdata)
@@ -437,7 +437,7 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.tokenOf(this)
-          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'road', turnPlayerID:game.turnPlayer.socketID}
+          const logdata = {action:'build', playername:game.turnPlayer.name, playernumber:game.turnPlayer.number, builditem:'road', turnPlayerID:game.turnPlayer.socketID}
           display.message(logdata)
           display.playLog(logdata)
           takeRecord(logdata)
@@ -472,7 +472,7 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.tokenOf(this)
-          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'road', turnPlayerID:game.turnPlayer.socketID}
+          const logdata = {action:'build', playername:game.turnPlayer.name, playernumber:game.turnPlayer.number, builditem:'road', turnPlayerID:game.turnPlayer.socketID}
           display.message(logdata)
           display.playLog(logdata)
           takeRecord(logdata)
@@ -501,7 +501,7 @@ class Player{
           board.longestCheck()
           game.pointReload()
           display.tokenOf(this)
-          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'road', turnPlayerID:game.turnPlayer.socketID}
+          const logdata = {action:'build', playername:game.turnPlayer.name, playernumber:game.turnPlayer.number, builditem:'road', turnPlayerID:game.turnPlayer.socketID}
           display.message(logdata)
           display.playLog(logdata)
           takeRecord(logdata)
@@ -538,7 +538,7 @@ class Player{
           display.tokenOf(this)
           game.phase = 'afterdice'
           display.toggleMyButtons(game.turnPlayer.socketID)
-          const logdata = {action:'build', playername:game.turnPlayer.name, builditem:'road', turnPlayerID:game.turnPlayer.socketID}
+          const logdata = {action:'build', playername:game.turnPlayer.name, playernumber:game.turnPlayer.number, builditem:'road', turnPlayerID:game.turnPlayer.socketID}
           display.message(logdata)
           display.playLog(logdata)
           takeRecord(logdata)
@@ -1516,12 +1516,12 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
         player.calculateMyProductivity()
       }
     }
-    const logdata = {action:'dice', playername:game.turnPlayer.name, turnPlayerID:game.turnPlayer.socketID}
-    display.message(logdata)
-    display.playLog(logdata)
     let dice1 = Math.ceil(Math.random()*6);
     let dice2 = Math.ceil(Math.random()*6);
     this.dice = [dice1,dice2];
+    const logdata = {action:'dice', playername:game.turnPlayer.name, turnPlayerID:game.turnPlayer.socketID,dice:this.dice}
+    display.message(logdata)
+    display.playLog(logdata)
     board.thief.thiefStay += 1
     game.turnPlayer.dice = 0
     if(dice1 + dice2 === 7){
@@ -2108,7 +2108,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   },
   turnEnd(){
     if(this.phase === 'afterdice'){
-      if(this.turnPlayer.point >= 10){
+      if(this.turnPlayer.point >= 2){
         io.emit('fanfare','')
         makeNewTurnRecord()
         const logdata = {action:'win', playername:this.turnPlayer.name}
@@ -3411,6 +3411,8 @@ io.on("connection", (socket)=>{
       display.relativeNodes()
       display.thief()
       display.allPlayerInformation()
+      display.resetRate()
+      display.deletePlayLog()
     }else{
       display.hideReceivingArea()
     }

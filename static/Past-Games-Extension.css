@@ -163,6 +163,14 @@ body{
                 align-items: center;
                 text-align: center;
             }
+            .token{
+                gap: 2%;
+            }
+            .remainedtokennumber{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
             .remainedtoken{
                 height:20px
             }
@@ -262,16 +270,29 @@ body{
                     justify-content: center;
                     align-items: center;
                 }
+                .message_icon{
+                    height: 24px;
+                }
                 #controlrecord{
                     width: 100%;
                     height: 40%;
                     display: flex;
+                    flex-wrap: wrap;
                     justify-content: center;
                     align-items: center;
+                }
+                .recordrows{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
                 }
                 .recordbutton{
                     margin:0 1.5%;
                     height: 26px;
+                }
+                #recordbuttonicon{
+                    height: 100%;
                 }
                 #turn{
                     font-weight: bold;
@@ -433,9 +454,9 @@ td{
                         #controlrecord{
                             position: fixed;
                             width: 400px;
-                            height: initial;
                             bottom: 2.5vh;
                             right: 0%;
+                            height: initial;
                         }@media screen and (min-width:1500px){
                             #controlrecord{
                                 bottom: 2.5vh;

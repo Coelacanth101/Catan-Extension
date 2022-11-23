@@ -413,7 +413,11 @@ socket.on('deleterelativenodes',()=>{
 socket.on('playlog',(logdata)=>{
     $(`#receiving_area`).show();
     if(logdata.action === 'build'){
-        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が${translate(logdata.builditem)}を建設しました</div>`)
+        if(logdata.builditem !== 'road'){
+            $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<img class="message_icon" src="./img/${logdata.builditem}${logdata.playernumber}.png">を建設しました</div>`)
+        }else{
+            $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<img class="message_icon" src="./img/regular_road_right_up${logdata.playernumber}.png">を建設しました</div>`)
+        }
     }else if(logdata.action === 'draw'){
         $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>がカードを引きました</div>`)
     }else if(logdata.action === 'progress'){
@@ -423,7 +427,7 @@ socket.on('playlog',(logdata)=>{
     }else if(logdata.action === 'robresource'){
         $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<b>${logdata.robbed}</b>から強奪しました</div>`)
     }else if(logdata.action === 'monopoly'){
-        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<div class="card ${String(logdata.resource)}"><img src="./img/${logdata.resource}pict.png" alt="${logdata.resource}" class="img_for_card"></div>${logdata.amount}枚を独占しました</div>`)
+        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<div class="card ${String(logdata.resource)}"><img src="./img/${logdata.resource}pict.png" alt="${logdata.resource}" class="img_for_card"></div>×${logdata.amount}を独占しました</div>`)
     }else if(logdata.action === 'harvest'){
         let harvestResources = ''
         for(let resource of logdata.resource){
@@ -492,7 +496,7 @@ socket.on('playlog',(logdata)=>{
         burstPlayers = burstPlayers.slice(1)
         $(`#logmessage`).append(`<div class="log">${burstPlayers}がバーストしました</div>`)
     }else if(logdata.action === 'dice'){
-        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>がダイスを振りました</div>`)
+        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<img class="message_icon" src="./img/dice${logdata.dice[0]}.png"><img class="message_icon" src="./img/dice${logdata.dice[1]}.png">を出しました</div>`)
     }else if(logdata.action === 'exhaust'){
         let exhaustresource = ''
         for(let resource of logdata.exhaust){
@@ -537,7 +541,11 @@ socket.on('message',(logdata)=>{
     $(`#button_area`).hide()
     $(`#message_area`).show()
     if(logdata.action === 'build'){
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が${translate(logdata.builditem)}を建設しました</div>`)
+        if(logdata.builditem !== 'road'){
+            $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<img class="message_icon" src="./img/${logdata.builditem}${logdata.playernumber}.png">を建設しました</div>`)
+        }else{
+            $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<img class="message_icon" src="./img/regular_road_right_up${logdata.playernumber}.png">を建設しました</div>`)
+        }
     }else if(logdata.action === 'draw'){
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>がカードを引きました</div>`)
     }else if(logdata.action === 'progress'){
@@ -547,7 +555,7 @@ socket.on('message',(logdata)=>{
     }else if(logdata.action === 'robresource'){
         $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<b>${logdata.robbed}</b>から強奪しました</div>`)
     }else if(logdata.action === 'monopoly'){
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<div class="card ${String(logdata.resource)}"><img src="./img/${logdata.resource}pict.png" alt="${logdata.resource}" class="img_for_card"></div>${logdata.amount}枚を独占しました</div>`)
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<div class="card ${String(logdata.resource)}"><img src="./img/${logdata.resource}pict.png" alt="${logdata.resource}" class="img_for_card"></div>×${logdata.amount}を独占しました</div>`)
     }else if(logdata.action === 'harvest'){
         let harvestResources = ''
         for(let resource of logdata.resource){
@@ -604,7 +612,7 @@ socket.on('message',(logdata)=>{
         burstPlayers = burstPlayers.slice(1)
         $(`#message_area`).append(`<div class="message">${burstPlayers}がバーストしました</div>`)
     }else if(logdata.action === 'dice'){
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>がダイスを振りました</div>`)
+        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<img class="message_icon" src="./img/dice${logdata.dice[0]}.png"><img class="message_icon" src="./img/dice${logdata.dice[1]}.png">を出しました</div>`)
     }else if(logdata.action === 'exhaust'){
         let exhaustresource = ''
         for(let resource of logdata.exhaust){
@@ -1692,13 +1700,13 @@ const display = {
     allToken(game){
         $(`#receiving_area`).show();
         for(let p of game.players){
-            $(`#player${p.number}token`).html(`<img class="remainedtoken" src="./img/house${p.number}.png">:${p.token.house} <img class="remainedtoken" src="./img/city${p.number}.png">:${p.token.city} <img class="remainedtoken" src="./img/regular_road_right_up${p.number}.png">:${p.token.road}`)
+            $(`#player${p.number}token`).html(`<div class="remainedtokennumber"><img class="remainedtoken" src="./img/house${p.number}.png">:${p.token.house}</div> <div class="remainedtokennumber"><img class="remainedtoken" src="./img/city${p.number}.png">:${p.token.city}</div> <div class="remainedtokennumber"><img class="remainedtoken" src="./img/regular_road_right_up${p.number}.png">:${p.token.road}</div>`)
         };
         $(`#receiving_area`).hide();
     },
     tokenOf(data){
         $(`#receiving_area`).show();
-        $(`#player${data.number}token`).html(`<img class="remainedtoken" src="./img/house${data.number}.png">:${data.token.house} <img class="remainedtoken" src="./img/city${data.number}.png">:${data.token.city} <img class="remainedtoken" src="./img/regular_road_right_up${data.number}.png">:${data.token.road}`)
+        $(`#player${data.number}token`).html(`<div class="remainedtokennumber"><img class="remainedtoken" src="./img/house${data.number}.png">:${data.token.house}</div> <div class="remainedtokennumber"><img class="remainedtoken" src="./img/city${data.number}.png">:${data.token.city}</div> <div class="remainedtokennumber"><img class="remainedtoken" src="./img/regular_road_right_up${data.number}.png">:${data.token.road}</div>`)
         $(`#receiving_area`).hide();
     },
     allTitle(game){
@@ -2169,7 +2177,7 @@ const display = {
                                 <div id="player${myNumber}mark" class="playermark player${myNumber}color"><b>${myNumber+1}</b></div>
                                 <div id="player${myNumber}name" class="name showlog"><b>${players[myNumber].name}</b></div>
                             </div>
-                            <div id="player${myNumber}token" class="token line" ><img class="remainedtoken" src="./img/house${myNumber}.png">:${players[myNumber].token.house} <img class="remainedtoken" src="./img/city${myNumber}.png">:${players[myNumber].token.city} <img class="remainedtoken" src="./img/regular_road_right_up${myNumber}.png">:${players[myNumber].token.road}</div>
+                            <div id="player${myNumber}token" class="token line" ><div class="remainedtokennumber"><img class="remainedtoken" src="./img/house${myNumber}.png">:${players[myNumber].token.house}</div> <div class="remainedtokennumber"><img class="remainedtoken" src="./img/city${myNumber}.png">:${players[myNumber].token.city}</div> <div class="remainedtokennumber"><img class="remainedtoken" src="./img/regular_road_right_up${myNumber}.png">:${players[myNumber].token.road}</div></div>
                         </div>
                         <div id="player${myNumber}row2" class="row">
                             <div id="player${myNumber}resource" class="resource line"></div>
@@ -2197,7 +2205,7 @@ const display = {
                                     <div id="player${myNumber}name" class="name"><b>${players[myNumber].name}</b>
                                     </div>
                                 </div>
-                                <div id="player${myNumber}token" class="token line" ><img class="remainedtoken" src="./img/house${myNumber}.png">:${players[myNumber].token.house} <img class="remainedtoken" src="./img/city${myNumber}.png">:${players[myNumber].token.city} <img class="remainedtoken" src="./img/regular_road_right_up${myNumber}.png">:${players[myNumber].token.road}</div>
+                                <div id="player${myNumber}token" class="token line" ><div class="remainedtokennumber"><img class="remainedtoken" src="./img/house${myNumber}.png">:${players[myNumber].token.house}</div> <div class="remainedtokennumber"><img class="remainedtoken" src="./img/city${myNumber}.png">:${players[myNumber].token.city}</div> <div class="remainedtokennumber"><img class="remainedtoken" src="./img/regular_road_right_up${myNumber}.png">:${players[myNumber].token.road}</div></div>
                             </div>
                             <div id="player${myNumber}row2" class="row">
                                 <div id="player${myNumber}resource" class="resource line"></div>
@@ -2225,7 +2233,7 @@ const display = {
                         <div id="player${myNumber}mark" class="playermark player${myNumber}color"><b>${myNumber+1}</b></div>
                         <div id="player${myNumber}name" class="name showlog"><b>${players[myNumber].name}</b></div>
                         </div>
-                        <div id="player${myNumber}token" class="token line" ><img class="remainedtoken" src="./img/house${myNumber}.png">:${players[myNumber].token.house} <img class="remainedtoken" src="./img/city${myNumber}.png">:${players[myNumber].token.city} <img class="remainedtoken" src="./img/regular_road_right_up${myNumber}.png">:${players[myNumber].token.road}</div>
+                        <div id="player${myNumber}token" class="token line" ><div class="remainedtokennumber"><img class="remainedtoken" src="./img/house${myNumber}.png">:${players[myNumber].token.house}</div> <div class="remainedtokennumber"><img class="remainedtoken" src="./img/city${myNumber}.png">:${players[myNumber].token.city}</div> <div class="remainedtokennumber"><img class="remainedtoken" src="./img/regular_road_right_up${myNumber}.png">:${players[myNumber].token.road}</div></div>
                     </div>
                     <div id="player${myNumber}row2" class="row">
                         <div id="player${myNumber}resource" class="resource line"></div>
@@ -2334,7 +2342,7 @@ const display = {
         $(`.road`).html(``)
         for(let player of situation){
             //token
-            $(`#player${pn}token`).html(`<img class="remainedtoken" src="./img/house${pn}.png">:${player.token.house} <img class="remainedtoken" src="./img/city${pn}.png">:${player.token.city} <img class="remainedtoken" src="./img/regular_road_right_up${pn}.png">:${player.token.road}`)
+            $(`#player${pn}token`).html(`<div class="remainedtokennumber"><img class="remainedtoken" src="./img/house${pn}.png">:${player.token.house}</div> <div class="remainedtokennumber"><img class="remainedtoken" src="./img/city${pn}.png">:${player.token.city}</div> <div class="remainedtokennumber"><img class="remainedtoken" src="./img/regular_road_right_up${pn}.png">:${player.token.road}</div>`)
             //resource
             $(`#player${pn}resource`).html('')
             for(let r in player.resource){
@@ -2400,21 +2408,22 @@ const display = {
             $(`#dice_area`).html(``)
         }
         //deck
-        if(record[turn][actionInTurn].progress || record[turn][actionInTurn].progress === 0){
-            if(board_size === 'large'){
-                $(`#deck_area`).html(`<div id="deckcase"><div id="deck"></div></div>&nbsp;×${record[turn][actionInTurn].progress}`)
-                $(`#deck`).css(`height`, `${record[turn][actionInTurn].progress/34 * 100}%`)
-            }else if(board_size = 'regular'){
-                $(`#deck_area`).html(`<div id="deckcase"><div id="deck"></div></div>&nbsp;×${record[turn][actionInTurn].progress}`)
-                $(`#deck`).css(`height`, `${record[turn][actionInTurn].progress/25 * 100}%`)
-            }
-            
+        if(board_size === 'large'){
+            $(`#deck_area`).html(`<div id="deckcase"><div id="deck"></div></div>&nbsp;×${record[turn][actionInTurn].progress}`)
+            $(`#deck`).css(`height`, `${record[turn][actionInTurn].progress/34 * 100}%`)
+        }else if(board_size = 'regular'){
+            $(`#deck_area`).html(`<div id="deckcase"><div id="deck"></div></div>&nbsp;×${record[turn][actionInTurn].progress}`)
+            $(`#deck`).css(`height`, `${record[turn][actionInTurn].progress/25 * 100}%`)
         }
         //message
         $(`#endmessage_area`).html(``);
         if(record[turn][actionInTurn].action){
             if(record[turn][actionInTurn].action.action === 'build'){
-                $(`#endmessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が${translate(record[turn][actionInTurn].action.builditem)}を建設しました</div>`)
+                if(record[turn][actionInTurn].action.builditem !== 'road'){
+                    $(`#endmessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<img class="message_icon" src="./img/${record[turn][actionInTurn].action.builditem}${record[turn][actionInTurn].action.playernumber}.png">を建設しました</div>`)
+                }else{
+                    $(`#endmessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<img class="message_icon" src="./img/regular_road_right_up${record[turn][actionInTurn].action.playernumber}.png">を建設しました</div>`)
+                }
             }else if(record[turn][actionInTurn].action.action === 'draw'){
                 $(`#endmessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<div class="card ${record[turn][actionInTurn].action.progress}"><img src="./img/${record[turn][actionInTurn].action.progress}.png" alt="${record[turn][actionInTurn].action.progress}" class="img_for_card ${record[turn][actionInTurn].action.progress}"></div>を引きました</div>`)
             }else if(record[turn][actionInTurn].action.action === 'progress'){
@@ -2424,7 +2433,7 @@ const display = {
             }else if(record[turn][actionInTurn].action.action === 'robresource'){
                 $(`#endmessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<b>${record[turn][actionInTurn].action.robbed}</b>から<div class="card ${record[turn][actionInTurn].action.resource}"><img src="./img/${record[turn][actionInTurn].action.resource}pict.png" alt="${record[turn][actionInTurn].action.resource}" class="img_for_card"></div>を強奪しました</div>`)
             }else if(record[turn][actionInTurn].action.action === 'monopoly'){
-                $(`#endmessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<div class="card ${String(record[turn][actionInTurn].action.resource)}"><img src="./img/${record[turn][actionInTurn].action.resource}pict.png" alt="${record[turn][actionInTurn].action.resource}" class="img_for_card"></div>${record[turn][actionInTurn].action.amount}枚を独占しました</div>`)
+                $(`#endmessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<div class="card ${String(record[turn][actionInTurn].action.resource)}"><img src="./img/${record[turn][actionInTurn].action.resource}pict.png" alt="${record[turn][actionInTurn].action.resource}" class="img_for_card"></div>×${record[turn][actionInTurn].action.amount}を独占しました</div>`)
             }else if(record[turn][actionInTurn].action.action === 'harvest'){
                 let harvestResources = ''
                 for(let resource of record[turn][actionInTurn].action.resource){
@@ -2489,7 +2498,7 @@ const display = {
                 burstPlayers = burstPlayers.slice(1)
                 $(`#endmessage_area`).append(`<div class="message">${burstPlayers}がバーストしました</div>`)
             }else if(record[turn][actionInTurn].action.action === 'dice'){
-                $(`#endmessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>がダイスを振りました</div>`)
+                $(`#endmessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<img class="message_icon" src="./img/dice${record[turn][actionInTurn].dice[0]}.png"><img class="message_icon" src="./img/dice${record[turn][actionInTurn].dice[1]}.png">を出しました</div>`)
             }else if(record[turn][actionInTurn].action.action === 'exhaust'){
                 let exhaustresource = ''
                 for(let resource of record[turn][actionInTurn].action.exhaust){

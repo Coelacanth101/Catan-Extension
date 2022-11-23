@@ -648,7 +648,7 @@ function renderGame(data){
                     <div id="player${myNumber}mark" class="playermark player${myNumber}color"><b>${myNumber+1}</b></div>
                     <div id="player${myNumber}name" class="name showlog"><b>${playerName}</b></div>
                     </div>
-                    <div id="player${myNumber}token" class="token line" ><img class="remainedtoken" src="./img/house${myNumber}.png">:5 <img class="remainedtoken" src="./img/city${myNumber}.png">:4 <img class="remainedtoken" src="./img/regular_road_right_up${myNumber}.png">:15</div>
+                    <div id="player${myNumber}token" class="token line" ><div class="remainedtokennumber"><img class="remainedtoken" src="./img/house${myNumber}.png">:5</div> <div class="remainedtokennumber"><img class="remainedtoken" src="./img/city${myNumber}.png">:4</div> <div class="remainedtokennumber"><img class="remainedtoken" src="./img/regular_road_right_up${myNumber}.png">:15</div></div>
                 </div>
                 <div id="player${myNumber}row2" class="row">
                     <div id="player${myNumber}resource" class="resource line"></div>
@@ -676,7 +676,7 @@ function renderRecord(){
     $(`.road`).html(``)
     for(let player of situation){
         //token
-        $(`#player${pn}token`).html(`<img class="remainedtoken" src="./img/house${pn}.png">:${player.token.house} <img class="remainedtoken" src="./img/city${pn}.png">:${player.token.city} <img class="remainedtoken" src="./img/regular_road_right_up${pn}.png">:${player.token.road}`)
+        $(`#player${pn}token`).html(`<div class="remainedtokennumber"><img class="remainedtoken" src="./img/house${pn}.png">:${player.token.house}</div> <div class="remainedtokennumber"><img class="remainedtoken" src="./img/city${pn}.png">:${player.token.city}</div> <div class="remainedtokennumber"><img class="remainedtoken" src="./img/regular_road_right_up${pn}.png">:${player.token.road}</div>`)
         //resource
         $(`#player${pn}resource`).html('')
         for(let r in player.resource){
@@ -742,7 +742,7 @@ function renderRecord(){
         $(`#dice_area`).html(``)
     }
     //deck
-    if(record[turn][actionInTurn].progress || record[turn][actionInTurn].progress === 0){
+    if('progress' in record[turn][actionInTurn]){
         if(board_size === 'large'){
             $(`#deck_area`).html(`<div id="deckcase"><div id="deck"></div></div>&nbsp;×${record[turn][actionInTurn].progress}`)
             $(`#deck`).css(`height`, `${record[turn][actionInTurn].progress/34 * 100}%`)
@@ -757,7 +757,15 @@ function renderRecord(){
     $(`#message_area`).html(``);
     if(record[turn][actionInTurn].action){
         if(record[turn][actionInTurn].action.action === 'build'){
-            $(`#message_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が${translate(record[turn][actionInTurn].action.builditem)}を建設しました</div>`)
+            if('playernumber' in record[turn][actionInTurn].action){
+                if(record[turn][actionInTurn].action.builditem !== 'road'){
+                    $(`#message_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<img class="message_icon" src="./img/${record[turn][actionInTurn].action.builditem}${record[turn][actionInTurn].action.playernumber}.png">を建設しました</div>`)
+                }else{
+                    $(`#message_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<img class="message_icon" src="./img/regular_road_right_up${record[turn][actionInTurn].action.playernumber}.png">を建設しました</div>`)
+                }
+            }else{
+                $(`#message_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が${translate(record[turn][actionInTurn].action.builditem)}を建設しました</div>`)
+            }
         }else if(record[turn][actionInTurn].action.action === 'draw'){
             $(`#message_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<div class="card ${record[turn][actionInTurn].action.progress}"><img src="./img/${record[turn][actionInTurn].action.progress}.png" alt="${record[turn][actionInTurn].action.progress}" class="img_for_card ${record[turn][actionInTurn].action.progress}"></div>を引きました</div>`)
         }else if(record[turn][actionInTurn].action.action === 'progress'){
@@ -832,7 +840,12 @@ function renderRecord(){
             burstPlayers = burstPlayers.slice(1)
             $(`#message_area`).append(`<div class="message">${burstPlayers}がバーストしました</div>`)
         }else if(record[turn][actionInTurn].action.action === 'dice'){
-            $(`#message_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>がダイスを振りました</div>`)
+            if('dice' in record[turn][actionInTurn]){
+                $(`#message_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<img class="message_icon" src="./img/dice${record[turn][actionInTurn].dice[0]}.png"><img class="message_icon" src="./img/dice${record[turn][actionInTurn].dice[1]}.png">を出しました</div>`)
+            }else{
+                $(`#message_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<img class="message_icon" src="./img/dice.png">を振りました</div>`)
+            }
+            
         }else if(record[turn][actionInTurn].action.action === 'exhaust'){
             let exhaustresource = ''
             for(let resource of record[turn][actionInTurn].action.exhaust){
