@@ -630,6 +630,17 @@ socket.on('gamerecord',(data)=>{
     turn = endturn
     actionInTurn = 0
     playerNumber = record[0][0].players.length
+    //ターン選択肢追加
+    $('#turn').html('<select name="turnselect" id="turnselect"></select>')
+    for(let i = 0; i <= endturn; i++){
+        if(i === 0){
+            $('#turnselect').append(`<option value="${i}" id="turn${i}">${i}</option>`)
+        }else if(i !== endturn){
+            $('#turnselect').append(`<option value="${i}" id="turn${i}">${i}</option>`)
+        }else{
+            $('#turnselect').append(`<option value="${i}" selected id="turn${i}">終局</option>`)
+        }
+    }
 })
 socket.on('pleasetakeover',()=>{
     alert('画面が更新されました。')
@@ -689,7 +700,12 @@ $(`#finalturn`).on(`click`, function(){
     actionInTurn = 0
     display.renderRecord()
 })
-
+//movetoをクリック
+$(`#moveto`).on(`click`, function(){
+    turn = Number($(`#turnselect`).val())
+    actionInTurn = 0
+    display.renderRecord()
+})
 
 
 
@@ -2511,11 +2527,7 @@ const display = {
                 $(`#endmessage_area`).append(`<h1>${record[turn][actionInTurn].action.playername}の勝ちです!</h1>`)
             }
         }
-        if(turn === endturn){
-            $(`#turn`).html(`終局`)
-        }else[
-            $(`#turn`).html(`${turn}`)
-        ]
+        $(`#turn${turn}`).prop('selected', true);
         let turnPlayerNumber
         $(`.name`).css(`background-color`, ``)
         if(turn === endturn){
