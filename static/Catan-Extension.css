@@ -569,6 +569,7 @@ body{
                 .recordbutton{
                     margin:0 1.5%;
                     height: 26px;
+                    white-space: nowrap;
                 }
                 #recordbuttonicon{
                     height: 100%;
