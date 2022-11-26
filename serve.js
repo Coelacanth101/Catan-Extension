@@ -1932,14 +1932,14 @@ const game = {maxPlayer:maxPlayer, players:[], turnPlayer:'', basePlayer:'', pha
 log:{turnPlayer:'', phase:'nameinputting', progressDeck:[],largestArmyPlayer:'',longestRoadPlayer:'',burstPlayer:[],proposedata:{proposer:'', proposee:'', giveresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}, takeresource:{ore:0,grain:0,wool:0,lumber:0,brick:0}},renounce:[],allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0}},
 lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   newGame(){
-    const now = new Date()
-    this.startTime = now
-    this.gameID = randomString()
     for(let player of this.players){
       player.reset()
     }
     board.reset()
     this.reset()
+    const now = new Date()
+    this.startTime = now
+    this.gameID = randomString()
     this.players = shuffle(this.players)
     let i = 1;
     for(let player of this.players){
@@ -2108,7 +2108,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   },
   turnEnd(){
     if(this.phase === 'afterdice'){
-      if(this.turnPlayer.point >= 10){
+      if(this.turnPlayer.point >= 2){
         io.emit('fanfare','')
         makeNewTurnRecord()
         const logdata = {action:'win', playername:this.turnPlayer.name}
@@ -3247,6 +3247,7 @@ function lastActionUndeletable(){
   lastAction.undo = false
 }
 function updateDatabase(winner){
+  console.log(winner.name)
   let pl = game.players.length
   //winner更新
   const losersInitialProductivity = {ore:0,grain:0,wool:0,lumber:0,brick:0}
@@ -3258,6 +3259,7 @@ function updateDatabase(winner){
     }
   }
   const newWinner = "insert into winner (start_time, name, number_of_players, my_number, turn, used_ore, used_grain, used_wool, used_lumber, used_brick, road_on_board, house_on_board, city_on_board, largestarmy, longestroad, owned_point, owned_knight, owned_roadbuild, owned_monopoly, owned_harvest, lastpoint, ore_initial_productivity, grain_initial_productivity, wool_initial_productivity, lumber_initial_productivity, brick_initial_productivity, ore_initial_productivity_of_losers, grain_initial_productivity_of_losers, wool_initial_productivity_of_losers, lumber_initial_productivity_of_losers, brick_initial_productivity_of_losers, negotiate, seven, gameid) values('" + JSON.stringify(game.startTime) + "', '" + winner.name + "', " + String(pl) + ", " + String(winner.number+1) + ", " + board.diceCount.total + ", " + String(winner.totalUse.ore) + ", " + String(winner.totalUse.grain) + ", " + String(winner.totalUse.wool) + ", " + String(winner.totalUse.lumber) + ", " + String(winner.totalUse.brick) + ", " + String(15-winner.token.road) + ", " + String(5-winner.token.house) + ", " + String(4-winner.token.city) + ", " + String(winner.largestArmy) + ", " + String(winner.longestRoad) + ", " + String(winner.progress.point) + ", " + String(winner.progress.knight+winner.used.knight) + ", " + String(winner.progress.roadbuild+winner.used.roadbuild) + ", " + String(winner.progress.monopoly+winner.used.monopoly) + ", " + String(winner.progress.harvest+winner.used.harvest) + ", '" + String(winner.lastPoint) + "', " + winner.initial_productivity.ore + ", " + winner.initial_productivity.grain + ", " + winner.initial_productivity.wool + ", " + winner.initial_productivity.lumber + ", " + winner.initial_productivity.brick + ", " + losersInitialProductivity.ore + ", " + losersInitialProductivity.grain + ", " + losersInitialProductivity.wool + ", " + losersInitialProductivity.lumber + ", " + losersInitialProductivity.brick + ", " + winner.negotiate + ", " + winner.seven + ", '" + game.gameID + "')";
+  console.log(newWinner)
   client.query(newWinner)
   .then((res) => {
   })
