@@ -496,7 +496,7 @@ socket.on('playlog',(logdata)=>{
         burstPlayers = burstPlayers.slice(1)
         $(`#logmessage`).append(`<div class="log">${burstPlayers}がバーストしました</div>`)
     }else if(logdata.action === 'dice'){
-        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<img class="message_icon" src="./img/dice${logdata.dice[0]}.png"><img class="message_icon" src="./img/dice${logdata.dice[1]}.png">を出しました</div>`)
+        $(`#logmessage`).append(`<div class="log"><b>${logdata.playername}</b>が<img class="message_icon" src="./img/dice.png">を振りました</div>`)
     }else if(logdata.action === 'exhaust'){
         let exhaustresource = ''
         for(let resource of logdata.exhaust){

@@ -2,6 +2,7 @@
 const app  = require("express")();
 const http = require("http").createServer(app);
 const io   = require("socket.io")(http);
+const ejs = require("ejs")
 const DOCUMENT_ROOT = __dirname + "/static";
 const SECRET_TOKEN = "abcdefghijklmn12345";
 app.get("/", (req, res)=>{
@@ -9,7 +10,10 @@ app.get("/", (req, res)=>{
 });
 
 app.get("/search_games", (req, res)=>{
-  res.sendFile(DOCUMENT_ROOT + "/Past-Games.html");
+  res.sendFile(DOCUMENT_ROOT + "/Past-Games.ejs");
+});
+app.get("/search_gamesa", (req, res)=>{
+  returnAllgames(res)
 });
 
 app.get("/:file", (req, res)=>{
@@ -3377,6 +3381,21 @@ function randomString(){
   }
   return string
 }
+function returnAllgames(res){
+  const query = "select start_time,gameid from game order by start_time";
+      client
+      .query(query)
+      .then((resdata) => {
+        if(resdata.rows[0]){
+          const games = resdata.rows
+          res.render(DOCUMENT_ROOT + "/Past-Games.ejs", {data:games});
+        }
+      })
+      .catch((e) => {
+      });
+}
+
+
 
 io.on("connection", (socket)=>{
 
