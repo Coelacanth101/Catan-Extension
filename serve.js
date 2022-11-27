@@ -11,7 +11,7 @@ app.get("/", (req, res)=>{
 /*app.get("/search_games", (req, res)=>{
   res.sendFile(DOCUMENT_ROOT + "/Past-Games.html");
 });*/
-app.get("/search_gamese", (req, res)=>{
+app.get("/search_games", (req, res)=>{
   returnAllgames(res)
 });
 
