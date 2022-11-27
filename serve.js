@@ -12,7 +12,7 @@ app.get("/", (req, res)=>{
 app.get("/search_games", (req, res)=>{
   res.sendFile(DOCUMENT_ROOT + "/Past-Games.ejs");
 });
-app.get("/search_gamesa", (req, res)=>{
+app.get("/search_gamesejs", (req, res)=>{
   returnAllgames(res)
 });
 
