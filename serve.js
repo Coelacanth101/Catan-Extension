@@ -8,11 +8,10 @@ const SECRET_TOKEN = "abcdefghijklmn12345";
 app.get("/", (req, res)=>{
   res.sendFile(DOCUMENT_ROOT + "/Catan.html");
 });
-
-app.get("/search_games", (req, res)=>{
-  res.sendFile(DOCUMENT_ROOT + "/Past-Games.ejs");
-});
-app.get("/search_gamesejs", (req, res)=>{
+/*app.get("/search_games", (req, res)=>{
+  res.sendFile(DOCUMENT_ROOT + "/Past-Games.html");
+});*/
+app.get("/search_gamese", (req, res)=>{
   returnAllgames(res)
 });
 
