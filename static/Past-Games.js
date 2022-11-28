@@ -6,9 +6,9 @@ let turn
 let actionInTurn
 let playerNumber
 //決定をクリック
-$(`#decide`).on(`click`, function(){
+$(`.view_game`).on(`click`, function(){
     $(`#receiving_area`).show()
-    const data = {gameID:$(`#games`).val(), socketID:socket.id}
+    const data = {gameID:$(this).attr("id"), socketID:socket.id}
     socket.emit('replaygame', data)
 })
 

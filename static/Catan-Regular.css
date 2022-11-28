@@ -708,7 +708,7 @@ body{
                 }
                 .img_for_table{
                     display: block;
-                    width: 20px;
+                    width: 25px;
                     margin: auto;
                 }
 @media screen and (orientation:portrait){

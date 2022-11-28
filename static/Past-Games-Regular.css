@@ -8,22 +8,8 @@ body{
     max-width: 1500px;
     margin: auto;
 }
-#select_area{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 200px;
-}
-#decide{
-    background: skyblue;
-    width: 60px;
-    height: 40px;
-    margin: 1px;
-    padding: 0px;
-    font-size:large;
-    font-weight: bold;
-    border-radius: 50%;
-    line-height: 100%;
+#gamelist{
+    margin: auto;
 }
         #dice_area{
             width: 20%;
@@ -316,7 +302,7 @@ body{
                 }
                 .img_for_table{
                     display: block;
-                    width: 20px;
+                    width: 25px;
                     margin: auto;
                 }
 @media screen and (orientation:portrait){

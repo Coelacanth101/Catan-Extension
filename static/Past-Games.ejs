@@ -37,15 +37,22 @@
                 </div>
             </div>
         </div>
-        <div id="select_area">
-            <select name="" id="games">
-                <% for(let game of data){ %>
-                    <option value="<%= game.gameid %>"><%= game.start_time.toLocaleString() %></option>
-                <% } %>
-            </select>
-            <input type="button" value="決定" id="decide">
-        </div>
-        
+        <table border="5" id="gamelist">
+            <tr>
+                <th><img src="./img/calender.png" alt="" class="img_for_table"></th>
+                <th><img src="./img/crown.png" alt="" class="img_for_table"></th>
+                <th></th>
+            </tr>
+            <% for(let game of data){ %>
+                <% if(game.start_time){ %>
+                    <tr>
+                        <td><%= game.start_time.toLocaleString() %></td>
+                        <td><%= game.name %></td>
+                        <td><img src="./img/view.png" alt="" class="img_for_table view_game" id="<%= game.gameid %>"></td>
+                    </tr>
+                <% }%>
+            <% } %>
+        </table>
     </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="./jquery-3.4.1.min.js"></script>

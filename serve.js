@@ -3377,7 +3377,7 @@ function randomString(){
   return string
 }
 function returnAllgames(res){
-  const query = "select start_time,gameid from game order by start_time";
+  const query = "select start_time,name,gameid from winner order by start_time";
       client
       .query(query)
       .then((resdata) => {
