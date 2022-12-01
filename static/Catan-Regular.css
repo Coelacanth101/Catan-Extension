@@ -11,6 +11,7 @@ body{
 #nameinputarea{
         margin: auto;
         text-align: center;
+        color: white;
 }
     #size_select{
         display: flex;
