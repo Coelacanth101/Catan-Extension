@@ -1038,7 +1038,6 @@ $(`#board_area`).on('click', '#volume', function(){
 //壁紙をクリック
 $(`#board_area`).on('click', '#wallpaper', function(){
     let wallpaper_number = Number($('#wallpaper').attr('data-number'))
-    console.log('1041', wallpaper_number)
     const max_number = 2
     switch(wallpaper_number){
         case max_number:
