@@ -770,36 +770,36 @@ function renderRecord(){
     }
 
     //message
-    $(`#message_area`).html(``);
+    $(`#gamemessage_area`).html(``);
     if(record[turn][actionInTurn].action){
         if(record[turn][actionInTurn].action.action === 'build'){
             if('playernumber' in record[turn][actionInTurn].action){
                 if(record[turn][actionInTurn].action.builditem !== 'road'){
-                    $(`#message_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<img class="message_icon" src="./img/${record[turn][actionInTurn].action.builditem}${record[turn][actionInTurn].action.playernumber}.png">を建設しました</div>`)
+                    $(`#gamemessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<img class="message_icon" src="./img/${record[turn][actionInTurn].action.builditem}${record[turn][actionInTurn].action.playernumber}.png">を建設しました</div>`)
                 }else{
-                    $(`#message_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<img class="message_icon" src="./img/regular_road_right_up${record[turn][actionInTurn].action.playernumber}.png">を建設しました</div>`)
+                    $(`#gamemessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<img class="message_icon" src="./img/regular_road_right_up${record[turn][actionInTurn].action.playernumber}.png">を建設しました</div>`)
                 }
             }else{
-                $(`#message_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が${translate(record[turn][actionInTurn].action.builditem)}を建設しました</div>`)
+                $(`#gamemessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が${translate(record[turn][actionInTurn].action.builditem)}を建設しました</div>`)
             }
         }else if(record[turn][actionInTurn].action.action === 'draw'){
-            $(`#message_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<div class="card ${record[turn][actionInTurn].action.progress}"><img src="./img/${record[turn][actionInTurn].action.progress}.png" alt="${record[turn][actionInTurn].action.progress}" class="img_for_card ${record[turn][actionInTurn].action.progress}"></div>を引きました</div>`)
+            $(`#gamemessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<div class="card ${record[turn][actionInTurn].action.progress}"><img src="./img/${record[turn][actionInTurn].action.progress}.png" alt="${record[turn][actionInTurn].action.progress}" class="img_for_card ${record[turn][actionInTurn].action.progress}"></div>を引きました</div>`)
         }else if(record[turn][actionInTurn].action.action === 'progress'){
-            $(`#message_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<div class="card ${record[turn][actionInTurn].action.progress}"><img src="./img/${record[turn][actionInTurn].action.progress}.png" alt="${record[turn][actionInTurn].action.progress}" class="img_for_card ${record[turn][actionInTurn].action.progress}"></div>を使いました</div>`)
+            $(`#gamemessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<div class="card ${record[turn][actionInTurn].action.progress}"><img src="./img/${record[turn][actionInTurn].action.progress}.png" alt="${record[turn][actionInTurn].action.progress}" class="img_for_card ${record[turn][actionInTurn].action.progress}"></div>を使いました</div>`)
         }else if(record[turn][actionInTurn].action.action === 'thiefmove'){
-            $(`#message_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が盗賊を移動しました</div>`)
+            $(`#gamemessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が盗賊を移動しました</div>`)
         }else if(record[turn][actionInTurn].action.action === 'robresource'){
-            $(`#message_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<b>${record[turn][actionInTurn].action.robbed}</b>から<div class="card ${record[turn][actionInTurn].action.resource}"><img src="./img/${record[turn][actionInTurn].action.resource}pict.png" alt="${record[turn][actionInTurn].action.resource}" class="img_for_card"></div>を強奪しました</div>`)
+            $(`#gamemessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<b>${record[turn][actionInTurn].action.robbed}</b>から<div class="card ${record[turn][actionInTurn].action.resource}"><img src="./img/${record[turn][actionInTurn].action.resource}pict.png" alt="${record[turn][actionInTurn].action.resource}" class="img_for_card"></div>を強奪しました</div>`)
         }else if(record[turn][actionInTurn].action.action === 'monopoly'){
-            $(`#message_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<div class="card ${String(record[turn][actionInTurn].action.resource)}"><img src="./img/${record[turn][actionInTurn].action.resource}pict.png" alt="${record[turn][actionInTurn].action.resource}" class="img_for_card"></div>${record[turn][actionInTurn].action.amount}枚を独占しました</div>`)
+            $(`#gamemessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<div class="card ${String(record[turn][actionInTurn].action.resource)}"><img src="./img/${record[turn][actionInTurn].action.resource}pict.png" alt="${record[turn][actionInTurn].action.resource}" class="img_for_card"></div>${record[turn][actionInTurn].action.amount}枚を独占しました</div>`)
         }else if(record[turn][actionInTurn].action.action === 'harvest'){
             let harvestResources = ''
             for(let resource of record[turn][actionInTurn].action.resource){
                 harvestResources += `<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
             }
-            $(`#message_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が${harvestResources}を収穫しました</div>`)
+            $(`#gamemessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が${harvestResources}を収穫しました</div>`)
         }else if(record[turn][actionInTurn].action.action === 'undo'){
-            $(`#message_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が取り消しました</div>`)
+            $(`#gamemessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が取り消しました</div>`)
         }else if(record[turn][actionInTurn].action.action === 'trash'){
             for(let data of record[turn][actionInTurn].action.trashRecord){
                 let trash = ''
@@ -810,7 +810,7 @@ function renderRecord(){
                         i += 1
                     }
                 }
-                $(`#message_area`).append(`<div class="message"><b>${data.name}</b>が${trash}を捨てました</div>`)
+                $(`#gamemessage_area`).append(`<div class="message"><b>${data.name}</b>が${trash}を捨てました</div>`)
             }
         }else if(record[turn][actionInTurn].action.action === 'accept'){
             let giveresource = ''
@@ -829,7 +829,7 @@ function renderRecord(){
                     i += 1
                 }
             }
-            $(`#message_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.proposername}</b>の${giveresource}と<b>${record[turn][actionInTurn].action.playername}</b>の${takeresource}を交換しました</div>`)
+            $(`#gamemessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.proposername}</b>の${giveresource}と<b>${record[turn][actionInTurn].action.playername}</b>の${takeresource}を交換しました</div>`)
         }else if(record[turn][actionInTurn].action.action === 'trade'){
             let exportresource = ''
             for(let resource in record[turn][actionInTurn].action.exportresource){
@@ -847,19 +847,19 @@ function renderRecord(){
                     i += 1
                 }
             }
-            $(`#message_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が${exportresource}を${importresource}に換えました</div>`)
+            $(`#gamemessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が${exportresource}を${importresource}に換えました</div>`)
         }else if(record[turn][actionInTurn].action.action === 'burst'){
             let burstPlayers = ``
             for(let player of record[turn][actionInTurn].action.players){
                 burstPlayers += `と<b>${player.name}</b>`
             }
             burstPlayers = burstPlayers.slice(1)
-            $(`#message_area`).append(`<div class="message">${burstPlayers}がバーストしました</div>`)
+            $(`#gamemessage_area`).append(`<div class="message">${burstPlayers}がバーストしました</div>`)
         }else if(record[turn][actionInTurn].action.action === 'dice'){
             if('dice' in record[turn][actionInTurn]){
-                $(`#message_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<img class="message_icon" src="./img/dice${record[turn][actionInTurn].dice[0]}.png"><img class="message_icon" src="./img/dice${record[turn][actionInTurn].dice[1]}.png">を出しました</div>`)
+                $(`#gamemessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<img class="message_icon" src="./img/dice${record[turn][actionInTurn].dice[0]}.png"><img class="message_icon" src="./img/dice${record[turn][actionInTurn].dice[1]}.png">を出しました</div>`)
             }else{
-                $(`#message_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<img class="message_icon" src="./img/dice.png">を振りました</div>`)
+                $(`#gamemessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>が<img class="message_icon" src="./img/dice.png">を振りました</div>`)
             }
             
         }else if(record[turn][actionInTurn].action.action === 'exhaust'){
@@ -867,11 +867,11 @@ function renderRecord(){
             for(let resource of record[turn][actionInTurn].action.exhaust){
                 exhaustresource += `<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
             }
-            $(`#message_area`).append(`<div class="message">${exhaustresource}が枯渇しました</div>`)
+            $(`#gamemessage_area`).append(`<div class="message">${exhaustresource}が枯渇しました</div>`)
         }else if(record[turn][actionInTurn].action.action === 'turnend'){
-            $(`#message_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>がターンを終了しました</div>`)
+            $(`#gamemessage_area`).append(`<div class="message"><b>${record[turn][actionInTurn].action.playername}</b>がターンを終了しました</div>`)
         }else if(record[turn][actionInTurn].action.action === 'win'){
-            $(`#message_area`).append(`<h1>${record[turn][actionInTurn].action.playername}の勝ちです!</h1>`)
+            $(`#gamemessage_area`).append(`<h1>${record[turn][actionInTurn].action.playername}の勝ちです!</h1>`)
         }
     }
     $(`#turn${turn}`).prop('selected', true);

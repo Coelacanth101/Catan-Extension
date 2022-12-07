@@ -51,6 +51,10 @@ const buildResource = {house:{ore:0,grain:1,wool:1,lumber:1,brick:1}, city:{ore:
 let progress = {knight:20, roadbuild:3, harvest:3, monopoly:3, point:5}
 let gameRecord = []
 let trashRecord = []
+const victoryPoint = 10
+const longestRoad = 5
+const largestArmy = 3
+const burst = 8
 
 
 class Player{
@@ -989,7 +993,7 @@ class Player{
   };
   //最大騎士力チェック
   largestArmyCheck(){
-    if(this.used.knight >= 3){
+    if(this.used.knight >= largestArmy){
       if(game.largestArmyPlayer === ''){
         game.largestArmyPlayer = this
         this.largestArmy = 2
@@ -1712,7 +1716,7 @@ const board = {size:'', island:[],numbers:[],thief:'', house:[], city:[], road:[
     let longestPlayer = []
     for(let player of game.players){
       player.longestLength = player.myLongest()
-      if(player.longestLength >= 5){
+      if(player.longestLength >= longestRoad){
         if(longestPlayer.length === 0){
           longestPlayer.push(player)
         }else if(player.longestLength > longestPlayer[0].longestLength){
@@ -2109,7 +2113,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   },
   turnEnd(){
     if(this.phase === 'afterdice'){
-      if(this.turnPlayer.point >= 10){
+      if(this.turnPlayer.point >= victoryPoint){
         io.emit('fanfare','')
         makeNewTurnRecord()
         const logdata = {action:'win', playername:this.turnPlayer.name}
@@ -2198,7 +2202,7 @@ lastActionPlayer:'',allResource:{ore:0,grain:0,wool:0,lumber:0,brick:0},
   burstPlayerCheck(){
     this.burstPlayer = []
     for(let player of this.players){
-      if(player.totalResource() >= 8){
+      if(player.totalResource() >= burst){
         this.burstPlayer.push(player)
         player.toTrash = Math.floor(player.totalResource()/2)
       }
@@ -3396,11 +3400,11 @@ io.on("connection", (socket)=>{
 
   //画面の表示
   display.allMightyTo(socket.id)
-  if(game.phase !== 'nameinputting'){
+  /*if(game.phase !== 'nameinputting'){
     setTimeout(()=>{
-      io.to(socket.id).emit("pleasetakeover",'')
+      io.to(socket.id).emit('pleasetakeover','')
     },3000)
-  }
+  }*/
   
   //名前の入力
   socket.on("nameInput", (namedata)=>{
@@ -3429,6 +3433,9 @@ io.on("connection", (socket)=>{
       display.allPlayerInformation()
       display.resetRate()
       display.deletePlayLog()
+      if(victoryPoint !== 10){
+        io.emit('not10point',victoryPoint)
+      }
     }else{
       display.hideReceivingArea()
     }

@@ -240,8 +240,8 @@ socket.on('hideproposearea', (e)=>{
 });
 socket.on('hidemessagearea', (e)=>{
     $(`#receiving_area`).show();
-    $(`#message_area`).hide();
-    $(`#message_area`).html(``);
+    $(`#gamemessage_area`).hide();
+    $(`#gamemessage_area`).html(``);
     $(`#receiving_area`).hide();
 });
 socket.on('hideplayers', (e)=>{
@@ -515,11 +515,11 @@ socket.on('deleteplaylog',()=>{
     $(`#receiving_area`).hide();
 })
 socket.on('message',(logdata)=>{
-    $(`#message_area`).html(``);
+    $(`#gamemessage_area`).html(``);
     if(logdata.action === 'trash'){
         $(`#receiving_area`).show();
         $(`#button_area`).hide()
-        $(`#message_area`).show()
+        $(`#gamemessage_area`).show()
         let trashMessage = ''
         for(let data of logdata.trashRecord){
             let trash = ''
@@ -532,38 +532,38 @@ socket.on('message',(logdata)=>{
             }
             trashMessage += `<div class="message trash"><b>${data.name}</b>が${trash}を捨てました</div>`
         }
-        $(`#message_area`).append(`${trashMessage}`)
+        $(`#gamemessage_area`).append(`${trashMessage}`)
     }
     if(socket.id === logdata.turnPlayerID){
         return
     }
     $(`#receiving_area`).show();
     $(`#button_area`).hide()
-    $(`#message_area`).show()
+    $(`#gamemessage_area`).show()
     if(logdata.action === 'build'){
         if(logdata.builditem !== 'road'){
-            $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<img class="message_icon" src="./img/${logdata.builditem}${logdata.playernumber}.png">を建設しました</div>`)
+            $(`#gamemessage_area`).append(`<div class="message"><b>${logdata.playername}</b>が<img class="message_icon" src="./img/${logdata.builditem}${logdata.playernumber}.png">を建設しました</div>`)
         }else{
-            $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<img class="message_icon" src="./img/regular_road_right_up${logdata.playernumber}.png">を建設しました</div>`)
+            $(`#gamemessage_area`).append(`<div class="message"><b>${logdata.playername}</b>が<img class="message_icon" src="./img/regular_road_right_up${logdata.playernumber}.png">を建設しました</div>`)
         }
     }else if(logdata.action === 'draw'){
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>がカードを引きました</div>`)
+        $(`#gamemessage_area`).append(`<div class="message"><b>${logdata.playername}</b>がカードを引きました</div>`)
     }else if(logdata.action === 'progress'){
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<div class="card ${logdata.progress}"><img src="./img/${logdata.progress}.png" alt="${logdata.progress}" class="img_for_card ${logdata.progress}"></div>を使いました</div>`)
+        $(`#gamemessage_area`).append(`<div class="message"><b>${logdata.playername}</b>が<div class="card ${logdata.progress}"><img src="./img/${logdata.progress}.png" alt="${logdata.progress}" class="img_for_card ${logdata.progress}"></div>を使いました</div>`)
     }else if(logdata.action === 'thiefmove'){
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が盗賊を移動しました</div>`)
+        $(`#gamemessage_area`).append(`<div class="message"><b>${logdata.playername}</b>が盗賊を移動しました</div>`)
     }else if(logdata.action === 'robresource'){
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<b>${logdata.robbed}</b>から強奪しました</div>`)
+        $(`#gamemessage_area`).append(`<div class="message"><b>${logdata.playername}</b>が<b>${logdata.robbed}</b>から強奪しました</div>`)
     }else if(logdata.action === 'monopoly'){
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<div class="card ${String(logdata.resource)}"><img src="./img/${logdata.resource}pict.png" alt="${logdata.resource}" class="img_for_card"></div>×${logdata.amount}を独占しました</div>`)
+        $(`#gamemessage_area`).append(`<div class="message"><b>${logdata.playername}</b>が<div class="card ${String(logdata.resource)}"><img src="./img/${logdata.resource}pict.png" alt="${logdata.resource}" class="img_for_card"></div>×${logdata.amount}を独占しました</div>`)
     }else if(logdata.action === 'harvest'){
         let harvestResources = ''
         for(let resource of logdata.resource){
             harvestResources += `<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
         }
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が${harvestResources}を収穫しました</div>`)
+        $(`#gamemessage_area`).append(`<div class="message"><b>${logdata.playername}</b>が${harvestResources}を収穫しました</div>`)
     }else if(logdata.action === 'undo'){
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が取り消しました</div>`)
+        $(`#gamemessage_area`).append(`<div class="message"><b>${logdata.playername}</b>が取り消しました</div>`)
     }else if(logdata.action === 'propose'){
         let giveresource = ''
         for(let resource in logdata.giveresource){
@@ -581,11 +581,11 @@ socket.on('message',(logdata)=>{
                 i += 1
             }
         }
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<b>${logdata.proposee}</b>に${giveresource}と${takeresource}の交換を提案しました</div>`)
+        $(`#gamemessage_area`).append(`<div class="message"><b>${logdata.playername}</b>が<b>${logdata.proposee}</b>に${giveresource}と${takeresource}の交換を提案しました</div>`)
     }else if(logdata.action === 'accept'){
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が同意しました</div>`)
+        $(`#gamemessage_area`).append(`<div class="message"><b>${logdata.playername}</b>が同意しました</div>`)
     }else if(logdata.action === 'deny'){
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が拒否しました</div>`)
+        $(`#gamemessage_area`).append(`<div class="message"><b>${logdata.playername}</b>が拒否しました</div>`)
     }else if(logdata.action === 'trade'){
         let exportresource = ''
         for(let resource in logdata.exportresource){
@@ -603,24 +603,24 @@ socket.on('message',(logdata)=>{
                 i += 1
             }
         }
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が${exportresource}を${importresource}に換えました</div>`)
+        $(`#gamemessage_area`).append(`<div class="message"><b>${logdata.playername}</b>が${exportresource}を${importresource}に換えました</div>`)
     }else if(logdata.action === 'burst'){
         let burstPlayers = ``
         for(let player of logdata.players){
             burstPlayers += `と<b>${player.name}</b>`
         }
         burstPlayers = burstPlayers.slice(1)
-        $(`#message_area`).append(`<div class="message">${burstPlayers}がバーストしました</div>`)
+        $(`#gamemessage_area`).append(`<div class="message">${burstPlayers}がバーストしました</div>`)
     }else if(logdata.action === 'dice'){
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>が<img class="message_icon" src="./img/dice${logdata.dice[0]}.png"><img class="message_icon" src="./img/dice${logdata.dice[1]}.png">を出しました</div>`)
+        $(`#gamemessage_area`).append(`<div class="message"><b>${logdata.playername}</b>が<img class="message_icon" src="./img/dice${logdata.dice[0]}.png"><img class="message_icon" src="./img/dice${logdata.dice[1]}.png">を出しました</div>`)
     }else if(logdata.action === 'exhaust'){
         let exhaustresource = ''
         for(let resource of logdata.exhaust){
             exhaustresource += `<div class="card ${String(resource)}"><img src="./img/${resource}pict.png" alt="${resource}" class="img_for_card"></div>`
         }
-        $(`#message_area`).append(`<div class="message">${exhaustresource}が枯渇しました</div>`)
+        $(`#gamemessage_area`).append(`<div class="message">${exhaustresource}が枯渇しました</div>`)
     }else if(logdata.action === 'turnend'){
-        $(`#message_area`).append(`<div class="message"><b>${logdata.playername}</b>がターンを終了しました</div>`)
+        $(`#gamemessage_area`).append(`<div class="message"><b>${logdata.playername}</b>がターンを終了しました</div>`)
     }
     $(`#receiving_area`).hide();
 })
@@ -642,9 +642,9 @@ socket.on('gamerecord',(data)=>{
         }
     }
 })
-socket.on('pleasetakeover',()=>{
+/*socket.on('pleasetakeover',()=>{
     alert('画面が更新されました。')
-})
+})*/
 
 /*socket.on('rating', (data)=>{
     $(`#player${data.number}name`).html(`<b>${data.name}</b>(${data.rating})`)
@@ -1035,6 +1035,32 @@ $(`#board_area`).on('click', '#volume', function(){
             break;
     }
 })
+//壁紙をクリック
+$(`#board_area`).on('click', '#wallpaper', function(){
+    let wallpaper_number = Number($('#wallpaper').attr('data-number'))
+    console.log('1041', wallpaper_number)
+    const max_number = 2
+    switch(wallpaper_number){
+        case max_number:
+            wallpaper_number = 0
+            $('body').attr('background', ``)
+            $('.message_area').css(`color`, `initial`)
+            break
+        default:
+            wallpaper_number += 1
+            $('body').attr('background', `./img/wood_pattern${wallpaper_number}.jpg`)
+            switch(wallpaper_number){
+                case 2:
+                    $('.message_area').css(`color`, `white`)
+                    break
+                default:
+                    $('.message_area').css(`color`, `initial`)
+                    break
+            }
+            break
+    }
+    $('#wallpaper').attr('data-number', `${wallpaper_number}`)
+})
 //設定ボタンクリック
 $(`#board_area`).on('click', '#setting_button', function(){
     $(`#setting_area`).toggleClass('show')
@@ -1053,12 +1079,14 @@ const display = {
         $(`#receiving_area`).show();
         $('#field').hide()
         $('body').attr('background', "./img/kyushu.jpg")
+        $('.message_area').css(`color`, `white`)
         $(`#receiving_area`).hide()
     },
     showField(){
         $(`#receiving_area`).show();
         $('#field').show()
         $('body').attr('background', "./img/wood_pattern1.jpg")
+        $('.message_area').css(`color`, `initial`)
         $(`#receiving_area`).hide()
       },
     hideItems(game){
@@ -1086,6 +1114,7 @@ const display = {
         $(`.tilenumberinput`).val(``)
         $('#field').show()
         $('body').attr('background', "./img/wood_pattern1.jpg")
+        $('.message_area').css(`color`, `initial`)
         let tileNumber = 1
         if(island.length === 9){
             board_size = 'large'
@@ -1100,8 +1129,9 @@ const display = {
                 <div id="setting_area">
                 <div id="setting_close">×</div>
                 <div id="setting_icons">
-                <img id="volume" class="setting_icon" src='./img/volume_${sound}.png'>
-                <img id="cost_card"  class="setting_icon"src='./img/cost_card.jpg'>
+                <img id="volume" class="setting_icon" src="./img/volume_${sound}.png">
+                <img id="wallpaper" class="setting_icon" data-number="1" src="./img/wallpaper.png">
+                <img id="cost_card"  class="setting_icon" src="./img/cost_card.jpg">
                 </div>
                 </div>
                 <img id="board_frame" src='./img/large_board.png'>
@@ -1440,8 +1470,9 @@ const display = {
                 <div id="setting_area">
                 <div id="setting_close">×</div>
                 <div id="setting_icons">
-                <img id="volume" class="setting_icon" src='./img/volume_${sound}.png'>
-                <img id="cost_card"  class="setting_icon"src='./img/cost_card.jpg'>
+                <img id="volume" class="setting_icon" src="./img/volume_${sound}.png">
+                <img id="wallpaper" class="setting_icon" data-number="1" src="./img/wallpaper.png">
+                <img id="cost_card"  class="setting_icon"src="./img/cost_card.jpg">
                 </div>
                 </div>
                 <img id="board_frame" src='./img/regular_board.png'>
@@ -2589,4 +2620,7 @@ socket.on('burstsound',()=>{
 })
 socket.on('fanfare',()=>{
     fanfareSound.play()
+})
+socket.on('not10point',(victoryPoint)=>{
+    alert(`勝利点が${victoryPoint}点になっています`)
 })
