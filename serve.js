@@ -51,7 +51,7 @@ const buildResource = {house:{ore:0,grain:1,wool:1,lumber:1,brick:1}, city:{ore:
 let progress = {knight:20, roadbuild:3, harvest:3, monopoly:3, point:5}
 let gameRecord = []
 let trashRecord = []
-const victoryPoint = 10
+const victoryPoint = 3
 const longestRoad = 5
 const largestArmy = 3
 const burst = 8
@@ -111,14 +111,14 @@ class Player{
     totalUse:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     lastPoint:'',
     harvestArray:[]}
-    const q = "select * from player_information where name = '" + this.name + "'";
+    const q = "select * from player where name = '" + this.name + "'";
     client
       .query(q)
       .then((res) => {
         if(res.rows[0]){
           this.rating = res.rows[0].rating
         }else{
-          const newPlayer = "insert into player_information (name, win3, lose3, win4, lose4, win5, lose5, win6, lose6, rating, activestreakwins, beststreakwins, bestrating) values('" + this.name + "', 0, 0, 0, 0, 0, 0, 0, 0, 1500, 0, 0, 1500)";
+          const newPlayer = "insert into player (name, win3, lose3, win4, lose4, win5, lose5, win6, lose6, rating, activestreakwins, beststreakwins, bestrating) values('" + this.name + "', 0, 0, 0, 0, 0, 0, 0, 0, 1500, 0, 0, 1500)";
           client.query(newPlayer)
           .then((res) => {
           })
@@ -182,14 +182,14 @@ class Player{
     totalUse:{ore:0,grain:0,wool:0,lumber:0,brick:0},
     lastPoint:'',
     harvestArray:[]}
-    const q = "select * from player_information where name = '" + this.name + "'";
+    const q = "select * from player where name = '" + this.name + "'";
     client
       .query(q)
       .then((res) => {
         if(res.rows[0]){
           this.rating = res.rows[0].rating
         }else{
-          const newPlayer = "insert into player_information (name, win3, lose3, win4, lose4, win5, lose5, win6, lose6, rating, activestreakwins, beststreakwins) values('" + this.name + "', 0, 0, 0, 0, 0, 0, 0, 0, 1500, 0, 0)";
+          const newPlayer = "insert into player (name, win3, lose3, win4, lose4, win5, lose5, win6, lose6, rating, activestreakwins, beststreakwins) values('" + this.name + "', 0, 0, 0, 0, 0, 0, 0, 0, 1500, 0, 0)";
           client.query(newPlayer)
           .then((res) => {
           })
@@ -3302,9 +3302,9 @@ function updateDatabase(winner){
       losers.push({name:player.name, rating:player.rating})
     }
   }
-  //player_information更新
+  //player更新
   for(let player of game.players){
-    const query = "select * from player_information where name = '" + player.name + "'";
+    const query = "select * from player where name = '" + player.name + "'";
     client
     .query(query)
     .then((res) => {
@@ -3319,7 +3319,9 @@ function updateDatabase(winner){
         if(player.rating > res.rows[0].bestrating){
           res.rows[0].bestrating = player.rating
         }
-        const query = "update player_information set " + winx + " = " + res.rows[0][winx] + ", rating = " + player.rating + ", activestreakwins = " + res.rows[0].activestreakwins + ", beststreakwins = " + res.rows[0].beststreakwins + ", bestrating = " + res.rows[0].bestrating + " where name = '" + player.name + "'";
+        const query = "update player set " + winx + " = " + res.rows[0][winx] + ", rating = " + player.rating + ", activestreakwins = " + res.rows[0].activestreakwins + ", beststreakwins = " + res.rows[0].beststreakwins + ", bestrating = " + res.rows[0].bestrating + " where name = '" + player.name + "'";
+        //////////
+        console.log(query)
         client.query(query)
         .then((res) => {
         })
@@ -3329,7 +3331,7 @@ function updateDatabase(winner){
         let losex = 'lose' + String(pl)
         res.rows[0][losex] += 1
         player.rating = rating.losersNewRating(player, w)
-        const query = "update player_information set " + losex + " = " + res.rows[0][losex] + ", rating = " + player.rating + ", activestreakwins = 0 where name = '" + player.name + "'";
+        const query = "update player set " + losex + " = " + res.rows[0][losex] + ", rating = " + player.rating + ", activestreakwins = 0 where name = '" + player.name + "'";
         client.query(query)
         .then((res) => {
         })
