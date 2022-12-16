@@ -2,15 +2,17 @@
 const app  = require("express")();
 const http = require("http").createServer(app);
 const io   = require("socket.io")(http);
-const ejs = require("ejs")
 const DOCUMENT_ROOT = __dirname + "/static";
-const SECRET_TOKEN = "abcdefghijklmn12345";
 app.get("/", (req, res)=>{
   res.sendFile(DOCUMENT_ROOT + "/Catan.html");
 });
 
 app.get("/search_games", (req, res)=>{
   returnAllgames(res)
+});
+
+app.get("/statistics", (req, res)=>{
+  returnStatictics(res)
 });
 
 app.get("/:file", (req, res)=>{
@@ -51,7 +53,7 @@ const buildResource = {house:{ore:0,grain:1,wool:1,lumber:1,brick:1}, city:{ore:
 let progress = {knight:20, roadbuild:3, harvest:3, monopoly:3, point:5}
 let gameRecord = []
 let trashRecord = []
-const victoryPoint = 3
+const victoryPoint = 10
 const longestRoad = 5
 const largestArmy = 3
 const burst = 8
@@ -3320,8 +3322,6 @@ function updateDatabase(winner){
           res.rows[0].bestrating = player.rating
         }
         const query = "update player set " + winx + " = " + res.rows[0][winx] + ", rating = " + player.rating + ", activestreakwins = " + res.rows[0].activestreakwins + ", beststreakwins = " + res.rows[0].beststreakwins + ", bestrating = " + res.rows[0].bestrating + " where name = '" + player.name + "'";
-        //////////
-        console.log(query)
         client.query(query)
         .then((res) => {
         })
@@ -3389,14 +3389,143 @@ function returnAllgames(res){
       .then((resdata) => {
         if(resdata.rows[0]){
           const games = resdata.rows
-          res.render(DOCUMENT_ROOT + "/Past-Games.ejs", {data:games});
+          res.render(DOCUMENT_ROOT + "/Search-Games.ejs", {data:games});
         }
       })
       .catch((e) => {
       });
 }
-
-
+function returnStatictics(res){
+  const statistics = {winner:{}, loser:{}}
+  const exclude_item = ["number_of_players", "my_number", "turn", "ore_initial_productivity_of_losers", "grain_initial_productivity_of_losers", "wool_initial_productivity_of_losers", "lumber_initial_productivity_of_losers", "brick_initial_productivity_of_losers"]
+  const query = "select * from winner";
+      client
+      .query(query)
+      .then((resdata) => {
+        if(resdata.rows[0]){
+          const winnersdata = resdata.rows
+          for(let key in winnersdata[0]){
+            let totalamount = 0;
+            let number = 0;
+            if(!exclude_item.includes(key)){
+              for(let data of winnersdata){
+                if(typeof data[key] === "number"){
+                  totalamount += data[key];
+                  number++;
+                }
+              }
+            }
+            if(typeof totalamount === "number" && Boolean(totalamount) && number !== 0){
+              statistics.winner[translate(key)] = totalamount / number;
+            }
+          }
+          let allprogress = statistics.winner[translate('owned_point')] + statistics.winner[translate('owned_knight')] + statistics.winner[translate('owned_roadbuild')] + statistics.winner[translate('owned_monopoly')] + statistics.winner[translate('owned_harvest')]
+          statistics.winner[translate('owned_point')] /= allprogress
+          statistics.winner[translate('owned_knight')] /= allprogress
+          statistics.winner[translate('owned_roadbuild')] /= allprogress
+          statistics.winner[translate('owned_monopoly')] /= allprogress
+          statistics.winner[translate('owned_harvest')] /= allprogress
+        }
+        const query2 = "select * from loser";
+        client
+        .query(query2)
+        .then((resdata) => {
+          if(resdata.rows[0]){
+            const losersdata = resdata.rows
+            for(let key in losersdata[0]){
+              let totalamount = 0;
+              let number = 0;
+              if(!exclude_item.includes(key)){
+                for(let data of losersdata){
+                  if(typeof data[key] === "number"){
+                    totalamount += data[key];
+                    number++;
+                  }
+                }
+              }
+              if(typeof totalamount === "number" && Boolean(totalamount) && number !== 0){
+                statistics.loser[translate(key)] = totalamount / number;
+              }
+            }
+            let allprogress = statistics.loser[translate('owned_point')] + statistics.loser[translate('owned_knight')] + statistics.loser[translate('owned_roadbuild')] + statistics.loser[translate('owned_monopoly')] + statistics.loser[translate('owned_harvest')]
+            statistics.loser[translate('owned_point')] /= allprogress
+            statistics.loser[translate('owned_knight')] /= allprogress
+            statistics.loser[translate('owned_roadbuild')] /= allprogress
+            statistics.loser[translate('owned_monopoly')] /= allprogress
+            statistics.loser[translate('owned_harvest')] /= allprogress
+            for(let worl in statistics){
+              for(let key in statistics[worl]){
+                statistics[worl][key] = Math.round(statistics[worl][key] * 1000)/1000
+              }
+            }
+            const compare = {}
+            for(let key in statistics.winner){
+              if(statistics.winner[key] > statistics.loser[key]){
+                compare[key] = '>'
+              }else if(statistics.winner[key] < statistics.loser[key]){
+                compare[key] = '<'
+              }else{
+                compare[key] = '='
+              }
+            }
+            statistics.compare = compare
+            res.render(DOCUMENT_ROOT + "/Statistics.ejs", {data:statistics});
+          }
+        })
+        .catch((e) => {
+        });
+      })
+      .catch((e) => {
+      });
+}
+function translate(word){
+  switch(word){
+      case 'used_ore':
+          return '鉄'
+      case 'used_grain':
+          return '米'
+      case 'used_wool':
+          return '羊'
+      case 'used_lumber':
+          return '木'
+      case 'used_brick':
+          return '煉'
+      case 'road_on_board':
+          return '道'
+      case 'house_on_board':
+          return '家'
+      case 'city_on_board':
+          return '街'
+      case 'largestarmy':
+          return '騎士賞'
+      case 'longestroad':
+          return '道賞'
+      case 'owned_point':
+          return '得点'
+      case 'owned_knight':
+          return '騎士'
+      case 'owned_roadbuild':
+          return '街道'
+      case 'owned_monopoly':
+          return '独占'
+      case 'owned_harvest':
+          return '収穫'
+      case 'ore_initial_productivity':
+          return '初期鉄'
+      case 'grain_initial_productivity':
+          return '初期米'
+      case 'wool_initial_productivity':
+          return '初期羊'
+      case 'lumber_initial_productivity':
+          return '初期木'
+      case 'brick_initial_productivity':
+          return '初期煉'
+      case 'negotiate':
+          return '交渉'
+      case 'seven':
+          return 'ダイス7'
+  }
+}
 
 io.on("connection", (socket)=>{
 

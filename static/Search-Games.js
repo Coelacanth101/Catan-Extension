@@ -8,6 +8,8 @@ let playerNumber
 //決定をクリック
 $(`.view_game`).on(`click`, function(){
     $(`#receiving_area`).show()
+    $('.view_game').css('background', 'initial');
+    $(this).css('background', 'gray');
     const data = {gameID:$(this).attr("id"), socketID:socket.id}
     socket.emit('replaygame', data)
 })
@@ -71,7 +73,7 @@ $(`#moveto`).on(`click`, function(){
 
 function renderGame(data){
     $('#field').show()
-    $('body').attr('background', "./img/wood_pattern1.jpg")
+    $('body').attr('background', "./img/background1.jpg")
     $(`#receiving_area`).show()
     record = data.gameRecord
     endturn = record.length-1
@@ -83,7 +85,7 @@ function renderGame(data){
     let tileNumber = 1
     if(data.board.length === 9){
         board_size = 'large'
-        $('#cs').attr('href',"./Past-Games-Extension.css")
+        $('#cs').attr('href',"./Search-Games-Extension.css")
         $(`#board`).html(`
             <div id="dice_area"></div>
             <div id="receiving_area"><img id="receiving" src="./img/loading.gif"></div>
@@ -413,7 +415,7 @@ function renderGame(data){
         }
     }else if(data.board.length === 7){
         board_size = 'regular'
-        $('#cs').attr('href',"./Past-Games-Regular.css")
+        $('#cs').attr('href',"./Search-Games-Regular.css")
         $(`#board`).html(`
             <div id="dice_area"></div>
             <div id="receiving_area"><img id="receiving" src="./img/loading.gif"></div>
@@ -662,7 +664,7 @@ function renderGame(data){
                 <div id="player${myNumber}row1" class="row">
                     <div class="nameline">
                     <div id="player${myNumber}mark" class="playermark player${myNumber}color"><b>${myNumber+1}</b></div>
-                    <div id="player${myNumber}name" class="name showlog"><b>${playerName}</b></div>
+                    <div id="player${myNumber}name" class="name showlog"><b>${playerName}</b>(<div id="vp${myNumber}">0</div>)</div>
                     </div>
                     <div id="player${myNumber}token" class="token line" ><div class="remainedtokennumber"><img class="remainedtoken" src="./img/house${myNumber}.png">:5</div> <div class="remainedtokennumber"><img class="remainedtoken" src="./img/city${myNumber}.png">:4</div> <div class="remainedtokennumber"><img class="remainedtoken" src="./img/regular_road_right_up${myNumber}.png">:15</div></div>
                 </div>
@@ -746,6 +748,9 @@ function renderRecord(){
         for(let cityNumber of player.city){
             $(`#nodetouch${cityNumber}`).html(`<img id="city${cityNumber}" class="city" src="./img/city${pn}.png">`)
         }
+        //name
+        let vp = player.house.length + player.city.length * 2 + player.progress.point + player.largestArmy + player.longestRoad
+        $(`#vp${pn}`).html(`${vp}`)
         pn += 1
     }
     //thief

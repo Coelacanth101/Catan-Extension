@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>九州の開拓者たち</title>
+    <link rel="stylesheet" href="./Search-Games-Regular.css" id="cs">
+    <link rel="icon" href="./img/favicon.ico">
+</head>
+<body background="./img/kyushu.jpg">
+    <table border="5">
+        <tr>
+            <th></th>
+            <th>勝</th>
+            <th></th>
+            <th>負</th>
+            <th>勝/負</th>
+        </tr>
+        <% for(let item in data.winner){ %>
+            <tr>
+                <th><%= item %></th>
+                <td><%= data.winner[item] %></td>
+                <td><%= data.compare[item] %></td>
+                <td><%= data.loser[item] %></td>
+                <td><%= Math.round(data.winner[item] * 100 / data.loser[item]) / 100 %></td>
+            </tr>
+        <% } %>
+    </table>
+    
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./jquery-3.4.1.min.js"></script>
+    <script src="./Statistics.js"></script>
+</body>
+</html>

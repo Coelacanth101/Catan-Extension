@@ -2464,6 +2464,10 @@ body{
         text-align: center;
         margin: 100px auto auto auto
     }
+    #links{
+        text-align: center;
+        margin: auto;
+    }
     #yesorno{
         display: none;
     }

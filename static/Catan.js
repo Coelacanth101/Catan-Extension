@@ -14,6 +14,7 @@ turnSound.volume = 0
 burstSound.volume = 0
 fanfareSound.volume = 0
 let sound = 'unloaded'
+const background_pattern = 3
 //画面初期化
 $('#initializebutton').on('click', function(){
     $('#yesorno').show()
@@ -92,20 +93,10 @@ socket.on('shownameinputarea', (playersName)=>{
     display.showNameInputArea(playersName)
 })
 
-
 socket.on('island', (island)=>{
     $(`#receiving_area`).show();
     display.island(island)
 })
-
-
-
-
-
-
-
-
-
 
 socket.on('hideItems', (data)=>{
     $(`#receiving_area`).show();
@@ -131,8 +122,6 @@ socket.on('allUsed', (data)=>{
     $(`#receiving_area`).show();
     display.allUsed(data)
 });
-
-
 
 socket.on('resourceof', (data)=>{
     $(`#receiving_area`).show();
@@ -1038,16 +1027,15 @@ $(`#board_area`).on('click', '#volume', function(){
 //壁紙をクリック
 $(`#board_area`).on('click', '#wallpaper', function(){
     let wallpaper_number = Number($('#wallpaper').attr('data-number'))
-    const max_number = 2
     switch(wallpaper_number){
-        case max_number:
+        case background_pattern:
             wallpaper_number = 0
             $('body').attr('background', ``)
             $('.message_area').css(`color`, `initial`)
             break
         default:
             wallpaper_number += 1
-            $('body').attr('background', `./img/wood_pattern${wallpaper_number}.jpg`)
+            $('body').attr('background', `./img/background${wallpaper_number}.jpg`)
             switch(wallpaper_number){
                 case 2:
                     $('.message_area').css(`color`, `white`)
@@ -1084,7 +1072,7 @@ const display = {
     showField(){
         $(`#receiving_area`).show();
         $('#field').show()
-        $('body').attr('background', "./img/wood_pattern1.jpg")
+        $('body').attr('background', "./img/background1.jpg")
         $('.message_area').css(`color`, `initial`)
         $(`#receiving_area`).hide()
       },
@@ -1112,7 +1100,7 @@ const display = {
         $(`#receiving_area`).show()
         $(`.tilenumberinput`).val(``)
         $('#field').show()
-        $('body').attr('background', "./img/wood_pattern1.jpg")
+        $('body').attr('background', "./img/background1.jpg")
         $('.message_area').css(`color`, `initial`)
         let tileNumber = 1
         if(island.length === 9){
@@ -2176,7 +2164,6 @@ const display = {
         $(`#receiving_area`).hide();
     },
     showGameEndArea(){
-        fanfareSound.play()
         $(`#receiving_area`).show();
         $(`#gameend_area`).show()
         $(`#newgame_area`).show()
